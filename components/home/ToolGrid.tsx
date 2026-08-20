@@ -20,7 +20,7 @@ type ToolLocale = { title: string; description: string };
 
 const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   // PDF
-  "pdf-merge":     { ko: { title: "PDF 합치기",    description: "여러 PDF 파일을 하나의 문서로 즉시 합칩니다." }, ja: { title: "PDFマージ", description: "複数のPDFを即座に一つに結合します。" } },
+  "pdf-merger":    { ko: { title: "PDF 합치기",    description: "여러 PDF 파일을 하나의 문서로 즉시 합칩니다." }, ja: { title: "PDFマージ", description: "複数のPDFを即座に一つに結合します。" } },
   "pdf-split":     { ko: { title: "PDF 분할",      description: "특정 페이지를 추출하거나 PDF를 여러 파일로 분할합니다." }, ja: { title: "PDF分割", description: "特定ページを抽出またはPDFを分割します。" } },
   "pdf-compress":  { ko: { title: "PDF 압축",      description: "눈에 띄는 품질 저하 없이 PDF 파일 크기를 줄입니다." }, ja: { title: "PDF圧縮", description: "品質を保ちつつPDFファイルサイズを圧縮します。" } },
   "pdf-to-word":   { ko: { title: "PDF → Word",   description: "PDF 문서를 편집 가능한 .docx 형식으로 변환합니다." }, ja: { title: "PDF→Word", description: "PDFを編集可能な.docx形式に変換します。" } },

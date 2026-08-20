@@ -45,13 +45,13 @@ export const CATEGORIES: ToolCategory[] = [
 export const TOOLS: Tool[] = [
   // ── PDF Tools ─────────────────────────────────────────────
   {
-    id: "pdf-merge",
+    id: "pdf-merger",
     title: "PDF Merge",
     description: "Combine multiple PDF files into a single document instantly.",
     category: "PDF Tools",
     icon: "FilePlus2",
     badge: "Popular",
-    href: "/tools/pdf-merge",
+    href: "/tools/pdf-merger",
   },
   {
     id: "pdf-split",
