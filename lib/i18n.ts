@@ -321,6 +321,39 @@ export interface Translations {
   "pdfMerger.guide.faq2A": string;
   "pdfMerger.guide.faq3Q": string;
   "pdfMerger.guide.faq3A": string;
+  // ── PDF Compress Tool ──────────────────────────────────────────
+  "pdfCompress.title": string;
+  "pdfCompress.subtitle": string;
+  "pdfCompress.dropPrompt": string;
+  "pdfCompress.originalSize": string;
+  "pdfCompress.compressedSize": string;
+  "pdfCompress.reduction": string;
+  "pdfCompress.level": string;
+  "pdfCompress.levelRecommended": string;
+  "pdfCompress.levelRecommendedDesc": string;
+  "pdfCompress.levelHigh": string;
+  "pdfCompress.levelHighDesc": string;
+  "pdfCompress.levelLow": string;
+  "pdfCompress.levelLowDesc": string;
+  "pdfCompress.filename": string;
+  "pdfCompress.compressBtn": string;
+  "pdfCompress.compressing": string;
+  "pdfCompress.download": string;
+  "pdfCompress.reset": string;
+  "pdfCompress.guide.title": string;
+  "pdfCompress.guide.aboutTitle": string;
+  "pdfCompress.guide.aboutDesc": string;
+  "pdfCompress.guide.howTitle": string;
+  "pdfCompress.guide.step1": string;
+  "pdfCompress.guide.step2": string;
+  "pdfCompress.guide.step3": string;
+  "pdfCompress.guide.faqTitle": string;
+  "pdfCompress.guide.faq1Q": string;
+  "pdfCompress.guide.faq1A": string;
+  "pdfCompress.guide.faq2Q": string;
+  "pdfCompress.guide.faq2A": string;
+  "pdfCompress.guide.faq3Q": string;
+  "pdfCompress.guide.faq3A": string;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -631,6 +664,39 @@ export const translations: Record<Locale, Translations> = {
     "pdfMerger.guide.faq2A": "There is no artificial limit. You can merge as many PDF files as your device's memory allows.",
     "pdfMerger.guide.faq3Q": "Can I reorder PDF files before merging?",
     "pdfMerger.guide.faq3A": "Yes. Each file card has Up and Down controls to let you customize the exact order of pages in the merged file.",
+    // PDF Compress
+    "pdfCompress.title": "PDF Compress",
+    "pdfCompress.subtitle": "Reduce PDF file size while maintaining visual quality—100% free and private.",
+    "pdfCompress.dropPrompt": "Drag & drop a PDF file here, or click to browse...",
+    "pdfCompress.originalSize": "Original Size",
+    "pdfCompress.compressedSize": "Compressed Size",
+    "pdfCompress.reduction": "File Size Savings",
+    "pdfCompress.level": "Compression Level",
+    "pdfCompress.levelRecommended": "Recommended",
+    "pdfCompress.levelRecommendedDesc": "Best balance of file size reduction and visual quality.",
+    "pdfCompress.levelHigh": "High Compression",
+    "pdfCompress.levelHighDesc": "Maximum file size reduction for large documents.",
+    "pdfCompress.levelLow": "Low Compression",
+    "pdfCompress.levelLowDesc": "Minimal modification, highest visual fidelity.",
+    "pdfCompress.filename": "Output Filename",
+    "pdfCompress.compressBtn": "Compress PDF",
+    "pdfCompress.compressing": "Compressing PDF...",
+    "pdfCompress.download": "Download Compressed PDF",
+    "pdfCompress.reset": "Clear File",
+    "pdfCompress.guide.title": "Complete PDF Compress Guide",
+    "pdfCompress.guide.aboutTitle": "What is the PDF Compress Tool?",
+    "pdfCompress.guide.aboutDesc": "The PDF Compress tool reduces PDF file sizes directly inside your browser by optimizing document streams, flattening object structures, and stripping unneeded metadata—with zero server uploads.",
+    "pdfCompress.guide.howTitle": "How to Compress a PDF File",
+    "pdfCompress.guide.step1": "1. Drag & drop or select a PDF file to compress.",
+    "pdfCompress.guide.step2": "2. Select your preferred compression level preset (Recommended, High, or Low).",
+    "pdfCompress.guide.step3": "3. Click 'Compress PDF' and download your optimized document with one click.",
+    "pdfCompress.guide.faqTitle": "Frequently Asked Questions",
+    "pdfCompress.guide.faq1Q": "Is my PDF file uploaded to any server?",
+    "pdfCompress.guide.faq1A": "No. All PDF compression operations run 100% locally in your browser memory using WebAssembly & pdf-lib.",
+    "pdfCompress.guide.faq2Q": "Does PDF compression ruin text quality?",
+    "pdfCompress.guide.faq2A": "No! Text fonts, vector artwork, and document text remain crisp while stream objects and metadata dictionaries are optimized.",
+    "pdfCompress.guide.faq3Q": "Is there a file size limit?",
+    "pdfCompress.guide.faq3A": "There is no artificial limit. You can process large PDF files as long as your system memory permits.",
   },
 
   // ── Korean ─────────────────────────────────────────────────
@@ -939,6 +1005,39 @@ export const translations: Record<Locale, Translations> = {
     "pdfMerger.guide.faq2A": "별도의 인위적인 개수 제한은 없습니다. 사용 중인 컴퓨터 기기의 메모리가 허용하는 한 수십 개의 파일도 병합할 수 있습니다.",
     "pdfMerger.guide.faq3Q": "파일 병합 전 순서를 바꿀 수 있나요?",
     "pdfMerger.guide.faq3A": "네. 각 파일 카드의 위/아래 이동 버튼을 통해 원하는 결합 순서로 자유롭게 재배치할 수 있습니다.",
+    // PDF Compress
+    "pdfCompress.title": "PDF 압축 & 용량 줄이기",
+    "pdfCompress.subtitle": "품질 손실을 최소화하면서 PDF 파일 용량을 획기적으로 줄여줍니다—100% 무료 및 보안 유지.",
+    "pdfCompress.dropPrompt": "PDF 파일을 이곳에 드래그하거나 클릭하여 업로드하세요...",
+    "pdfCompress.originalSize": "원본 파일 용량",
+    "pdfCompress.compressedSize": "압축 후 용량",
+    "pdfCompress.reduction": "절감된 용량 비율",
+    "pdfCompress.level": "압축 레벨 선택",
+    "pdfCompress.levelRecommended": "추천 압축 (Recommended)",
+    "pdfCompress.levelRecommendedDesc": "화질 손실 없이 용량과 가독성의 최적 밸런스를 제공합니다.",
+    "pdfCompress.levelHigh": "강력 압축 (High Compression)",
+    "pdfCompress.levelHighDesc": "대용량 PDF 및 스캔 문서의 파일 크기를 최대한 감소시킵니다.",
+    "pdfCompress.levelLow": "일반 압축 (Low Compression)",
+    "pdfCompress.levelLowDesc": "원본 화질을 99% 유지하며 미세하게 용량을 정돈합니다.",
+    "pdfCompress.filename": "저장할 파일명",
+    "pdfCompress.compressBtn": "PDF 압축하기",
+    "pdfCompress.compressing": "PDF 압축 중...",
+    "pdfCompress.download": "압축된 PDF 다운로드",
+    "pdfCompress.reset": "파일 삭제",
+    "pdfCompress.guide.title": "PDF 압축 완벽 가이드",
+    "pdfCompress.guide.aboutTitle": "PDF 압축 도구란 무엇인가요?",
+    "pdfCompress.guide.aboutDesc": "desktools.run의 PDF 압축기 도구는 서버 업로드 없이 웹 브라우저 메모리 내에서 PDF 내부 구조 및 메타데이터, 스트림 객체를 최적화하여 안전하게 용량을 줄여주는 100% 로컬 무료 유틸리티입니다.",
+    "pdfCompress.guide.howTitle": "PDF 파일 용량 줄이는 방법",
+    "pdfCompress.guide.step1": "1. 용량을 줄이고자 하는 PDF 문서를 드래그하여 업로드합니다.",
+    "pdfCompress.guide.step2": "2. 원하는 압축 레벨(추천 압축, 강력 압축, 일반 압축)을 선택합니다.",
+    "pdfCompress.guide.step3": "3. 'PDF 압축하기' 버튼을 누르고 절감된 용량을 확인한 후 즉시 다운로드하세요.",
+    "pdfCompress.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "pdfCompress.guide.faq1Q": "업로드한 PDF 파일이 외부 서버로 전송되나요?",
+    "pdfCompress.guide.faq1A": "아닙니다. 모든 PDF 압축 및 최적화 작업은 웹 브라우저 내부에서 100% 로컬로 안전하게 진행됩니다.",
+    "pdfCompress.guide.faq2Q": "압축 후 텍스트나 글꼴 화질이 저하되나요?",
+    "pdfCompress.guide.faq2A": "아닙니다! 텍스트 및 벡터 글꼴은 100% 선명하게 유지되며, 객체 스트림 및 구조 메타데이터가 압축 정리됩니다.",
+    "pdfCompress.guide.faq3Q": "파일 용량 및 횟수에 제한이 있나요?",
+    "pdfCompress.guide.faq3A": "제한이 없습니다. 횟수나 용량 제한 없이 필요한 만큼 자유롭게 압축할 수 있습니다.",
   },
 
   // ── Japanese ───────────────────────────────────────────────
@@ -1247,6 +1346,39 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNGは透過対応・高画質、JPGは軽量、WEBPは次世代の高圧縮フォーマットです。",
     "imageResizer.guide.faq3Q": "アスペクト比固定とは？",
     "imageResizer.guide.faq3A": "縦横の比率を維持して画像が歪むのを防ぎます。",
+    // PDF Compress
+    "pdfCompress.title": "PDF圧縮",
+    "pdfCompress.subtitle": "品質を保ちつつPDFのファイルサイズを軽量化します。",
+    "pdfCompress.dropPrompt": "PDFファイルをドラッグ＆ドロップしてください...",
+    "pdfCompress.originalSize": "元のサイズ",
+    "pdfCompress.compressedSize": "圧縮後のサイズ",
+    "pdfCompress.reduction": "削減率",
+    "pdfCompress.level": "圧縮レベル",
+    "pdfCompress.levelRecommended": "推奨圧縮",
+    "pdfCompress.levelRecommendedDesc": "画質とファイルサイズのバランスが最適です。",
+    "pdfCompress.levelHigh": "高圧縮",
+    "pdfCompress.levelHighDesc": "サイズを大幅に削減します。",
+    "pdfCompress.levelLow": "低圧縮",
+    "pdfCompress.levelLowDesc": "最高画質を保持します。",
+    "pdfCompress.filename": "出力ファイル名",
+    "pdfCompress.compressBtn": "PDFを圧縮",
+    "pdfCompress.compressing": "圧縮中...",
+    "pdfCompress.download": "圧縮されたPDFをダウンロード",
+    "pdfCompress.reset": "リセット",
+    "pdfCompress.guide.title": "PDF圧縮ガイド",
+    "pdfCompress.guide.aboutTitle": "PDF圧縮ツールとは？",
+    "pdfCompress.guide.aboutDesc": "ブラウザ上で100%ローカルにPDFサイズを削減します。",
+    "pdfCompress.guide.howTitle": "使い方",
+    "pdfCompress.guide.step1": "1. PDFファイルをアップロードします。",
+    "pdfCompress.guide.step2": "2. 圧縮レベルを選択します。",
+    "pdfCompress.guide.step3": "3. 圧縮してダウンロードします。",
+    "pdfCompress.guide.faqTitle": "よくある質問",
+    "pdfCompress.guide.faq1Q": "ファイルは送信されますか？",
+    "pdfCompress.guide.faq1A": "いいえ、100%ローカルで処理されます。",
+    "pdfCompress.guide.faq2Q": "文字画質に影響しますか？",
+    "pdfCompress.guide.faq2A": "いいえ、テキストは鮮明なまま保持されます。",
+    "pdfCompress.guide.faq3Q": "サイズ制限はありますか？",
+    "pdfCompress.guide.faq3A": "制限はありません。",
   },
 
   // ── Spanish ────────────────────────────────────────────────
@@ -1555,6 +1687,39 @@ export const translations: Record<Locale, Translations> = {
     "pdfMerger.guide.faq2A": "No hay límite artificial.",
     "pdfMerger.guide.faq3Q": "¿Puedo reordenar las páginas?",
     "pdfMerger.guide.faq3A": "Sí, puedes ajustar el orden fácilmente.",
+    // PDF Compress
+    "pdfCompress.title": "Comprimir PDF",
+    "pdfCompress.subtitle": "Reduce el tamaño de tu archivo PDF manteniendo la calidad.",
+    "pdfCompress.dropPrompt": "Arrastra y suelta un archivo PDF aquí...",
+    "pdfCompress.originalSize": "Tamaño Original",
+    "pdfCompress.compressedSize": "Tamaño Comprimido",
+    "pdfCompress.reduction": "Ahorro de Tamaño",
+    "pdfCompress.level": "Nivel de Compresión",
+    "pdfCompress.levelRecommended": "Recomendado",
+    "pdfCompress.levelRecommendedDesc": "Mejor equilibrio entre calidad y tamaño.",
+    "pdfCompress.levelHigh": "Alta Compresión",
+    "pdfCompress.levelHighDesc": "Máxima reducción de tamaño.",
+    "pdfCompress.levelLow": "Baja Compresión",
+    "pdfCompress.levelLowDesc": "Máxima calidad visual.",
+    "pdfCompress.filename": "Nombre del Archivo",
+    "pdfCompress.compressBtn": "Comprimir PDF",
+    "pdfCompress.compressing": "Comprimiendo...",
+    "pdfCompress.download": "Descargar PDF Comprimido",
+    "pdfCompress.reset": "Limpiar",
+    "pdfCompress.guide.title": "Guía de Compresión PDF",
+    "pdfCompress.guide.aboutTitle": "¿Qué es la herramienta de Compresión PDF?",
+    "pdfCompress.guide.aboutDesc": "Comprime archivos PDF 100% en tu navegador.",
+    "pdfCompress.guide.howTitle": "Cómo usar",
+    "pdfCompress.guide.step1": "1. Selecciona o arrastra tu archivo PDF.",
+    "pdfCompress.guide.step2": "2. Elige el nivel de compresión.",
+    "pdfCompress.guide.step3": "3. Descarga tu PDF comprimido.",
+    "pdfCompress.guide.faqTitle": "Preguntas Frecuentes",
+    "pdfCompress.guide.faq1Q": "¿Mis archivos se suben al servidor?",
+    "pdfCompress.guide.faq1A": "No, todo ocurre 100% en tu navegador.",
+    "pdfCompress.guide.faq2Q": "¿Afecta a la calidad del texto?",
+    "pdfCompress.guide.faq2A": "No, el texto se mantiene nítido.",
+    "pdfCompress.guide.faq3Q": "¿Hay límite de tamaño?",
+    "pdfCompress.guide.faq3A": "No hay límites artificiales.",
   },
 
   // ── Chinese ────────────────────────────────────────────────
@@ -1863,6 +2028,39 @@ export const translations: Record<Locale, Translations> = {
     "pdfMerger.guide.faq2A": "没有数量限制，取决于您的设备内存。",
     "pdfMerger.guide.faq3Q": "可以调整合并顺序吗？",
     "pdfMerger.guide.faq3A": "可以，通过上移/下移按钮轻松调整顺序。",
+    // PDF Compress
+    "pdfCompress.title": "PDF 压缩",
+    "pdfCompress.subtitle": "在保持视觉质量的同时压缩 PDF 文件大小。",
+    "pdfCompress.dropPrompt": "拖放 PDF 文件到此处...",
+    "pdfCompress.originalSize": "原始大小",
+    "pdfCompress.compressedSize": "压缩后大小",
+    "pdfCompress.reduction": "节省空间",
+    "pdfCompress.level": "压缩级别",
+    "pdfCompress.levelRecommended": "推荐压缩",
+    "pdfCompress.levelRecommendedDesc": "最佳文件大小与质量平衡。",
+    "pdfCompress.levelHigh": "强力压缩",
+    "pdfCompress.levelHighDesc": "最大程度减小文件体积。",
+    "pdfCompress.levelLow": "轻度压缩",
+    "pdfCompress.levelLowDesc": "保持最高清晰度。",
+    "pdfCompress.filename": "输出文件名",
+    "pdfCompress.compressBtn": "压缩 PDF",
+    "pdfCompress.compressing": "压缩中...",
+    "pdfCompress.download": "下载压缩后的 PDF",
+    "pdfCompress.reset": "清除文件",
+    "pdfCompress.guide.title": "PDF 压缩指南",
+    "pdfCompress.guide.aboutTitle": "什么是 PDF 压缩工具？",
+    "pdfCompress.guide.aboutDesc": "100% 在本地浏览器中压缩 PDF 文件。",
+    "pdfCompress.guide.howTitle": "使用方法",
+    "pdfCompress.guide.step1": "1. 选择或拖放 PDF 文件。",
+    "pdfCompress.guide.step2": "2. 选择压缩级别。",
+    "pdfCompress.guide.step3": "3. 点击压缩并下载。",
+    "pdfCompress.guide.faqTitle": "常见问题",
+    "pdfCompress.guide.faq1Q": "文件会上传到服务器吗？",
+    "pdfCompress.guide.faq1A": "不会，100% 本地完成。",
+    "pdfCompress.guide.faq2Q": "会影响文字清晰度吗？",
+    "pdfCompress.guide.faq2A": "不会，文本保持清晰。",
+    "pdfCompress.guide.faq3Q": "有大小限制吗？",
+    "pdfCompress.guide.faq3A": "没有人工限制。",
   },
 
   // ── French ─────────────────────────────────────────────────
@@ -2171,5 +2369,38 @@ export const translations: Record<Locale, Translations> = {
     "pdfMerger.guide.faq2A": "Aucune limite artificielle.",
     "pdfMerger.guide.faq3Q": "Puis-je réorganiser l'ordre ?",
     "pdfMerger.guide.faq3A": "Oui, ajustez facilement l'ordre des fichiers.",
+    // PDF Compress
+    "pdfCompress.title": "Compresser PDF",
+    "pdfCompress.subtitle": "Réduisez la taille de votre fichier PDF tout en préservant la qualité.",
+    "pdfCompress.dropPrompt": "Glissez-déposez un fichier PDF ici...",
+    "pdfCompress.originalSize": "Taille originale",
+    "pdfCompress.compressedSize": "Taille meublée",
+    "pdfCompress.reduction": "Réduction",
+    "pdfCompress.level": "Niveau de compression",
+    "pdfCompress.levelRecommended": "Recommandé",
+    "pdfCompress.levelRecommendedDesc": "Meilleur équilibre entre taille et qualité.",
+    "pdfCompress.levelHigh": "Haute compression",
+    "pdfCompress.levelHighDesc": "Réduction maximale de la taille.",
+    "pdfCompress.levelLow": "Faible compression",
+    "pdfCompress.levelLowDesc": "Qualité visuelle maximale.",
+    "pdfCompress.filename": "Nom du fichier",
+    "pdfCompress.compressBtn": "Compresser PDF",
+    "pdfCompress.compressing": "Compression...",
+    "pdfCompress.download": "Télécharger le PDF compressé",
+    "pdfCompress.reset": "Effacer",
+    "pdfCompress.guide.title": "Guide de compression PDF",
+    "pdfCompress.guide.aboutTitle": "Qu'est-ce que l'outil de compression PDF ?",
+    "pdfCompress.guide.aboutDesc": "Compresse les fichiers PDF 100% dans votre navigateur.",
+    "pdfCompress.guide.howTitle": "Comment l'utiliser",
+    "pdfCompress.guide.step1": "1. Sélectionnez votre fichier PDF.",
+    "pdfCompress.guide.step2": "2. Choisissez le niveau de compression.",
+    "pdfCompress.guide.step3": "3. Téléchargez votre fichier compressé.",
+    "pdfCompress.guide.faqTitle": "Foire Aux Questions",
+    "pdfCompress.guide.faq1Q": "Mes fichiers sont-ils envoyés sur un serveur ?",
+    "pdfCompress.guide.faq1A": "Non, tout est 100% local sur votre navigateur.",
+    "pdfCompress.guide.faq2Q": "Cela altère-t-il la qualité du texte ?",
+    "pdfCompress.guide.faq2A": "Non, le texte reste parfaitement net.",
+    "pdfCompress.guide.faq3Q": "Y a-t-il une limite de taille ?",
+    "pdfCompress.guide.faq3A": "Aucune limite artificielle.",
   },
 };
