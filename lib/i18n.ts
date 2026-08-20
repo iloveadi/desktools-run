@@ -291,6 +291,36 @@ export interface Translations {
   "imageResizer.guide.faq2A": string;
   "imageResizer.guide.faq3Q": string;
   "imageResizer.guide.faq3A": string;
+  // ── PDF Merger Tool ──────────────────────────────────────────
+  "pdfMerger.title": string;
+  "pdfMerger.subtitle": string;
+  "pdfMerger.dropPrompt": string;
+  "pdfMerger.addMore": string;
+  "pdfMerger.totalFiles": string;
+  "pdfMerger.totalPages": string;
+  "pdfMerger.filename": string;
+  "pdfMerger.mergeBtn": string;
+  "pdfMerger.merging": string;
+  "pdfMerger.download": string;
+  "pdfMerger.reset": string;
+  "pdfMerger.moveUp": string;
+  "pdfMerger.moveDown": string;
+  "pdfMerger.remove": string;
+  "pdfMerger.pages": string;
+  "pdfMerger.guide.title": string;
+  "pdfMerger.guide.aboutTitle": string;
+  "pdfMerger.guide.aboutDesc": string;
+  "pdfMerger.guide.howTitle": string;
+  "pdfMerger.guide.step1": string;
+  "pdfMerger.guide.step2": string;
+  "pdfMerger.guide.step3": string;
+  "pdfMerger.guide.faqTitle": string;
+  "pdfMerger.guide.faq1Q": string;
+  "pdfMerger.guide.faq1A": string;
+  "pdfMerger.guide.faq2Q": string;
+  "pdfMerger.guide.faq2A": string;
+  "pdfMerger.guide.faq3Q": string;
+  "pdfMerger.guide.faq3A": string;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -571,6 +601,36 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNG supports transparency and lossless quality. JPG provides small file sizes for photos without transparency. WEBP offers next-gen high compression with transparency support.",
     "imageResizer.guide.faq3Q": "How does locking the aspect ratio help?",
     "imageResizer.guide.faq3A": "Locking the aspect ratio ensures your image scales proportionally without stretching, warping, or distorting.",
+
+    "pdfMerger.title": "PDF Merger",
+    "pdfMerger.subtitle": "Combine multiple PDF files into one single document instantly—100% free and private.",
+    "pdfMerger.dropPrompt": "Drag & drop PDF files here, or click to browse files...",
+    "pdfMerger.addMore": "Add More PDFs",
+    "pdfMerger.totalFiles": "Total Files",
+    "pdfMerger.totalPages": "Total Pages",
+    "pdfMerger.filename": "Output Filename",
+    "pdfMerger.mergeBtn": "Merge PDF Files",
+    "pdfMerger.merging": "Merging PDFs...",
+    "pdfMerger.download": "Download Merged PDF",
+    "pdfMerger.reset": "Clear All",
+    "pdfMerger.moveUp": "Move Up",
+    "pdfMerger.moveDown": "Move Down",
+    "pdfMerger.remove": "Remove",
+    "pdfMerger.pages": "pages",
+    "pdfMerger.guide.title": "Complete PDF Merger Guide",
+    "pdfMerger.guide.aboutTitle": "What is the PDF Merger Tool?",
+    "pdfMerger.guide.aboutDesc": "The PDF Merger allows you to combine multiple PDF documents into a single organized file directly inside your browser—with zero server file uploads.",
+    "pdfMerger.guide.howTitle": "How to Combine PDF Files",
+    "pdfMerger.guide.step1": "1. Drag & drop or select multiple PDF files to upload.",
+    "pdfMerger.guide.step2": "2. Use the Up (▲) and Down (▼) buttons to arrange the files in your preferred sequence.",
+    "pdfMerger.guide.step3": "3. Enter a custom output filename and click 'Merge PDF Files' to download your combined document.",
+    "pdfMerger.guide.faqTitle": "Frequently Asked Questions",
+    "pdfMerger.guide.faq1Q": "Are my PDF files uploaded to any server?",
+    "pdfMerger.guide.faq1A": "No. All PDF parsing and page merging operations happen 100% locally inside your browser memory using WebAssembly & pdf-lib.",
+    "pdfMerger.guide.faq2Q": "Is there a limit on how many PDFs I can merge?",
+    "pdfMerger.guide.faq2A": "There is no artificial limit. You can merge as many PDF files as your device's memory allows.",
+    "pdfMerger.guide.faq3Q": "Can I reorder PDF files before merging?",
+    "pdfMerger.guide.faq3A": "Yes. Each file card has Up and Down controls to let you customize the exact order of pages in the merged file.",
   },
 
   // ── Korean ─────────────────────────────────────────────────
@@ -849,6 +909,36 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNG는 투명 배경과 무손실 화질을 지원하고, JPG는 사진 파일의 용량을 크게 줄여줍니다. WEBP는 투명도와 뛰어난 압축률을 동시에 제공하는 차세대 포맷입니다.",
     "imageResizer.guide.faq3Q": "종횡비 고정 기능은 왜 필요한가요?",
     "imageResizer.guide.faq3A": "가로와 세로 비율을 유지함으로써 리사이즈 시 이미지가 찌그러지거나 왜곡되는 현상을 방지해 줍니다.",
+
+    "pdfMerger.title": "PDF 합치기 & 병합",
+    "pdfMerger.subtitle": "여러 개의 PDF 문서를 순서를 지정하여 하나의 깔끔한 문서로 빠르게 합치세요.",
+    "pdfMerger.dropPrompt": "PDF 파일들을 이곳에 드래그하거나 클릭하여 업로드하세요...",
+    "pdfMerger.addMore": "PDF 파일 추가하기",
+    "pdfMerger.totalFiles": "총 파일 수",
+    "pdfMerger.totalPages": "총 페이지 수",
+    "pdfMerger.filename": "저장할 파일명",
+    "pdfMerger.mergeBtn": "PDF 병합하기",
+    "pdfMerger.merging": "PDF 병합 중...",
+    "pdfMerger.download": "병합된 PDF 다운로드",
+    "pdfMerger.reset": "전체 삭제",
+    "pdfMerger.moveUp": "위로 이동",
+    "pdfMerger.moveDown": "아래로 이동",
+    "pdfMerger.remove": "삭제",
+    "pdfMerger.pages": "페이지",
+    "pdfMerger.guide.title": "PDF 합치기 완벽 가이드",
+    "pdfMerger.guide.aboutTitle": "PDF 합치기 도구란 무엇인가요?",
+    "pdfMerger.guide.aboutDesc": "서버 업로드 걱정 없이 사용자의 웹 브라우저 메모리 내에서 여러 PDF 파일을 원하는 순서대로 안전하게 하나로 합쳐주는 100% 로컬 무료 유틸리티입니다.",
+    "pdfMerger.guide.howTitle": "PDF 병합 방법",
+    "pdfMerger.guide.step1": "1. 합치고자 하는 여러 개의 PDF 파일을 드래그하여 업로드합니다.",
+    "pdfMerger.guide.step2": "2. 목록에서 위(▲) 및 아래(▼) 버튼을 눌러 PDF 결합 순서를 정렬합니다.",
+    "pdfMerger.guide.step3": "3. 저장할 파일명을 입력한 후 'PDF 병합하기' 버튼을 눌러 즉시 다운로드합니다.",
+    "pdfMerger.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "pdfMerger.guide.faq1Q": "업로드한 PDF 문서가 외부 서버로 전송되나요?",
+    "pdfMerger.guide.faq1A": "아닙니다. desktools.run의 모든 PDF 처리는 pdf-lib 엔진을 통해 사용자의 브라우저 내에서 100% 로컬로 안전하게 진행됩니다.",
+    "pdfMerger.guide.faq2Q": "합칠 수 있는 PDF 파일 수에 제한이 있나요?",
+    "pdfMerger.guide.faq2A": "별도의 인위적인 개수 제한은 없습니다. 사용 중인 컴퓨터 기기의 메모리가 허용하는 한 수십 개의 파일도 병합할 수 있습니다.",
+    "pdfMerger.guide.faq3Q": "파일 병합 전 순서를 바꿀 수 있나요?",
+    "pdfMerger.guide.faq3A": "네. 각 파일 카드의 위/아래 이동 버튼을 통해 원하는 결합 순서로 자유롭게 재배치할 수 있습니다.",
   },
 
   // ── Japanese ───────────────────────────────────────────────
@@ -878,6 +968,36 @@ export const translations: Record<Locale, Translations> = {
     "grid.search.result": "件の結果",
     "grid.showAll": "← すべて表示",
     "grid.searchLabel": "検索結果:",
+
+    "pdfMerger.title": "PDF結合・結合",
+    "pdfMerger.subtitle": "複数のPDFファイルを1つのドキュメントに結合。",
+    "pdfMerger.dropPrompt": "PDFファイルをドラッグ＆ドロップ、または選択...",
+    "pdfMerger.addMore": "PDFを追加",
+    "pdfMerger.totalFiles": "合計ファイル数",
+    "pdfMerger.totalPages": "合計ページ数",
+    "pdfMerger.filename": "出力ファイル名",
+    "pdfMerger.mergeBtn": "PDFを結合",
+    "pdfMerger.merging": "結合中...",
+    "pdfMerger.download": "結合されたPDFをダウンロード",
+    "pdfMerger.reset": "すべてクリア",
+    "pdfMerger.moveUp": "上に移動",
+    "pdfMerger.moveDown": "下に移動",
+    "pdfMerger.remove": "削除",
+    "pdfMerger.pages": "ページ",
+    "pdfMerger.guide.title": "PDF結合完全ガイド",
+    "pdfMerger.guide.aboutTitle": "PDF結合ツールとは？",
+    "pdfMerger.guide.aboutDesc": "サーバーにアップロードせず、ブラウザ上で直接複数のPDFを安全に1つに結合できます。",
+    "pdfMerger.guide.howTitle": "使い方",
+    "pdfMerger.guide.step1": "1. PDFファイルをアップロードします。",
+    "pdfMerger.guide.step2": "2. 上下ボタンで順番を調整します。",
+    "pdfMerger.guide.step3": "3. ファイル名を入力し、結合してダウンロードします。",
+    "pdfMerger.guide.faqTitle": "よくある質問",
+    "pdfMerger.guide.faq1Q": "ファイルはサーバーに送信されますか？",
+    "pdfMerger.guide.faq1A": "いいえ、pdf-libを使用し100%ブラウザ内でローカル処理されます。",
+    "pdfMerger.guide.faq2Q": "結合可能なファイル数に制限はありますか？",
+    "pdfMerger.guide.faq2A": "制限はありません。お使いの端末のメモリの許す限り結合可能です。",
+    "pdfMerger.guide.faq3Q": "順番は変更できますか？",
+    "pdfMerger.guide.faq3A": "はい、上下ボタンで自由に並び替えが可能です。",
 
     "footer.tagline":
       "高速で軽量なWebユーティリティ — デスクの上ですぐに。インストールも登録も不要。開いて実行するだけ。",
@@ -1405,6 +1525,36 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNG admite transparencia, JPG optimiza el tamaño y WEBP ofrece máxima compresión.",
     "imageResizer.guide.faq3Q": "¿Para qué sirve bloquear la proporción?",
     "imageResizer.guide.faq3A": "Mantiene la relación de aspecto sin distorsionar la imagen.",
+
+    "pdfMerger.title": "Unir Archivos PDF",
+    "pdfMerger.subtitle": "Combina múltiples archivos PDF en un solo documento de forma rápida y segura.",
+    "pdfMerger.dropPrompt": "Arrastra y suelta archivos PDF aquí, o haz clic para buscar...",
+    "pdfMerger.addMore": "Añadir más PDFs",
+    "pdfMerger.totalFiles": "Total de Archivos",
+    "pdfMerger.totalPages": "Total de Páginas",
+    "pdfMerger.filename": "Nombre del Archivo",
+    "pdfMerger.mergeBtn": "Unir PDFs",
+    "pdfMerger.merging": "Uniendo...",
+    "pdfMerger.download": "Descargar PDF Combinado",
+    "pdfMerger.reset": "Borrar Todo",
+    "pdfMerger.moveUp": "Mover Arriba",
+    "pdfMerger.moveDown": "Mover Abajo",
+    "pdfMerger.remove": "Eliminar",
+    "pdfMerger.pages": "páginas",
+    "pdfMerger.guide.title": "Guía Completa para Combinar PDFs",
+    "pdfMerger.guide.aboutTitle": "¿Qué es la herramienta de unir PDFs?",
+    "pdfMerger.guide.aboutDesc": "Permite organizar y unir varios archivos PDF 100% dentro de tu navegador sin subir nada al servidor.",
+    "pdfMerger.guide.howTitle": "Cómo usar",
+    "pdfMerger.guide.step1": "1. Sube tus archivos PDF.",
+    "pdfMerger.guide.step2": "2. Ordena los archivos con los botones arriba/abajo.",
+    "pdfMerger.guide.step3": "3. Asigna un nombre y descarga el resultado.",
+    "pdfMerger.guide.faqTitle": "Preguntas Frecuentes",
+    "pdfMerger.guide.faq1Q": "¿Mis archivos se suben al servidor?",
+    "pdfMerger.guide.faq1A": "No, todo ocurre 100% en tu navegador.",
+    "pdfMerger.guide.faq2Q": "¿Hay límite de archivos?",
+    "pdfMerger.guide.faq2A": "No hay límite artificial.",
+    "pdfMerger.guide.faq3Q": "¿Puedo reordenar las páginas?",
+    "pdfMerger.guide.faq3A": "Sí, puedes ajustar el orden fácilmente.",
   },
 
   // ── Chinese ────────────────────────────────────────────────
@@ -1683,6 +1833,36 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNG 支持透明背景，JPG 适合照片压缩，WEBP 是兼具透明度与高压缩率的新一代格式。",
     "imageResizer.guide.faq3Q": "为什么要锁定宽高比？",
     "imageResizer.guide.faq3A": "保持宽高比例可防止图片拉伸或变形。",
+
+    "pdfMerger.title": "PDF 合并工具",
+    "pdfMerger.subtitle": "按自定义顺序将多个 PDF 文件秒速合并为一个文件，100% 本地安全。",
+    "pdfMerger.dropPrompt": "将 PDF 文件拖放到此处，或点击浏览文件...",
+    "pdfMerger.addMore": "添加更多 PDF",
+    "pdfMerger.totalFiles": "文件总数",
+    "pdfMerger.totalPages": "总页数",
+    "pdfMerger.filename": "保存文件名",
+    "pdfMerger.mergeBtn": "合并 PDF 文件",
+    "pdfMerger.merging": "正在合并...",
+    "pdfMerger.download": "下载合并后的 PDF",
+    "pdfMerger.reset": "清空全部",
+    "pdfMerger.moveUp": "上移",
+    "pdfMerger.moveDown": "下移",
+    "pdfMerger.remove": "删除",
+    "pdfMerger.pages": "页",
+    "pdfMerger.guide.title": "PDF 合并完整指南",
+    "pdfMerger.guide.aboutTitle": "什么是 PDF 合并工具？",
+    "pdfMerger.guide.aboutDesc": "无需上传服务器，100% 在您的浏览器内将多个 PDF 文件合并为一个完整的文档。",
+    "pdfMerger.guide.howTitle": "使用步骤",
+    "pdfMerger.guide.step1": "1. 拖放上传多个 PDF 文件。",
+    "pdfMerger.guide.step2": "2. 使用上移/下移按钮调整文件合并顺序。",
+    "pdfMerger.guide.step3": "3. 输入保存文件名，点击“合并 PDF 文件”并下载。",
+    "pdfMerger.guide.faqTitle": "常见问题",
+    "pdfMerger.guide.faq1Q": "PDF 文件会上传到服务器吗？",
+    "pdfMerger.guide.faq1A": "不会。所有解析与合并均在本地浏览器内存中完成。",
+    "pdfMerger.guide.faq2Q": "合并文件数量有限制吗？",
+    "pdfMerger.guide.faq2A": "没有数量限制，取决于您的设备内存。",
+    "pdfMerger.guide.faq3Q": "可以调整合并顺序吗？",
+    "pdfMerger.guide.faq3A": "可以，通过上移/下移按钮轻松调整顺序。",
   },
 
   // ── French ─────────────────────────────────────────────────
@@ -1961,5 +2141,35 @@ export const translations: Record<Locale, Translations> = {
     "imageResizer.guide.faq2A": "PNG gère la transparence, JPG réduit le poids des photos, WEBP offre une compression optimale.",
     "imageResizer.guide.faq3Q": "Pourquoi verrouiller les proportions ?",
     "imageResizer.guide.faq3A": "Pour éviter toute déformation lors du changement de taille.",
+
+    "pdfMerger.title": "Fusionner des PDF",
+    "pdfMerger.subtitle": "Combinez plusieurs fichiers PDF en un seul document instantanément et en toute confidentialité.",
+    "pdfMerger.dropPrompt": "Glissez-déposez des fichiers PDF ici, ou cliquez pour parcourir...",
+    "pdfMerger.addMore": "Ajouter des PDF",
+    "pdfMerger.totalFiles": "Total Fichiers",
+    "pdfMerger.totalPages": "Total Pages",
+    "pdfMerger.filename": "Nom du fichier",
+    "pdfMerger.mergeBtn": "Fusionner les PDF",
+    "pdfMerger.merging": "Fusion en cours...",
+    "pdfMerger.download": "Télécharger le PDF Fusionné",
+    "pdfMerger.reset": "Tout effacer",
+    "pdfMerger.moveUp": "Monter",
+    "pdfMerger.moveDown": "Descendre",
+    "pdfMerger.remove": "Supprimer",
+    "pdfMerger.pages": "pages",
+    "pdfMerger.guide.title": "Guide Complet de Fusion PDF",
+    "pdfMerger.guide.aboutTitle": "Qu'est-ce que l'outil de fusion PDF ?",
+    "pdfMerger.guide.aboutDesc": "Permet de regrouper plusieurs fichiers PDF en un seul 100% localement dans votre navigateur.",
+    "pdfMerger.guide.howTitle": "Comment l'utiliser",
+    "pdfMerger.guide.step1": "1. Déposez vos fichiers PDF.",
+    "pdfMerger.guide.step2": "2. Ajustez l'ordre avec les boutons monter/descendre.",
+    "pdfMerger.guide.step3": "3. Indiquez le nom et téléchargez.",
+    "pdfMerger.guide.faqTitle": "Foire Aux Questions",
+    "pdfMerger.guide.faq1Q": "Mes fichiers sont-ils envoyés sur un serveur ?",
+    "pdfMerger.guide.faq1A": "Non, tout est 100% local sur votre navigateur.",
+    "pdfMerger.guide.faq2Q": "Y a-t-il une limite de fichiers ?",
+    "pdfMerger.guide.faq2A": "Aucune limite artificielle.",
+    "pdfMerger.guide.faq3Q": "Puis-je réorganiser l'ordre ?",
+    "pdfMerger.guide.faq3A": "Oui, ajustez facilement l'ordre des fichiers.",
   },
 };
