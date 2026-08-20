@@ -4,16 +4,6 @@
  * app/tools/image-resizer/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Image Resizer & Converter Tool for desktools.run
- *
- * Features:
- *  - 100% Client-side HTML5 Canvas resizing & format conversion
- *  - Supports PNG, JPG, WEBP, GIF, SVG image formats
- *  - Custom pixel dimensions (Width/Height) with aspect ratio lock/unlock
- *  - Quick percentage resizing presets (25%, 50%, 75%, 100%, 150%, 200%)
- *  - Output format selection (PNG, JPEG, WEBP) & Quality slider
- *  - Real-time side-by-side original vs resized preview with file size reduction
- *  - 1-click Download & Reset
- *  - Full 6-language i18n & Dark/Light theme support
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -27,12 +17,10 @@ import {
   Download,
   RotateCcw,
   Sparkles,
-  CheckCircle2,
-  FileImage,
-  HelpCircle,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
@@ -40,32 +28,27 @@ type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 export default function ImageResizerPage() {
   const { t } = useLocale();
 
-  // File & Image state
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string>("");
   const [origWidth, setOrigWidth] = useState<number>(0);
   const [origHeight, setOrigHeight] = useState<number>(0);
   const [origSize, setOrigSize] = useState<number>(0);
 
-  // Resize settings
   const [targetWidth, setTargetWidth] = useState<number>(0);
   const [targetHeight, setTargetHeight] = useState<number>(0);
   const [lockAspect, setLockAspect] = useState<boolean>(true);
   const [outputFormat, setOutputFormat] = useState<OutputFormat>("image/jpeg");
-  const [quality, setQuality] = useState<number>(90); // 10 to 100
+  const [quality, setQuality] = useState<number>(90);
 
-  // Resized Output Preview state
   const [resizedBlob, setResizedBlob] = useState<Blob | null>(null);
   const [resizedDataUrl, setResizedDataUrl] = useState<string>("");
   const [resizedSize, setResizedSize] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  // Canvas ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Load image file
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
 
@@ -89,7 +72,6 @@ export default function ImageResizerPage() {
     reader.readAsDataURL(file);
   }, []);
 
-  // Drag & drop handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -103,7 +85,6 @@ export default function ImageResizerPage() {
     }
   };
 
-  // Dimension change handlers
   const handleWidthChange = (val: number) => {
     setTargetWidth(val);
     if (lockAspect && origWidth > 0 && origHeight > 0) {
@@ -128,7 +109,6 @@ export default function ImageResizerPage() {
     setTargetHeight(h);
   };
 
-  // Canvas Resize Execution
   useEffect(() => {
     if (!imageSrc || targetWidth <= 0 || targetHeight <= 0) return;
 
@@ -142,11 +122,9 @@ export default function ImageResizerPage() {
 
         const ctx = canvas.getContext("2d");
         if (ctx) {
-          // Smooth image scaling
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = "high";
 
-          // If JPEG, fill white background to avoid transparent black artifacts
           if (outputFormat === "image/jpeg") {
             ctx.fillStyle = "#ffffff";
             ctx.fillRect(0, 0, targetWidth, targetHeight);
@@ -176,7 +154,6 @@ export default function ImageResizerPage() {
     return () => clearTimeout(timer);
   }, [imageSrc, targetWidth, targetHeight, outputFormat, quality]);
 
-  // Download Handler
   const handleDownload = () => {
     if (!resizedBlob || !imageFile) return;
 
@@ -195,7 +172,6 @@ export default function ImageResizerPage() {
     document.body.removeChild(link);
   };
 
-  // Reset Handler
   const handleReset = () => {
     setImageFile(null);
     setImageSrc("");
@@ -210,7 +186,6 @@ export default function ImageResizerPage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Format Helper
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return "0 B";
     const k = 1024;
@@ -293,7 +268,6 @@ export default function ImageResizerPage() {
         {/* ── Main Resizer Workspace ───────────────────── */}
         <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           {!imageFile ? (
-            /* Upload Dropzone */
             <div
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -346,12 +320,9 @@ export default function ImageResizerPage() {
               </div>
             </div>
           ) : (
-            /* Resizer Editing Workspace */
             <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "24px" }} className="workspace-grid">
-              {/* Left Column: Side-by-Side Preview */}
               <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }} className="preview-grid">
-                  {/* Original Image Card */}
                   <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-secondary)" }}>
@@ -379,7 +350,6 @@ export default function ImageResizerPage() {
                     </div>
                   </div>
 
-                  {/* Resized Preview Card */}
                   <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", fontWeight: 700, color: "#818cf8" }}>
@@ -416,7 +386,6 @@ export default function ImageResizerPage() {
                   </div>
                 </div>
 
-                {/* Actions Bar */}
                 <div style={{ display: "flex", gap: "12px" }}>
                   <button
                     onClick={handleDownload}
@@ -466,13 +435,11 @@ export default function ImageResizerPage() {
                 </div>
               </div>
 
-              {/* Right Column: Controls Panel */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
                   Resize Settings
                 </h3>
 
-                {/* Pixel Inputs (Width x Height) */}
                 <div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                     <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)" }}>
@@ -550,7 +517,6 @@ export default function ImageResizerPage() {
                   </div>
                 </div>
 
-                {/* Percentage Preset Chips */}
                 <div>
                   <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "8px" }}>
                     {t("imageResizer.byPercent")}
@@ -580,7 +546,6 @@ export default function ImageResizerPage() {
                   </div>
                 </div>
 
-                {/* Output Format Selection */}
                 <div>
                   <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "8px" }}>
                     {t("imageResizer.format")}
@@ -611,7 +576,6 @@ export default function ImageResizerPage() {
                   </div>
                 </div>
 
-                {/* Quality Slider (for JPG & WEBP) */}
                 {outputFormat !== "image/png" && (
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--text-secondary)", marginBottom: "6px" }}>
@@ -632,79 +596,26 @@ export default function ImageResizerPage() {
             </div>
           )}
 
-          {/* Hidden Canvas Element */}
           <canvas ref={canvasRef} style={{ display: "none" }} />
         </section>
 
-        {/* ── Bottom Guide & FAQ Section ─────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "48px auto 0", padding: "0 24px" }}>
-          <div className="glass-card" style={{ padding: "36px", display: "flex", flexDirection: "column", gap: "28px" }}>
-            {/* Header */}
-            <div style={{ borderBottom: "1px solid var(--border-subtle)", paddingBottom: "20px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                <FileImage size={22} color="#818cf8" />
-                <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
-                  {t("imageResizer.guide.title")}
-                </h2>
-              </div>
-              <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
-                Everything you need to know about resizing and converting images locally in your browser.
-              </p>
-            </div>
-
-            {/* Grid layout */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }} className="guide-grid">
-              {/* About section */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#818cf8" />
-                  {t("imageResizer.guide.aboutTitle")}
-                </h3>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: "1.7" }}>
-                  {t("imageResizer.guide.aboutDesc")}
-                </p>
-              </div>
-
-              {/* How to use */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <CheckCircle2 size={16} color="#34d399" />
-                  {t("imageResizer.guide.howTitle")}
-                </h3>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px", fontSize: "13.5px", color: "var(--text-secondary)" }}>
-                  <li>{t("imageResizer.guide.step1")}</li>
-                  <li>{t("imageResizer.guide.step2")}</li>
-                  <li>{t("imageResizer.guide.step3")}</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "24px" }}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <HelpCircle size={18} color="#fbbf24" />
-                {t("imageResizer.guide.faqTitle")}
-              </h3>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }} className="faq-grid">
-                {[
-                  { q: t("imageResizer.guide.faq1Q"), a: t("imageResizer.guide.faq1A") },
-                  { q: t("imageResizer.guide.faq2Q"), a: t("imageResizer.guide.faq2A") },
-                  { q: t("imageResizer.guide.faq3Q"), a: t("imageResizer.guide.faq3A") },
-                ].map((item, idx) => (
-                  <div key={idx} style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                    <h4 style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                      Q. {item.q}
-                    </h4>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                      {item.a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("imageResizer.guide.aboutTitle") || "이미지 리사이저 & 변환 도구란 무엇인가요?"}
+          aboutDesc={t("imageResizer.guide.aboutDesc") || "웹 브라우저의 HTML5 Canvas를 활용하여 이미지 파일(PNG, JPG, WEBP 등)의 해상도 크기를 원하는 픽셀이나 비율(%)로 즉시 조정하고 포맷 변환을 100% 로컬에서 처리해 주는 유틸리티입니다."}
+          howTitle={t("imageResizer.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("imageResizer.guide.step1") || "리사이즈할 이미지 파일을 드래그앤드롭하거나 클릭하여 선택합니다.",
+            t("imageResizer.guide.step2") || "원하는 가로/세로 픽셀 크기를 입력하거나 25%, 50%, 75% 비율 칩을 클릭합니다.",
+            t("imageResizer.guide.step3") || "포맷(JPG/PNG/WEBP) 및 품질을 설정하고 '이미지 다운로드' 버튼을 누릅니다.",
+          ]}
+          faqs={[
+            { q: t("imageResizer.guide.faq1Q") || "업로드한 이미지가 외부 서버로 저장되나요?", a: t("imageResizer.guide.faq1A") || "아닙니다! 사용자의 웹 브라우저 메모리 내부 HTML5 Canvas에서 100% 처리되므로 완벽한 개인정보 보호가 보증됩니다." },
+            { q: t("imageResizer.guide.faq2Q") || "이미지 비율(Aspect Ratio)을 유지할 수 있나요?", a: t("imageResizer.guide.faq2A") || "네, 가로/세로 비율 잠금 아이콘을 켜면 가로 또는 세로 수치를 수정할 때 자동으로 비율에 맞춰 계산됩니다." },
+            { q: t("imageResizer.guide.faq3Q") || "변환 가능한 최대 파일 크기 제한이 있나요?", a: t("imageResizer.guide.faq3A") || "서버가 아닌 사용자 기기의 성능에 따라 결정되며, 보통 수십 MB의 고해상도 그래픽 파일도 원활히 조작 가능합니다." },
+          ]}
+        />
       </main>
 
       <Footer />
@@ -713,8 +624,6 @@ export default function ImageResizerPage() {
         @media (max-width: 900px) {
           .workspace-grid { grid-template-columns: 1fr !important; }
           .preview-grid { grid-template-columns: 1fr !important; }
-          .guide-grid { grid-template-columns: 1fr !important; }
-          .faq-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>

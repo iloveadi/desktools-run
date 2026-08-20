@@ -2,142 +2,142 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════
-   DARK MODE (default)
-   Applied when <html class="dark"> or no class set
+   LINEAR / RAYCAST STYLE - DARK MODE (default)
+   Deep Onyx #09090d + Slate Cobalt & Cyan Spark
    ═══════════════════════════════════════════════════════════ */
 :root,
 html.dark {
   color-scheme: dark;
 
-  /* Backgrounds */
-  --bg-primary:    #0d0d14;
-  --bg-secondary:  #12121f;
-  --bg-card:       #17172a;
-  --bg-card-hover: #1e1e35;
+  /* Backgrounds: Deep Onyx / Obsidian */
+  --bg-primary:    #09090d;
+  --bg-secondary:  #0e0f17;
+  --bg-card:       #13141f;
+  --bg-card-hover: #191b29;
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-hover:  rgba(255, 255, 255, 0.12);
+  /* Borders: Subtle slate glow & clean lines */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover:  rgba(99, 102, 241, 0.28);
 
-  /* Brand gradient (unchanged in both modes) */
-  --brand-from: #6366f1;
-  --brand-mid:  #8b5cf6;
-  --brand-to:   #d946ef;
+  /* Brand gradient: Cobalt -> Electric Indigo -> Cyan Spark */
+  --brand-from: #4f46e5;
+  --brand-mid:  #6366f1;
+  --brand-to:   #06b6d4;
 
-  /* Text */
-  --text-primary:   #f1f0ff;
-  --text-secondary: #9b9ab4;
-  --text-muted:     #5e5d78;
+  /* Text: High contrast crisp slate typography */
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
 
-  /* Shadows */
-  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  /* Shadows: Linear style subtle inset glow & deep elevation */
+  --shadow-glow: 0 0 32px rgba(79, 70, 229, 0.12);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.45);
 
   /* Header */
-  --header-bg: rgba(13, 13, 20, 0.85);
+  --header-bg: rgba(9, 9, 13, 0.82);
 
   /* Card glass */
-  --glass-bg:       rgba(23, 23, 42, 0.7);
-  --glass-bg-hover: rgba(30, 30, 53, 0.85);
+  --glass-bg:       rgba(19, 20, 31, 0.75);
+  --glass-bg-hover: rgba(25, 27, 41, 0.88);
 
   /* Input */
-  --input-bg:    rgba(255, 255, 255, 0.04);
-  --input-bg-focus: rgba(99, 102, 241, 0.08);
-  --input-border: rgba(255, 255, 255, 0.08);
-  --input-border-focus: rgba(99, 102, 241, 0.4);
+  --input-bg:           rgba(255, 255, 255, 0.03);
+  --input-bg-focus:     rgba(99, 102, 241, 0.08);
+  --input-border:       rgba(255, 255, 255, 0.09);
+  --input-border-focus: rgba(99, 102, 241, 0.45);
 
   /* Buttons */
-  --btn-secondary-bg:     rgba(255, 255, 255, 0.05);
+  --btn-secondary-bg:     rgba(255, 255, 255, 0.04);
   --btn-secondary-border: rgba(255, 255, 255, 0.08);
-  --btn-secondary-hover:  rgba(255, 255, 255, 0.09);
+  --btn-secondary-hover:  rgba(255, 255, 255, 0.08);
 
   /* Footer */
-  --footer-bg: rgba(10, 10, 18, 0.95);
-
-  /* Scrollbar */
-  --scrollbar-thumb: rgba(99, 102, 241, 0.4);
-
-  /* Search highlight tag */
-  --tag-bg:       rgba(255, 255, 255, 0.05);
-  --tag-border:   rgba(255, 255, 255, 0.07);
-  --tag-bg-hover: rgba(255, 255, 255, 0.08);
-
-  /* Badge icon containers */
-  --icon-pdf-bg:       rgba(239, 68, 68, 0.15);
-  --icon-image-bg:     rgba(34, 211, 168, 0.15);
-  --icon-text-bg:      rgba(59, 130, 246, 0.15);
-  --icon-dev-bg:       rgba(99, 102, 241, 0.15);
-  --icon-converter-bg: rgba(245, 158, 11, 0.15);
-  --icon-security-bg:  rgba(217, 70, 239, 0.15);
-
-  /* Stats strip */
-  --stats-bg:     rgba(255, 255, 255, 0.02);
-  --stats-border: rgba(255, 255, 255, 0.06);
-
-  /* Divider */
-  --divider: rgba(255, 255, 255, 0.06);
-  --border-active: rgba(99, 102, 241, 0.4);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   LIGHT MODE
-   Applied when <html class="light">
-   ═══════════════════════════════════════════════════════════ */
-html.light {
-  color-scheme: light;
-
-  /* Backgrounds — soft lavender-tinted whites */
-  --bg-primary:    #f5f4ff;
-  --bg-secondary:  #eeedfb;
-  --bg-card:       #ffffff;
-  --bg-card-hover: #f0effe;
-
-  /* Borders */
-  --border-subtle: rgba(99, 102, 241, 0.1);
-  --border-hover:  rgba(99, 102, 241, 0.22);
-
-  /* Brand gradient (unchanged) */
-  --brand-from: #6366f1;
-  --brand-mid:  #8b5cf6;
-  --brand-to:   #d946ef;
-
-  /* Text */
-  --text-primary:   #1a1833;
-  --text-secondary: #5a5880;
-  --text-muted:     #9896b8;
-
-  /* Shadows */
-  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.08);
-  --shadow-card: 0 4px 20px rgba(99, 102, 241, 0.08);
-
-  /* Header */
-  --header-bg: rgba(245, 244, 255, 0.88);
-
-  /* Card glass */
-  --glass-bg:       rgba(255, 255, 255, 0.85);
-  --glass-bg-hover: rgba(240, 239, 254, 0.95);
-
-  /* Input */
-  --input-bg:           rgba(99, 102, 241, 0.04);
-  --input-bg-focus:     rgba(99, 102, 241, 0.07);
-  --input-border:       rgba(99, 102, 241, 0.15);
-  --input-border-focus: rgba(99, 102, 241, 0.5);
-
-  /* Buttons */
-  --btn-secondary-bg:     rgba(99, 102, 241, 0.07);
-  --btn-secondary-border: rgba(99, 102, 241, 0.15);
-  --btn-secondary-hover:  rgba(99, 102, 241, 0.12);
-
-  /* Footer */
-  --footer-bg: rgba(238, 237, 251, 0.98);
+  --footer-bg: rgba(7, 7, 10, 0.96);
 
   /* Scrollbar */
   --scrollbar-thumb: rgba(99, 102, 241, 0.35);
 
   /* Search highlight tag */
-  --tag-bg:       rgba(99, 102, 241, 0.06);
-  --tag-border:   rgba(99, 102, 241, 0.12);
-  --tag-bg-hover: rgba(99, 102, 241, 0.1);
+  --tag-bg:       rgba(255, 255, 255, 0.04);
+  --tag-border:   rgba(255, 255, 255, 0.08);
+  --tag-bg-hover: rgba(255, 255, 255, 0.07);
+
+  /* Badge icon containers */
+  --icon-pdf-bg:       rgba(239, 68, 68, 0.12);
+  --icon-image-bg:     rgba(16, 185, 129, 0.12);
+  --icon-text-bg:      rgba(59, 130, 246, 0.12);
+  --icon-dev-bg:       rgba(99, 102, 241, 0.12);
+  --icon-converter-bg: rgba(245, 158, 11, 0.12);
+  --icon-security-bg:  rgba(6, 182, 212, 0.12);
+
+  /* Stats strip */
+  --stats-bg:     rgba(255, 255, 255, 0.02);
+  --stats-border: rgba(255, 255, 255, 0.07);
+
+  /* Divider */
+  --divider: rgba(255, 255, 255, 0.07);
+  --border-active: rgba(99, 102, 241, 0.45);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LINEAR / RAYCAST STYLE - LIGHT MODE
+   High-contrast Slate + Deep Indigo Contrast Text
+   ═══════════════════════════════════════════════════════════ */
+html.light {
+  color-scheme: light;
+
+  /* Backgrounds: Slate 50 ultra-clean off-white */
+  --bg-primary:    #f8fafc;
+  --bg-secondary:  #f1f5f9;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f8fafc;
+
+  /* Borders: Sharp Slate 200/300 */
+  --border-subtle: #cbd5e1;
+  --border-hover:  #94a3b8;
+
+  /* Brand gradient */
+  --brand-from: #4f46e5;
+  --brand-mid:  #6366f1;
+  --brand-to:   #0284c7;
+
+  /* Text: High contrast Slate 900 / 800 / 600 */
+  --text-primary:   #0f172a;
+  --text-secondary: #1e293b;
+  --text-muted:     #475569;
+
+  /* Shadows: Soft subtle SaaS cards elevation */
+  --shadow-glow: 0 0 32px rgba(79, 70, 229, 0.08);
+  --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+  /* Header */
+  --header-bg: rgba(248, 250, 252, 0.92);
+
+  /* Card glass */
+  --glass-bg:       rgba(255, 255, 255, 0.92);
+  --glass-bg-hover: rgba(248, 250, 252, 0.98);
+
+  /* Input */
+  --input-bg:           #f1f5f9;
+  --input-bg-focus:     #ffffff;
+  --input-border:       #cbd5e1;
+  --input-border-focus: #4f46e5;
+
+  /* Buttons */
+  --btn-secondary-bg:     #f1f5f9;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-hover:  #e2e8f0;
+
+  /* Footer */
+  --footer-bg: rgba(241, 245, 249, 0.98);
+
+  /* Scrollbar */
+  --scrollbar-thumb: rgba(148, 163, 184, 0.6);
+
+  /* Search highlight tag */
+  --tag-bg:       #f1f5f9;
+  --tag-border:   #cbd5e1;
+  --tag-bg-hover: #e2e8f0;
 
   /* Badge icon containers */
   --icon-pdf-bg:       rgba(239, 68, 68, 0.1);
@@ -145,15 +145,15 @@ html.light {
   --icon-text-bg:      rgba(59, 130, 246, 0.1);
   --icon-dev-bg:       rgba(99, 102, 241, 0.1);
   --icon-converter-bg: rgba(245, 158, 11, 0.1);
-  --icon-security-bg:  rgba(217, 70, 239, 0.1);
+  --icon-security-bg:  rgba(2, 132, 199, 0.1);
 
   /* Stats strip */
-  --stats-bg:     rgba(99, 102, 241, 0.04);
-  --stats-border: rgba(99, 102, 241, 0.1);
+  --stats-bg:     #f1f5f9;
+  --stats-border: #cbd5e1;
 
   /* Divider */
-  --divider: rgba(99, 102, 241, 0.1);
-  --border-active: rgba(99, 102, 241, 0.5);
+  --divider: #cbd5e1;
+  --border-active: #4f46e5;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -163,9 +163,9 @@ html.light {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --color-brand-indigo: #6366f1;
-  --color-brand-violet: #8b5cf6;
-  --color-brand-fuchsia: #d946ef;
+  --color-brand-indigo: #4f46e5;
+  --color-brand-violet: #6366f1;
+  --color-brand-fuchsia: #06b6d4;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -180,7 +180,6 @@ html.light {
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -200,6 +199,27 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.7); }
 
+/* ── Pill Badges (High Contrast in both Dark & Light modes) ─ */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(79, 70, 229, 0.14);
+  border: 1px solid rgba(79, 70, 229, 0.28);
+  color: #a5b4fc;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+html.light .badge-pill {
+  background: rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  color: #312e81; /* Deep high-contrast Navy Indigo for crisp readability */
+  font-weight: 700;
+}
+
 /* ── Gradient Text ─────────────────────────────────────────── */
 .gradient-text {
   background: linear-gradient(135deg, var(--brand-from), var(--brand-mid), var(--brand-to));
@@ -211,18 +231,23 @@ body {
 /* ── Glass Card ────────────────────────────────────────────── */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+html.light .glass-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(15, 23, 42, 0.05);
 }
 
 .glass-card:hover {
   background: var(--glass-bg-hover);
   border-color: var(--border-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card), var(--shadow-glow);
+  box-shadow: var(--shadow-card), var(--shadow-glow), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ── Glow Button ───────────────────────────────────────────── */
@@ -257,20 +282,20 @@ body {
 }
 
 /* ── Category Badge Colors ─────────────────────────────────── */
-.badge-pdf       { background: rgba(239, 68, 68, 0.15);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
-.badge-image     { background: rgba(34, 211, 168, 0.12); color: #34d399; border: 1px solid rgba(34, 211, 168, 0.25); }
-.badge-text      { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); }
-.badge-dev       { background: rgba(99, 102, 241, 0.12); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.25); }
-.badge-converter { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
-.badge-security  { background: rgba(217, 70, 239, 0.12); color: #e879f9; border: 1px solid rgba(217, 70, 239, 0.25); }
+.badge-pdf       { background: rgba(239, 68, 68, 0.12);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.22); }
+.badge-image     { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.22); }
+.badge-text      { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.22); }
+.badge-dev       { background: rgba(99, 102, 241, 0.12); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.22); }
+.badge-converter { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.22); }
+.badge-security  { background: rgba(6, 182, 212, 0.12);  color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.22); }
 
-/* Light mode badge text adjustments */
-html.light .badge-pdf       { color: #dc2626; }
-html.light .badge-image     { color: #059669; }
-html.light .badge-text      { color: #2563eb; }
-html.light .badge-dev       { color: #4f46e5; }
-html.light .badge-converter { color: #d97706; }
-html.light .badge-security  { color: #a21caf; }
+/* Light mode badge text adjustments (bold high contrast) */
+html.light .badge-pdf       { color: #b91c1c; font-weight: 700; }
+html.light .badge-image     { color: #047857; font-weight: 700; }
+html.light .badge-text      { color: #1d4ed8; font-weight: 700; }
+html.light .badge-dev       { color: #4338ca; font-weight: 700; }
+html.light .badge-converter { color: #b45309; font-weight: 700; }
+html.light .badge-security  { color: #0369a1; font-weight: 700; }
 
 /* ── Icon Containers ───────────────────────────────────────── */
 .icon-pdf       { background: var(--icon-pdf-bg);       color: #f87171; }
@@ -278,14 +303,14 @@ html.light .badge-security  { color: #a21caf; }
 .icon-text      { background: var(--icon-text-bg);      color: #60a5fa; }
 .icon-dev       { background: var(--icon-dev-bg);       color: #818cf8; }
 .icon-converter { background: var(--icon-converter-bg); color: #fbbf24; }
-.icon-security  { background: var(--icon-security-bg);  color: #e879f9; }
+.icon-security  { background: var(--icon-security-bg);  color: #38bdf8; }
 
-html.light .icon-pdf       { color: #dc2626; }
-html.light .icon-image     { color: #059669; }
-html.light .icon-text      { color: #2563eb; }
-html.light .icon-dev       { color: #4f46e5; }
-html.light .icon-converter { color: #d97706; }
-html.light .icon-security  { color: #a21caf; }
+html.light .icon-pdf       { color: #b91c1c; }
+html.light .icon-image     { color: #047857; }
+html.light .icon-text      { color: #1d4ed8; }
+html.light .icon-dev       { color: #4338ca; }
+html.light .icon-converter { color: #b45309; }
+html.light .icon-security  { color: #0369a1; }
 
 /* ── Animations ────────────────────────────────────────────── */
 @keyframes fade-in-up {
@@ -325,7 +350,7 @@ html.light .icon-security  { color: #a21caf; }
 .search-input:focus {
   background: var(--input-bg-focus);
   border-color: var(--input-border-focus);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 .search-input::placeholder { color: var(--text-muted); }
 
@@ -338,7 +363,6 @@ html.light .icon-security  { color: #a21caf; }
 }
 
 /* ── Theme Transition ──────────────────────────────────────── */
-/* Smooth transition for all themed elements */
 header,
 footer,
 .glass-card,

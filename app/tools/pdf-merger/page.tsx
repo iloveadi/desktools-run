@@ -4,15 +4,6 @@
  * app/tools/pdf-merger/page.tsx
  * ─────────────────────────────────────────────────────────────
  * PDF Merger & Combiner Tool for desktools.run
- *
- * Features:
- *  - 100% Client-side PDF page copying & merging via `pdf-lib`
- *  - Drag & drop multiple PDF files simultaneously
- *  - Parses page count & file size for each PDF
- *  - Up (▲) and Down (▼) file reordering
- *  - Remove individual files or Clear All
- *  - Custom output filename & 1-click Download
- *  - Full 6-language i18n & Dark/Light theme support
  */
 
 import { useState, useRef, useCallback } from "react";
@@ -29,12 +20,10 @@ import {
   Plus,
   RotateCcw,
   Sparkles,
-  CheckCircle2,
-  HelpCircle,
-  BookOpen,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 interface PdfItem {
@@ -76,7 +65,6 @@ export default function PdfMergerPage() {
         });
       } catch (err) {
         console.error("Error loading PDF:", file.name, err);
-        // Fallback for corrupt or password protected files
         newItems.push({
           id: Math.random().toString(36).substring(2, 9),
           file,
@@ -140,6 +128,9 @@ export default function PdfMergerPage() {
     if (pdfQueue.length === 0) return;
 
     setIsMerging(true);
+    // Yield to event loop to allow loading UI state to render
+    await new Promise((r) => setTimeout(r, 60));
+
     try {
       const mergedPdf = await PDFDocument.create();
 
@@ -166,6 +157,7 @@ export default function PdfMergerPage() {
       document.body.removeChild(link);
     } catch (err) {
       console.error("PDF Merge Error:", err);
+      alert("PDF 병합 중 오류가 발생했습니다.");
     } finally {
       setIsMerging(false);
     }
@@ -558,75 +550,23 @@ export default function PdfMergerPage() {
           )}
         </section>
 
-        {/* ── Bottom Guide & FAQ Section ─────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "48px auto 0", padding: "0 24px" }}>
-          <div className="glass-card" style={{ padding: "36px", display: "flex", flexDirection: "column", gap: "28px" }}>
-            {/* Header */}
-            <div style={{ borderBottom: "1px solid var(--border-subtle)", paddingBottom: "20px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                <BookOpen size={22} color="#f87171" />
-                <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
-                  {t("pdfMerger.guide.title")}
-                </h2>
-              </div>
-              <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
-                Everything you need to know about combining PDF documents securely in your browser.
-              </p>
-            </div>
-
-            {/* Grid layout */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }} className="guide-grid">
-              {/* About section */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#f87171" />
-                  {t("pdfMerger.guide.aboutTitle")}
-                </h3>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: "1.7" }}>
-                  {t("pdfMerger.guide.aboutDesc")}
-                </p>
-              </div>
-
-              {/* How to use */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <CheckCircle2 size={16} color="#34d399" />
-                  {t("pdfMerger.guide.howTitle")}
-                </h3>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px", fontSize: "13.5px", color: "var(--text-secondary)" }}>
-                  <li>{t("pdfMerger.guide.step1")}</li>
-                  <li>{t("pdfMerger.guide.step2")}</li>
-                  <li>{t("pdfMerger.guide.step3")}</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "24px" }}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <HelpCircle size={18} color="#fbbf24" />
-                {t("pdfMerger.guide.faqTitle")}
-              </h3>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }} className="faq-grid">
-                {[
-                  { q: t("pdfMerger.guide.faq1Q"), a: t("pdfMerger.guide.faq1A") },
-                  { q: t("pdfMerger.guide.faq2Q"), a: t("pdfMerger.guide.faq2A") },
-                  { q: t("pdfMerger.guide.faq3Q"), a: t("pdfMerger.guide.faq3A") },
-                ].map((item, idx) => (
-                  <div key={idx} style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                    <h4 style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                      Q. {item.q}
-                    </h4>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                      {item.a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Local Processing"
+          aboutTitle={t("pdfMerger.guide.aboutTitle") || "PDF 합치기 도구란 무엇인가요?"}
+          aboutDesc={t("pdfMerger.guide.aboutDesc") || "서버 업로드 걱정 없이 웹 브라우저 메모리 내에서 여러 PDF 파일을 원하는 순서대로 안전하게 하나로 합쳐주는 로컬 무료 유틸리티입니다."}
+          howTitle={t("pdfMerger.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("pdfMerger.guide.step1") || "합치고자 하는 여러 개의 PDF 파일을 드래그하여 업로드합니다.",
+            t("pdfMerger.guide.step2") || "목록에서 위(▲) 및 아래(▼) 버튼을 눌러 PDF 결합 순서를 정렬합니다.",
+            t("pdfMerger.guide.step3") || "저장할 파일명을 입력한 후 'PDF 병합하기' 버튼을 눌러 다운로드합니다.",
+          ]}
+          faqs={[
+            { q: t("pdfMerger.guide.faq1Q") || "업로드한 PDF 문서가 외부 서버로 전송되나요?", a: t("pdfMerger.guide.faq1A") || "아닙니다. desktools.run의 모든 PDF 처리는 사용자 브라우저 내에서 100% 로컬로 안전하게 진행됩니다." },
+            { q: t("pdfMerger.guide.faq2Q") || "합칠 수 있는 PDF 파일 수에 제한이 있나요?", a: t("pdfMerger.guide.faq2A") || "별도의 개수 제한은 없습니다. 컴퓨터 메모리가 허용하는 한 수십 개의 파일도 병합할 수 있습니다." },
+            { q: t("pdfMerger.guide.faq3Q") || "파일 병합 전 순서를 바꿀 수 있나요?", a: t("pdfMerger.guide.faq3A") || "네, 각 파일 카드의 위/아래 이동 버튼을 통해 원하는 결합 순서로 자유롭게 재배치할 수 있습니다." },
+          ]}
+        />
       </main>
 
       <Footer />
@@ -634,8 +574,6 @@ export default function PdfMergerPage() {
       <style>{`
         @media (max-width: 900px) {
           .workspace-grid { grid-template-columns: 1fr !important; }
-          .guide-grid { grid-template-columns: 1fr !important; }
-          .faq-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>

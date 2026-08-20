@@ -4,14 +4,6 @@
  * app/tools/pdf-compress/page.tsx
  * ─────────────────────────────────────────────────────────────
  * PDF Compression Tool for desktools.run
- *
- * Features:
- *  - 100% Client-side PDF stream optimization & compression via `pdf-lib`
- *  - Drag & drop PDF file selection
- *  - Live size calculation (Original vs Compressed & % Savings)
- *  - 3 Compression Presets: Recommended, High, Low
- *  - Custom output filename & 1-click Download
- *  - Full 6-language i18n & Dark/Light theme support
  */
 
 import { useState, useRef, useCallback } from "react";
@@ -26,15 +18,12 @@ import {
   RotateCcw,
   Sparkles,
   CheckCircle2,
-  HelpCircle,
-  BookOpen,
-  Zap,
   Gauge,
-  ShieldCheck,
   FileText,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 type CompressionLevel = "recommended" | "high" | "low";
@@ -114,21 +103,33 @@ export default function PdfCompressPage() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Execute Compression
+  // Execute Compression (non-blocking yield)
   const handleCompress = async () => {
     if (!pdfFile) return;
 
     setIsCompressing(true);
+    // Yield to event loop to allow loading UI state to render instantly
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
     try {
       const buffer = await pdfFile.file.arrayBuffer();
       const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
 
       // Create new optimized document
       const destDoc = await PDFDocument.create();
-      const pages = await destDoc.copyPages(srcDoc, srcDoc.getPageIndices());
-      pages.forEach((p) => destDoc.addPage(p));
 
-      // Strip optional redundant metadata for High & Recommended levels
+      const pageIndices = srcDoc.getPageIndices();
+      // Copy pages in chunks to keep main thread responsive
+      for (let i = 0; i < pageIndices.length; i += 10) {
+        const chunkIndices = pageIndices.slice(i, i + 10);
+        const pages = await destDoc.copyPages(srcDoc, chunkIndices);
+        pages.forEach((p) => destDoc.addPage(p));
+        if (pageIndices.length > 20) {
+          await new Promise((r) => setTimeout(r, 10));
+        }
+      }
+
+      // Strip metadata for High & Recommended levels
       if (level === "high" || level === "recommended") {
         destDoc.setTitle("");
         destDoc.setAuthor("");
@@ -138,7 +139,7 @@ export default function PdfCompressPage() {
         destDoc.setCreator("desktools.run");
       }
 
-      // Configure save options based on level
+      // Save optimized PDF
       const useObjectStreams = level !== "low";
       const compressedBytes = await destDoc.save({
         useObjectStreams,
@@ -149,7 +150,6 @@ export default function PdfCompressPage() {
       const url = URL.createObjectURL(blob);
       const newSize = blob.size;
 
-      // Calculate size reduction percentage
       const orig = pdfFile.originalSize;
       const savings = orig > 0 ? Math.max(0, Math.round(((orig - newSize) / orig) * 100)) : 0;
 
@@ -159,7 +159,7 @@ export default function PdfCompressPage() {
         savings,
       });
 
-      // Trigger direct browser download
+      // Trigger automatic download
       const name = outputFilename.endsWith(".pdf") ? outputFilename : `${outputFilename}.pdf`;
       const link = document.createElement("a");
       link.href = url;
@@ -170,6 +170,7 @@ export default function PdfCompressPage() {
       document.body.removeChild(link);
     } catch (err) {
       console.error("PDF Compression Error:", err);
+      alert("PDF 압축 중 오류가 발생했습니다.");
     } finally {
       setIsCompressing(false);
     }
@@ -313,7 +314,7 @@ export default function PdfCompressPage() {
           ) : (
             /* PDF Compression Workspace */
             <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "24px" }} className="workspace-grid">
-              {/* Left Column: File Info & Compression Presets */}
+              {/* Left Column: File Info & Presets */}
               <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                 {/* File Card */}
                 <div
@@ -642,75 +643,23 @@ export default function PdfCompressPage() {
           )}
         </section>
 
-        {/* ── Bottom Guide & FAQ Section ─────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "48px auto 0", padding: "0 24px" }}>
-          <div className="glass-card" style={{ padding: "36px", display: "flex", flexDirection: "column", gap: "28px" }}>
-            {/* Header */}
-            <div style={{ borderBottom: "1px solid var(--border-subtle)", paddingBottom: "20px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                <BookOpen size={22} color="#f87171" />
-                <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
-                  {t("pdfCompress.guide.title")}
-                </h2>
-              </div>
-              <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
-                Everything you need to know about reducing PDF file sizes securely in your browser.
-              </p>
-            </div>
-
-            {/* Grid layout */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }} className="guide-grid">
-              {/* About section */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#f87171" />
-                  {t("pdfCompress.guide.aboutTitle")}
-                </h3>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: "1.7" }}>
-                  {t("pdfCompress.guide.aboutDesc")}
-                </p>
-              </div>
-
-              {/* How to use */}
-              <div>
-                <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <CheckCircle2 size={16} color="#34d399" />
-                  {t("pdfCompress.guide.howTitle")}
-                </h3>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px", fontSize: "13.5px", color: "var(--text-secondary)" }}>
-                  <li>{t("pdfCompress.guide.step1")}</li>
-                  <li>{t("pdfCompress.guide.step2")}</li>
-                  <li>{t("pdfCompress.guide.step3")}</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "24px" }}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <HelpCircle size={18} color="#fbbf24" />
-                {t("pdfCompress.guide.faqTitle")}
-              </h3>
-
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }} className="faq-grid">
-                {[
-                  { q: t("pdfCompress.guide.faq1Q"), a: t("pdfCompress.guide.faq1A") },
-                  { q: t("pdfCompress.guide.faq2Q"), a: t("pdfCompress.guide.faq2A") },
-                  { q: t("pdfCompress.guide.faq3Q"), a: t("pdfCompress.guide.faq3A") },
-                ].map((item, idx) => (
-                  <div key={idx} style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                    <h4 style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                      Q. {item.q}
-                    </h4>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                      {item.a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("pdfCompress.guide.aboutTitle") || "PDF 용량 줄이기 도구란 무엇인가요?"}
+          aboutDesc={t("pdfCompress.guide.aboutDesc") || "서버로 데이터 전송 없이 웹 브라우저 메모리 내에서 PDF 내부 개체 및 스트림 구조를 최적화하여 용량을 줄여주는 100% 로컬 무료 유틸리티입니다."}
+          howTitle={t("pdfCompress.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("pdfCompress.guide.step1") || "용량을 줄이고자 하는 PDF 파일을 드래그하여 업로드합니다.",
+            t("pdfCompress.guide.step2") || "원하는 압축 레벨(권장, 고압축, 저압축)을 선택합니다.",
+            t("pdfCompress.guide.step3") || "'PDF 압축하기' 버튼을 눌러 최적화된 파일로 즉시 다운로드합니다.",
+          ]}
+          faqs={[
+            { q: t("pdfCompress.guide.faq1Q") || "업로드한 PDF 문서가 서버로 전송되나요?", a: t("pdfCompress.guide.faq1A") || "아닙니다. 모든 계산 및 처리 과정은 100% 사용자의 브라우저 로컬 환경에서만 일어납니다." },
+            { q: t("pdfCompress.guide.faq2Q") || "압축 시 문서 화질이 저하되나요?", a: t("pdfCompress.guide.faq2A") || "추천 레벨을 사용하면 텍스트 선명도 및 가독성을 유지하면서 불필요한 메타데이터와 개체 스트림을 최적화합니다." },
+            { q: t("pdfCompress.guide.faq3Q") || "파일 용량 제한이 있나요?", a: t("pdfCompress.guide.faq3A") || "서버 제한은 없으며, 사용자의 컴퓨터 메모리 범위 내에서 대용량 파일도 빠르게 처리됩니다." },
+          ]}
+        />
       </main>
 
       <Footer />
@@ -718,8 +667,6 @@ export default function PdfCompressPage() {
       <style>{`
         @media (max-width: 900px) {
           .workspace-grid { grid-template-columns: 1fr !important; }
-          .guide-grid { grid-template-columns: 1fr !important; }
-          .faq-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>

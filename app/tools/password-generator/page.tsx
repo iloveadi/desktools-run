@@ -4,16 +4,6 @@
  * app/tools/password-generator/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Password Generator Tool for desktools.run
- *
- * Features:
- *  - Cryptographically secure generation (window.crypto.getRandomValues)
- *  - Adjustable length (4-64 chars) with real-time slider
- *  - Toggles for Uppercase, Lowercase, Numbers, Symbols & Ambiguous filter
- *  - Real-time Strength & Entropy meter (in bits)
- *  - Batch generation (5 passwords at once)
- *  - 1-click Copy with toast notification feedback
- *  - Full 6-language i18n & Dark/Light theme support
- *  - 100% Client-side local processing
  */
 
 import { useState, useMemo, useCallback, useEffect } from "react";
@@ -24,17 +14,13 @@ import {
   Copy,
   Check,
   RefreshCw,
-  Sparkles,
-  ShieldCheck,
-  BookOpen,
-  HelpCircle,
-  CheckCircle2,
   Sliders,
   Layers,
   Lock,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Character Sets ─────────────────────────────────────────────
@@ -44,7 +30,6 @@ const NUMBER_CHARS = "0123456789";
 const SYMBOL_CHARS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 const AMBIGUOUS_CHARS = new Set(["0", "O", "o", "1", "l", "I", "i"]);
 
-// Cryptographically secure single password generator
 function generatePassword(
   length: number,
   useUpper: boolean,
@@ -66,13 +51,11 @@ function generatePassword(
       .join("");
   }
 
-  // Fallback if no sets selected
   if (!pool) pool = LOWERCASE_CHARS;
 
   const poolSize = pool.length;
   let result = "";
 
-  // Cryptographically secure random selection using window.crypto
   if (typeof window !== "undefined" && window.crypto && window.crypto.getRandomValues) {
     const randomBuffer = new Uint32Array(length);
     window.crypto.getRandomValues(randomBuffer);
@@ -80,7 +63,6 @@ function generatePassword(
       result += pool[randomBuffer[i] % poolSize];
     }
   } else {
-    // Fallback Math.random
     for (let i = 0; i < length; i++) {
       result += pool[Math.floor(Math.random() * poolSize)];
     }
@@ -89,13 +71,11 @@ function generatePassword(
   return { password: result, poolSize };
 }
 
-// Compute entropy in bits: E = L * log2(N)
 function calculateEntropy(length: number, poolSize: number): number {
   if (poolSize <= 1 || length <= 0) return 0;
   return Math.round(length * Math.log2(poolSize));
 }
 
-// Determine strength tier
 function getStrengthTier(entropy: number) {
   if (entropy < 28) return { labelKey: "passwordGen.strength.veryWeak", color: "#ef4444", percent: 20 };
   if (entropy < 45) return { labelKey: "passwordGen.strength.weak", color: "#f59e0b", percent: 40 };
@@ -104,11 +84,9 @@ function getStrengthTier(entropy: number) {
   return { labelKey: "passwordGen.strength.veryStrong", color: "#6366f1", percent: 100 };
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function PasswordGeneratorPage() {
   const { t } = useLocale();
 
-  // Generator Options
   const [length, setLength] = useState<number>(16);
   const [useUpper, setUseUpper] = useState<boolean>(true);
   const [useLower, setUseLower] = useState<boolean>(true);
@@ -116,16 +94,13 @@ export default function PasswordGeneratorPage() {
   const [useSyms, setUseSyms] = useState<boolean>(true);
   const [excludeAmbiguous, setExcludeAmbiguous] = useState<boolean>(false);
 
-  // Active Password State
   const [password, setPassword] = useState<string>("");
   const [poolSize, setPoolSize] = useState<number>(62);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
 
-  // Bulk Passwords List
   const [bulkPasswords, setBulkPasswords] = useState<string[]>([]);
 
-  // Generate password on option change or manual click
   const handleRegenerate = useCallback(() => {
     setIsSpinning(true);
     setTimeout(() => setIsSpinning(false), 300);
@@ -141,7 +116,6 @@ export default function PasswordGeneratorPage() {
     setPassword(newPass);
     setPoolSize(pool);
 
-    // Generate 5 bulk passwords as well
     const list: string[] = [];
     for (let i = 0; i < 5; i++) {
       list.push(
@@ -151,16 +125,13 @@ export default function PasswordGeneratorPage() {
     setBulkPasswords(list);
   }, [length, useUpper, useLower, useNums, useSyms, excludeAmbiguous]);
 
-  // Initial generation on mount
   useEffect(() => {
     handleRegenerate();
   }, [handleRegenerate]);
 
-  // Entropy & Strength Tier
   const entropyBits = useMemo(() => calculateEntropy(length, poolSize), [length, poolSize]);
   const strengthTier = useMemo(() => getStrengthTier(entropyBits), [entropyBits]);
 
-  // Copy handler
   const handleCopy = useCallback((textToCopy: string, index: number) => {
     navigator.clipboard.writeText(textToCopy);
     setCopiedIndex(index);
@@ -264,7 +235,6 @@ export default function PasswordGeneratorPage() {
               gap: "16px",
             }}
           >
-            {/* Display Area */}
             <div
               style={{
                 display: "flex",
@@ -291,7 +261,6 @@ export default function PasswordGeneratorPage() {
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-                {/* Regenerate Button */}
                 <button
                   onClick={handleRegenerate}
                   style={{
@@ -319,7 +288,6 @@ export default function PasswordGeneratorPage() {
                   />
                 </button>
 
-                {/* Primary Copy Button */}
                 <button
                   onClick={() => handleCopy(password, -1)}
                   style={{
@@ -358,7 +326,6 @@ export default function PasswordGeneratorPage() {
                 </span>
               </div>
 
-              {/* Progress bar */}
               <div
                 style={{
                   width: "100%",
@@ -399,7 +366,6 @@ export default function PasswordGeneratorPage() {
               </h3>
             </div>
 
-            {/* Length Slider */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <label style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
@@ -441,7 +407,6 @@ export default function PasswordGeneratorPage() {
               </div>
             </div>
 
-            {/* Checkboxes Grid */}
             <div
               style={{
                 display: "grid",
@@ -571,159 +536,23 @@ export default function PasswordGeneratorPage() {
           </div>
         </section>
 
-        {/* ── Tool Guide & FAQ Section ────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "48px" }}>
-            <div style={{ marginBottom: "32px", textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "4px 12px",
-                  borderRadius: "100px",
-                  background: "rgba(99,102,241,0.12)",
-                  border: "1px solid rgba(99,102,241,0.2)",
-                  color: "#a5b4fc",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  marginBottom: "12px",
-                }}
-              >
-                <BookOpen size={12} />
-                {t("passwordGen.guide.title")}
-              </div>
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 800,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.4px",
-                }}
-              >
-                {t("passwordGen.guide.aboutTitle")}
-              </h2>
-            </div>
-
-            {/* About & Steps Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-                marginBottom: "32px",
-              }}
-              className="guide-grid"
-            >
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "8px",
-                      background: "rgba(99,102,241,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#818cf8",
-                    }}
-                  >
-                    <ShieldCheck size={18} />
-                  </div>
-                  <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                    Cryptographically Unbiased
-                  </h3>
-                </div>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                  {t("passwordGen.guide.aboutDesc")}
-                </p>
-              </div>
-
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
-                  {t("passwordGen.guide.howTitle")}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {[
-                    t("passwordGen.guide.step1"),
-                    t("passwordGen.guide.step2"),
-                    t("passwordGen.guide.step3"),
-                  ].map((stepText, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <div
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          background: "rgba(99,102,241,0.2)",
-                          color: "#a5b4fc",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {idx + 1}
-                      </div>
-                      <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                        {stepText}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div className="glass-card" style={{ padding: "28px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                <HelpCircle size={18} style={{ color: "#fbbf24" }} />
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {t("passwordGen.guide.faqTitle")}
-                </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {[
-                  { q: t("passwordGen.guide.faq1Q"), a: t("passwordGen.guide.faq1A") },
-                  { q: t("passwordGen.guide.faq2Q"), a: t("passwordGen.guide.faq2A") },
-                  { q: t("passwordGen.guide.faq3Q"), a: t("passwordGen.guide.faq3A") },
-                ].map(({ q, a }, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                      <CheckCircle2 size={15} style={{ color: "#34d399", marginTop: "3px", flexShrink: 0 }} />
-                      <span>{q}</span>
-                    </div>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, paddingLeft: "21px" }}>
-                      {a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("passwordGen.guide.aboutTitle") || "무작위 비밀번호 생성기 도구란 무엇인가요?"}
+          aboutDesc={t("passwordGen.guide.aboutDesc") || "웹 브라우저의 강력한 암호화 무작위 함수(window.crypto.getRandomValues)를 기반으로 그 누구도 추측할 수 없는 강력하고 안전한 무작위 암호를 100% 로컬에서 무료로 생성해 주는 유틸리티입니다."}
+          howTitle={t("passwordGen.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("passwordGen.guide.step1") || "슬라이더를 조절하여 생성할 비밀번호의 길이를 선택합니다 (권장 16자 이상).",
+            t("passwordGen.guide.step2") || "대문자, 소문자, 숫자, 특수문자 및 유사 문자 제외 옵션을 자유롭게 선택합니다.",
+            t("passwordGen.guide.step3") || "'비밀번호 복사' 버튼을 눌러 안전하게 생성된 암호를 클립보드에 복사합니다.",
+          ]}
+          faqs={[
+            { q: t("passwordGen.guide.faq1Q") || "생성된 비밀번호가 서버로 전송되거나 저장되나요?", a: t("passwordGen.guide.faq1A") || "아닙니다! 모든 비밀번호는 100% 사용자의 브라우저 내에서만 생성되며 서버나 메모리에 일절 보관되지 않습니다." },
+            { q: t("passwordGen.guide.faq2Q") || "Web Cryptography API 기반이란 무슨 뜻인가요?", a: t("passwordGen.guide.faq2A") || "일반 무작위 함수(Math.random)와 달리 보안에 극도로 강력한 난수를 생성하여 예측 가능성을 완전히 차단하는 암호학 표준 API입니다." },
+            { q: t("passwordGen.guide.faq3Q") || "안전한 비밀번호 길이의 기준은 무엇인가요?", a: t("passwordGen.guide.faq3A") || "대소문자, 숫자, 특수문자가 모두 포함된 최소 16자 이상의 암호(엔트로피 80bits 이상)를 사용할 것을 권장합니다." },
+          ]}
+        />
       </main>
 
       <Footer />

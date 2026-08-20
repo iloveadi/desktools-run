@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Search, Globe, Sun, Moon, ChevronDown, Zap, X } from "lucide-react";
+import { Search, Sun, Moon, ChevronDown, Zap, X } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
 import { useTheme } from "@/lib/context/ThemeContext";
 import type { Locale } from "@/lib/i18n";
@@ -11,13 +11,111 @@ interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
-const LANGUAGES: { code: Locale; label: string; flag: string }[] = [
-  { code: "en", label: "English",  flag: "🇺🇸" },
-  { code: "ko", label: "한국어",   flag: "🇰🇷" },
-  { code: "ja", label: "日本語",   flag: "🇯🇵" },
-  { code: "es", label: "Español",  flag: "🇪🇸" },
-  { code: "zh", label: "中文",     flag: "🇨🇳" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
+// ── SVG Country Flag Components (Standard National Flag Specifications) ──
+const FlagUS = () => (
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+    <path fill="#bd3d44" d="M0 0h640v480H0z"/>
+    <path stroke="#fff" strokeWidth="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
+    <path fill="#192f5d" d="M0 0h285v259H0z"/>
+    <g fill="#fff">
+      <circle cx="28" cy="24" r="6"/><circle cx="85" cy="24" r="6"/><circle cx="142" cy="24" r="6"/><circle cx="199" cy="24" r="6"/><circle cx="256" cy="24" r="6"/>
+      <circle cx="56" cy="48" r="6"/><circle cx="113" cy="48" r="6"/><circle cx="170" cy="48" r="6"/><circle cx="227" cy="48" r="6"/>
+      <circle cx="28" cy="72" r="6"/><circle cx="85" cy="72" r="6"/><circle cx="142" cy="72" r="6"/><circle cx="199" cy="72" r="6"/><circle cx="256" cy="72" r="6"/>
+      <circle cx="56" cy="96" r="6"/><circle cx="113" cy="96" r="6"/><circle cx="170" cy="96" r="6"/><circle cx="227" cy="96" r="6"/>
+      <circle cx="28" cy="120" r="6"/><circle cx="85" cy="120" r="6"/><circle cx="142" cy="120" r="6"/><circle cx="199" cy="120" r="6"/><circle cx="256" cy="120" r="6"/>
+      <circle cx="56" cy="144" r="6"/><circle cx="113" cy="144" r="6"/><circle cx="170" cy="144" r="6"/><circle cx="227" cy="144" r="6"/>
+      <circle cx="28" cy="168" r="6"/><circle cx="85" cy="168" r="6"/><circle cx="142" cy="168" r="6"/><circle cx="199" cy="168" r="6"/><circle cx="256" cy="168" r="6"/>
+      <circle cx="56" cy="192" r="6"/><circle cx="113" cy="192" r="6"/><circle cx="170" cy="192" r="6"/><circle cx="227" cy="192" r="6"/>
+      <circle cx="28" cy="216" r="6"/><circle cx="85" cy="216" r="6"/><circle cx="142" cy="216" r="6"/><circle cx="199" cy="216" r="6"/><circle cx="256" cy="216" r="6"/>
+    </g>
+  </svg>
+);
+
+// 대한민국 국기법 규격 표준 정밀 태극기 (대한민국 태극기 표준 비율 & 건곤감리 괘)
+const FlagKR = () => (
+  <svg width="18" height="13" viewBox="0 0 36 24" style={{ borderRadius: "2px", flexShrink: 0, border: "1px solid rgba(0,0,0,0.15)", background: "#ffffff" }}>
+    <rect width="36" height="24" fill="#ffffff"/>
+    <g transform="translate(18 12)">
+      {/* 태극문양: 상단 빨강(#cd2e3a), 하단 파랑(#0047a0) 대각선 -33.69도 기울임 */}
+      <g transform="rotate(-33.69)">
+        <path fill="#cd2e3a" d="M 0,-6 A 6,6 0 0,1 0,6 A 3,3 0 0,1 0,0 A 3,3 0 0,0 0,-6 Z"/>
+        <path fill="#0047a0" d="M 0,6 A 6,6 0 0,1 0,-6 A 3,3 0 0,1 0,0 A 3,3 0 0,0 0,6 Z"/>
+      </g>
+      
+      {/* 4괘: 건(☰ 11시), 곤(☷ 5시), 감(☵ 1시), 리(☲ 7시) */}
+      {/* 건 (☰) */}
+      <g transform="rotate(-33.69) translate(-9.5 0)" fill="#000000">
+        <rect x="-0.4" y="-3" width="0.5" height="6"/>
+        <rect x="-1.2" y="-3" width="0.5" height="6"/>
+        <rect x="-2.0" y="-3" width="0.5" height="6"/>
+      </g>
+      
+      {/* 곤 (☷) */}
+      <g transform="rotate(-33.69) translate(9.5 0)" fill="#000000">
+        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
+        <path d="M1.2-3h0.5v2.7H1.2zm0 3.3h0.5v2.7H1.2z"/>
+        <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
+      </g>
+
+      {/* 감 (☵) */}
+      <g transform="rotate(33.69) translate(9.5 0)" fill="#000000">
+        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
+        <rect x="1.2" y="-3" width="0.5" height="6"/>
+        <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
+      </g>
+
+      {/* 리 (☲) */}
+      <g transform="rotate(33.69) translate(-9.5 0)" fill="#000000">
+        <rect x="-0.4" y="-3" width="0.5" height="6"/>
+        <path d="M-1.2-3h0.5v2.7h-0.5zm0 3.3h0.5v2.7h-0.5z"/>
+        <rect x="-2.0" y="-3" width="0.5" height="6"/>
+      </g>
+    </g>
+  </svg>
+);
+
+const FlagJP = () => (
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+    <path fill="#fff" d="M0 0h640v480H0z"/>
+    <circle cx="320" cy="240" r="144" fill="#bc002d"/>
+  </svg>
+);
+
+const FlagES = () => (
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+    <path fill="#c60b1e" d="M0 0h640v480H0z"/>
+    <path fill="#ffc400" d="M0 120h640v240H0z"/>
+  </svg>
+);
+
+const FlagCN = () => (
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+    <path fill="#ee1c25" d="M0 0h640v480H0z"/>
+    <g fill="#ffde00">
+      <polygon points="100,60 112,96 150,96 119,118 131,154 100,132 69,154 81,118 50,96 88,96"/>
+      <polygon points="166,32 173,46 188,44 177,54 182,68 170,59 157,67 163,53 152,43 167,44"/>
+      <polygon points="200,70 203,85 218,87 205,95 208,110 197,100 183,107 191,93 181,83 196,85"/>
+      <polygon points="200,130 208,143 223,141 212,151 217,165 205,156 192,164 198,150 187,140 202,141"/>
+      <polygon points="166,170 167,185 182,189 169,196 171,211 160,200 146,206 155,193 145,182 160,185"/>
+    </g>
+  </svg>
+);
+
+const FlagFR = () => (
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+    <path fill="#002395" d="M0 0h213.3v480H0z"/>
+    <path fill="#fff" d="M213.3 0h213.4v480H213.3z"/>
+    <path fill="#ed2939" d="M426.7 0H640v480H426.7z"/>
+  </svg>
+);
+
+const LANGUAGES: { code: Locale; label: string; Flag: React.FC }[] = [
+  { code: "ko", label: "한국어",   Flag: FlagKR },
+  { code: "en", label: "English",  Flag: FlagUS },
+  { code: "ja", label: "日本語",   Flag: FlagJP },
+  { code: "es", label: "Español",  Flag: FlagES },
+  { code: "zh", label: "中文",     Flag: FlagCN },
+  { code: "fr", label: "Français", Flag: FlagFR },
 ];
 
 export default function Header({ onSearch }: HeaderProps) {
@@ -28,6 +126,7 @@ export default function Header({ onSearch }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const activeLang = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
+  const ActiveFlag = activeLang.Flag;
 
   const handleSearch = useCallback(
     (val: string) => {
@@ -74,7 +173,7 @@ export default function Header({ onSearch }: HeaderProps) {
           <div
             style={{
               width: "32px", height: "32px", borderRadius: "8px",
-              background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)",
+              background: "linear-gradient(135deg, #4f46e5, #6366f1, #06b6d4)",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
             }}
           >
@@ -123,16 +222,16 @@ export default function Header({ onSearch }: HeaderProps) {
               id="lang-toggle"
               onClick={() => setLangOpen((o) => !o)}
               style={{
-                display: "flex", alignItems: "center", gap: "5px",
+                display: "flex", alignItems: "center", gap: "7px",
                 background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
                 borderRadius: "8px", padding: "6px 10px", cursor: "pointer",
-                color: "var(--text-secondary)", fontSize: "13px", fontWeight: 500, transition: "all 0.2s",
+                color: "var(--text-primary)", fontSize: "13px", fontWeight: 600, transition: "all 0.2s",
               }}
               aria-label="Select language"
               aria-expanded={langOpen}
             >
-              <Globe size={14} />
-              <span>{activeLang.flag} {activeLang.code.toUpperCase()}</span>
+              <ActiveFlag />
+              <span>{activeLang.label}</span>
               <ChevronDown size={12} style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
             </button>
 
@@ -141,35 +240,39 @@ export default function Header({ onSearch }: HeaderProps) {
                 style={{
                   position: "absolute", right: 0, top: "calc(100% + 8px)",
                   background: "var(--bg-card)", border: "1px solid var(--border-subtle)",
-                  borderRadius: "12px", padding: "6px", minWidth: "160px",
+                  borderRadius: "12px", padding: "6px", minWidth: "150px",
                   boxShadow: "var(--shadow-card)", zIndex: 100,
                 }}
                 role="listbox"
                 aria-label="Language options"
               >
-                {LANGUAGES.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => {
-                      setLocale(lang.code); // ← 전역 언어 변경
-                      setLangOpen(false);
-                    }}
-                    style={{
-                      width: "100%", display: "flex", alignItems: "center", gap: "8px",
-                      padding: "8px 10px", borderRadius: "8px",
-                      background: locale === lang.code ? "rgba(99,102,241,0.15)" : "transparent",
-                      border: "none", cursor: "pointer",
-                      color: locale === lang.code ? "#a5b4fc" : "var(--text-secondary)",
-                      fontSize: "13px", fontWeight: locale === lang.code ? 600 : 400,
-                      textAlign: "left", transition: "background 0.15s",
-                    }}
-                    role="option"
-                    aria-selected={locale === lang.code}
-                  >
-                    <span style={{ fontSize: "16px" }}>{lang.flag}</span>
-                    {lang.label}
-                  </button>
-                ))}
+                {LANGUAGES.map((lang) => {
+                  const ItemFlag = lang.Flag;
+                  const isSelected = locale === lang.code;
+                  return (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLocale(lang.code);
+                        setLangOpen(false);
+                      }}
+                      style={{
+                        width: "100%", display: "flex", alignItems: "center", gap: "10px",
+                        padding: "8px 12px", borderRadius: "8px",
+                        background: isSelected ? "rgba(99,102,241,0.15)" : "transparent",
+                        border: "none", cursor: "pointer",
+                        color: isSelected ? "var(--brand-mid)" : "var(--text-primary)",
+                        fontSize: "13px", fontWeight: isSelected ? 700 : 500,
+                        textAlign: "left", transition: "background 0.15s",
+                      }}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      <ItemFlag />
+                      <span>{lang.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -182,7 +285,7 @@ export default function Header({ onSearch }: HeaderProps) {
               width: "36px", height: "36px", borderRadius: "8px",
               background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
               cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-              color: isDark ? "#fbbf24" : "#818cf8", transition: "all 0.2s",
+              color: isDark ? "#fbbf24" : "#4f46e5", transition: "all 0.2s",
             }}
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >

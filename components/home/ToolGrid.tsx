@@ -8,22 +8,20 @@ import {
   Braces, Binary, Link as LinkIcon, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck,
-  ChevronRight, Sparkles, TrendingUp,
+  ChevronRight, Sparkles, TrendingUp, Hammer,
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { groupToolsByCategory } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
 
-// ── Tool title/description translations ───────────────────────
-// Key = tool.id, value = { title, description } per locale
 type ToolLocale = { title: string; description: string };
 
 const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   // PDF
   "pdf-merger":    { ko: { title: "PDF 합치기",    description: "여러 PDF 파일을 하나의 문서로 즉시 합칩니다." }, ja: { title: "PDFマージ", description: "複数のPDFを即座に一つに結合します。" } },
   "pdf-split":     { ko: { title: "PDF 분할",      description: "특정 페이지를 추출하거나 PDF를 여러 파일로 분할합니다." }, ja: { title: "PDF分割", description: "特定ページを抽出またはPDFを分割します。" } },
-  "pdf-compress":  { ko: { title: "PDF 압축",      description: "눈에 띄는 품질 저하 없이 PDF 파일 크기를 줄입니다." }, ja: { title: "PDF圧縮", description: "品質を保ちつつPDFファイルサイズを圧縮します。" } },
-  "pdf-to-word":   { ko: { title: "PDF → Word",   description: "PDF 문서를 편집 가능한 .docx 형식으로 변환합니다." }, ja: { title: "PDF→Word", description: "PDFを編集可能な.docx形式に変換します。" } },
+  "pdf-compress":  { ko: { title: "PDF 압축",      description: "눈에 띄는 품질 저하 없이 PDF 파일 크기를 줄입니다." }, ja: { title: "PDF圧縮", description: "品質を保ちつつPDFファイルサイズ를 圧縮します。" } },
+  "pdf-to-word":   { ko: { title: "PDF → Word",   description: "PDF 문서를 편집 가능한 .docx 형식으로 변환합니다." }, ja: { title: "PDF→Word", description: "PDF를 編集可能な.docx形式に変換します。" } },
   // Image
   "image-resizer":    { ko: { title: "이미지 리사이즈",   description: "비율을 유지하면서 이미지를 원하는 크기로 조절합니다." }, ja: { title: "画像リサイズ", description: "アスペクト比を保ちながら画像をリサイズします。" } },
   "image-converter":  { ko: { title: "이미지 변환기",     description: "JPG, PNG, WebP, AVIF, GIF 등 다양한 형식으로 변환합니다." }, ja: { title: "画像変換", description: "JPG、PNG、WebP、AVIF、GIF間で変換します。" } },
@@ -48,17 +46,15 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "hash-generator":     { ko: { title: "해시 생성기",     description: "텍스트에서 MD5, SHA-1, SHA-256, SHA-512 해시를 생성합니다." }, ja: { title: "ハッシュ生成", description: "テキストからMD5、SHA-256などのハッシュを生成します。" } },
 };
 
-// Category name translations
 const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
   "PDF Tools":         { ko: "PDF 도구",        ja: "PDFツール",      es: "Herramientas PDF",    zh: "PDF工具",      fr: "Outils PDF" },
   "Image Tools":       { ko: "이미지 도구",      ja: "画像ツール",     es: "Herramientas Imagen", zh: "图像工具",     fr: "Outils Image" },
-  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "テキスト整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
+  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "텍스트整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
   "Dev Tools":         { ko: "개발자 도구",      ja: "開発者ツール",   es: "Herramientas Dev",    zh: "开发工具",     fr: "Outils Dev" },
   "Converter":         { ko: "변환기",           ja: "コンバーター",   es: "Conversor",           zh: "转换器",       fr: "Convertisseur" },
   "Security":          { ko: "보안",             ja: "セキュリティ",   es: "Seguridad",           zh: "安全",         fr: "Sécurité" },
 };
 
-// Category quick-nav translations
 const CAT_NAV_TRANSLATIONS: Record<string, Record<string, string>> = {
   "PDF":       { ko: "PDF",    ja: "PDF",    es: "PDF",       zh: "PDF",   fr: "PDF" },
   "Image":     { ko: "이미지", ja: "画像",   es: "Imagen",    zh: "图像",  fr: "Image" },
@@ -68,7 +64,6 @@ const CAT_NAV_TRANSLATIONS: Record<string, Record<string, string>> = {
   "Security":  { ko: "보안",   ja: "セキュリティ", es: "Seguridad", zh: "安全", fr: "Sécu." },
 };
 
-// ── Icon Registry ──────────────────────────────────────────────
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
   FilePlus2, Scissors, PackageMinus, FileText,
   ScanLine, RefreshCw, ZoomOut, Eraser,
@@ -84,13 +79,21 @@ const CATEGORY_META: Record<ToolCategory, { iconClass: string; badgeClass: strin
   "Text & Formatting": { iconClass: "icon-text",      badgeClass: "badge-text",      accent: "#60a5fa" },
   "Dev Tools":         { iconClass: "icon-dev",       badgeClass: "badge-dev",       accent: "#818cf8" },
   "Converter":         { iconClass: "icon-converter", badgeClass: "badge-converter", accent: "#fbbf24" },
-  "Security":          { iconClass: "icon-security",  badgeClass: "badge-security",  accent: "#e879f9" },
+  "Security":          { iconClass: "icon-security",  badgeClass: "badge-security",  accent: "#38bdf8" },
 };
 
-// Badge label translation
 const BADGE_TRANSLATIONS: Record<string, Record<string, string>> = {
   Popular: { ko: "인기",   ja: "人気",     es: "Popular",  zh: "热门",  fr: "Populaire" },
   New:     { ko: "신규",   ja: "新着",     es: "Nuevo",    zh: "新品",  fr: "Nouveau" },
+};
+
+const DEV_LABEL: Record<string, string> = {
+  ko: "개발 중",
+  ja: "開発中",
+  es: "En Dev",
+  zh: "开发中",
+  fr: "En Dev",
+  en: "In Dev",
 };
 
 interface ToolGridProps {
@@ -105,28 +108,50 @@ function ToolCard({ tool }: { tool: Tool }) {
   const meta = CATEGORY_META[tool.category];
   const IconComponent = ICON_MAP[tool.icon];
 
-  // Get translated title & description (fall back to English)
   const localeData = TOOL_TRANSLATIONS[tool.id]?.[locale];
   const title = localeData?.title ?? tool.title;
   const description = localeData?.description ?? tool.description;
 
-  // Translate badge
-  const badgeLabel = tool.badge
+  const badgeLabel = tool.isDev
+    ? (DEV_LABEL[locale] ?? "In Dev")
+    : tool.badge
     ? (BADGE_TRANSLATIONS[tool.badge]?.[locale] ?? tool.badge)
     : null;
 
   return (
-    <div className="glass-card tool-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
+    <div
+      className="glass-card tool-card"
+      style={{
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "12px",
+        opacity: tool.isDev ? 0.88 : 1,
+      }}
+    >
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
         <div className={meta.iconClass} style={{ width: "40px", height: "40px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }} aria-hidden="true">
           {IconComponent && <IconComponent size={18} strokeWidth={1.8} />}
         </div>
+
         {badgeLabel && (
           <span
-            className={tool.badge === "Popular" ? "badge-pdf" : "badge-dev"}
-            style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "100px", letterSpacing: "0.04em", display: "flex", alignItems: "center", gap: "3px", flexShrink: 0 }}
+            style={{
+              fontSize: "10px",
+              fontWeight: 700,
+              padding: "2px 8px",
+              borderRadius: "100px",
+              letterSpacing: "0.04em",
+              display: "flex",
+              alignItems: "center",
+              gap: "3px",
+              flexShrink: 0,
+              background: tool.isDev ? "rgba(245, 158, 11, 0.15)" : tool.badge === "Popular" ? "rgba(239, 68, 68, 0.15)" : "rgba(99, 102, 241, 0.15)",
+              color: tool.isDev ? "#fbbf24" : tool.badge === "Popular" ? "#f87171" : "#818cf8",
+              border: tool.isDev ? "1px solid rgba(245, 158, 11, 0.3)" : tool.badge === "Popular" ? "1px solid rgba(239, 68, 68, 0.25)" : "1px solid rgba(99, 102, 241, 0.25)",
+            }}
           >
-            {tool.badge === "Popular" ? <TrendingUp size={9} /> : <Sparkles size={9} />}
+            {tool.isDev ? <Hammer size={9} /> : tool.badge === "Popular" ? <TrendingUp size={9} /> : <Sparkles size={9} />}
             {badgeLabel}
           </span>
         )}
@@ -148,23 +173,24 @@ function ToolCard({ tool }: { tool: Tool }) {
           style={{
             display: "inline-flex", alignItems: "center", gap: "5px",
             padding: "7px 14px", borderRadius: "8px", fontSize: "12.5px", fontWeight: 600,
-            color: meta.accent, background: "var(--btn-secondary-bg)",
-            border: "1px solid var(--btn-secondary-border)", textDecoration: "none",
-            transition: "all 0.2s", fontFamily: "Inter, sans-serif",
+            color: tool.isDev ? "#fbbf24" : meta.accent,
+            background: tool.isDev ? "rgba(245, 158, 11, 0.08)" : "var(--btn-secondary-bg)",
+            border: tool.isDev ? "1px solid rgba(245, 158, 11, 0.25)" : "1px solid var(--btn-secondary-border)",
+            textDecoration: "none", transition: "all 0.2s", fontFamily: "Inter, sans-serif",
           }}
           onMouseEnter={(e) => {
             const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = "var(--btn-secondary-hover)";
-            el.style.borderColor = `${meta.accent}33`;
+            el.style.background = tool.isDev ? "rgba(245, 158, 11, 0.15)" : "var(--btn-secondary-hover)";
+            el.style.borderColor = tool.isDev ? "rgba(245, 158, 11, 0.4)" : `${meta.accent}33`;
           }}
           onMouseLeave={(e) => {
             const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = "var(--btn-secondary-bg)";
-            el.style.borderColor = "var(--btn-secondary-border)";
+            el.style.background = tool.isDev ? "rgba(245, 158, 11, 0.08)" : "var(--btn-secondary-bg)";
+            el.style.borderColor = tool.isDev ? "rgba(245, 158, 11, 0.25)" : "var(--btn-secondary-border)";
           }}
-          aria-label={`${t("grid.runTool")} — ${title}`}
+          aria-label={`${tool.isDev ? DEV_LABEL[locale] : t("grid.runTool")} — ${title}`}
         >
-          {t("grid.runTool")}
+          {tool.isDev ? (DEV_LABEL[locale] ?? "In Dev") : t("grid.runTool")}
           <ChevronRight size={12} />
         </Link>
       </div>
@@ -214,7 +240,6 @@ export default function ToolGrid({ tools, isSearching, onCategorySearch }: ToolG
     );
   }
 
-  // Category quick-nav buttons (defined here to access locale)
   const CAT_NAVS = [
     { label: "PDF",       query: "PDF Tools" },
     { label: "Image",     query: "Image" },

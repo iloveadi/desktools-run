@@ -2,13 +2,6 @@
  * lib/tools.ts
  * ─────────────────────────────────────────────────────────────
  * Central tool registry for desktools.run.
- *
- * Each Tool entry describes a utility card displayed on the landing page.
- * Phase 1: dummy data only. Phase 2 will wire each `href` to a real route.
- *
- * i18n note: `title` and `description` keys are intentionally plain English
- * strings here. In Phase 2, replace with i18n key strings (e.g. "tools.wordCount.title")
- * and resolve them via an i18n library (next-intl recommended).
  */
 
 export type ToolCategory =
@@ -19,16 +12,17 @@ export type ToolCategory =
   | "Converter"
   | "Security";
 
-export type ToolBadge = "New" | "Popular" | "Pro";
+export type ToolBadge = "New" | "Popular" | "Pro" | "Dev";
 
 export interface Tool {
   id: string;           // Unique slug used in URLs
-  title: string;        // Display name (i18n key in Phase 2)
-  description: string;  // Short description (i18n key in Phase 2)
+  title: string;        // Display name
+  description: string;  // Short description
   category: ToolCategory;
-  icon: string;         // Lucide icon name (camelCase)
-  badge?: ToolBadge;   // Optional label
-  href: string;         // Route (Phase 2: /tools/[id])
+  icon: string;         // Lucide icon name
+  badge?: ToolBadge;    // Optional label
+  href: string;         // Route
+  isDev?: boolean;      // True if tool is currently under development
 }
 
 /** All available tool categories */
@@ -52,6 +46,7 @@ export const TOOLS: Tool[] = [
     icon: "FilePlus2",
     badge: "Popular",
     href: "/tools/pdf-merger",
+    isDev: false,
   },
   {
     id: "pdf-split",
@@ -60,6 +55,7 @@ export const TOOLS: Tool[] = [
     category: "PDF Tools",
     icon: "Scissors",
     href: "/tools/pdf-split",
+    isDev: true,
   },
   {
     id: "pdf-compress",
@@ -69,6 +65,7 @@ export const TOOLS: Tool[] = [
     icon: "PackageMinus",
     badge: "Popular",
     href: "/tools/pdf-compress",
+    isDev: false,
   },
   {
     id: "pdf-to-word",
@@ -77,6 +74,7 @@ export const TOOLS: Tool[] = [
     category: "PDF Tools",
     icon: "FileText",
     href: "/tools/pdf-to-word",
+    isDev: true,
   },
 
   // ── Image Tools ───────────────────────────────────────────
@@ -88,6 +86,7 @@ export const TOOLS: Tool[] = [
     icon: "ScanLine",
     badge: "Popular",
     href: "/tools/image-resizer",
+    isDev: false,
   },
   {
     id: "image-converter",
@@ -96,6 +95,7 @@ export const TOOLS: Tool[] = [
     category: "Image Tools",
     icon: "RefreshCw",
     href: "/tools/image-converter",
+    isDev: true,
   },
   {
     id: "image-compress",
@@ -104,6 +104,7 @@ export const TOOLS: Tool[] = [
     category: "Image Tools",
     icon: "ZoomOut",
     href: "/tools/image-compress",
+    isDev: true,
   },
   {
     id: "background-remover",
@@ -113,6 +114,7 @@ export const TOOLS: Tool[] = [
     icon: "Eraser",
     badge: "New",
     href: "/tools/background-remover",
+    isDev: true,
   },
 
   // ── Text & Formatting ─────────────────────────────────────
@@ -124,6 +126,7 @@ export const TOOLS: Tool[] = [
     icon: "Type",
     badge: "Popular",
     href: "/tools/word-count",
+    isDev: false,
   },
   {
     id: "text-case",
@@ -132,6 +135,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "CaseSensitive",
     href: "/tools/text-case",
+    isDev: true,
   },
   {
     id: "markdown-preview",
@@ -140,6 +144,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "Code2",
     href: "/tools/markdown-preview",
+    isDev: true,
   },
   {
     id: "text-diff",
@@ -148,6 +153,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "GitCompare",
     href: "/tools/text-diff",
+    isDev: true,
   },
 
   // ── Dev Tools ─────────────────────────────────────────────
@@ -159,6 +165,7 @@ export const TOOLS: Tool[] = [
     icon: "Braces",
     badge: "Popular",
     href: "/tools/json-formatter",
+    isDev: true,
   },
   {
     id: "base64",
@@ -167,6 +174,7 @@ export const TOOLS: Tool[] = [
     category: "Dev Tools",
     icon: "Binary",
     href: "/tools/base64",
+    isDev: true,
   },
   {
     id: "url-encoder",
@@ -175,6 +183,7 @@ export const TOOLS: Tool[] = [
     category: "Dev Tools",
     icon: "Link",
     href: "/tools/url-encoder",
+    isDev: true,
   },
   {
     id: "regex-tester",
@@ -184,6 +193,7 @@ export const TOOLS: Tool[] = [
     icon: "Search",
     badge: "New",
     href: "/tools/regex-tester",
+    isDev: true,
   },
 
   // ── Converter ─────────────────────────────────────────────
@@ -194,6 +204,7 @@ export const TOOLS: Tool[] = [
     category: "Converter",
     icon: "ArrowLeftRight",
     href: "/tools/unit-converter",
+    isDev: false,
   },
   {
     id: "color-converter",
@@ -203,6 +214,7 @@ export const TOOLS: Tool[] = [
     icon: "Palette",
     badge: "Popular",
     href: "/tools/color-converter",
+    isDev: false,
   },
   {
     id: "csv-to-json",
@@ -210,7 +222,9 @@ export const TOOLS: Tool[] = [
     description: "Upload a CSV file and convert it to structured JSON data.",
     category: "Converter",
     icon: "Table",
+    badge: "New",
     href: "/tools/csv-to-json",
+    isDev: false,
   },
 
   // ── Security ──────────────────────────────────────────────
@@ -222,6 +236,7 @@ export const TOOLS: Tool[] = [
     icon: "KeyRound",
     badge: "Popular",
     href: "/tools/password-generator",
+    isDev: false,
   },
   {
     id: "hash-generator",
@@ -230,6 +245,7 @@ export const TOOLS: Tool[] = [
     category: "Security",
     icon: "ShieldCheck",
     href: "/tools/hash-generator",
+    isDev: false,
   },
 ];
 

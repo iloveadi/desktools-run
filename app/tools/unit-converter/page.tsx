@@ -4,16 +4,6 @@
  * app/tools/unit-converter/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Unit Converter Tool for desktools.run
- *
- * Features:
- *  - 8 Categories: Length, Weight, Temperature, Area, Volume, Speed, Time, Digital Storage
- *  - High-precision real-time conversion
- *  - Bidirectional unit swap (⇄)
- *  - Conversion formula display
- *  - Popular Preset shortcuts (e.g. 84 m² -> 평, 100°C -> °F)
- *  - All-Units Comparison Table
- *  - Full i18n (6 languages) & Dark/Light theme support
- *  - 100% Client-side local calculation
  */
 
 import { useState, useMemo, useCallback } from "react";
@@ -24,10 +14,6 @@ import {
   Copy,
   Check,
   Sparkles,
-  BookOpen,
-  HelpCircle,
-  CheckCircle2,
-  ShieldCheck,
   Ruler,
   Weight,
   Thermometer,
@@ -41,6 +27,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Unit Definitions & Conversion Ratios ──────────────────────
@@ -56,8 +43,8 @@ export type CategoryKey =
 
 interface UnitDef {
   key: string;
-  label: string; // Symbol or name
-  ratio?: number; // Base ratio relative to category base unit
+  label: string;
+  ratio?: number;
 }
 
 const CATEGORIES: {
@@ -188,7 +175,6 @@ const CATEGORIES: {
   },
 ];
 
-// Presets for quick one-click loading
 const POPULAR_PRESETS: {
   category: CategoryKey;
   label: string;
@@ -205,22 +191,18 @@ const POPULAR_PRESETS: {
   { category: "speed", label: "100 km/h → mph", val: 100, from: "kmh", to: "mph" },
 ];
 
-// ── Temperature Math ──────────────────────────────────────────
 function convertTemperature(val: number, from: string, to: string): number {
   if (from === to) return val;
-  // Convert from -> Celsius
   let celsius = val;
   if (from === "F") celsius = ((val - 32) * 5) / 9;
   if (from === "K") celsius = val - 273.15;
 
-  // Convert Celsius -> to
   if (to === "C") return celsius;
   if (to === "F") return (celsius * 9) / 5 + 32;
   if (to === "K") return celsius + 273.15;
   return val;
 }
 
-// Format numbers neatly (max 6 decimal places, trim trailing zeroes)
 function formatResultNumber(num: number): string {
   if (isNaN(num)) return "0";
   if (!isFinite(num)) return "Infinity";
@@ -231,11 +213,9 @@ function formatResultNumber(num: number): string {
   return parseFloat(formatted).toString();
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function UnitConverterPage() {
   const { t } = useLocale();
 
-  // State
   const [categoryKey, setCategoryKey] = useState<CategoryKey>("length");
   const [inputValue, setInputValue] = useState<string>("1");
   const [fromUnitKey, setFromUnitKey] = useState<string>("km");
@@ -247,7 +227,6 @@ export default function UnitConverterPage() {
     [categoryKey]
   );
 
-  // Switch category
   const handleCategoryChange = useCallback((catKey: CategoryKey) => {
     setCategoryKey(catKey);
     const cat = CATEGORIES.find((c) => c.key === catKey)!;
@@ -255,7 +234,6 @@ export default function UnitConverterPage() {
     setToUnitKey(cat.units[1]?.key || cat.units[0].key);
   }, []);
 
-  // Compute Converted Value
   const numericInput = parseFloat(inputValue) || 0;
 
   const resultValue = useMemo(() => {
@@ -266,18 +244,15 @@ export default function UnitConverterPage() {
     const toDef = activeCat.units.find((u) => u.key === toUnitKey);
     if (!fromDef?.ratio || !toDef?.ratio) return 0;
 
-    // Convert fromUnit -> baseUnit -> toUnit
     const inBase = numericInput * fromDef.ratio;
     return inBase / toDef.ratio;
   }, [categoryKey, numericInput, fromUnitKey, toUnitKey, activeCat]);
 
-  // Swap From & To
   const handleSwap = useCallback(() => {
     setFromUnitKey(toUnitKey);
     setToUnitKey(fromUnitKey);
   }, [fromUnitKey, toUnitKey]);
 
-  // Copy Result
   const handleCopy = useCallback(() => {
     const formatted = formatResultNumber(resultValue);
     const toDef = activeCat.units.find((u) => u.key === toUnitKey);
@@ -287,7 +262,6 @@ export default function UnitConverterPage() {
     setTimeout(() => setCopied(false), 2000);
   }, [resultValue, activeCat, toUnitKey]);
 
-  // Apply Preset Shortcut
   const handleApplyPreset = useCallback((preset: (typeof POPULAR_PRESETS)[0]) => {
     setCategoryKey(preset.category);
     const cat = CATEGORIES.find((c) => c.key === preset.category)!;
@@ -296,7 +270,6 @@ export default function UnitConverterPage() {
     setInputValue(preset.val.toString());
   }, []);
 
-  // All Units Comparison Table calculation
   const allUnitsComparison = useMemo(() => {
     return activeCat.units.map((unit) => {
       let val = 0;
@@ -318,11 +291,9 @@ export default function UnitConverterPage() {
     });
   }, [activeCat, categoryKey, numericInput, fromUnitKey, toUnitKey]);
 
-  // Active units
   const fromUnitObj = activeCat.units.find((u) => u.key === fromUnitKey) || activeCat.units[0];
   const toUnitObj = activeCat.units.find((u) => u.key === toUnitKey) || activeCat.units[1];
 
-  // Formula string
   const formulaText = useMemo(() => {
     const oneResult =
       categoryKey === "temperature"
@@ -744,159 +715,23 @@ export default function UnitConverterPage() {
           </div>
         </section>
 
-        {/* ── Tool Guide & FAQ Section ────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "48px" }}>
-            <div style={{ marginBottom: "32px", textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "4px 12px",
-                  borderRadius: "100px",
-                  background: "rgba(99,102,241,0.12)",
-                  border: "1px solid rgba(99,102,241,0.2)",
-                  color: "#a5b4fc",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  marginBottom: "12px",
-                }}
-              >
-                <BookOpen size={12} />
-                {t("unitConverter.guide.title")}
-              </div>
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 800,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.4px",
-                }}
-              >
-                {t("unitConverter.guide.aboutTitle")}
-              </h2>
-            </div>
-
-            {/* About & Steps Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-                marginBottom: "32px",
-              }}
-              className="guide-grid"
-            >
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "8px",
-                      background: "rgba(99,102,241,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#818cf8",
-                    }}
-                  >
-                    <ShieldCheck size={18} />
-                  </div>
-                  <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                    Instant & Private
-                  </h3>
-                </div>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                  {t("unitConverter.guide.aboutDesc")}
-                </p>
-              </div>
-
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
-                  {t("unitConverter.guide.howTitle")}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {[
-                    t("unitConverter.guide.step1"),
-                    t("unitConverter.guide.step2"),
-                    t("unitConverter.guide.step3"),
-                  ].map((stepText, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <div
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          background: "rgba(99,102,241,0.2)",
-                          color: "#a5b4fc",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {idx + 1}
-                      </div>
-                      <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                        {stepText}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ Card */}
-            <div className="glass-card" style={{ padding: "28px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                <HelpCircle size={18} style={{ color: "#fbbf24" }} />
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {t("unitConverter.guide.faqTitle")}
-                </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {[
-                  { q: t("unitConverter.guide.faq1Q"), a: t("unitConverter.guide.faq1A") },
-                  { q: t("unitConverter.guide.faq2Q"), a: t("unitConverter.guide.faq2A") },
-                  { q: t("unitConverter.guide.faq3Q"), a: t("unitConverter.guide.faq3A") },
-                ].map(({ q, a }, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                      <CheckCircle2 size={15} style={{ color: "#34d399", marginTop: "3px", flexShrink: 0 }} />
-                      <span>{q}</span>
-                    </div>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, paddingLeft: "21px" }}>
-                      {a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("unitConverter.guide.aboutTitle") || "단위 변환기 도구란 무엇인가요?"}
+          aboutDesc={t("unitConverter.guide.aboutDesc") || "길이, 무게, 온도, 넓이, 부피, 속도, 시간, 디지털 데이터 용량 등 8가지 카테고리의 주요 단위를 초고속으로 변환해 주는 통합 정밀 단위 변환 도구입니다."}
+          howTitle={t("unitConverter.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("unitConverter.guide.step1") || "상단 카테고리 탭(길이, 무게, 넓이, 용량 등) 중 원하는 단위를 선택합니다.",
+            t("unitConverter.guide.step2") || "변환할 값과 원본 단위 및 대상 단위를 선택합니다. (⇄ 버튼으로 서로 맞바꿀 수 있습니다)",
+            t("unitConverter.guide.step3") || "실시간으로 변환된 값과 공식, 전체 단위 비교표를 확인하고 '결과 복사' 버튼을 누릅니다.",
+          ]}
+          faqs={[
+            { q: t("unitConverter.guide.faq1Q") || "한국 단위인 '평'이나 '근'도 변환 가능한가요?", a: t("unitConverter.guide.faq1A") || "네! 넓이 카테고리에서 평(3.3058 m²), 무게 카테고리에서 근(600g) 등 자주 쓰는 단위 프리셋을 지원합니다." },
+            { q: t("unitConverter.guide.faq2Q") || "온도 단위 변환 공식은 어떻게 처리되나요?", a: t("unitConverter.guide.faq2A") || "섭씨(°C), 화씨(°F), 켈빈(K) 간의 공식에 따라 소수점 정밀 계산을 정확하게 처리합니다." },
+            { q: t("unitConverter.guide.faq3Q") || "변환 결과의 정밀도는 어느 정도인가요?", a: t("unitConverter.guide.faq3A") || "기본적으로 소수점 6자리까지 정밀 변환하며 극단적인 수치는 지수 표기법으로 명확하게 보여줍니다." },
+          ]}
+        />
       </main>
 
       <Footer />
@@ -904,9 +739,6 @@ export default function UnitConverterPage() {
       <style>{`
         @media (max-width: 768px) {
           .converter-inputs-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .guide-grid {
             grid-template-columns: 1fr !important;
           }
         }

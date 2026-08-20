@@ -4,29 +4,15 @@
  * app/tools/hash-generator/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Cryptographic Hash Generator & File Checksum Tool
- *
- * Features:
- *  - Algorithms: MD5, SHA-1, SHA-256, SHA-384, SHA-512
- *  - Native Web Crypto API (crypto.subtle.digest) + JS MD5
- *  - Real-time text input hashing & Drag and drop File checksums
- *  - UPPERCASE / lowercase hex toggle
- *  - 1-click Copy for individual hashes & Copy All
- *  - 100% Client-side local processing
- *  - Full 6-language i18n & Dark/Light theme support
  */
 
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Hash,
   ArrowLeft,
   Copy,
   Check,
-  Sparkles,
-  ShieldCheck,
-  BookOpen,
-  HelpCircle,
-  CheckCircle2,
   Upload,
   Trash2,
   Lock,
@@ -35,6 +21,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Pure JS Compact MD5 Implementation ─────────────────────────
@@ -167,7 +154,6 @@ function md5(bytes: Uint8Array): string {
   return out;
 }
 
-// Convert ArrayBuffer to Hex String
 function bufferToHex(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let hex = "";
@@ -177,11 +163,9 @@ function bufferToHex(buffer: ArrayBuffer): string {
   return hex;
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function HashGeneratorPage() {
   const { t } = useLocale();
 
-  // Input State
   const [inputText, setInputText] = useState("Hello desktools.run");
   const [fileInfo, setFileInfo] = useState<{ name: string; size: number } | null>(null);
   const [isUppercase, setIsUppercase] = useState(false);
@@ -189,7 +173,6 @@ export default function HashGeneratorPage() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Computed Hashes State
   const [hashes, setHashes] = useState<{
     md5: string;
     sha1: string;
@@ -204,7 +187,6 @@ export default function HashGeneratorPage() {
     sha512: "",
   });
 
-  // Calculate hashes for buffer
   const computeHashesForBuffer = useCallback(async (buffer: ArrayBuffer) => {
     const bytes = new Uint8Array(buffer);
     const md5Hex = md5(bytes);
@@ -240,15 +222,13 @@ export default function HashGeneratorPage() {
     });
   }, []);
 
-  // Recalculate whenever text input changes
   useEffect(() => {
-    if (fileInfo) return; // If file loaded, don't overwrite with empty string
+    if (fileInfo) return;
     const encoder = new TextEncoder();
     const buffer = encoder.encode(inputText).buffer;
     computeHashesForBuffer(buffer);
   }, [inputText, fileInfo, computeHashesForBuffer]);
 
-  // File Upload / Drop Handler
   const handleFileProcess = useCallback(
     (file: File) => {
       setFileInfo({ name: file.name, size: file.size });
@@ -276,7 +256,6 @@ export default function HashGeneratorPage() {
     setFileInfo(null);
   };
 
-  // Copy single hash
   const handleCopy = (key: string, val: string) => {
     const outputVal = isUppercase ? val.toUpperCase() : val.toLowerCase();
     navigator.clipboard.writeText(outputVal);
@@ -284,7 +263,6 @@ export default function HashGeneratorPage() {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  // Copy all hashes
   const handleCopyAll = () => {
     const text = `MD5: ${isUppercase ? hashes.md5.toUpperCase() : hashes.md5}
 SHA-1: ${isUppercase ? hashes.sha1.toUpperCase() : hashes.sha1}
@@ -391,7 +369,6 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
               </label>
 
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                {/* Hex Case Toggle */}
                 <button
                   onClick={() => setIsUppercase((prev) => !prev)}
                   style={{
@@ -460,7 +437,6 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
               </div>
             </div>
 
-            {/* Drag & Drop Input Textarea */}
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -670,159 +646,23 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
           </div>
         </section>
 
-        {/* ── Tool Guide & FAQ Section ────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "48px" }}>
-            <div style={{ marginBottom: "32px", textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "4px 12px",
-                  borderRadius: "100px",
-                  background: "rgba(99,102,241,0.12)",
-                  border: "1px solid rgba(99,102,241,0.2)",
-                  color: "#a5b4fc",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  marginBottom: "12px",
-                }}
-              >
-                <BookOpen size={12} />
-                {t("hashGen.guide.title")}
-              </div>
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 800,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.4px",
-                }}
-              >
-                {t("hashGen.guide.aboutTitle")}
-              </h2>
-            </div>
-
-            {/* About & Steps Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-                marginBottom: "32px",
-              }}
-              className="guide-grid"
-            >
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "8px",
-                      background: "rgba(99,102,241,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#818cf8",
-                    }}
-                  >
-                    <ShieldCheck size={18} />
-                  </div>
-                  <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                    One-Way Avalanche Effect
-                  </h3>
-                </div>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                  {t("hashGen.guide.aboutDesc")}
-                </p>
-              </div>
-
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
-                  {t("hashGen.guide.howTitle")}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {[
-                    t("hashGen.guide.step1"),
-                    t("hashGen.guide.step2"),
-                    t("hashGen.guide.step3"),
-                  ].map((stepText, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <div
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          background: "rgba(99,102,241,0.2)",
-                          color: "#a5b4fc",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {idx + 1}
-                      </div>
-                      <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                        {stepText}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div className="glass-card" style={{ padding: "28px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                <HelpCircle size={18} style={{ color: "#fbbf24" }} />
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {t("hashGen.guide.faqTitle")}
-                </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {[
-                  { q: t("hashGen.guide.faq1Q"), a: t("hashGen.guide.faq1A") },
-                  { q: t("hashGen.guide.faq2Q"), a: t("hashGen.guide.faq2A") },
-                  { q: t("hashGen.guide.faq3Q"), a: t("hashGen.guide.faq3A") },
-                ].map(({ q, a }, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                      <CheckCircle2 size={15} style={{ color: "#34d399", marginTop: "3px", flexShrink: 0 }} />
-                      <span>{q}</span>
-                    </div>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, paddingLeft: "21px" }}>
-                      {a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Client-side Processing"
+          aboutTitle={t("hashGen.guide.aboutTitle") || "해시 생성기 도구란 무엇인가요?"}
+          aboutDesc={t("hashGen.guide.aboutDesc") || "웹 브라우저의 Web Crypto API를 사용하여 텍스트나 파일의 단방향 암호화 해시(MD5, SHA-1, SHA-256, SHA-512)를 100% 로컬로 실시간 계산해 주는 유틸리티입니다."}
+          howTitle={t("hashGen.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("hashGen.guide.step1") || "텍스트를 입력창에 입력하거나 분석하고 싶은 파일(.txt, .png, .pdf 등)을 드래그하여 업로드합니다.",
+            t("hashGen.guide.step2") || "MD5, SHA-1, SHA-256, SHA-512 해시 값이 실시간으로 계산되는 것을 확인합니다.",
+            t("hashGen.guide.step3") || "원하는 해시 값 옆의 '복사' 버튼 또는 '전체 복사'를 눌러 해시 결과를 클립보드에 저장합니다.",
+          ]}
+          faqs={[
+            { q: t("hashGen.guide.faq1Q") || "입력한 데이터나 파일이 서버에 업로드되나요?", a: t("hashGen.guide.faq1A") || "아닙니다. 브라우저의 Web Crypto API를 활용해 100% 로컬에서 암호화 해시가 계산되므로 절대 외부로 유출되지 않습니다." },
+            { q: t("hashGen.guide.faq2Q") || "해시 알고리즘 간의 주요 차이점은 무엇인가요?", a: t("hashGen.guide.faq2A") || "해시의 길이와 무결성 검증 수준이 다릅니다. 보안 목적으로는 SHA-256 이상의 최신 표준 알고리즘 사용을 권장합니다." },
+            { q: t("hashGen.guide.faq3Q") || "대용량 파일의 체크섬도 계산 가능한가요?", a: t("hashGen.guide.faq3A") || "네, 사용자 PC 메모리가 허용하는 한 수백 MB 크기의 파일도 서버 전송 없이 빠르게 해시 값을 추출합니다." },
+          ]}
+        />
       </main>
 
       <Footer />

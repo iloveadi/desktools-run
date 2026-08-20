@@ -4,15 +4,6 @@
  * app/tools/word-count/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Word Count & Text Analysis Tool
- *
- * Features:
- *  - Real-time word, character (with/without space), sentence, paragraph & line counts
- *  - Estimated Reading Time (~200 wpm) & Speaking Time (~130 wpm)
- *  - Top Keyword Density calculation with visual progress bars
- *  - Quick text transformations (UPPERCASE, lowercase, Title Case, clean spaces)
- *  - Drag & Drop file import (.txt, .md, etc.)
- *  - Copy to clipboard with toast notification
- *  - 100% Client-side processing (Privacy guaranteed)
  */
 
 import { useState, useMemo, useCallback, useRef } from "react";
@@ -32,13 +23,10 @@ import {
   ArrowLeft,
   BarChart3,
   Wand2,
-  HelpCircle,
-  BookOpen,
-  ShieldCheck,
-  CheckCircle2,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Text Analysis Calculations ─────────────────────────────────
@@ -57,42 +45,31 @@ function analyzeText(text: string) {
     };
   }
 
-  // Characters
   const charsWithSpace = text.length;
   const charsNoSpace = text.replace(/\s/g, "").length;
 
-  // Words (handles CJK characters as individual words/meaningful units if no spaces, plus standard whitespace splitting)
-  // Standard word splitting by whitespace:
   const whitespaceWords = text
     .trim()
     .split(/\s+/)
     .filter((w) => w.length > 0);
 
-  // Count words:
   const wordsCount = whitespaceWords.length;
 
-  // Sentences (split by ., !, ?, etc.)
   const sentences = text
     .split(/[.!?]+/)
     .filter((s) => s.trim().length > 0).length;
 
-  // Paragraphs (split by double newlines or non-empty lines)
   const paragraphs = text
     .split(/\n\s*\n/)
     .filter((p) => p.trim().length > 0).length;
 
-  // Lines
   const lines = text.split(/\r\n|\r|\n/).length;
 
-  // Reading time (Average ~200 wpm)
-  // Speaking time (Average ~130 wpm)
   const wpm = 200;
   const spm = 130;
   const readingTimeSec = Math.ceil((wordsCount / wpm) * 60);
   const speakingTimeSec = Math.ceil((wordsCount / spm) * 60);
 
-  // Keyword Density Analysis
-  // Extract words, normalize lowercase, filter out short stop words/numbers
   const stopWords = new Set([
     "the", "be", "to", "of", "and", "a", "in", "that", "have", "i",
     "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
@@ -137,7 +114,6 @@ function analyzeText(text: string) {
   };
 }
 
-// Format seconds into "Xm Ys" or "Ys"
 function formatTime(seconds: number) {
   if (seconds <= 0) return "0s";
   const mins = Math.floor(seconds / 60);
@@ -146,7 +122,6 @@ function formatTime(seconds: number) {
   return `${mins}m ${secs}s`;
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function WordCountPage() {
   const { t } = useLocale();
   const [text, setText] = useState("");
@@ -154,10 +129,8 @@ export default function WordCountPage() {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Compute metrics reactively
   const stats = useMemo(() => analyzeText(text), [text]);
 
-  // Actions
   const handleCopy = useCallback(() => {
     if (!text) return;
     navigator.clipboard.writeText(text);
@@ -192,7 +165,6 @@ export default function WordCountPage() {
     );
   }, []);
 
-  // File Drop / Import
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -232,7 +204,6 @@ export default function WordCountPage() {
             padding: "32px 24px 24px",
           }}
         >
-          {/* Back link */}
           <Link
             href="/"
             style={{
@@ -290,7 +261,6 @@ export default function WordCountPage() {
               </p>
             </div>
 
-            {/* Privacy Badge */}
             <div
               style={{
                 display: "inline-flex",
@@ -369,7 +339,6 @@ export default function WordCountPage() {
               gap: "8px",
             }}
           >
-            {/* Left: Transform Action buttons */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
               <button
                 onClick={handleUppercase}
@@ -437,7 +406,6 @@ export default function WordCountPage() {
               </button>
             </div>
 
-            {/* Right: File Upload, Copy, Clear */}
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <input
                 ref={fileInputRef}
@@ -522,7 +490,6 @@ export default function WordCountPage() {
             }}
             className="editor-grid"
           >
-            {/* Editor Textarea with Drag & Drop */}
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -554,7 +521,6 @@ export default function WordCountPage() {
                 aria-label="Text editor input"
               />
 
-              {/* Drag overlay prompt */}
               {isDragging && (
                 <div
                   style={{
@@ -612,7 +578,6 @@ export default function WordCountPage() {
                           {count} ({percentage}%)
                         </span>
                       </div>
-                      {/* Bar indicator */}
                       <div
                         style={{
                           width: "100%",
@@ -639,250 +604,31 @@ export default function WordCountPage() {
             </div>
           </div>
         </section>
-        {/* ── Tool Guide & FAQ Section ────────────────── */}
-        <section
-          style={{
-            maxWidth: "1280px",
-            margin: "56px auto 0",
-            padding: "0 24px",
-          }}
-        >
-          <div
-            style={{
-              borderTop: "1px solid var(--border-subtle)",
-              paddingTop: "48px",
-            }}
-          >
-            {/* Header */}
-            <div style={{ marginBottom: "32px", textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "4px 12px",
-                  borderRadius: "100px",
-                  background: "rgba(99,102,241,0.12)",
-                  border: "1px solid rgba(99,102,241,0.2)",
-                  color: "#a5b4fc",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  marginBottom: "12px",
-                }}
-              >
-                <BookOpen size={12} />
-                {t("wordCount.guide.title")}
-              </div>
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 800,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.4px",
-                }}
-              >
-                {t("wordCount.guide.aboutTitle")}
-              </h2>
-            </div>
 
-            {/* About Box & How to Use Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-                marginBottom: "32px",
-              }}
-              className="guide-grid"
-            >
-              {/* About overview */}
-              <div
-                className="glass-card"
-                style={{
-                  padding: "24px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "8px",
-                      background: "rgba(99,102,241,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#818cf8",
-                    }}
-                  >
-                    <ShieldCheck size={18} />
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 700,
-                      color: "var(--text-primary)",
-                    }}
-                  >
-                    100% Free & Browser-Native
-                  </h3>
-                </div>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.7,
-                  }}
-                >
-                  {t("wordCount.guide.aboutDesc")}
-                </p>
-              </div>
-
-              {/* How to use steps */}
-              <div
-                className="glass-card"
-                style={{
-                  padding: "24px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "14px",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 700,
-                    color: "var(--text-primary)",
-                    marginBottom: "4px",
-                  }}
-                >
-                  {t("wordCount.guide.howTitle")}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {[
-                    t("wordCount.guide.step1"),
-                    t("wordCount.guide.step2"),
-                    t("wordCount.guide.step3"),
-                  ].map((stepText, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <div
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          background: "rgba(99,102,241,0.2)",
-                          color: "#a5b4fc",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {idx + 1}
-                      </div>
-                      <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                        {stepText}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div
-              className="glass-card"
-              style={{
-                padding: "28px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "20px",
-                }}
-              >
-                <HelpCircle size={18} style={{ color: "#fbbf24" }} />
-                <h3
-                  style={{
-                    fontSize: "17px",
-                    fontWeight: 700,
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  {t("wordCount.guide.faqTitle")}
-                </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {[
-                  { q: t("wordCount.guide.faq1Q"), a: t("wordCount.guide.faq1A") },
-                  { q: t("wordCount.guide.faq2Q"), a: t("wordCount.guide.faq2A") },
-                  { q: t("wordCount.guide.faq3Q"), a: t("wordCount.guide.faq3A") },
-                ].map(({ q, a }, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "6px",
-                      }}
-                    >
-                      <CheckCircle2 size={15} style={{ color: "#34d399", marginTop: "3px", flexShrink: 0 }} />
-                      <span>{q}</span>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: "13px",
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.6,
-                        paddingLeft: "21px",
-                      }}
-                    >
-                      {a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("wordCount.guide.aboutTitle") || "단어 및 글자 수 세기 도구란 무엇인가요?"}
+          aboutDesc={t("wordCount.guide.aboutDesc") || "desktools.run의 글자수 세기 도구는 웹 브라우저에서 바로 사용할 수 있는 무료 텍스트 분석 도구입니다. 텍스트를 입력하는 즉시 공백 포함/제외 글자 수, 단어 수, 문장 수, 단락 수, 예상 읽기/말하기 시간 및 주요 키워드 빈도를 실시간으로 계산해 드립니다."}
+          howTitle={t("wordCount.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("wordCount.guide.step1") || "에디터에 텍스트를 직접 입력하거나 붙여넣고, 또는 .txt / .md 텍스트 파일을 드래그하여 불러옵니다.",
+            t("wordCount.guide.step2") || "상단 통계 카드에서 단어 수, 글자 수, 문장 수 및 예상 읽기 시간을 실시간으로 확인합니다.",
+            t("wordCount.guide.step3") || "대소문자 변환, 공백/줄바꿈 정리 및 텍스트 복사 기능으로 효율적으로 원고를 다듬으세요.",
+          ]}
+          faqs={[
+            { q: t("wordCount.guide.faq1Q") || "작성한 텍스트가 서버에 저장되거나 전송되나요?", a: t("wordCount.guide.faq1A") || "아닙니다. 모든 텍스트 계산 및 분석은 100% 사용자의 웹 브라우저 내부에서 로컬로 처리됩니다." },
+            { q: t("wordCount.guide.faq2Q") || "예상 읽기 및 말하기 시간은 어떻게 계산되나요?", a: t("wordCount.guide.faq2A") || "일반적인 성인의 평균 묵독 속도(분당 약 200단어)와 낭독/스피치 속도(분당 약 130단어)를 기준으로 자동 산출됩니다." },
+            { q: t("wordCount.guide.faq3Q") || "공백 포함 글자 수와 공백 제외 글자 수의 차이는 무엇인가요?", a: t("wordCount.guide.faq3A") || "'공백 포함'은 띄어쓰기 및 줄바꿈을 포함한 전체 입력 글자 수를 의미하며, '공백 제외'는 순수한 문자 및 기호 수만을 의미합니다." },
+          ]}
+        />
       </main>
 
       <Footer />
 
       <style>{`
         @media (max-width: 900px) {
-          .editor-grid,
-          .guide-grid {
+          .editor-grid {
             grid-template-columns: 1fr !important;
           }
         }

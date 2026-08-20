@@ -4,16 +4,6 @@
  * app/tools/color-converter/page.tsx
  * ─────────────────────────────────────────────────────────────
  * Color Converter & Palette Generator Tool for desktools.run
- *
- * Features:
- *  - Conversions: HEX, RGB, HSL, HSV, CMYK
- *  - Native Color Picker & EyeDropper API integration
- *  - WCAG Contrast Ratio Accessibility checker (AA / AAA)
- *  - Dynamic Tints & Shades palette generator (10% - 90%)
- *  - Color Harmonies (Complementary, Analogous, Triadic)
- *  - 1-click Copy for all formats & CSS declarations
- *  - Full 6-language i18n & Dark/Light theme support
- *  - 100% Client-side local processing
  */
 
 import { useState, useMemo, useCallback, useEffect } from "react";
@@ -25,17 +15,12 @@ import {
   Check,
   Pipette,
   Sparkles,
-  ShieldCheck,
-  BookOpen,
-  HelpCircle,
-  CheckCircle2,
-  Sliders,
   Layers,
   Sun,
-  Lock,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Precise Color Math Helpers ─────────────────────────────────
@@ -45,16 +30,19 @@ interface RGB {
   g: number;
   b: number;
 }
+
 interface HSL {
   h: number;
   s: number;
   l: number;
 }
+
 interface HSV {
   h: number;
   s: number;
   v: number;
 }
+
 interface CMYK {
   c: number;
   m: number;
@@ -62,9 +50,8 @@ interface CMYK {
   k: number;
 }
 
-// HEX -> RGB
 function hexToRgb(hex: string): RGB {
-  let cleanHex = hex.replace(/^#/, "");
+  let cleanHex = hex.replace("#", "").trim();
   if (cleanHex.length === 3) {
     cleanHex = cleanHex
       .split("")
@@ -72,9 +59,6 @@ function hexToRgb(hex: string): RGB {
       .join("");
   }
   const num = parseInt(cleanHex, 16);
-  if (isNaN(num) || cleanHex.length !== 6) {
-    return { r: 99, g: 102, b: 241 }; // Default indigo fallback
-  }
   return {
     r: (num >> 16) & 255,
     g: (num >> 8) & 255,
@@ -82,13 +66,11 @@ function hexToRgb(hex: string): RGB {
   };
 }
 
-// RGB -> HEX
 function rgbToHex(r: number, g: number, b: number): string {
   const toHex = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 }
 
-// RGB -> HSL
 function rgbToHsl(r: number, g: number, b: number): HSL {
   const rNorm = r / 255;
   const gNorm = g / 255;
@@ -124,11 +106,10 @@ function rgbToHsl(r: number, g: number, b: number): HSL {
   };
 }
 
-// HSL -> RGB
 function hslToRgb(h: number, s: number, l: number): RGB {
-  const hNorm = ((h % 360) + 360) % 360 / 360;
-  const sNorm = Math.max(0, Math.min(100, s)) / 100;
-  const lNorm = Math.max(0, Math.min(100, l)) / 100;
+  const hNorm = h / 360;
+  const sNorm = s / 100;
+  const lNorm = l / 100;
 
   if (sNorm === 0) {
     const val = Math.round(lNorm * 255);
@@ -154,7 +135,6 @@ function hslToRgb(h: number, s: number, l: number): RGB {
   };
 }
 
-// RGB -> HSV
 function rgbToHsv(r: number, g: number, b: number): HSV {
   const rNorm = r / 255;
   const gNorm = g / 255;
@@ -189,7 +169,6 @@ function rgbToHsv(r: number, g: number, b: number): HSV {
   };
 }
 
-// RGB -> CMYK
 function rgbToCmyk(r: number, g: number, b: number): CMYK {
   const rNorm = r / 255;
   const gNorm = g / 255;
@@ -212,7 +191,6 @@ function rgbToCmyk(r: number, g: number, b: number): CMYK {
   };
 }
 
-// Relative Luminance for WCAG
 function getLuminance(r: number, g: number, b: number): number {
   const a = [r, g, b].map((v) => {
     v /= 255;
@@ -221,7 +199,6 @@ function getLuminance(r: number, g: number, b: number): number {
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
 }
 
-// Contrast Ratio between two RGBs
 function getContrastRatio(rgb1: RGB, rgb2: RGB): number {
   const lum1 = getLuminance(rgb1.r, rgb1.g, rgb1.b);
   const lum2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
@@ -230,27 +207,22 @@ function getContrastRatio(rgb1: RGB, rgb2: RGB): number {
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
-// ─────────────────────────────────────────────────────────────
 export default function ColorConverterPage() {
   const { t } = useLocale();
 
-  // Primary State: RGB
-  const [rgb, setRgb] = useState<RGB>({ r: 99, g: 102, b: 241 }); // Default Indigo #6366F1
+  const [rgb, setRgb] = useState<RGB>({ r: 99, g: 102, b: 241 });
   const [hexInput, setHexInput] = useState("#6366F1");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  // Derived Color States
   const hex = useMemo(() => rgbToHex(rgb.r, rgb.g, rgb.b), [rgb]);
   const hsl = useMemo(() => rgbToHsl(rgb.r, rgb.g, rgb.b), [rgb]);
   const hsv = useMemo(() => rgbToHsv(rgb.r, rgb.g, rgb.b), [rgb]);
   const cmyk = useMemo(() => rgbToCmyk(rgb.r, rgb.g, rgb.b), [rgb]);
 
-  // Keep hexInput in sync with rgb changes
   useEffect(() => {
     setHexInput(hex);
   }, [hex]);
 
-  // Color Pick / Hex Change Handler
   const handleHexChange = useCallback((newHex: string) => {
     setHexInput(newHex);
     if (/^#?[0-9A-Fa-f]{6}$/.test(newHex)) {
@@ -258,7 +230,6 @@ export default function ColorConverterPage() {
     }
   }, []);
 
-  // EyeDropper API (if supported)
   const handleEyeDropper = useCallback(async () => {
     if (typeof window !== "undefined" && "EyeDropper" in window) {
       try {
@@ -274,7 +245,6 @@ export default function ColorConverterPage() {
     }
   }, [handleHexChange]);
 
-  // WCAG Contrast Ratios
   const whiteContrast = useMemo(
     () => getContrastRatio(rgb, { r: 255, g: 255, b: 255 }).toFixed(2),
     [rgb]
@@ -284,7 +254,6 @@ export default function ColorConverterPage() {
     [rgb]
   );
 
-  // Tints & Shades Palette (10% to 90% Lightness)
   const shadesPalette = useMemo(() => {
     return [10, 20, 30, 40, 50, 60, 70, 80, 90].map((lightness) => {
       const shadeRgb = hslToRgb(hsl.h, hsl.s, lightness);
@@ -296,14 +265,10 @@ export default function ColorConverterPage() {
     });
   }, [hsl]);
 
-  // Color Harmonies
   const harmonies = useMemo(() => {
-    // Complementary: +180 deg
     const compRgb = hslToRgb((hsl.h + 180) % 360, hsl.s, hsl.l);
-    // Analogous: -30 deg, +30 deg
     const ana1Rgb = hslToRgb((hsl.h - 30 + 360) % 360, hsl.s, hsl.l);
     const ana2Rgb = hslToRgb((hsl.h + 30) % 360, hsl.s, hsl.l);
-    // Triadic: -120 deg, +120 deg
     const tri1Rgb = hslToRgb((hsl.h - 120 + 360) % 360, hsl.s, hsl.l);
     const tri2Rgb = hslToRgb((hsl.h + 120) % 360, hsl.s, hsl.l);
 
@@ -325,7 +290,6 @@ export default function ColorConverterPage() {
     };
   }, [hsl, hex]);
 
-  // Copy handler
   const handleCopy = useCallback((key: string, textToCopy: string) => {
     navigator.clipboard.writeText(textToCopy);
     setCopiedKey(key);
@@ -430,7 +394,6 @@ export default function ColorConverterPage() {
               alignItems: "center",
             }}
           >
-            {/* Color Swatch Card */}
             <div
               style={{
                 height: "220px",
@@ -447,7 +410,6 @@ export default function ColorConverterPage() {
                 transition: "background 0.2s ease",
               }}
             >
-              {/* White Text Contrast Preview */}
               <div
                 style={{
                   fontSize: "18px",
@@ -459,7 +421,6 @@ export default function ColorConverterPage() {
                 White Text ({whiteContrast}:1)
               </div>
 
-              {/* Black Text Contrast Preview */}
               <div
                 style={{
                   fontSize: "18px",
@@ -470,7 +431,6 @@ export default function ColorConverterPage() {
                 Black Text ({blackContrast}:1)
               </div>
 
-              {/* Native Color Picker Trigger Input */}
               <input
                 type="color"
                 value={hex}
@@ -490,7 +450,6 @@ export default function ColorConverterPage() {
               />
             </div>
 
-            {/* Picker & Quick Actions Box */}
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <input
@@ -512,7 +471,6 @@ export default function ColorConverterPage() {
                   }}
                 />
 
-                {/* EyeDropper API Button (if supported) */}
                 {typeof window !== "undefined" && "EyeDropper" in window && (
                   <button
                     onClick={handleEyeDropper}
@@ -535,7 +493,6 @@ export default function ColorConverterPage() {
                 )}
               </div>
 
-              {/* WCAG Accessibility Badges */}
               <div
                 style={{
                   display: "flex",
@@ -585,12 +542,12 @@ export default function ColorConverterPage() {
             }}
           >
             {[
-              { key: "HEX", title: t("colorGen.hex"), val: hex, css: `color: ${hex};` },
-              { key: "RGB", title: t("colorGen.rgb"), val: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`, css: `background-color: rgb(${rgb.r}, ${rgb.g}, ${rgb.b});` },
-              { key: "HSL", title: t("colorGen.hsl"), val: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`, css: `background-color: hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%);` },
-              { key: "HSV", title: t("colorGen.hsv"), val: `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`, css: `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)` },
-              { key: "CMYK", title: t("colorGen.cmyk"), val: `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`, css: `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)` },
-            ].map(({ key, title, val, css }) => (
+              { key: "HEX", title: t("colorGen.hex"), val: hex },
+              { key: "RGB", title: t("colorGen.rgb"), val: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` },
+              { key: "HSL", title: t("colorGen.hsl"), val: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` },
+              { key: "HSV", title: t("colorGen.hsv"), val: `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)` },
+              { key: "CMYK", title: t("colorGen.cmyk"), val: `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)` },
+            ].map(({ key, title, val }) => (
               <div
                 key={key}
                 className="glass-card"
@@ -703,7 +660,6 @@ export default function ColorConverterPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              {/* Complementary */}
               <div>
                 <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: "8px" }}>
                   Complementary (보색 - 180° Contrast)
@@ -734,7 +690,6 @@ export default function ColorConverterPage() {
                 </div>
               </div>
 
-              {/* Analogous */}
               <div>
                 <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-muted)", display: "block", marginBottom: "8px" }}>
                   Analogous (유사색 - ±30° Harmony)
@@ -768,159 +723,23 @@ export default function ColorConverterPage() {
           </div>
         </section>
 
-        {/* ── Tool Guide & FAQ Section ────────────────── */}
-        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "48px" }}>
-            <div style={{ marginBottom: "32px", textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "4px 12px",
-                  borderRadius: "100px",
-                  background: "rgba(99,102,241,0.12)",
-                  border: "1px solid rgba(99,102,241,0.2)",
-                  color: "#a5b4fc",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  marginBottom: "12px",
-                }}
-              >
-                <BookOpen size={12} />
-                {t("colorGen.guide.title")}
-              </div>
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 800,
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.4px",
-                }}
-              >
-                {t("colorGen.guide.aboutTitle")}
-              </h2>
-            </div>
-
-            {/* About & Steps Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "20px",
-                marginBottom: "32px",
-              }}
-              className="guide-grid"
-            >
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "8px",
-                      background: "rgba(99,102,241,0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#818cf8",
-                    }}
-                  >
-                    <ShieldCheck size={18} />
-                  </div>
-                  <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                    Digital RGB vs Print CMYK
-                  </h3>
-                </div>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-                  {t("colorGen.guide.aboutDesc")}
-                </p>
-              </div>
-
-              <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
-                  {t("colorGen.guide.howTitle")}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {[
-                    t("colorGen.guide.step1"),
-                    t("colorGen.guide.step2"),
-                    t("colorGen.guide.step3"),
-                  ].map((stepText, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <div
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "50%",
-                          background: "rgba(99,102,241,0.2)",
-                          color: "#a5b4fc",
-                          fontSize: "12px",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "2px",
-                        }}
-                      >
-                        {idx + 1}
-                      </div>
-                      <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                        {stepText}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* FAQ Section */}
-            <div className="glass-card" style={{ padding: "28px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
-                <HelpCircle size={18} style={{ color: "#fbbf24" }} />
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  {t("colorGen.guide.faqTitle")}
-                </h3>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "20px",
-                }}
-              >
-                {[
-                  { q: t("colorGen.guide.faq1Q"), a: t("colorGen.guide.faq1A") },
-                  { q: t("colorGen.guide.faq2Q"), a: t("colorGen.guide.faq2A") },
-                  { q: t("colorGen.guide.faq3Q"), a: t("colorGen.guide.faq3A") },
-                ].map(({ q, a }, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                    }}
-                  >
-                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                      <CheckCircle2 size={15} style={{ color: "#34d399", marginTop: "3px", flexShrink: 0 }} />
-                      <span>{q}</span>
-                    </div>
-                    <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, paddingLeft: "21px" }}>
-                      {a}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText="100% Free & Browser-Native"
+          aboutTitle={t("colorGen.guide.aboutTitle") || "색상 변환기 및 팔레트 도구란 무엇인가요?"}
+          aboutDesc={t("colorGen.guide.aboutDesc") || "웹 디자이너와 개발자를 위한 정밀 색상 변환 도구입니다. HEX, RGB, HSL, HSV, CMYK 색상 코드 간 상호 변환 및 WCAG 접근성 명암비(AA/AAA) 체크, 명암 틴트 팔레트 및 보색/유사색 팔레트를 생성해 줍니다."}
+          howTitle={t("colorGen.guide.howTitle") || "사용 방법"}
+          steps={[
+            t("colorGen.guide.step1") || "HEX 입력을 수정을 하거나 색상 스와치를 클릭해 원하는 색상을 정밀하게 선택합니다.",
+            t("colorGen.guide.step2") || "HEX, RGB, HSL, CMYK 코드가 실시간 변환되는 것을 확인하고 원하는 코드 옆의 '복사'를 누릅니다.",
+            t("colorGen.guide.step3") || "하단의 틴트/셰이드 팔레트와 보색/유사색 조화 팔레트를 자유롭게 클릭해 활용하세요.",
+          ]}
+          faqs={[
+            { q: t("colorGen.guide.faq1Q") || "웹용 RGB와 인쇄용 CMYK의 차이는 무엇인가요?", a: t("colorGen.guide.faq1A") || "RGB는 모니터의 빛을 조합하는 가산 혼합 방식이며, CMYK는 인쇄용 잉크를 조합하는 감산 혼합 방식입니다." },
+            { q: t("colorGen.guide.faq2Q") || "WCAG 명암비 기준(AA / AAA)이란 무엇인가요?", a: t("colorGen.guide.faq2A") || "웹 접근성 지침으로 일반 텍스트는 4.5:1 이상(AA 기준)의 명암비를 유지해야 가독성이 우수해집니다." },
+            { q: t("colorGen.guide.faq3Q") || "화면 스포이트(EyeDropper) 기능은 어떻게 쓰나요?", a: t("colorGen.guide.faq3A") || "입력창 옆의 스포이트 아이콘을 누르면 모니터 화면 전체의 원하는 색상을 바로 추출할 수 있습니다. (크롬/엣지 지원)" },
+          ]}
+        />
       </main>
 
       <Footer />
@@ -932,9 +751,6 @@ export default function ColorConverterPage() {
           }
           .shades-grid {
             grid-template-columns: repeat(5, 1fr) !important;
-          }
-          .guide-grid {
-            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

@@ -8,7 +8,6 @@ interface HeroSectionProps {
   onSearch: (query: string) => void;
 }
 
-// Popular tags: labels are multilingual, query stays consistent for search to work
 const POPULAR_TAGS = [
   { en: "PDF Merge",          ko: "PDF 합치기",       ja: "PDFマージ",         es: "Unir PDF",         zh: "合并PDF",   fr: "Fusionner PDF",  query: "PDF Merge" },
   { en: "Word Count",         ko: "단어 수 세기",      ja: "文字数カウント",     es: "Contar Palabras",  zh: "字数统计",  fr: "Compter Mots",   query: "Word Count" },
@@ -48,25 +47,20 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
   return (
     <section style={{ position: "relative", overflow: "hidden", padding: "100px 24px 80px", textAlign: "center" }}>
       {/* Background grid */}
-      <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.6 }} aria-hidden="true" />
+      <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.5 }} aria-hidden="true" />
 
-      {/* Floating orbs */}
-      <div className="orb" style={{ width: "600px", height: "600px", background: "radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)", top: "-200px", left: "50%", transform: "translateX(-50%)", zIndex: 0 }} aria-hidden="true" />
-      <div className="orb" style={{ width: "300px", height: "300px", background: "radial-gradient(circle, rgba(217,70,239,0.12) 0%, transparent 70%)", top: "0", right: "10%", zIndex: 0 }} aria-hidden="true" />
-      <div className="orb" style={{ width: "250px", height: "250px", background: "radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%)", top: "60px", left: "5%", zIndex: 0 }} aria-hidden="true" />
+      {/* Subtle Floating orbs */}
+      <div className="orb" style={{ width: "600px", height: "600px", background: "radial-gradient(circle, rgba(79, 70, 229, 0.16) 0%, transparent 70%)", top: "-220px", left: "50%", transform: "translateX(-50%)", zIndex: 0 }} aria-hidden="true" />
+      <div className="orb" style={{ width: "320px", height: "320px", background: "radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%)", top: "20px", right: "12%", zIndex: 0 }} aria-hidden="true" />
+      <div className="orb" style={{ width: "280px", height: "280px", background: "radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)", top: "80px", left: "6%", zIndex: 0 }} aria-hidden="true" />
 
       <div style={{ position: "relative", zIndex: 1, maxWidth: "760px", margin: "0 auto" }}>
         {/* Badge */}
         <div
-          className="animate-fade-in-up"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: "6px",
-            background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.25)",
-            borderRadius: "100px", padding: "5px 14px 5px 8px", marginBottom: "24px",
-            fontSize: "12.5px", fontWeight: 600, color: "#a5b4fc",
-          }}
+          className="animate-fade-in-up badge-pill"
+          style={{ marginBottom: "24px" }}
         >
-          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "rgba(99,102,241,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: "18px", height: "18px", borderRadius: "50%", background: "rgba(79, 70, 229, 0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Sparkles size={10} />
           </div>
           {t("hero.badge")}
@@ -134,8 +128,8 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 onClick={() => handleTagClick(tag.query)}
                 style={{
                   padding: "4px 12px", borderRadius: "100px",
-                  background: query === tag.query ? "rgba(99,102,241,0.2)" : "var(--tag-bg)",
-                  border: query === tag.query ? "1px solid rgba(99,102,241,0.4)" : "1px solid var(--tag-border)",
+                  background: query === tag.query ? "rgba(79, 70, 229, 0.2)" : "var(--tag-bg)",
+                  border: query === tag.query ? "1px solid rgba(79, 70, 229, 0.4)" : "1px solid var(--tag-border)",
                   color: query === tag.query ? "#a5b4fc" : "var(--text-secondary)",
                   fontSize: "12.5px", cursor: "pointer", transition: "all 0.15s",
                   fontFamily: "Inter, sans-serif", fontWeight: 500,
@@ -170,7 +164,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
               key={stat.labelKey}
               style={{
                 flex: "1 1 120px", padding: "20px 24px", textAlign: "center",
-                borderRight: i < STATS_KEYS.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                borderRight: i < STATS_KEYS.length - 1 ? "1px solid var(--border-subtle)" : "none",
               }}
             >
               <div style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", marginBottom: "2px" }} className="gradient-text">
