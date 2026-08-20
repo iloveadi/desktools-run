@@ -1,0 +1,1965 @@
+/**
+ * lib/i18n.ts
+ * ─────────────────────────────────────────────────────────────
+ * Lightweight i18n system for desktools.run (Phase 1).
+ * No external library — just a typed translation map.
+ *
+ * Usage:
+ *   const { t } = useI18n();
+ *   t("hero.title1")  →  "Fast Web Utilities"  (EN)
+ *                     →  "빠른 웹 유틸리티"       (KO)
+ *
+ * Phase 2: Replace with next-intl for routing-based locale support.
+ */
+
+export type Locale = "en" | "ko" | "ja" | "es" | "zh" | "fr";
+
+export interface Translations {
+  // ── Header ──────────────────────────────────────────────────
+  "header.search.placeholder": string;
+
+  // ── Hero ────────────────────────────────────────────────────
+  "hero.badge": string;
+  "hero.title1": string;
+  "hero.title2": string;
+  "hero.subtitle": string;
+  "hero.search.placeholder": string;
+  "hero.search.button": string;
+  "hero.popular": string;
+  "hero.stats.tools": string;
+  "hero.stats.categories": string;
+  "hero.stats.browser": string;
+  "hero.stats.signup": string;
+
+  // ── Tool Grid ────────────────────────────────────────────────
+  "grid.allTools": string;
+  "grid.subtitle": string;
+  "grid.tools": string;        // e.g. "4 tools"
+  "grid.runTool": string;
+  "grid.noResults.title": string;
+  "grid.noResults.body": string;
+  "grid.search.results": string;   // e.g. "2 results found"
+  "grid.search.result": string;    // singular
+  "grid.showAll": string;
+  "grid.searchLabel": string;      // e.g. 'Search results for "JSON"'
+
+  // ── Footer ───────────────────────────────────────────────────
+  "footer.tagline": string;
+  "footer.privacy": string;
+  "footer.nav.product": string;
+  "footer.nav.company": string;
+  "footer.nav.legal": string;
+  "footer.links.allTools": string;
+  "footer.links.pdfTools": string;
+  "footer.links.imageTools": string;
+  "footer.links.devTools": string;
+  "footer.links.changelog": string;
+  "footer.links.about": string;
+  "footer.links.blog": string;
+  "footer.links.request": string;
+  "footer.links.status": string;
+  "footer.links.privacy": string;
+  "footer.links.terms": string;
+  "footer.links.cookies": string;
+  "footer.links.contact": string;
+  "footer.copyright": string;
+  // ── Word Count Tool ──────────────────────────────────────────
+  "wordCount.title": string;
+  "wordCount.subtitle": string;
+  "wordCount.placeholder": string;
+  "wordCount.words": string;
+  "wordCount.chars": string;
+  "wordCount.charsNoSpace": string;
+  "wordCount.sentences": string;
+  "wordCount.paragraphs": string;
+  "wordCount.lines": string;
+  "wordCount.readTime": string;
+  "wordCount.speakTime": string;
+  "wordCount.density": string;
+  "wordCount.clear": string;
+  "wordCount.copy": string;
+  "wordCount.copied": string;
+  "wordCount.uppercase": string;
+  "wordCount.lowercase": string;
+  "wordCount.titlecase": string;
+  "wordCount.cleanSpaces": string;
+  "wordCount.dropPrompt": string;
+  // Guide / About section
+  "wordCount.guide.title": string;
+  "wordCount.guide.aboutTitle": string;
+  "wordCount.guide.aboutDesc": string;
+  "wordCount.guide.howTitle": string;
+  "wordCount.guide.step1": string;
+  "wordCount.guide.step2": string;
+  "wordCount.guide.step3": string;
+  "wordCount.guide.faqTitle": string;
+  "wordCount.guide.faq1Q": string;
+  "wordCount.guide.faq1A": string;
+  "wordCount.guide.faq2Q": string;
+  "wordCount.guide.faq2A": string;
+  "wordCount.guide.faq3Q": string;
+  "wordCount.guide.faq3A": string;
+  // ── Unit Converter Tool ──────────────────────────────────────
+  "unitConverter.title": string;
+  "unitConverter.subtitle": string;
+  "unitConverter.from": string;
+  "unitConverter.to": string;
+  "unitConverter.value": string;
+  "unitConverter.result": string;
+  "unitConverter.swap": string;
+  "unitConverter.formula": string;
+  "unitConverter.allUnits": string;
+  "unitConverter.presets": string;
+  "unitConverter.copyResult": string;
+  "unitConverter.copied": string;
+  "unitConverter.cat.length": string;
+  "unitConverter.cat.weight": string;
+  "unitConverter.cat.temperature": string;
+  "unitConverter.cat.area": string;
+  "unitConverter.cat.volume": string;
+  "unitConverter.cat.speed": string;
+  "unitConverter.cat.time": string;
+  "unitConverter.cat.storage": string;
+  "unitConverter.guide.title": string;
+  "unitConverter.guide.aboutTitle": string;
+  "unitConverter.guide.aboutDesc": string;
+  "unitConverter.guide.howTitle": string;
+  "unitConverter.guide.step1": string;
+  "unitConverter.guide.step2": string;
+  "unitConverter.guide.step3": string;
+  "unitConverter.guide.faqTitle": string;
+  "unitConverter.guide.faq1Q": string;
+  "unitConverter.guide.faq1A": string;
+  "unitConverter.guide.faq2Q": string;
+  "unitConverter.guide.faq2A": string;
+  "unitConverter.guide.faq3Q": string;
+  "unitConverter.guide.faq3A": string;
+  // ── Password Generator Tool ──────────────────────────────────
+  "passwordGen.title": string;
+  "passwordGen.subtitle": string;
+  "passwordGen.length": string;
+  "passwordGen.uppercase": string;
+  "passwordGen.lowercase": string;
+  "passwordGen.numbers": string;
+  "passwordGen.symbols": string;
+  "passwordGen.excludeAmbiguous": string;
+  "passwordGen.strength": string;
+  "passwordGen.strength.veryWeak": string;
+  "passwordGen.strength.weak": string;
+  "passwordGen.strength.medium": string;
+  "passwordGen.strength.strong": string;
+  "passwordGen.strength.veryStrong": string;
+  "passwordGen.generate": string;
+  "passwordGen.copy": string;
+  "passwordGen.copied": string;
+  "passwordGen.bulk": string;
+  "passwordGen.guide.title": string;
+  "passwordGen.guide.aboutTitle": string;
+  "passwordGen.guide.aboutDesc": string;
+  "passwordGen.guide.howTitle": string;
+  "passwordGen.guide.step1": string;
+  "passwordGen.guide.step2": string;
+  "passwordGen.guide.step3": string;
+  "passwordGen.guide.faqTitle": string;
+  "passwordGen.guide.faq1Q": string;
+  "passwordGen.guide.faq1A": string;
+  "passwordGen.guide.faq2Q": string;
+  "passwordGen.guide.faq2A": string;
+  "passwordGen.guide.faq3Q": string;
+  "passwordGen.guide.faq3A": string;
+  // ── Hash Generator Tool ──────────────────────────────────────
+  "hashGen.title": string;
+  "hashGen.subtitle": string;
+  "hashGen.inputPlaceholder": string;
+  "hashGen.uppercaseHex": string;
+  "hashGen.lowercaseHex": string;
+  "hashGen.copy": string;
+  "hashGen.copied": string;
+  "hashGen.copyAll": string;
+  "hashGen.clear": string;
+  "hashGen.dropPrompt": string;
+  "hashGen.fileLoaded": string;
+  "hashGen.guide.title": string;
+  "hashGen.guide.aboutTitle": string;
+  "hashGen.guide.aboutDesc": string;
+  "hashGen.guide.howTitle": string;
+  "hashGen.guide.step1": string;
+  "hashGen.guide.step2": string;
+  "hashGen.guide.step3": string;
+  "hashGen.guide.faqTitle": string;
+  "hashGen.guide.faq1Q": string;
+  "hashGen.guide.faq1A": string;
+  "hashGen.guide.faq2Q": string;
+  "hashGen.guide.faq2A": string;
+  "hashGen.guide.faq3Q": string;
+  "hashGen.guide.faq3A": string;
+  // ── Color Converter Tool ─────────────────────────────────────
+  "colorGen.title": string;
+  "colorGen.subtitle": string;
+  "colorGen.picker": string;
+  "colorGen.hex": string;
+  "colorGen.rgb": string;
+  "colorGen.hsl": string;
+  "colorGen.hsv": string;
+  "colorGen.cmyk": string;
+  "colorGen.contrast": string;
+  "colorGen.shades": string;
+  "colorGen.harmonies": string;
+  "colorGen.copy": string;
+  "colorGen.copied": string;
+  "colorGen.guide.title": string;
+  "colorGen.guide.aboutTitle": string;
+  "colorGen.guide.aboutDesc": string;
+  "colorGen.guide.howTitle": string;
+  "colorGen.guide.step1": string;
+  "colorGen.guide.step2": string;
+  "colorGen.guide.step3": string;
+  "colorGen.guide.faqTitle": string;
+  "colorGen.guide.faq1Q": string;
+  "colorGen.guide.faq1A": string;
+  "colorGen.guide.faq2Q": string;
+  "colorGen.guide.faq2A": string;
+  "colorGen.guide.faq3Q": string;
+  "colorGen.guide.faq3A": string;
+  // ── Privacy Policy Page ──────────────────────────────────────
+  "privacy.title": string;
+  "privacy.subtitle": string;
+  "privacy.badge": string;
+  "privacy.sec1Title": string;
+  "privacy.sec1Desc": string;
+  "privacy.sec2Title": string;
+  "privacy.sec2Desc": string;
+  "privacy.sec3Title": string;
+  "privacy.sec3Desc": string;
+  "privacy.sec4Title": string;
+  "privacy.sec4Desc": string;
+  "privacy.sec5Title": string;
+  "privacy.sec5Desc": string;
+  // ── Terms of Service Page ────────────────────────────────────
+  "terms.title": string;
+  "terms.subtitle": string;
+  "terms.badge": string;
+  "terms.sec1Title": string;
+  "terms.sec1Desc": string;
+  "terms.sec2Title": string;
+  "terms.sec2Desc": string;
+  "terms.sec3Title": string;
+  "terms.sec3Desc": string;
+  "terms.sec4Title": string;
+  "terms.sec4Desc": string;
+  "terms.sec5Title": string;
+  "terms.sec5Desc": string;
+  // ── Cookie Policy Page ───────────────────────────────────────
+  "cookies.title": string;
+  "cookies.subtitle": string;
+  "cookies.badge": string;
+  "cookies.sec1Title": string;
+  "cookies.sec1Desc": string;
+  "cookies.sec2Title": string;
+  "cookies.sec2Desc": string;
+  "cookies.sec3Title": string;
+  "cookies.sec3Desc": string;
+  "cookies.sec4Title": string;
+  "cookies.sec4Desc": string;
+  "cookies.sec5Title": string;
+  "cookies.sec5Desc": string;
+  // ── Image Resizer Tool ───────────────────────────────────────
+  "imageResizer.title": string;
+  "imageResizer.subtitle": string;
+  "imageResizer.dropPrompt": string;
+  "imageResizer.width": string;
+  "imageResizer.height": string;
+  "imageResizer.lockAspect": string;
+  "imageResizer.byPercent": string;
+  "imageResizer.format": string;
+  "imageResizer.quality": string;
+  "imageResizer.original": string;
+  "imageResizer.resized": string;
+  "imageResizer.download": string;
+  "imageResizer.reset": string;
+  "imageResizer.guide.title": string;
+  "imageResizer.guide.aboutTitle": string;
+  "imageResizer.guide.aboutDesc": string;
+  "imageResizer.guide.howTitle": string;
+  "imageResizer.guide.step1": string;
+  "imageResizer.guide.step2": string;
+  "imageResizer.guide.step3": string;
+  "imageResizer.guide.faqTitle": string;
+  "imageResizer.guide.faq1Q": string;
+  "imageResizer.guide.faq1A": string;
+  "imageResizer.guide.faq2Q": string;
+  "imageResizer.guide.faq2A": string;
+  "imageResizer.guide.faq3Q": string;
+  "imageResizer.guide.faq3A": string;
+}
+
+// ─────────────────────────────────────────────────────────────
+export const translations: Record<Locale, Translations> = {
+  // ── English ────────────────────────────────────────────────
+  en: {
+    "header.search.placeholder": "Search tools... (e.g. PDF, resize, JSON)",
+
+    "hero.badge": "No install · No sign-up · 100% Free",
+    "hero.title1": "Fast Web Utilities",
+    "hero.title2": "Right on Your Desk",
+    "hero.subtitle":
+      "PDF tools, image editing, text processing, developer utilities — all running instantly in your browser. No downloads, no data sent to servers.",
+    "hero.search.placeholder": "Search 21 tools — try 'PDF', 'resize', 'JSON'...",
+    "hero.search.button": "Search",
+    "hero.popular": "Popular:",
+    "hero.stats.tools": "Free Tools",
+    "hero.stats.categories": "Categories",
+    "hero.stats.browser": "Browser-based",
+    "hero.stats.signup": "Sign-up Required",
+
+    "grid.allTools": "All Tools",
+    "grid.subtitle": "21 utilities · 6 categories · all free",
+    "grid.tools": "tools",
+    "grid.runTool": "Run tool",
+    "grid.noResults.title": "No tools found",
+    "grid.noResults.body": 'Try a different search term — e.g. "PDF", "image", or "JSON".',
+    "grid.search.results": "results found",
+    "grid.search.result": "result found",
+    "grid.showAll": "← Show all",
+    "grid.searchLabel": "Search results for",
+
+    "footer.tagline":
+      "Fast, lightweight web utilities — right on your desk. No installation. No sign-up. Just open and run.",
+    "footer.privacy":
+      "All processing happens locally in your browser. Your files never leave your device.",
+    "footer.nav.product": "Product",
+    "footer.nav.company": "Company",
+    "footer.nav.legal": "Legal",
+    "footer.links.allTools": "All Tools",
+    "footer.links.pdfTools": "PDF Tools",
+    "footer.links.imageTools": "Image Tools",
+    "footer.links.devTools": "Dev Tools",
+    "footer.links.changelog": "Changelog",
+    "footer.links.about": "About Us",
+    "footer.links.blog": "Blog",
+    "footer.links.request": "Request a Tool",
+    "footer.links.status": "Status",
+    "footer.links.privacy": "Privacy Policy",
+    "footer.links.terms": "Terms of Service",
+    "footer.links.cookies": "Cookie Policy",
+    "footer.links.contact": "Contact",
+    "footer.copyright": "All rights reserved.",
+
+    "wordCount.title": "Word Count & Text Analysis",
+    "wordCount.subtitle": "Count words, characters, sentences, reading time and analyze keyword density in real-time.",
+    "wordCount.placeholder": "Type or paste your text here, or drag & drop a text file (.txt, .md)...",
+    "wordCount.words": "Words",
+    "wordCount.chars": "Characters",
+    "wordCount.charsNoSpace": "Chars (no space)",
+    "wordCount.sentences": "Sentences",
+    "wordCount.paragraphs": "Paragraphs",
+    "wordCount.lines": "Lines",
+    "wordCount.readTime": "Reading Time",
+    "wordCount.speakTime": "Speaking Time",
+    "wordCount.density": "Top Keyword Density",
+    "wordCount.clear": "Clear",
+    "wordCount.copy": "Copy Text",
+    "wordCount.copied": "Copied!",
+    "wordCount.uppercase": "UPPERCASE",
+    "wordCount.lowercase": "lowercase",
+    "wordCount.titlecase": "Title Case",
+    "wordCount.cleanSpaces": "Clean Extra Spaces",
+    "wordCount.dropPrompt": "Drop text file here to import",
+    "wordCount.guide.title": "About This Tool & Guide",
+    "wordCount.guide.aboutTitle": "What is Word Count & Text Analysis?",
+    "wordCount.guide.aboutDesc": "desktools.run Word Counter is a fast, free, browser-based text calculator. It instantly calculates word counts, character counts (with and without spaces), sentence counts, paragraph counts, and estimated reading/speaking times as you type. It also analyzes top keyword density to help writers, students, bloggers, and SEO specialists optimize their content.",
+    "wordCount.guide.howTitle": "How to Use",
+    "wordCount.guide.step1": "Type or paste your text into the editor, or drag & drop a text file (.txt, .md).",
+    "wordCount.guide.step2": "Instantly review real-time metrics, reading times, and keyword density charts.",
+    "wordCount.guide.step3": "Use quick action buttons to format case, clean up extra spaces, or copy text with one click.",
+    "wordCount.guide.faqTitle": "Frequently Asked Questions",
+    "wordCount.guide.faq1Q": "Is my text uploaded or saved on any server?",
+    "wordCount.guide.faq1A": "No. All text processing and calculations run 100% locally in your web browser. Your text never leaves your device.",
+    "wordCount.guide.faq2Q": "How is the estimated reading time calculated?",
+    "wordCount.guide.faq2A": "Reading time is calculated based on an average reading speed of 200 words per minute (WPM), and speaking time is based on 130 WPM.",
+    "wordCount.guide.faq3Q": "What is the difference between Characters (with spaces) and Chars (no space)?",
+    "wordCount.guide.faq3A": "Characters with spaces counts every single keypress including spaces and line breaks. Characters without spaces excludes whitespace, which is standard for academic assignments, official applications, and essay guidelines.",
+
+    "unitConverter.title": "Unit Converter",
+    "unitConverter.subtitle": "Convert length, weight, temperature, area, volume, speed, time, and digital storage units instantly.",
+    "unitConverter.from": "From",
+    "unitConverter.to": "To",
+    "unitConverter.value": "Value",
+    "unitConverter.result": "Converted Result",
+    "unitConverter.swap": "Swap Units",
+    "unitConverter.formula": "Conversion Formula",
+    "unitConverter.allUnits": "All Units Comparison Table",
+    "unitConverter.presets": "Popular Presets",
+    "unitConverter.copyResult": "Copy Result",
+    "unitConverter.copied": "Copied!",
+    "unitConverter.cat.length": "Length",
+    "unitConverter.cat.weight": "Weight",
+    "unitConverter.cat.temperature": "Temperature",
+    "unitConverter.cat.area": "Area",
+    "unitConverter.cat.volume": "Volume",
+    "unitConverter.cat.speed": "Speed",
+    "unitConverter.cat.time": "Time",
+    "unitConverter.cat.storage": "Digital Storage",
+    "unitConverter.guide.title": "About & Guide",
+    "unitConverter.guide.aboutTitle": "What is desktools.run Unit Converter?",
+    "unitConverter.guide.aboutDesc": "desktools.run Unit Converter is a fast, free, browser-based multi-category unit calculation tool. It allows you to convert between metric, imperial, and traditional units (such as Korean Pyeong or Geun) instantly in your browser with zero latency and 100% privacy.",
+    "unitConverter.guide.howTitle": "How to Use",
+    "unitConverter.guide.step1": "Select a category tab (Length, Weight, Temp, Area, etc.) at the top.",
+    "unitConverter.guide.step2": "Enter the value and choose your From and To units.",
+    "unitConverter.guide.step3": "View the live result, formula, and the all-units comparison table.",
+    "unitConverter.guide.faqTitle": "Frequently Asked Questions",
+    "unitConverter.guide.faq1Q": "How is Pyeong (평) converted to Square Meters (m²)?",
+    "unitConverter.guide.faq1A": "1 Pyeong (평) is defined as exactly 400/121 m², which is approximately 3.305785 m².",
+    "unitConverter.guide.faq2Q": "How does Temperature conversion work?",
+    "unitConverter.guide.faq2A": "Unlike simple ratio multipliers, temperature conversions use offset formulas: °F = (°C × 9/5) + 32, and K = °C + 273.15.",
+    "unitConverter.guide.faq3Q": "Are these calculations performed locally?",
+    "unitConverter.guide.faq3A": "Yes! All calculations occur 100% in your browser using high-precision JavaScript math. No data is sent to any server.",
+
+    "passwordGen.title": "Password Generator",
+    "passwordGen.subtitle": "Generate strong, cryptographically secure random passwords to protect your accounts.",
+    "passwordGen.length": "Password Length",
+    "passwordGen.uppercase": "Uppercase Letters (A-Z)",
+    "passwordGen.lowercase": "Lowercase Letters (a-z)",
+    "passwordGen.numbers": "Numbers (0-9)",
+    "passwordGen.symbols": "Special Symbols (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "Exclude Ambiguous (0, O, o, 1, l, I)",
+    "passwordGen.strength": "Password Strength",
+    "passwordGen.strength.veryWeak": "Very Weak",
+    "passwordGen.strength.weak": "Weak",
+    "passwordGen.strength.medium": "Medium",
+    "passwordGen.strength.strong": "Strong",
+    "passwordGen.strength.veryStrong": "Very Strong",
+    "passwordGen.generate": "Regenerate",
+    "passwordGen.copy": "Copy Password",
+    "passwordGen.copied": "Copied!",
+    "passwordGen.bulk": "Batch Generation (5 Passwords)",
+    "passwordGen.guide.title": "About & Security Guide",
+    "passwordGen.guide.aboutTitle": "What makes a password cryptographically secure?",
+    "passwordGen.guide.aboutDesc": "desktools.run Password Generator uses the Web Cryptography API (window.crypto.getRandomValues) to produce true unguessable random values. All generation happens locally inside your web browser with zero server transmission.",
+    "passwordGen.guide.howTitle": "How to Use",
+    "passwordGen.guide.step1": "Set your desired password length using the slider (16+ characters recommended).",
+    "passwordGen.guide.step2": "Toggle character sets (uppercase, numbers, symbols, ambiguous filter).",
+    "passwordGen.guide.step3": "Click 'Regenerate' or 'Copy Password' to use it for your accounts.",
+    "passwordGen.guide.faqTitle": "Frequently Asked Questions",
+    "passwordGen.guide.faq1Q": "Is my generated password sent to any server?",
+    "passwordGen.guide.faq1A": "No! Passwords are generated 100% locally in your browser memory and never uploaded to any server.",
+    "passwordGen.guide.faq2Q": "What is password entropy?",
+    "passwordGen.guide.faq2A": "Entropy measures password randomness in bits. A password with >60 bits of entropy takes centuries for supercomputers to brute-force.",
+    "passwordGen.guide.faq3Q": "Why exclude ambiguous characters?",
+    "passwordGen.guide.faq3A": "Characters like 0 (zero) and O (capital o) look identical in many fonts. Excluding them prevents typing errors when reading passwords aloud or on mobile.",
+
+    "hashGen.title": "Hash Generator",
+    "hashGen.subtitle": "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 cryptographic hashes and file checksums in real-time.",
+    "hashGen.inputPlaceholder": "Type text here to compute hashes in real-time, or drag & drop a file...",
+    "hashGen.uppercaseHex": "UPPERCASE Hex",
+    "hashGen.lowercaseHex": "lowercase hex",
+    "hashGen.copy": "Copy",
+    "hashGen.copied": "Copied!",
+    "hashGen.copyAll": "Copy All Hashes",
+    "hashGen.clear": "Clear",
+    "hashGen.dropPrompt": "Drop any file here to compute cryptographic checksums",
+    "hashGen.fileLoaded": "Checksum calculated for file",
+    "hashGen.guide.title": "About & Cryptographic Hash Guide",
+    "hashGen.guide.aboutTitle": "What is a cryptographic hash function?",
+    "hashGen.guide.aboutDesc": "A cryptographic hash function converts any input text or binary file into a unique, fixed-length hexadecimal checksum string. Any tiny modification to the input produces a completely different hash (avalanche effect).",
+    "hashGen.guide.howTitle": "How to Use",
+    "hashGen.guide.step1": "Type or paste text into the input area, or drag & drop a file.",
+    "hashGen.guide.step2": "Instantly view computed MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes.",
+    "hashGen.guide.step3": "Toggle UPPERCASE / lowercase hex or click 'Copy' to copy hashes to your clipboard.",
+    "hashGen.guide.faqTitle": "Frequently Asked Questions",
+    "hashGen.guide.faq1Q": "What is the difference between SHA-256 and MD5?",
+    "hashGen.guide.faq1A": "SHA-256 generates a 256-bit hash and is currently cryptographically secure against collisions. MD5 generates a 128-bit hash and is primarily used for fast file integrity verification.",
+    "hashGen.guide.faq2Q": "Can a hash be reversed back to original text?",
+    "hashGen.guide.faq2A": "No. Hash functions are strictly one-way mathematical algorithms designed to be irreversible.",
+    "hashGen.guide.faq3Q": "Is my text or file uploaded to a server?",
+    "hashGen.guide.faq3A": "No! All hashing operations use the browser's native Web Crypto API (window.crypto.subtle). Your files and text never leave your device.",
+
+    "colorGen.title": "Color Converter & Picker",
+    "colorGen.subtitle": "Convert HEX, RGB, HSL, HSV, and CMYK color codes instantly with palette and accessibility contrast check.",
+    "colorGen.picker": "Pick Color",
+    "colorGen.hex": "HEX Color",
+    "colorGen.rgb": "RGB Color",
+    "colorGen.hsl": "HSL Color",
+    "colorGen.hsv": "HSV Color",
+    "colorGen.cmyk": "CMYK (Print)",
+    "colorGen.contrast": "Accessibility & Contrast Ratio",
+    "colorGen.shades": "Tints & Shades Palette",
+    "colorGen.harmonies": "Color Harmonies & Palettes",
+    "colorGen.copy": "Copy",
+    "colorGen.copied": "Copied!",
+    "colorGen.guide.title": "About & Color Spaces Guide",
+    "colorGen.guide.aboutTitle": "What is the difference between RGB, HSL, and CMYK?",
+    "colorGen.guide.aboutDesc": "RGB (Red, Green, Blue) is used for digital screens. HSL (Hue, Saturation, Lightness) is human-intuitive for design tweaking. CMYK (Cyan, Magenta, Yellow, Key/Black) is the subtractive color model used in professional printing.",
+    "colorGen.guide.howTitle": "How to Use",
+    "colorGen.guide.step1": "Use the visual color picker or enter HEX, RGB, or HSL color values.",
+    "colorGen.guide.step2": "Instantly view converted values in HEX, RGB, HSL, HSV, and CMYK.",
+    "colorGen.guide.step3": "Explore generated tints/shades, color harmonies, and copy CSS codes.",
+    "colorGen.guide.faqTitle": "Frequently Asked Questions",
+    "colorGen.guide.faq1Q": "Why do web designs use HEX and RGB while print uses CMYK?",
+    "colorGen.guide.faq1A": "Monitors emit additive light (RGB), whereas physical inks absorb light (CMYK). Converting to CMYK ensures accurate print reproduction.",
+    "colorGen.guide.faq2Q": "What is contrast ratio?",
+    "colorGen.guide.faq2A": "Contrast ratio measures the luminance difference between text and background. WCAG requires at least 4.5:1 for normal readable text.",
+    "colorGen.guide.faq3Q": "How do complementary colors work?",
+    "colorGen.guide.faq3A": "Complementary colors sit directly opposite each other on the 360° color wheel (180° offset), creating maximum visual contrast.",
+
+    "privacy.title": "Privacy Policy",
+    "privacy.subtitle": "Last updated: August 21, 2026. How desktools.run protects your privacy and processes data 100% locally.",
+    "privacy.badge": "100% Client-Side Privacy Guarantee",
+    "privacy.sec1Title": "1. Zero Server File & Text Transmission",
+    "privacy.sec1Desc": "All core utilities (Word Counter, Unit Converter, Password Generator, Hash Generator, Color Converter, etc.) run 100% inside your web browser. Your uploaded files, pasted text, generated passwords, and cryptographic hashes NEVER leave your device or get sent to any remote server.",
+    "privacy.sec2Title": "2. Information We Do Not Collect",
+    "privacy.sec2Desc": "We do not collect personal identifiable information (PII) such as your name, email address, phone number, physical address, or payment details when you use our free web tools.",
+    "privacy.sec3Title": "3. Local Storage Usage",
+    "privacy.sec3Desc": "We use browser LocalStorage strictly for storing your user preferences: 'desktools_theme' (dark/light mode preference) and 'desktools_locale' (selected language preference). These items remain entirely on your device.",
+    "privacy.sec4Title": "4. Cookies & Analytics",
+    "privacy.sec4Desc": "desktools.run does not use invasive cross-site tracking cookies. Anonymous web telemetry may be processed to measure basic site uptime and pageview statistics.",
+    "privacy.sec5Title": "5. Your Data Rights & Contact",
+    "privacy.sec5Desc": "Because we do not store your data on any server, you retain 100% control over your files and text. If you have any privacy questions, please contact privacy@desktools.run.",
+
+    "terms.title": "Terms of Service",
+    "terms.subtitle": "Last updated: August 21, 2026. Terms and conditions governing your use of desktools.run.",
+    "terms.badge": "Free & Open Web Utilities",
+    "terms.sec1Title": "1. Acceptance of Terms",
+    "terms.sec1Desc": "By accessing or using desktools.run, you agree to comply with and be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our web tools.",
+    "terms.sec2Title": "2. Service Scope & Free License",
+    "terms.sec2Desc": "desktools.run provides free web utility tools (file conversion, text processing, password generation, hash computation, color tools) that process data 100% locally inside your web browser without requiring account registration.",
+    "terms.sec3Title": "3. Disclaimer of Warranties & Limitation of Liability",
+    "terms.sec3Desc": "The services and tools are provided on an 'AS IS' and 'AS AVAILABLE' basis without warranties of any kind. desktools.run disclaims any liability for losses or damages arising from reliance on tool outputs or calculation results.",
+    "terms.sec4Title": "4. Intellectual Property & Acceptable Use",
+    "terms.sec4Desc": "The site design, branding, code, and interface remain the property of desktools.run. You agree not to perform automated abusive scraping, denial-of-service (DDoS) attacks, or attempt to compromise site infrastructure.",
+    "terms.sec5Title": "5. Modifications & Support Contact",
+    "terms.sec5Desc": "We reserve the right to revise these terms at any time. Continued use of the platform after updates constitutes acceptance of the new terms. For questions, contact support@desktools.run.",
+
+    "cookies.title": "Cookie Policy",
+    "cookies.subtitle": "Last updated: August 21, 2026. Learn how desktools.run respects your privacy with zero tracking cookies.",
+    "cookies.badge": "Zero Tracking Cookies Guarantee",
+    "cookies.sec1Title": "1. No Invasive Tracking Cookies",
+    "cookies.sec1Desc": "desktools.run does NOT use third-party advertising cookies, cross-site profiling trackers, or invasive marketing cookies. You can browse and use all tools without being tracked.",
+    "cookies.sec2Title": "2. What We Store (Essential Local Storage)",
+    "cookies.sec2Desc": "Instead of tracking cookies, we use HTML5 LocalStorage solely to remember your user preferences: 'desktools_theme' (dark/light theme) and 'desktools_locale' (selected language). These items reside 100% on your device.",
+    "cookies.sec3Title": "3. How Cookies and Storage Work",
+    "cookies.sec3Desc": "Cookies and LocalStorage are small data files stored locally by your browser. They allow websites to remember your settings between visits without sending personal data to external servers.",
+    "cookies.sec4Title": "4. How to Manage or Delete Browser Data",
+    "cookies.sec4Desc": "You can clear or block LocalStorage and cookies at any time through your web browser settings (Chrome, Safari, Firefox, Edge). Note that clearing storage will reset your theme and language preferences to defaults.",
+    "cookies.sec5Title": "5. Policy Updates & Contact",
+    "cookies.sec5Desc": "We may update this policy to reflect site improvements. If you have questions regarding our cookie practices, please contact privacy@desktools.run.",
+
+    "imageResizer.title": "Image Resizer",
+    "imageResizer.subtitle": "Resize PNG, JPG, and WEBP images instantly with custom dimensions, aspect ratio lock, and quality controls.",
+    "imageResizer.dropPrompt": "Drag & drop an image here, or click to browse files...",
+    "imageResizer.width": "Width (px)",
+    "imageResizer.height": "Height (px)",
+    "imageResizer.lockAspect": "Lock Aspect Ratio",
+    "imageResizer.byPercent": "Resize by Percentage",
+    "imageResizer.format": "Output Format",
+    "imageResizer.quality": "Quality",
+    "imageResizer.original": "Original Image",
+    "imageResizer.resized": "Resized Preview",
+    "imageResizer.download": "Download Resized Image",
+    "imageResizer.reset": "Reset Image",
+    "imageResizer.guide.title": "Complete Image Resizer Guide",
+    "imageResizer.guide.aboutTitle": "What is the Image Resizer Tool?",
+    "imageResizer.guide.aboutDesc": "The Image Resizer allows you to scale images to exact pixel dimensions or percentage ratios while controlling compression quality and output format—100% inside your browser.",
+    "imageResizer.guide.howTitle": "How to Resize Images",
+    "imageResizer.guide.step1": "1. Drag & drop or upload your PNG, JPG, or WEBP photo.",
+    "imageResizer.guide.step2": "2. Adjust width/height in pixels or click percentage presets (e.g. 50%). Keep aspect ratio locked to prevent distortion.",
+    "imageResizer.guide.step3": "3. Choose output format (PNG, JPG, WEBP) and quality, then click Download.",
+    "imageResizer.guide.faqTitle": "Frequently Asked Questions",
+    "imageResizer.guide.faq1Q": "Is my image uploaded to any server?",
+    "imageResizer.guide.faq1A": "No. All canvas rendering and resizing happens 100% locally inside your browser memory. Your images remain strictly private on your device.",
+    "imageResizer.guide.faq2Q": "What is the difference between PNG, JPG, and WEBP?",
+    "imageResizer.guide.faq2A": "PNG supports transparency and lossless quality. JPG provides small file sizes for photos without transparency. WEBP offers next-gen high compression with transparency support.",
+    "imageResizer.guide.faq3Q": "How does locking the aspect ratio help?",
+    "imageResizer.guide.faq3A": "Locking the aspect ratio ensures your image scales proportionally without stretching, warping, or distorting.",
+  },
+
+  // ── Korean ─────────────────────────────────────────────────
+  ko: {
+    "header.search.placeholder": "도구 검색... (예: PDF, 리사이즈, JSON)",
+
+    "hero.badge": "설치 불필요 · 회원가입 불필요 · 100% 무료",
+    "hero.title1": "빠른 웹 유틸리티",
+    "hero.title2": "바로 내 책상 위에서",
+    "hero.subtitle":
+      "PDF 도구, 이미지 편집, 텍스트 처리, 개발자 유틸리티 — 모두 브라우저에서 즉시 실행됩니다. 다운로드도, 서버 전송도 없습니다.",
+    "hero.search.placeholder": "21개 도구 검색 — 'PDF', '리사이즈', 'JSON' 등을 입력해 보세요...",
+    "hero.search.button": "검색",
+    "hero.popular": "인기:",
+    "hero.stats.tools": "무료 도구",
+    "hero.stats.categories": "카테고리",
+    "hero.stats.browser": "브라우저 기반",
+    "hero.stats.signup": "회원가입 필요",
+
+    "grid.allTools": "전체 도구",
+    "grid.subtitle": "21개 유틸리티 · 6개 카테고리 · 전부 무료",
+    "grid.tools": "개 도구",
+    "grid.runTool": "실행하기",
+    "grid.noResults.title": "검색 결과가 없습니다",
+    "grid.noResults.body": '다른 검색어를 입력해 보세요 — 예: "PDF", "이미지", "JSON".',
+    "grid.search.results": "개 결과 찾음",
+    "grid.search.result": "개 결과 찾음",
+    "grid.showAll": "← 전체 보기",
+    "grid.searchLabel": "검색 결과:",
+
+    "footer.tagline":
+      "빠르고 가벼운 웹 유틸리티 — 내 책상 위에서 바로. 설치도, 회원가입도 필요 없습니다. 그냥 열고 실행하세요.",
+    "footer.privacy":
+      "모든 처리는 브라우저 내에서 로컬로 이루어집니다. 파일은 절대 서버로 전송되지 않습니다.",
+    "footer.nav.product": "제품",
+    "footer.nav.company": "회사",
+    "footer.nav.legal": "법적 고지",
+    "footer.links.allTools": "전체 도구",
+    "footer.links.pdfTools": "PDF 도구",
+    "footer.links.imageTools": "이미지 도구",
+    "footer.links.devTools": "개발자 도구",
+    "footer.links.changelog": "변경 이력",
+    "footer.links.about": "소개",
+    "footer.links.blog": "블로그",
+    "footer.links.request": "도구 요청",
+    "footer.links.status": "서비스 상태",
+    "footer.links.privacy": "개인정보처리방침",
+    "footer.links.terms": "이용약관",
+    "footer.links.cookies": "쿠키 정책",
+    "footer.links.contact": "문의하기",
+    "footer.copyright": "All rights reserved.",
+
+    "wordCount.title": "단어 및 글자 수 세기",
+    "wordCount.subtitle": "단어 수, 글자 수, 문장 수, 예상 읽기 시간 및 키워드 빈도를 실시간으로 분석합니다.",
+    "wordCount.placeholder": "여기에 텍스트를 입력하거나 붙여넣으세요. 텍스트 파일(.txt, .md)을 드래그하여 놓을 수도 있습니다...",
+    "wordCount.words": "단어 수",
+    "wordCount.chars": "글자 수 (공백 포함)",
+    "wordCount.charsNoSpace": "글자 수 (공백 제외)",
+    "wordCount.sentences": "문장 수",
+    "wordCount.paragraphs": "단락 수",
+    "wordCount.lines": "줄 수",
+    "wordCount.readTime": "예상 읽기 시간",
+    "wordCount.speakTime": "예상 말하기 시간",
+    "wordCount.density": "상위 키워드 빈도",
+    "wordCount.clear": "초기화",
+    "wordCount.copy": "텍스트 복사",
+    "wordCount.copied": "복사됨!",
+    "wordCount.uppercase": "대문자 변환",
+    "wordCount.lowercase": "소문자 변환",
+    "wordCount.titlecase": "첫 글자 대문자",
+    "wordCount.cleanSpaces": "공백/줄바꿈 정리",
+    "wordCount.dropPrompt": "텍스트 파일을 여기에 놓아 불러오기",
+    "wordCount.guide.title": "도구 소개 및 사용 가이드",
+    "wordCount.guide.aboutTitle": "단어 및 글자 수 세기 도구란 무엇인가요?",
+    "wordCount.guide.aboutDesc": "desktools.run의 글자수 세기 도구는 웹 브라우저에서 바로 사용할 수 있는 무료 텍스트 분석 도구입니다. 텍스트를 입력하는 즉시 공백 포함/제외 글자 수, 단어 수, 문장 수, 단락 수, 예상 읽기/말하기 시간 및 주요 키워드 빈도를 실시간으로 계산해 드립니다. 대학 과제, 자소서, 블로그 포스팅, SNS 원고 작성 및 SEO 본문 길이를 맞출 때 유용합니다.",
+    "wordCount.guide.howTitle": "사용 방법",
+    "wordCount.guide.step1": "에디터에 텍스트를 직접 입력하거나 붙여넣고, 또는 .txt / .md 텍스트 파일을 드래그하여 불러옵니다.",
+    "wordCount.guide.step2": "상단 통계 카드에서 단어 수, 글자 수, 문장 수 및 예상 읽기 시간을 실시간으로 확인합니다.",
+    "wordCount.guide.step3": "대소문자 변환, 공백/줄바꿈 정리 및 텍스트 복사 기능으로 효율적으로 원고를 다듬으세요.",
+    "wordCount.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "wordCount.guide.faq1Q": "작성한 텍스트가 서버에 저장되거나 전송되나요?",
+    "wordCount.guide.faq1A": "아닙니다. 모든 텍스트 계산 및 분석은 100% 사용자의 웹 브라우저 내부에서 로컬로 처리됩니다. 입력하신 내용이 외부 서버로 절대 전송되지 않습니다.",
+    "wordCount.guide.faq2Q": "예상 읽기 및 말하기 시간은 어떻게 계산되나요?",
+    "wordCount.guide.faq2A": "일반적인 성인의 평균 묵독 속도(분당 약 200단어)와 낭독/스피치 속도(분당 약 130단어)를 기준으로 자동 산출됩니다.",
+    "wordCount.guide.faq3Q": "공백 포함 글자 수와 공백 제외 글자 수의 차이는 무엇인가요?",
+    "wordCount.guide.faq3A": "'공백 포함'은 띄어쓰기 및 줄바꿈을 포함한 전체 입력 글자 수를 의미하며, '공백 제외'는 순수한 문자 및 기호 수만을 의미합니다. 자기소개서나 논문 규정에 맞춰 선택하세요.",
+
+    "unitConverter.title": "단위 변환기",
+    "unitConverter.subtitle": "길이, 무게, 온도, 면적, 부피, 속도, 시간, 디지털 용량을 실시간으로 빠르게 변환합니다.",
+    "unitConverter.from": "변환 전 단위",
+    "unitConverter.to": "변환 후 단위",
+    "unitConverter.value": "값 입력",
+    "unitConverter.result": "변환 결과",
+    "unitConverter.swap": "단위 맞교환",
+    "unitConverter.formula": "변환 공식",
+    "unitConverter.allUnits": "전체 단위 비교표",
+    "unitConverter.presets": "인기 변환 바로가기",
+    "unitConverter.copyResult": "결과 복사",
+    "unitConverter.copied": "복사됨!",
+    "unitConverter.cat.length": "길이",
+    "unitConverter.cat.weight": "무게",
+    "unitConverter.cat.temperature": "온도",
+    "unitConverter.cat.area": "면적",
+    "unitConverter.cat.volume": "부피",
+    "unitConverter.cat.speed": "속도",
+    "unitConverter.cat.time": "시간",
+    "unitConverter.cat.storage": "디지털 용량",
+    "unitConverter.guide.title": "도구 소개 및 사용 가이드",
+    "unitConverter.guide.aboutTitle": "단위 변환기 도구란 무엇인가요?",
+    "unitConverter.guide.aboutDesc": "desktools.run의 단위 변환기는 웹 브라우저에서 바로 다양한 단위(길이, 무게, 온도, 면적, 부피, 속도, 시간, 용량 및 한국 전통 단위인 평, 근)를 즉시 변환해 주는 무료 유틸리티입니다. 부동산 아파트 평수 계산, 요리 레시피 단위 변환, 해외 직구 무게(파운드/온스) 측정에 유용합니다.",
+    "unitConverter.guide.howTitle": "사용 방법",
+    "unitConverter.guide.step1": "상단 탭에서 변환하고자 하는 카테고리(길이, 무게, 온도, 면적 등)를 선택합니다.",
+    "unitConverter.guide.step2": "숫자를 입력하고 변환할 단위와 목표 단위를 선택합니다.",
+    "unitConverter.guide.step3": "실시간으로 자동 계산된 결과, 공식 및 전체 단위 비교표를 확인하세요.",
+    "unitConverter.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "unitConverter.guide.faq1Q": "1평(坪)은 몇 제곱미터(m²) 인가요?",
+    "unitConverter.guide.faq1A": "1평은 정확히 400/121 m²이며, 약 3.305785 m² 입니다. (예: 84m² 아파트는 약 25.4평)",
+    "unitConverter.guide.faq2Q": "온도 변환은 어떻게 계산되나요?",
+    "unitConverter.guide.faq2A": "섭씨(°C)와 화씨(°F)는 고정 비율이 아닌 오프셋 공식(°F = °C × 1.8 + 32)을 적용하여 정확하게 산출됩니다.",
+    "unitConverter.guide.faq3Q": "입력한 수치가 서버로 전송되나요?",
+    "unitConverter.guide.faq3A": "아닙니다. 모든 단위 변환 계산은 100% 브라우저 로컬에서 계산되므로 안전하고 빠릅니다.",
+
+    "passwordGen.title": "비밀번호 생성기",
+    "passwordGen.subtitle": "암호학적으로 안전한 강력한 무작위 비밀번호를 즉시 생성합니다.",
+    "passwordGen.length": "비밀번호 길이",
+    "passwordGen.uppercase": "대문자 포함 (A-Z)",
+    "passwordGen.lowercase": "소문자 포함 (a-z)",
+    "passwordGen.numbers": "숫자 포함 (0-9)",
+    "passwordGen.symbols": "특수문자 포함 (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "헷갈리는 문자 제외 (0, O, o, 1, l, I)",
+    "passwordGen.strength": "비밀번호 보안 강도",
+    "passwordGen.strength.veryWeak": "매우 약함",
+    "passwordGen.strength.weak": "약함",
+    "passwordGen.strength.medium": "보통",
+    "passwordGen.strength.strong": "강함",
+    "passwordGen.strength.veryStrong": "매우 강함 (안전)",
+    "passwordGen.generate": "새로 생성",
+    "passwordGen.copy": "비밀번호 복사",
+    "passwordGen.copied": "복사됨!",
+    "passwordGen.bulk": "일괄 생성 (5개 세트)",
+    "passwordGen.guide.title": "도구 소개 및 보안 가이드",
+    "passwordGen.guide.aboutTitle": "안전한 비밀번호 생성기의 원리는 무엇인가요?",
+    "passwordGen.guide.aboutDesc": "desktools.run의 비밀번호 생성기는 웹 암호화 표준 API인 window.crypto.getRandomValues()를 사용하여 예측 불가능한 암호학적 무작위 비밀번호를 만듭니다. 모든 생성 작업은 100% 브라우저 메모리 내부에서만 수행됩니다.",
+    "passwordGen.guide.howTitle": "사용 방법",
+    "passwordGen.guide.step1": "슬라이더를 조절하여 원하는 비밀번호 길이를 설정합니다 (16자 이상 권장).",
+    "passwordGen.guide.step2": "대소문자, 숫자, 특수문자 및 헷갈리는 문자 제외 옵션을 선택합니다.",
+    "passwordGen.guide.step3": "'새로 생성' 또는 '비밀번호 복사' 버튼을 눌러 계정에 등록하세요.",
+    "passwordGen.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "passwordGen.guide.faq1Q": "생성된 비밀번호가 서버나 기록에 남나요?",
+    "passwordGen.guide.faq1A": "절대 남지 않습니다! 모든 난수 생성은 사용자의 브라우저 내에서 로컬로 처리되며, 데이터가 외부에 수집되지 않습니다.",
+    "passwordGen.guide.faq2Q": "비밀번호 엔트로피(Entropy)란 무엇인가요?",
+    "passwordGen.guide.faq2A": "엔트로피는 무작위성을 비트(Bit) 단위로 측정한 지표입니다. 60비트 이상의 엔트로피를 가진 비밀번호는 슈퍼컴퓨터로도 해킹에 수백 년 이상이 소요됩니다.",
+    "passwordGen.guide.faq3Q": "헷갈리는 문자 제외 기능이란 무엇인가요?",
+    "passwordGen.guide.faq3A": "숫자 0과 알파벳 O, 숫자 1과 소문자 l처럼 폰트에 따라 다르게 보이는 기호를 미리 배제하여 입력 실수를 방지해 주는 기능입니다.",
+
+    "hashGen.title": "해시 생성기",
+    "hashGen.subtitle": "MD5, SHA-1, SHA-256, SHA-384, SHA-512 암호화 해시 및 파일 체크섬을 실시간으로 생성합니다.",
+    "hashGen.inputPlaceholder": "텍스트를 입력하면 해시가 실시간으로 계산됩니다. 또는 파일을 여기에 드래그하여 올려놓으세요...",
+    "hashGen.uppercaseHex": "대문자 HEX",
+    "hashGen.lowercaseHex": "소문자 HEX",
+    "hashGen.copy": "복사",
+    "hashGen.copied": "복사됨!",
+    "hashGen.copyAll": "전체 해시 복사",
+    "hashGen.clear": "초기화",
+    "hashGen.dropPrompt": "파일 체크섬을 생성하려면 여기에 파일 드래그 앤 드롭",
+    "hashGen.fileLoaded": "파일 체크섬 계산 완료",
+    "hashGen.guide.title": "도구 소개 및 해시 가이드",
+    "hashGen.guide.aboutTitle": "암호화 해시(Hash Function)란 무엇인가요?",
+    "hashGen.guide.aboutDesc": "암호화 해시 함수는 임의의 데이터나 파일을 단방향으로 계산하여 고정된 길의 16진수 문자열(체크섬)로 변환해 주는 알고리즘입니다. 입력 데이터가 단 1비트만 달라져도 완전히 다른 해시값이 생성되므로 데이터 무결성 검증에 필수적입니다.",
+    "hashGen.guide.howTitle": "사용 방법",
+    "hashGen.guide.step1": "입력창에 텍스트를 입력하거나, 검증할 파일(이미지, 문서, 압축파일 등)을 드래그하여 불러옵니다.",
+    "hashGen.guide.step2": "실시간으로 생성된 MD5, SHA-1, SHA-256, SHA-384, SHA-512 해시 결과를 확인합니다.",
+    "hashGen.guide.step3": "대소문자 토글 또는 '복사' 버튼을 눌러 필요한 해시값을 클립보드에 저장하세요.",
+    "hashGen.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "hashGen.guide.faq1Q": "SHA-256과 MD5의 차이점은 무엇인가요?",
+    "hashGen.guide.faq1A": "SHA-256은 256비트 길이의 보안 암호화 표준이며 충돌 공격에 강합니다. MD5는 128비트 길이로 빠르게 파일 무결성을 검사할 때 주로 쓰입니다.",
+    "hashGen.guide.faq2Q": "해시값에서 원래 텍스트를 복원할 수 있나요?",
+    "hashGen.guide.faq2A": "아닙니다. 해시 함수는 단방향(One-way) 연산이므로 해시 결과만으로 원본 텍스트를 역추적하여 복원하는 것은 불가능합니다.",
+    "hashGen.guide.faq3Q": "업로드한 파일이나 텍스트가 서버로 전송되나요?",
+    "hashGen.guide.faq3A": "절대 전송되지 않습니다! 모든 해시 계산은 브라우저의 Web Crypto API를 사용하여 100% 사용자의 컴퓨터 로컬에서 처리됩니다.",
+
+    "colorGen.title": "색상 변환기 & 피커",
+    "colorGen.subtitle": "HEX, RGB, HSL, HSV, CMYK 색상 코드를 실시간으로 변환하고 팔레트 및 대비율을 확인합니다.",
+    "colorGen.picker": "색상 선택 (피커)",
+    "colorGen.hex": "HEX 코드",
+    "colorGen.rgb": "RGB 값",
+    "colorGen.hsl": "HSL 값",
+    "colorGen.hsv": "HSV 값",
+    "colorGen.cmyk": "CMYK (인쇄용)",
+    "colorGen.contrast": "웹 접근성 대비율 (Contrast)",
+    "colorGen.shades": "명암 & 밝기 단계 팔레트 (Tints & Shades)",
+    "colorGen.harmonies": "조화로운 컬러 팔레트 (보색/유사색/삼각보색)",
+    "colorGen.copy": "복사",
+    "colorGen.copied": "복사됨!",
+    "colorGen.guide.title": "도구 소개 및 색상 공간 가이드",
+    "colorGen.guide.aboutTitle": "RGB, HSL, CMYK의 차이점은 무엇인가요?",
+    "colorGen.guide.aboutDesc": "RGB는 모니터 화면에서 빛을 섞는 가산 혼합 모델입니다. HSL은 사람이 색상, 채도, 명도를 직관적으로 조절하기에 좋으며, CMYK는 잉크를 사용하는 전문 인쇄용 감산 혼합 모델입니다.",
+    "colorGen.guide.howTitle": "사용 방법",
+    "colorGen.guide.step1": "컬러 피커에서 색상을 선택하거나 HEX, RGB, HSL 값을 입력합니다.",
+    "colorGen.guide.step2": "실시간으로 변환된 HEX, RGB, HSL, HSV, CMYK 결과값을 확인합니다.",
+    "colorGen.guide.step3": "자동 생성된 명암 팔레트 및 보색 조합을 확인하고 필요한 CSS 코드를 복사하세요.",
+    "colorGen.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "colorGen.guide.faq1Q": "웹 디자인에서는 왜 HEX/RGB를 쓰고 인쇄에서는 CMYK를 쓰나요?",
+    "colorGen.guide.faq1A": "디지털 화면은 픽셀의 빛(RGB)을 발산하지만, 종이 인쇄는 잉크(CMYK)가 빛을 흡수하므로 변환 계산이 필요합니다.",
+    "colorGen.guide.faq2Q": "웹 접근성 텍스트 대비율(Contrast Ratio)이란 무엇인가요?",
+    "colorGen.guide.faq2A": "배경과 텍스트 간의 명암 차이 지표입니다. WCAG 표준에 따르면 일반 텍스트 기준 4.5:1 이상의 대비율을 만족해야 읽기 쉽습니다.",
+    "colorGen.guide.faq3Q": "보색(Complementary Color)은 어떤 원리인가요?",
+    "colorGen.guide.faq3A": "360도 색상환에서 정확히 정반대(180도) 위치에 있는 색상으로, 강렬하고 대비가 분명한 시각적 효과를 줍니다.",
+
+    "privacy.title": "개인정보처리방침",
+    "privacy.subtitle": "최종 수정일: 2026년 8월 21일. desktools.run이 사용자의 개인정보를 보호하고 데이터를 100% 로컬에서 처리하는 방법입니다.",
+    "privacy.badge": "100% 브라우저 로컬 개인정보 보호 보장",
+    "privacy.sec1Title": "1. 외부 서버 파일 및 텍스트 전송 제로 (0%)",
+    "privacy.sec1Desc": "desktools.run의 모든 유틸리티 도구(단어 수 세기, 단위 변환기, 비밀번호 생성기, 해시 생성기, 색상 변환기 등)는 100% 사용자의 웹 브라우저 내부에서 작동합니다. 사용자가 입력한 텍스트, 업로드한 파일, 생성된 비밀번호 및 암호화 해시는 절대로 외부 서버로 전송되거나 저장되지 않습니다.",
+    "privacy.sec2Title": "2. 수집하지 않는 정보",
+    "privacy.sec2Desc": "본 플랫폼은 무료 웹 도구를 제공하며, 이용자의 성명, 이메일, 전화번호, 결제 정보 등 어떠한 개인식별정보(PII)도 요구하거나 수집하지 않습니다.",
+    "privacy.sec3Title": "3. 로컬 스토리지 (LocalStorage) 사용 안내",
+    "privacy.sec3Desc": "이용 편의를 위해 사용자의 브라우저 로컬 스토리지에 테마 설정('desktools_theme') 및 다국어 언어 선택('desktools_locale') 정보만을 저장합니다. 이 정보는 오직 사용자의 브라우저 단에만 존재합니다.",
+    "privacy.sec4Title": "4. 쿠키 및 방문 분석 정책",
+    "privacy.sec4Desc": "desktools.run은 사용자를 추적하는 타사 마케팅 쿠키를 사용하지 않습니다. 사이트 가동률 및 기본적인 방문 통계 측정을 위해 최소한의 익명 기술 로그만 활용될 수 있습니다.",
+    "privacy.sec5Title": "5. 데이터 권리 및 개인정보 문의처",
+    "privacy.sec5Desc": "사용자의 정보가 서버에 전혀 수집되지 않으므로, 사용자는 자신의 데이터에 대한 완전한 통제권을 가집니다. 개인정보 방침 관련 문의 사항은 privacy@desktools.run으로 연락해 주시기 바랍니다.",
+
+    "terms.title": "이용약관",
+    "terms.subtitle": "최종 수정일: 2026년 8월 21일. desktools.run 서비스를 이용함에 있어 적용되는 이용 조건입니다.",
+    "terms.badge": "회원가입 없는 100% 무료 웹 유틸리티",
+    "terms.sec1Title": "1. 약관의 동의 및 효력",
+    "terms.sec1Desc": "desktools.run 웹사이트를 이용함으로서 귀하는 본 이용약관에 동의하게 됩니다. 본 약관 내용에 동의하지 않는 경우 서비스 이용을 중단해 주시기 바랍니다.",
+    "terms.sec2Title": "2. 서비스 제공 범위 및 라이선스",
+    "terms.sec2Desc": "desktools.run은 회원가입이나 설치 없이 100% 브라우저 로컬에서 연산되는 웹 도구(단어 수 세기, 단위 변환기, 비밀번호 생성기, 해시 생성기, 색상 변환기 등)를 무료로 제공합니다. 이용자는 개인적 및 상업적 목적으로 도구를 자유롭게 활용할 수 있습니다.",
+    "terms.sec3Title": "3. 면책 조항 및 책임의 한계",
+    "terms.sec3Desc": "본 서비스 및 도구는 '있는 그대로(AS IS)' 제공됩니다. desktools.run은 도구가 산출한 결과값, 수치 계산, 해시 또는 텍스트 변환 결과의 무결성이나 정확성에 대해 보증하지 않으며, 이로 인해 발생한 임의의 손실에 대해 책임을 지지 않습니다.",
+    "terms.sec4Title": "4. 지적재산권 및 공정 이용 (Acceptable Use)",
+    "terms.sec4Desc": "플랫폼의 디자인, 브랜딩, 소스코드 및 인터페이스에 대한 지적재산권은 desktools.run에 귀속됩니다. 악의적인 비정상적 자동화 트래픽(DDoS), 서버 공격 또는 서비스 침해 행위는 엄격히 금지됩니다.",
+    "terms.sec5Title": "5. 약관의 개정 및 지원 문의",
+    "terms.sec5Desc": "본 약관은 관련 법령 개정 또는 서비스 업데이트에 따라 변경될 수 있습니다. 약관 및 서비스에 대한 문의 사항은 support@desktools.run으로 연락 바랍니다.",
+
+    "cookies.title": "쿠키 정책",
+    "cookies.subtitle": "최종 수정일: 2026년 8월 21일. desktools.run이 추적 쿠키 없이 사용자의 개인정보를 보호하는 방식 안내입니다.",
+    "cookies.badge": "타사 추적 쿠키 미사용 (Zero Tracking Cookies)",
+    "cookies.sec1Title": "1. 타사 마케팅 추적 쿠키 미사용 원칙",
+    "cookies.sec1Desc": "desktools.run은 이용자를 타겟팅하는 제3자 광고 쿠키, 타사 마케팅 추적 쿠키, 개인 행적 추적기를 일절 사용하지 않습니다. 사용자는 추적 걱정 없이 모든 도구를 안심하고 사용할 수 있습니다.",
+    "cookies.sec2Title": "2. 저장되는 데이터 (필수 로컬 스토리지)",
+    "cookies.sec2Desc": "전통적인 쿠키 대신 HTML5 LocalStorage를 활용하여 사용자가 직접 설정한 필수 환경 설정 정보만을 저장합니다: 'desktools_theme' (다크/라이트 모드) 및 'desktools_locale' (선택 언어). 이 정보는 사용자의 기기에만 보관됩니다.",
+    "cookies.sec3Title": "3. 쿠키 및 웹 스토리지 작동 방식",
+    "cookies.sec3Desc": "쿠키 및 웹 스토리지는 웹 사이트 재방문 시 사용자가 선택한 설정을 기억하여 편리한 사용 환경을 제공하는 웹 브라우저 로컬 저장 기술입니다. 개인정보는 수집되지 않습니다.",
+    "cookies.sec4Title": "4. 브라우저 스토리지 및 쿠키 관리 방법",
+    "cookies.sec4Desc": "이용자는 사용하는 웹 브라우저(Chrome, Safari, Firefox, Edge 등)의 설정 메뉴에서 언제든지 저장된 쿠키 및 로컬 스토리지를 삭제하거나 차단할 수 있습니다. (삭제 시 테마 및 언어 설정이 초기화됩니다.)",
+    "cookies.sec5Title": "5. 방침 개정 및 개인정보 문의처",
+    "cookies.sec5Desc": "본 쿠키 정책은 서비스 기능 추가 등에 따라 변경될 수 있습니다. 쿠키 및 개인정보 관련 문의 사항은 privacy@desktools.run으로 연락 바랍니다.",
+
+    "imageResizer.title": "이미지 리사이즈 & 크기 조절",
+    "imageResizer.subtitle": "PNG, JPG, WEBP 이미지의 해상도(픽셀/퍼센트) 및 품질을 실시간으로 자유롭게 조절하세요.",
+    "imageResizer.dropPrompt": "이미지 파일을 이곳에 드래그하거나 클릭하여 업로드하세요...",
+    "imageResizer.width": "가로 너비 (px)",
+    "imageResizer.height": "세로 높이 (px)",
+    "imageResizer.lockAspect": "종횡비 (비율) 고정",
+    "imageResizer.byPercent": "비율(퍼센트)로 크기 조절",
+    "imageResizer.format": "출력 포맷",
+    "imageResizer.quality": "품질",
+    "imageResizer.original": "원본 이미지",
+    "imageResizer.resized": "리사이즈 미리보기",
+    "imageResizer.download": "리사이즈 이미지 다운로드",
+    "imageResizer.reset": "이미지 초기화",
+    "imageResizer.guide.title": "이미지 리사이즈 완벽 가이드",
+    "imageResizer.guide.aboutTitle": "이미지 리사이즈 도구란 무엇인가요?",
+    "imageResizer.guide.aboutDesc": "서버 업로드 없이 사용자의 웹 브라우저에서 PNG, JPG, WEBP 이미지의 가로/세로 해상도를 픽셀 및 퍼센트 단위로 자유롭게 조절하고 용량을 줄여주는 100% 로컬 유틸리티입니다.",
+    "imageResizer.guide.howTitle": "이미지 크기 조절 방법",
+    "imageResizer.guide.step1": "1. 편집하려는 사진(PNG, JPG, WEBP 등)을 드래그하여 업로드합니다.",
+    "imageResizer.guide.step2": "2. 원하는 가로/세로 픽셀을 입력하거나 50%, 75% 등 퍼센트 버튼을 누릅니다. 종횡비 고정 아이콘(🔗)이 켜져 있으면 비율이 왜곡되지 않습니다.",
+    "imageResizer.guide.step3": "3. 출력 포맷 및 이미지 품질을 선택한 후 '리사이즈 이미지 다운로드' 버튼을 클릭합니다.",
+    "imageResizer.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "imageResizer.guide.faq1Q": "업로드한 이미지가 외부 서버로 전송되나요?",
+    "imageResizer.guide.faq1A": "아닙니다. desktools.run의 모든 이미지 처리는 HTML5 Canvas 기술을 통해 사용자의 브라우저 내에서 100% 로컬로 진행됩니다.",
+    "imageResizer.guide.faq2Q": "PNG, JPG, WEBP 포맷은 어떤 차이가 있나요?",
+    "imageResizer.guide.faq2A": "PNG는 투명 배경과 무손실 화질을 지원하고, JPG는 사진 파일의 용량을 크게 줄여줍니다. WEBP는 투명도와 뛰어난 압축률을 동시에 제공하는 차세대 포맷입니다.",
+    "imageResizer.guide.faq3Q": "종횡비 고정 기능은 왜 필요한가요?",
+    "imageResizer.guide.faq3A": "가로와 세로 비율을 유지함으로써 리사이즈 시 이미지가 찌그러지거나 왜곡되는 현상을 방지해 줍니다.",
+  },
+
+  // ── Japanese ───────────────────────────────────────────────
+  ja: {
+    "header.search.placeholder": "ツールを検索... (例: PDF、リサイズ、JSON)",
+
+    "hero.badge": "インストール不要 · 登録不要 · 完全無料",
+    "hero.title1": "高速Webユーティリティ",
+    "hero.title2": "デスクの上ですぐに",
+    "hero.subtitle":
+      "PDFツール、画像編集、テキスト処理、開発者ユーティリティ — すべてブラウザで即実行。ダウンロードも、サーバー送信もなし。",
+    "hero.search.placeholder": "21のツールを検索 — 'PDF'、'リサイズ'、'JSON'など...",
+    "hero.search.button": "検索",
+    "hero.popular": "人気:",
+    "hero.stats.tools": "無料ツール",
+    "hero.stats.categories": "カテゴリ",
+    "hero.stats.browser": "ブラウザベース",
+    "hero.stats.signup": "登録が必要",
+
+    "grid.allTools": "全ツール",
+    "grid.subtitle": "21のユーティリティ · 6カテゴリ · すべて無料",
+    "grid.tools": "ツール",
+    "grid.runTool": "実行する",
+    "grid.noResults.title": "ツールが見つかりません",
+    "grid.noResults.body": '別の検索語を試してください — 例: "PDF"、"画像"、"JSON"。',
+    "grid.search.results": "件の結果",
+    "grid.search.result": "件の結果",
+    "grid.showAll": "← すべて表示",
+    "grid.searchLabel": "検索結果:",
+
+    "footer.tagline":
+      "高速で軽量なWebユーティリティ — デスクの上ですぐに。インストールも登録も不要。開いて実行するだけ。",
+    "footer.privacy":
+      "すべての処理はブラウザ内でローカルに行われます。ファイルはデバイスから外に出ません。",
+    "footer.nav.product": "製品",
+    "footer.nav.company": "会社",
+    "footer.nav.legal": "法的情報",
+    "footer.links.allTools": "全ツール",
+    "footer.links.pdfTools": "PDFツール",
+    "footer.links.imageTools": "画像ツール",
+    "footer.links.devTools": "開発者ツール",
+    "footer.links.changelog": "変更履歴",
+    "footer.links.about": "会社概要",
+    "footer.links.blog": "ブログ",
+    "footer.links.request": "ツールリクエスト",
+    "footer.links.status": "サービス状況",
+    "footer.links.privacy": "プライバシーポリシー",
+    "footer.links.terms": "利用規約",
+    "footer.links.cookies": "Cookieポリシー",
+    "footer.links.contact": "お問い合わせ",
+    "footer.copyright": "All rights reserved.",
+
+    "wordCount.title": "文字数＆単語数カウント",
+    "wordCount.subtitle": "単語数、文字数、文章数、読了時間、キーワード頻度をリアルタイムで計測・分析します。",
+    "wordCount.placeholder": "ここにテキストを入力または貼り付けるか、テキストファイル（.txt, .md）をドラッグ＆ドロップしてください...",
+    "wordCount.words": "単語数",
+    "wordCount.chars": "文字数 (空白込み)",
+    "wordCount.charsNoSpace": "文字数 (空白除く)",
+    "wordCount.sentences": "文章数",
+    "wordCount.paragraphs": "段落数",
+    "wordCount.lines": "行数",
+    "wordCount.readTime": "読了時間",
+    "wordCount.speakTime": "スピーチ時間",
+    "wordCount.density": "頻出キーワード",
+    "wordCount.clear": "クリア",
+    "wordCount.copy": "コピー",
+    "wordCount.copied": "コピー完了!",
+    "wordCount.uppercase": "大文字変換",
+    "wordCount.lowercase": "小文字変換",
+    "wordCount.titlecase": "タイトルケース",
+    "wordCount.cleanSpaces": "余分な空白を削除",
+    "wordCount.dropPrompt": "ここにファイルをドロップして読み込み",
+    "wordCount.guide.title": "ツールガイドと説明",
+    "wordCount.guide.aboutTitle": "文字数＆単語数カウントツールとは？",
+    "wordCount.guide.aboutDesc": "desktools.runの文字数カウントツールは、ブラウザで即座に使える無料のテキスト解析ツールです。テキストを入力すると、空白込み・除く文字数、単語数、文章数、段落数、推定読了時間、スピーチ時間、キーワード頻度をリアルタイムで分析します。レポート、論文、ブログ記事、SNS投稿、SEO文章の文字数調整に最適です。",
+    "wordCount.guide.howTitle": "の使い方",
+    "wordCount.guide.step1": "エディタにテキストを入力・貼り付けるか、.txt / .mdファイルをドラッグ＆ドロップします。",
+    "wordCount.guide.step2": "上部の統計カードで単語数、文字数、読了時間をリアルタイムで確認します。",
+    "wordCount.guide.step3": "大文字・小文字変換、余分な空白削除、コピーボタンで手軽に推敲できます。",
+    "wordCount.guide.faqTitle": "よくある質問 (FAQ)",
+    "wordCount.guide.faq1Q": "入力したテキストはサーバーに送信・保存されますか？",
+    "wordCount.guide.faq1A": "いいえ。すべての処理は100%お客様のウェブブラウザ内でローカルに実行されます。テキストが外部サーバーに送信されることは一切ありません。",
+    "wordCount.guide.faq2Q": "推定読了時間はどのように計算されますか？",
+    "wordCount.guide.faq2A": "一般的な大人の平均読書速度（1分間に約200単語）およびスピーチ速度（1分間に約130単語）に基づいて自動計算されます。",
+    "wordCount.guide.faq3Q": "「空白込み」と「空白除く」の違いは何ですか？",
+    "wordCount.guide.faq3A": "「空白込み」はスペースや改行を含む全入力文字数です。「空白除く」は純粋な文字・記号のみの数で、公的書類やレポート、原稿用紙などの規定確認に適しています。",
+
+    "unitConverter.title": "単位変換ツール",
+    "unitConverter.subtitle": "長さ、重さ、温度、面積、体積、速度、時間、デジタル容量を即座に相互変換します。",
+    "unitConverter.from": "変換前",
+    "unitConverter.to": "変換後",
+    "unitConverter.value": "値を入力",
+    "unitConverter.result": "変換結果",
+    "unitConverter.swap": "単位を入れ替え",
+    "unitConverter.formula": "計算式",
+    "unitConverter.allUnits": "全単位一覧比較",
+    "unitConverter.presets": "人気の変換ショートカット",
+    "unitConverter.copyResult": "結果をコピー",
+    "unitConverter.copied": "コピー完了!",
+    "unitConverter.cat.length": "長さ",
+    "unitConverter.cat.weight": "重さ",
+    "unitConverter.cat.temperature": "温度",
+    "unitConverter.cat.area": "面積",
+    "unitConverter.cat.volume": "体積",
+    "unitConverter.cat.speed": "速度",
+    "unitConverter.cat.time": "時間",
+    "unitConverter.cat.storage": "デジタル容量",
+    "unitConverter.guide.title": "ツールガイドと説明",
+    "unitConverter.guide.aboutTitle": "単位変換ツールとは？",
+    "unitConverter.guide.aboutDesc": "desktools.runの単位変換ツールは、ブラウザで即座に動作する無料の多機能変換ユーティリティです。メートル法、ヤード・ポンド法、伝統的な単位（坪、斤など）をリアルタイムで瞬時に計算します。",
+    "unitConverter.guide.howTitle": "の使い方",
+    "unitConverter.guide.step1": "上部タブから変換したいカテゴリ（長さ、重さ、温度など）を選択します。",
+    "unitConverter.guide.step2": "数値と単位を選択します。",
+    "unitConverter.guide.step3": "計算結果、計算式、および全単位の一覧比較表を確認してください。",
+    "unitConverter.guide.faqTitle": "よくある質問 (FAQ)",
+    "unitConverter.guide.faq1Q": "坪（ツボ）から平方メートル（m²）への変換は？",
+    "unitConverter.guide.faq1A": "1坪は正確に400/121 m²で、約3.305785 m²です。",
+    "unitConverter.guide.faq2Q": "温度の変換方法は？",
+    "unitConverter.guide.faq2A": "摂氏（°C）と華氏（°F）は単純な倍率ではなく、オフセット計算式（°F = °C × 1.8 + 32）を用いて正確に算出します。",
+    "unitConverter.guide.faq3Q": "計算はローカルで行われますか？",
+    "unitConverter.guide.faq3A": "はい。すべての計算は100%お使いのブラウザ内で即座に完了します。",
+
+    "passwordGen.title": "パスワード自動生成ツール",
+    "passwordGen.subtitle": "暗号学的に安全で強力なランダムパスワードを即座に生成します。",
+    "passwordGen.length": "パスワードの長さ",
+    "passwordGen.uppercase": "大文字を含む (A-Z)",
+    "passwordGen.lowercase": "小文字を含む (a-z)",
+    "passwordGen.numbers": "数字を含む (0-9)",
+    "passwordGen.symbols": "記号を含む (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "紛らわしい文字を除外 (0, O, o, 1, l, I)",
+    "passwordGen.strength": "セキュリティ強度",
+    "passwordGen.strength.veryWeak": "非常に弱い",
+    "passwordGen.strength.weak": "弱い",
+    "passwordGen.strength.medium": "普通",
+    "passwordGen.strength.strong": "強い",
+    "passwordGen.strength.veryStrong": "非常に強い (安全)",
+    "passwordGen.generate": "再生成",
+    "passwordGen.copy": "コピー",
+    "passwordGen.copied": "コピー完了!",
+    "passwordGen.bulk": "一括生成 (5パターン)",
+    "passwordGen.guide.title": "ツールガイドとセキュリティ解説",
+    "passwordGen.guide.aboutTitle": "安全なパスワード生成の仕組みとは？",
+    "passwordGen.guide.aboutDesc": "desktools.runのパスワード生成ツールはWeb Cryptography API (window.crypto)を使用し、推測不可能な暗号学的乱数を生成します。処理は100%ブラウザ内で完結します。",
+    "passwordGen.guide.howTitle": "の使い方",
+    "passwordGen.guide.step1": "スライダーで希望の長さ（16文字以上推奨）を設定します。",
+    "passwordGen.guide.step2": "大文字・数字・記号などのオプションを選択します。",
+    "passwordGen.guide.step3": "「コピー」ボタンをクリックしてアカウントに登録してください。",
+    "passwordGen.guide.faqTitle": "よくある質問 (FAQ)",
+    "passwordGen.guide.faq1Q": "生成されたパスワードはサーバーに送信されますか？",
+    "passwordGen.guide.faq1A": "いいえ。すべての処理は100%お使いのブラウザメモリ内で実行され、外部に送信されることはありません。",
+    "passwordGen.guide.faq2Q": "エントロピーとは何ですか？",
+    "passwordGen.guide.faq2A": "エントロピーは乱数性の強さを表す指標です。60ビット以上のエントロピーを持つパスワードは解読に数百年以上かかります。",
+    "passwordGen.guide.faq3Q": "紛らわしい文字除外とは何ですか？",
+    "passwordGen.guide.faq3A": "数字の0と大文字のO、数字の1と小文字のlなど、見間違いやすい文字をあらかじめ除外する機能です。",
+
+    "hashGen.title": "ハッシュ生成ツール",
+    "hashGen.subtitle": "MD5, SHA-1, SHA-256, SHA-384, SHA-512 暗号ハッシュおよびファイルのチェックサムをリアルタイムで生成します。",
+    "hashGen.inputPlaceholder": "テキストを入力するとハッシュが即座に計算されます。ファイルをドラッグ＆ドロップすることも可能です...",
+    "hashGen.uppercaseHex": "大文字 HEX",
+    "hashGen.lowercaseHex": "小文字 hex",
+    "hashGen.copy": "コピー",
+    "hashGen.copied": "コピー完了!",
+    "hashGen.copyAll": "すべてのハッシュをコピー",
+    "hashGen.clear": "クリア",
+    "hashGen.dropPrompt": "ここにファイルをドロップしてチェックサムを計算",
+    "hashGen.fileLoaded": "ファイルチェックサム計算完了",
+    "hashGen.guide.title": "ツールガイドとハッシュ解説",
+    "hashGen.guide.aboutTitle": "暗号ハッシュ関数とは？",
+    "hashGen.guide.aboutDesc": "暗号ハッシュ関数は、入力データを一方向の計算で固定長の16進数文字列（チェックサム）に変換するアルゴリズムです。データの改ざん検出や改ざん検証に広く利用されています。",
+    "hashGen.guide.howTitle": "の使い方",
+    "hashGen.guide.step1": "テキストを入力するか、ファイルをドラッグ＆ドロップします。",
+    "hashGen.guide.step2": "即座に計算されたMD5、SHA-1、SHA-256、SHA-384、SHA-512の各ハッシュを確認します。",
+    "hashGen.guide.step3": "大文字/小文字切替やコピーボタンでクリップボードに保存します。",
+    "hashGen.guide.faqTitle": "よくある質問 (FAQ)",
+    "hashGen.guide.faq1Q": "SHA-256とMD5の違いは何ですか？",
+    "hashGen.guide.faq1A": "SHA-256は現代の標準的な高セキュリティ暗号ハッシュです。MD5は高速なファイル整合性確認用の128ビットハッシュです。",
+    "hashGen.guide.faq2Q": "ハッシュ値から元のテキストを復元できますか？",
+    "hashGen.guide.faq2A": "いいえ。ハッシュ関数は不可逆な一方向関数として設計されているため、復元は不可能です。",
+    "hashGen.guide.faq3Q": "テキストやファイルはサーバーに送信されますか？",
+    "hashGen.guide.faq3A": "いいえ。すべてお使いのブラウザのWeb Crypto APIでローカル処理されます。",
+
+    "colorGen.title": "カラーコード変換 & ピッカー",
+    "colorGen.subtitle": "HEX, RGB, HSL, HSV, CMYKのカラーコードを即座に相互変換し、パレットとアクセシビリティコントラストを確認します。",
+    "colorGen.picker": "カラーピッカー",
+    "colorGen.hex": "HEX コード",
+    "colorGen.rgb": "RGB 値",
+    "colorGen.hsl": "HSL 値",
+    "colorGen.hsv": "HSV 値",
+    "colorGen.cmyk": "CMYK (印刷用)",
+    "colorGen.contrast": "アクセシビリティ・コントラスト比",
+    "colorGen.shades": "シェード＆ティントパレット",
+    "colorGen.harmonies": "カラーハーモニー (補色・類似色)",
+    "colorGen.copy": "コピー",
+    "colorGen.copied": "コピー完了!",
+    "colorGen.guide.title": "ツールガイドと色空間解説",
+    "colorGen.guide.aboutTitle": "RGB、HSL、CMYKの違いとは？",
+    "colorGen.guide.aboutDesc": "RGBはディスプレイ画面用の加法混色モデル、HSLは直感的なデザイン調整に適した色相・彩度・輝度モデル、CMYKは印刷機用の減法混色モデルです。",
+    "colorGen.guide.howTitle": "の使い方",
+    "colorGen.guide.step1": "カラーピッカーで色を選択するか、HEXやRGB値を入力します。",
+    "colorGen.guide.step2": "即座に変換されたHEX、RGB、HSL、HSV、CMYKの各値を確認します。",
+    "colorGen.guide.step3": "自動生成されたパレットや補色を確認し、CSSコードをコピーしてください。",
+    "colorGen.guide.faqTitle": "よくある質問 (FAQ)",
+    "colorGen.guide.faq1Q": "Webと印刷で色表現が異なるのはなぜですか？",
+    "colorGen.guide.faq1A": "モニターはRGBの光を発光し、印刷インクはCMYKで光を吸収するためです。",
+    "colorGen.guide.faq2Q": "コントラスト比とは何ですか？",
+    "colorGen.guide.faq2A": "背景とテキストの輝度差を示す指標です。WCAG規格では4.5:1以上が推奨されます。",
+    "colorGen.guide.faq3Q": "補色とはどのような仕組みですか？",
+    "colorGen.guide.faq3A": "色相環で正反対（180度）の位置にある色で、最も強い対比効果を生み出します。",
+
+    "privacy.title": "プライバシーポリシー",
+    "privacy.subtitle": "最終更新日: 2026年8月21日。desktools.runがお客様のプライバシーを保護し、100%ローカルでデータを処理する方法。",
+    "privacy.badge": "100% ブラウザローカルデータ保護保証",
+    "privacy.sec1Title": "1. 外部サーバーへのデータ送信ゼロ",
+    "privacy.sec1Desc": "desktools.runのすべてのツール（文字数カウント、単位変換、パスワード生成、ハッシュ生成、カラー変換など）は100%お使いのブラウザ内で動作します。入力テキスト、ファイル、生成されたパスワード、ハッシュ値が外部サーバーに送信・保存されることは一切ありません。",
+    "privacy.sec2Title": "2. 収集しない情報",
+    "privacy.sec2Desc": "氏名、メールアドレス、電話番号、決済情報 등의 個人識別情報（PII）は一切要求・収集いたしません。",
+    "privacy.sec3Title": "3. ローカルストレージの利用",
+    "privacy.sec3Desc": "テーマ設定（'desktools_theme'）および言語設定（'desktools_locale'）の保存用にのみブラウザのLocalStorageを利用しています。",
+    "privacy.sec4Title": "4. クッキーおよびアクセス解析",
+    "privacy.sec4Desc": "追跡目的のサードパーティ製クッキーは使用しておりません。稼働率計測用の最小限の匿名ログのみが利用されます。",
+    "privacy.sec5Title": "5. お客様の権利とお問い合わせ",
+    "privacy.sec5Desc": "お客様のデータはサーバーに保存されないため、データは完全にユーザー自身で制御できます。お問い合わせ: privacy@desktools.run",
+
+    "terms.title": "利用規約",
+    "terms.subtitle": "最終更新日: 2026年8月21日。desktools.runのご利用に関する条件。",
+    "terms.badge": "会員登録不要・100%無料Webツール",
+    "terms.sec1Title": "1. 規約への同意",
+    "terms.sec1Desc": "desktools.runにアクセスまたは利用することにより、お客様は本利用規約に同意したものとみなされます。",
+    "terms.sec2Title": "2. サービス範囲とライセンス",
+    "terms.sec2Desc": "会員登録なしで利用できる各種Webツール（文字数カウント、単位変換、パスワード生成、ハッシュ計算、カラー変換等）を無料で提供します。個人利用および商用利用が可能です。",
+    "terms.sec3Title": "3. 免責事項と責任の制限",
+    "terms.sec3Desc": "本サービスは「現状有姿（AS IS）」で提供されます。計算結果やツールの出力結果の完全性・正確性について保証するものではなく、発生した損害について一切の責任を負いません。",
+    "terms.sec4Title": "4. 知的財産権と適正利用",
+    "terms.sec4Desc": "デザイン、ブランド、コードの権利はdesktools.runに帰属します。不正な自動スクレイピングやDDoS攻撃行為は固く禁止されています。",
+    "terms.sec5Title": "5. 規約の変更とお問い合わせ",
+    "terms.sec5Desc": "規約は予告なく変更される場合があります。お問い合わせ: support@desktools.run",
+
+    "cookies.title": "クッキーポリシー",
+    "cookies.subtitle": "最終更新日: 2026年8月21日。desktools.runがトラッキングクッキーなしでプライバシーを保護する方法。",
+    "cookies.badge": "サードパーティトラッキングクッキー不使用",
+    "cookies.sec1Title": "1. 追跡用クッキー不使用の原則",
+    "cookies.sec1Desc": "desktools.runは、ユーザーをターゲット追跡する広告クッキーやサードパーティ製マーケティング追跡技術を一切使用していません。",
+    "cookies.sec2Title": "2. 保存されるデータ（必須ローカルストレージ）",
+    "cookies.sec2Desc": "クッキーの代わりにHTML5 LocalStorageを使用し、テーマ設定（'desktools_theme'）および言語設定（'desktools_locale'）のみを保存します。",
+    "cookies.sec3Title": "3. クッキーとストレージの仕組み",
+    "cookies.sec3Desc": "再訪問時に選択した設定を記憶するためのブラウザローカル保存機能です。個人情報は収集されません。",
+    "cookies.sec4Title": "4. 管理・削除方法",
+    "cookies.sec4Desc": "お使いのブラウザ（Chrome, Safari, Firefox, Edgeなど）の設定画面からいつでもデータをクリア・ブロックできます。",
+    "cookies.sec5Title": "5. 改定とお問い合わせ",
+    "cookies.sec5Desc": "ポリシーに関するお問い合わせ: privacy@desktools.run",
+
+    "imageResizer.title": "画像リサイズ",
+    "imageResizer.subtitle": "PNG, JPG, WEBP画像の解像度と品質を瞬時に変更。",
+    "imageResizer.dropPrompt": "画像をドラッグ＆ドロップ、またはクリックして選択...",
+    "imageResizer.width": "幅 (px)",
+    "imageResizer.height": "高さ (px)",
+    "imageResizer.lockAspect": "アスペクト比を固定",
+    "imageResizer.byPercent": "パーセントでリサイズ",
+    "imageResizer.format": "出力フォーマット",
+    "imageResizer.quality": "画質",
+    "imageResizer.original": "元の画像",
+    "imageResizer.resized": "リサイズプレビュー",
+    "imageResizer.download": "画像をダウンロード",
+    "imageResizer.reset": "リセット",
+    "imageResizer.guide.title": "画像リサイズ完全ガイド",
+    "imageResizer.guide.aboutTitle": "画像リサイズツールとは？",
+    "imageResizer.guide.aboutDesc": "サーバーに画像を送信することなく、ブラウザ上で直接解像度やファイルサイズを調整できる100%ローカルツールです。",
+    "imageResizer.guide.howTitle": "使い方",
+    "imageResizer.guide.step1": "1. 画像（PNG, JPG, WEBP）をアップロードします。",
+    "imageResizer.guide.step2": "2. ピクセルまたはパーセントでサイズを指定します。",
+    "imageResizer.guide.step3": "3. フォーマットと品質を選択し、ダウンロードします。",
+    "imageResizer.guide.faqTitle": "よくある質問",
+    "imageResizer.guide.faq1Q": "画像はサーバーに送信されますか？",
+    "imageResizer.guide.faq1A": "いいえ、すべての処理はブラウザのHTML5 Canvas上で100%ローカルに行われます。",
+    "imageResizer.guide.faq2Q": "PNG, JPG, WEBPの違いは？",
+    "imageResizer.guide.faq2A": "PNGは透過対応・高画質、JPGは軽量、WEBPは次世代の高圧縮フォーマットです。",
+    "imageResizer.guide.faq3Q": "アスペクト比固定とは？",
+    "imageResizer.guide.faq3A": "縦横の比率を維持して画像が歪むのを防ぎます。",
+  },
+
+  // ── Spanish ────────────────────────────────────────────────
+  es: {
+    "header.search.placeholder": "Buscar herramientas... (ej: PDF, resize, JSON)",
+
+    "hero.badge": "Sin instalación · Sin registro · 100% Gratis",
+    "hero.title1": "Utilidades Web Rápidas",
+    "hero.title2": "En Tu Escritorio",
+    "hero.subtitle":
+      "Herramientas PDF, edición de imágenes, procesamiento de texto, utilidades para desarrolladores — todo ejecutándose al instante en tu navegador.",
+    "hero.search.placeholder": "Busca 21 herramientas — prueba 'PDF', 'resize', 'JSON'...",
+    "hero.search.button": "Buscar",
+    "hero.popular": "Popular:",
+    "hero.stats.tools": "Herramientas Gratis",
+    "hero.stats.categories": "Categorías",
+    "hero.stats.browser": "Basado en Navegador",
+    "hero.stats.signup": "Registro Requerido",
+
+    "grid.allTools": "Todas las Herramientas",
+    "grid.subtitle": "21 utilidades · 6 categorías · todas gratis",
+    "grid.tools": "herramientas",
+    "grid.runTool": "Ejecutar",
+    "grid.noResults.title": "No se encontraron herramientas",
+    "grid.noResults.body": 'Prueba otro término — ej: "PDF", "imagen", o "JSON".',
+    "grid.search.results": "resultados encontrados",
+    "grid.search.result": "resultado encontrado",
+    "grid.showAll": "← Ver todo",
+    "grid.searchLabel": "Resultados para",
+
+    "footer.tagline":
+      "Utilidades web rápidas y ligeras — en tu escritorio. Sin instalación, sin registro. Solo abre y ejecuta.",
+    "footer.privacy":
+      "Todo el procesamiento ocurre localmente en tu navegador. Tus archivos nunca salen de tu dispositivo.",
+    "footer.nav.product": "Producto",
+    "footer.nav.company": "Empresa",
+    "footer.nav.legal": "Legal",
+    "footer.links.allTools": "Todas las Herramientas",
+    "footer.links.pdfTools": "Herramientas PDF",
+    "footer.links.imageTools": "Herramientas de Imagen",
+    "footer.links.devTools": "Herramientas Dev",
+    "footer.links.changelog": "Registro de Cambios",
+    "footer.links.about": "Sobre Nosotros",
+    "footer.links.blog": "Blog",
+    "footer.links.request": "Solicitar Herramienta",
+    "footer.links.status": "Estado",
+    "footer.links.privacy": "Política de Privacidad",
+    "footer.links.terms": "Términos de Servicio",
+    "footer.links.cookies": "Política de Cookies",
+    "footer.links.contact": "Contacto",
+    "footer.copyright": "Todos los derechos reservados.",
+
+    "wordCount.title": "Contador de Palabras y Caracteres",
+    "wordCount.subtitle": "Cuenta palabras, caracteres, oraciones, tiempo de lectura y analiza la densidad de palabras clave en tiempo real.",
+    "wordCount.placeholder": "Escribe o pega tu texto aquí, o arrastra un archivo de texto (.txt, .md)...",
+    "wordCount.words": "Palabras",
+    "wordCount.chars": "Caracteres",
+    "wordCount.charsNoSpace": "Caract. (sin espacio)",
+    "wordCount.sentences": "Oraciones",
+    "wordCount.paragraphs": "Párrafos",
+    "wordCount.lines": "Líneas",
+    "wordCount.readTime": "Tiempo de lectura",
+    "wordCount.speakTime": "Tiempo de discurso",
+    "wordCount.density": "Palabras más frecuentes",
+    "wordCount.clear": "Limpiar",
+    "wordCount.copy": "Copiar",
+    "wordCount.copied": "¡Copiado!",
+    "wordCount.uppercase": "MAYÚSCULAS",
+    "wordCount.lowercase": "minúsculas",
+    "wordCount.titlecase": "Tipo Título",
+    "wordCount.cleanSpaces": "Limpiar Espacios",
+    "wordCount.dropPrompt": "Arrastra un archivo aquí",
+    "wordCount.guide.title": "Guía y Descripción de la Herramienta",
+    "wordCount.guide.aboutTitle": "¿Qué es la calculadora de palabras y caracteres?",
+    "wordCount.guide.aboutDesc": "El contador de palabras de desktools.run es una herramienta gratuita y rápida basada en navegador. Calcula al instante palabras, caracteres (con y sin espacios), oraciones, párrafos, tiempo estimado de lectura/discurso y densidad de palabras clave. Ideal para estudiantes, redactores, bloggers y especialistas en SEO.",
+    "wordCount.guide.howTitle": "Cómo Usar",
+    "wordCount.guide.step1": "Escribe o pega texto en el editor, o arrastra un archivo de texto (.txt, .md).",
+    "wordCount.guide.step2": "Revisa métricas en tiempo real, tiempo de lectura y gráficos de palabras clave.",
+    "wordCount.guide.step3": "Usa los botones de acción para cambiar mayúsculas, limpiar espacios o copiar texto.",
+    "wordCount.guide.faqTitle": "Preguntas Frecuentes (FAQ)",
+    "wordCount.guide.faq1Q": "¿Se guarda o envía mi texto a algún servidor?",
+    "wordCount.guide.faq1A": "No. Todo el procesamiento se realiza 100% localmente en tu navegador web. Tu texto nunca sale de tu dispositivo.",
+    "wordCount.guide.faq2Q": "¿Cómo se calcula el tiempo estimado de lectura?",
+    "wordCount.guide.faq2A": "Se basa en una velocidad promedio de lectura de 200 palabras por minuto (WPM) y 130 WPM para discurso oral.",
+    "wordCount.guide.faq3Q": "¿Cuál es la diferencia entre caracteres con y sin espacios?",
+    "wordCount.guide.faq3A": "Caracteres con espacios cuenta cada pulsación de tecla, incluyendo espacios y saltos de línea. Caracteres sin espacios excluye los espacios en blanco, estándar en ensayos y tareas académicas.",
+
+    "unitConverter.title": "Conversor de Unidades",
+    "unitConverter.subtitle": "Convierte longitud, peso, temperatura, área, volumen, velocidad, tiempo y almacenamiento digital al instante.",
+    "unitConverter.from": "De",
+    "unitConverter.to": "A",
+    "unitConverter.value": "Valor",
+    "unitConverter.result": "Resultado Convertido",
+    "unitConverter.swap": "Intercambiar Unidades",
+    "unitConverter.formula": "Fórmula de Conversión",
+    "unitConverter.allUnits": "Tabla Comparativa de Todas las Unidades",
+    "unitConverter.presets": "Accesos Rápidos Populares",
+    "unitConverter.copyResult": "Copiar Resultado",
+    "unitConverter.copied": "¡Copiado!",
+    "unitConverter.cat.length": "Longitud",
+    "unitConverter.cat.weight": "Peso",
+    "unitConverter.cat.temperature": "Temperatura",
+    "unitConverter.cat.area": "Área",
+    "unitConverter.cat.volume": "Volumen",
+    "unitConverter.cat.speed": "Velocidad",
+    "unitConverter.cat.time": "Tiempo",
+    "unitConverter.cat.storage": "Almacenamiento Digital",
+    "unitConverter.guide.title": "Guía y Descripción",
+    "unitConverter.guide.aboutTitle": "¿Qué es el Conversor de Unidades de desktools.run?",
+    "unitConverter.guide.aboutDesc": "Es una herramienta de cálculo de unidades gratuita basada en navegador. Permite convertir al instante entre unidades métricas e imperiales con latencia cero y 100% de privacidad.",
+    "unitConverter.guide.howTitle": "Cómo Usar",
+    "unitConverter.guide.step1": "Selecciona una categoría (Longitud, Peso, Temp, Área, etc.) en la parte superior.",
+    "unitConverter.guide.step2": "Introduce el valor y elige las unidades de origen y destino.",
+    "unitConverter.guide.step3": "Observa el resultado en vivo, la fórmula y la tabla comparativa completa.",
+    "unitConverter.guide.faqTitle": "Preguntas Frecuentes",
+    "unitConverter.guide.faq1Q": "¿Cómo se calcula la conversión de temperatura?",
+    "unitConverter.guide.faq1A": "Utiliza fórmulas matemáticas exactas con desplazamiento: °F = (°C × 9/5) + 32.",
+    "unitConverter.guide.faq2Q": "¿Se realizan los cálculos localmente?",
+    "unitConverter.guide.faq2A": "Sí, el 100% de los cálculos se efectúa en tu navegador sin enviar datos a servidores.",
+    "unitConverter.guide.faq3Q": "¿Puedo copiar los resultados rápidamente?",
+    "unitConverter.guide.faq3A": "Sí, haz clic en el botón 'Copiar Resultado' para copiar el valor al portapapeles.",
+
+    "passwordGen.title": "Generador de Contraseñas",
+    "passwordGen.subtitle": "Genera contraseñas aleatorias seguras criptográficamente al instante.",
+    "passwordGen.length": "Longitud de Contraseña",
+    "passwordGen.uppercase": "Incluir Mayúsculas (A-Z)",
+    "passwordGen.lowercase": "Incluir Minúsculas (a-z)",
+    "passwordGen.numbers": "Incluir Números (0-9)",
+    "passwordGen.symbols": "Incluir Símbolos (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "Excluir Ambiguos (0, O, o, 1, l, I)",
+    "passwordGen.strength": "Fortaleza de Contraseña",
+    "passwordGen.strength.veryWeak": "Muy Débil",
+    "passwordGen.strength.weak": "Débil",
+    "passwordGen.strength.medium": "Media",
+    "passwordGen.strength.strong": "Fuerte",
+    "passwordGen.strength.veryStrong": "Muy Fuerte",
+    "passwordGen.generate": "Regenerar",
+    "passwordGen.copy": "Copiar Contraseña",
+    "passwordGen.copied": "¡Copiado!",
+    "passwordGen.bulk": "Generar en Lote (5)",
+    "passwordGen.guide.title": "Guía y Seguridad",
+    "passwordGen.guide.aboutTitle": "¿Qué hace que una contraseña sea segura?",
+    "passwordGen.guide.aboutDesc": "Utiliza la API Web Cryptography (window.crypto) para crear valores verdaderamente impredecibles localmente en tu navegador.",
+    "passwordGen.guide.howTitle": "Cómo Usar",
+    "passwordGen.guide.step1": "Ajusta la longitud con el deslizador (16+ caracteres recomendados).",
+    "passwordGen.guide.step2": "Selecciona las opciones de caracteres deseados.",
+    "passwordGen.guide.step3": "Haz clic en 'Copiar Contraseña' para guardarla en tu portapapeles.",
+    "passwordGen.guide.faqTitle": "Preguntas Frecuentes",
+    "passwordGen.guide.faq1Q": "¿Se envía la contraseña a algún servidor?",
+    "passwordGen.guide.faq1A": "No, el 100% de la generación ocurre localmente en la memoria de tu navegador.",
+    "passwordGen.guide.faq2Q": "¿Qué es la entropía?",
+    "passwordGen.guide.faq2A": "Mide la aleatoriedad en bits. Más de 60 bits ofrece una protección robusta contra ataques de fuerza bruta.",
+    "passwordGen.guide.faq3Q": "¿Por qué excluir caracteres ambiguos?",
+    "passwordGen.guide.faq3A": "Evita confusiones entre caracteres parecidos como el número 0 y la letra O.",
+
+    "hashGen.title": "Generador de Hashes",
+    "hashGen.subtitle": "Genera hashes criptográficos MD5, SHA-1, SHA-256, SHA-384 y SHA-512 en tiempo real.",
+    "hashGen.inputPlaceholder": "Escribe texto para calcular hashes en tiempo real, o arrastra un archivo...",
+    "hashGen.uppercaseHex": "HEX MAYÚSCULA",
+    "hashGen.lowercaseHex": "hex minúscula",
+    "hashGen.copy": "Copiar",
+    "hashGen.copied": "¡Copiado!",
+    "hashGen.copyAll": "Copiar Todos los Hashes",
+    "hashGen.clear": "Limpiar",
+    "hashGen.dropPrompt": "Arrastra un archivo aquí para calcular el checksum",
+    "hashGen.fileLoaded": "Checksum de archivo calculado",
+    "hashGen.guide.title": "Guía y Criptografía",
+    "hashGen.guide.aboutTitle": "¿Qué es una función hash criptográfica?",
+    "hashGen.guide.aboutDesc": "Convierte cualquier texto o archivo binario en una cadena hexadecimal única de longitud fija.",
+    "hashGen.guide.howTitle": "Cómo Usar",
+    "hashGen.guide.step1": "Escribe texto o arrastra un archivo al área de entrada.",
+    "hashGen.guide.step2": "Observa los hashes MD5, SHA-1, SHA-256, SHA-384 y SHA-512 calculados al instante.",
+    "hashGen.guide.step3": "Copia el hash deseado al portapapeles.",
+    "hashGen.guide.faqTitle": "Preguntas Frecuentes",
+    "hashGen.guide.faq1Q": "¿Diferencia entre SHA-256 y MD5?",
+    "hashGen.guide.faq1A": "SHA-256 es un estándar seguro de 256 bits; MD5 es un hash de 128 bits para verificación rápida.",
+    "hashGen.guide.faq2Q": "¿Es reversible un hash?",
+    "hashGen.guide.faq2A": "No, las funciones hash son estrictamente de una sola vía (irreversibles).",
+    "hashGen.guide.faq3Q": "¿Se suben los archivos a un servidor?",
+    "hashGen.guide.faq3A": "No, el 100% del cálculo ocurre en tu navegador mediante Web Crypto API.",
+
+    "colorGen.title": "Conversor y Selector de Color",
+    "colorGen.subtitle": "Convierte códigos de color HEX, RGB, HSL, HSV y CMYK al instante con paletas y contraste de accesibilidad.",
+    "colorGen.picker": "Seleccionar Color",
+    "colorGen.hex": "Código HEX",
+    "colorGen.rgb": "Valor RGB",
+    "colorGen.hsl": "Valor HSL",
+    "colorGen.hsv": "Valor HSV",
+    "colorGen.cmyk": "CMYK (Impresión)",
+    "colorGen.contrast": "Ratio de Contraste y Accesibilidad",
+    "colorGen.shades": "Paleta de Sombras y Tonos",
+    "colorGen.harmonies": "Armonías de Color y Paletas",
+    "colorGen.copy": "Copiar",
+    "colorGen.copied": "¡Copiado!",
+    "colorGen.guide.title": "Guía y Espacios de Color",
+    "colorGen.guide.aboutTitle": "¿Diferencia entre RGB, HSL y CMYK?",
+    "colorGen.guide.aboutDesc": "RGB se usa para pantallas digitales, HSL es intuitivo para ajustar diseño y CMYK se usa en impresión profesional.",
+    "colorGen.guide.howTitle": "Cómo Usar",
+    "colorGen.guide.step1": "Selecciona un color con el selector visual o ingresa códigos HEX/RGB.",
+    "colorGen.guide.step2": "Observa los valores convertidos en HEX, RGB, HSL, HSV y CMYK.",
+    "colorGen.guide.step3": "Explora las paletas armoniosas y copia códigos CSS.",
+    "colorGen.guide.faqTitle": "Preguntas Frecuentes",
+    "colorGen.guide.faq1Q": "¿Por qué la web usa RGB y la impresión CMYK?",
+    "colorGen.guide.faq1A": "Las pantallas emiten luz (RGB) mientras que la tinta física absorbe luz (CMYK).",
+    "colorGen.guide.faq2Q": "¿Qué es el ratio de contraste?",
+    "colorGen.guide.faq2A": "Mide la diferencia de luminancia entre texto y fondo. El estándar WCAG exige al menos 4.5:1.",
+    "colorGen.guide.faq3Q": "¿Cómo funcionan los colores complementarios?",
+    "colorGen.guide.faq3A": "Son los colores situados opuestos (180°) en el círculo cromático, ofreciendo máximo contraste.",
+
+    "privacy.title": "Política de Privacidad",
+    "privacy.subtitle": "Última actualización: 21 de agosto de 2026. Cómo desktools.run protege tu privacidad procesando todo 100% localmente.",
+    "privacy.badge": "Garantía de Privacidad 100% en el Navegador",
+    "privacy.sec1Title": "1. Cero Transmisión de Archivos o Texto a Servidores",
+    "privacy.sec1Desc": "Todas las herramientas (Contador de Palabras, Conversor de Unidades, Generador de Contraseñas, Hashes, Color, etc.) se ejecutan 100% dentro de tu navegador web. Tus archivos y textos NUNCA salen de tu dispositivo.",
+    "privacy.sec2Title": "2. Información que No Recopilamos",
+    "privacy.sec2Desc": "No solicitamos ni almacenamos datos personales identificables (PII) como nombres, correos ni datos de pago.",
+    "privacy.sec3Title": "3. Uso de Almacenamiento Local (LocalStorage)",
+    "privacy.sec3Desc": "Utilizamos LocalStorage únicamente para guardar tus preferencias de tema ('desktools_theme') e idioma ('desktools_locale').",
+    "privacy.sec4Title": "4. Cookies y Análisis",
+    "privacy.sec4Desc": "No utilizamos cookies de seguimiento de terceros ni rastreadores publicitarios.",
+    "privacy.sec5Title": "5. Tus Derechos y Contacto",
+    "privacy.sec5Desc": "Como no guardamos tus datos en servidores, tienes el control absoluto de tu información. Para consultas: privacy@desktools.run.",
+
+    "terms.title": "Términos de Servicio",
+    "terms.subtitle": "Última actualización: 21 de agosto de 2026. Términos y condiciones para el uso de desktools.run.",
+    "terms.badge": "Herramientas Web Gratis y Abiertas",
+    "terms.sec1Title": "1. Aceptación de los Términos",
+    "terms.sec1Desc": "Al acceder o usar desktools.run, aceptas cumplir y quedar vinculado por estos Términos de Servicio.",
+    "terms.sec2Title": "2. Alcance del Servicio y Licencia Gratuita",
+    "terms.sec2Desc": "Proporcionamos herramientas web gratuitas (contador de palabras, conversor, generadores) sin necesidad de registro de cuenta.",
+    "terms.sec3Title": "3. Exclusión de Garantías y Limitación de Responsabilidad",
+    "terms.sec3Desc": "Los servicios se proporcionan 'TAL CUAL' ('AS IS'). desktools.run no se hace responsable de daños derivados del uso de los resultados de las herramientas.",
+    "terms.sec4Title": "4. Propiedad Intelectual y Uso Aceptable",
+    "terms.sec4Desc": "El diseño y código pertenecen a desktools.run. Queda prohibido el scraping masivo automatizado o ataques informáticos.",
+    "terms.sec5Title": "5. Modificaciones y Contacto",
+    "terms.sec5Desc": "Nos reservamos el derecho de modificar estos términos. Para consultas: support@desktools.run.",
+
+    "cookies.title": "Política de Cookies",
+    "cookies.subtitle": "Última actualización: 21 de agosto de 2026. Cómo desktools.run respeta tu privacidad sin cookies de rastreo.",
+    "cookies.badge": "Garantía de Cero Cookies de Rastreo",
+    "cookies.sec1Title": "1. Sin Cookies de Rastreo Invasivas",
+    "cookies.sec1Desc": "desktools.run NO utiliza cookies publicitarias de terceros ni rastreadores de perfil de usuario.",
+    "cookies.sec2Title": "2. Lo que Almacenamos (LocalStorage Esencial)",
+    "cookies.sec2Desc": "Utilizamos LocalStorage únicamente para recordar tus preferencias de tema ('desktools_theme') e idioma ('desktools_locale').",
+    "cookies.sec3Title": "3. Cómo Funcionan las Cookies y el Almacenamiento",
+    "cookies.sec3Desc": "Son archivos de datos locales guardados por tu navegador para recordar tus ajustes sin enviar información a servidores externos.",
+    "cookies.sec4Title": "4. Cómo Administrar o Eliminar Datos",
+    "cookies.sec4Desc": "Puedes borrar el almacenamiento local o bloquear cookies en la configuración de tu navegador (Chrome, Safari, Firefox, Edge).",
+    "cookies.sec5Title": "5. Actualizaciones y Contacto",
+    "cookies.sec5Desc": "Para preguntas sobre nuestras prácticas: privacy@desktools.run.",
+
+    "imageResizer.title": "Redimensionar Imágenes",
+    "imageResizer.subtitle": "Cambia el tamaño y calidad de imágenes PNG, JPG y WEBP al instante.",
+    "imageResizer.dropPrompt": "Arrastra y suelta una imagen aquí, o haz clic para buscar...",
+    "imageResizer.width": "Ancho (px)",
+    "imageResizer.height": "Alto (px)",
+    "imageResizer.lockAspect": "Bloquear Proporción",
+    "imageResizer.byPercent": "Redimensionar por Porcentaje",
+    "imageResizer.format": "Formato de Salida",
+    "imageResizer.quality": "Calidad",
+    "imageResizer.original": "Imagen Original",
+    "imageResizer.resized": "Vista Previa Redimensionada",
+    "imageResizer.download": "Descargar Imagen",
+    "imageResizer.reset": "Restablecer",
+    "imageResizer.guide.title": "Guía Completa de Redimensión",
+    "imageResizer.guide.aboutTitle": "¿Qué es la herramienta de redimensión?",
+    "imageResizer.guide.aboutDesc": "Permite ajustar las dimensiones y calidad de tus fotos 100% dentro de tu navegador sin subir nada al servidor.",
+    "imageResizer.guide.howTitle": "Cómo usar",
+    "imageResizer.guide.step1": "1. Sube tu imagen PNG, JPG o WEBP.",
+    "imageResizer.guide.step2": "2. Ajusta los píxeles o usa los botones de porcentaje.",
+    "imageResizer.guide.step3": "3. Elige formato y calidad, luego descarga.",
+    "imageResizer.guide.faqTitle": "Preguntas Frecuentes",
+    "imageResizer.guide.faq1Q": "¿Mi imagen se sube a algún servidor?",
+    "imageResizer.guide.faq1A": "No, todo el procesamiento ocurre 100% en tu navegador.",
+    "imageResizer.guide.faq2Q": "¿Diferencia entre PNG, JPG y WEBP?",
+    "imageResizer.guide.faq2A": "PNG admite transparencia, JPG optimiza el tamaño y WEBP ofrece máxima compresión.",
+    "imageResizer.guide.faq3Q": "¿Para qué sirve bloquear la proporción?",
+    "imageResizer.guide.faq3A": "Mantiene la relación de aspecto sin distorsionar la imagen.",
+  },
+
+  // ── Chinese ────────────────────────────────────────────────
+  zh: {
+    "header.search.placeholder": "搜索工具...（例如：PDF、调整大小、JSON）",
+
+    "hero.badge": "无需安装 · 无需注册 · 100% 免费",
+    "hero.title1": "快速网页工具",
+    "hero.title2": "就在您的桌面上",
+    "hero.subtitle":
+      "PDF工具、图像编辑、文本处理、开发者工具 — 一切都在浏览器中即时运行。无需下载，数据不发送到服务器。",
+    "hero.search.placeholder": "搜索21个工具 — 试试 'PDF'、'调整大小'、'JSON'...",
+    "hero.search.button": "搜索",
+    "hero.popular": "热门：",
+    "hero.stats.tools": "免费工具",
+    "hero.stats.categories": "分类",
+    "hero.stats.browser": "基于浏览器",
+    "hero.stats.signup": "需要注册",
+
+    "grid.allTools": "所有工具",
+    "grid.subtitle": "21个工具 · 6个分类 · 全部免费",
+    "grid.tools": "个工具",
+    "grid.runTool": "立即运行",
+    "grid.noResults.title": "未找到工具",
+    "grid.noResults.body": '请尝试其他搜索词，例如："PDF"、"图像"或"JSON"。',
+    "grid.search.results": "个结果",
+    "grid.search.result": "个结果",
+    "grid.showAll": "← 显示全部",
+    "grid.searchLabel": "搜索结果：",
+
+    "footer.tagline":
+      "快速、轻量的网页工具 — 就在您的桌面上。无需安装，无需注册，打开即用。",
+    "footer.privacy":
+      "所有处理均在您的浏览器本地进行。您的文件永远不会离开您的设备。",
+    "footer.nav.product": "产品",
+    "footer.nav.company": "公司",
+    "footer.nav.legal": "法律",
+    "footer.links.allTools": "所有工具",
+    "footer.links.pdfTools": "PDF工具",
+    "footer.links.imageTools": "图像工具",
+    "footer.links.devTools": "开发者工具",
+    "footer.links.changelog": "更新日志",
+    "footer.links.about": "关于我们",
+    "footer.links.blog": "博客",
+    "footer.links.request": "请求工具",
+    "footer.links.status": "服务状态",
+    "footer.links.privacy": "隐私政策",
+    "footer.links.terms": "服务条款",
+    "footer.links.cookies": "Cookie政策",
+    "footer.links.contact": "联系我们",
+    "footer.copyright": "版权所有。",
+
+    "wordCount.title": "字数与字符统计",
+    "wordCount.subtitle": "实时统计单词数、字符数、句子数、阅读时间并分析关键词密度。",
+    "wordCount.placeholder": "在此输入或粘贴文本，或拖放文本文件 (.txt, .md)...",
+    "wordCount.words": "单词数",
+    "wordCount.chars": "字符数 (含空格)",
+    "wordCount.charsNoSpace": "字符数 (不含空格)",
+    "wordCount.sentences": "句子数",
+    "wordCount.paragraphs": "段落数",
+    "wordCount.lines": "行数",
+    "wordCount.readTime": "阅读时间",
+    "wordCount.speakTime": "朗读时间",
+    "wordCount.density": "高频关键词",
+    "wordCount.clear": "清空",
+    "wordCount.copy": "复制文本",
+    "wordCount.copied": "已复制!",
+    "wordCount.uppercase": "转大写",
+    "wordCount.lowercase": "转小写",
+    "wordCount.titlecase": "首字母大写",
+    "wordCount.cleanSpaces": "整理空格",
+    "wordCount.dropPrompt": "将文件拖放到此处导入",
+    "wordCount.guide.title": "工具指南与说明",
+    "wordCount.guide.aboutTitle": "什么是字数与字符统计工具？",
+    "wordCount.guide.aboutDesc": "desktools.run 字数统计器是一款基于浏览器的免费在线文本计算工具。在您输入时，它可实时计算单词数、字符数（含/不含空格）、句子数、段落数、预估阅读/朗读时间以及高频关键词密度。适用于论文写作、自荐信、博客、社交媒体文章及 SEO 内容优化。",
+    "wordCount.guide.howTitle": "使用方法",
+    "wordCount.guide.step1": "在编辑器中输入或粘贴文本，或拖放 .txt / .md 文本文件。",
+    "wordCount.guide.step2": "在顶部统计卡片中实时查看单词数、字符数及阅读时间。",
+    "wordCount.guide.step3": "使用转换大小写、清理多余空格及一键复制功能高效修饰文本。",
+    "wordCount.guide.faqTitle": "常见问题 (FAQ)",
+    "wordCount.guide.faq1Q": "我的文本会被上传或保存到服务器吗？",
+    "wordCount.guide.faq1A": "不会。所有文本处理与计算均为 100% 本地浏览器运行，您的文本绝不会离开您的设备。",
+    "wordCount.guide.faq2Q": "预估阅读时间是如何计算的？",
+    "wordCount.guide.faq2A": "根据成年人平均默读速度（每分钟约 200 词）和朗读速度（每分钟约 130 词）自动计算。",
+    "wordCount.guide.faq3Q": "“含空格”与“不含空格”字符数有何区别？",
+    "wordCount.guide.faq3A": "“含空格”统计包括空格和换行在内的所有按键字符；“不含空格”仅统计纯文字与符号数，常用于学术论文及官方申请要求。",
+
+    "unitConverter.title": "单位转换器",
+    "unitConverter.subtitle": "实时转换长度、重量、温度、面积、体积、速度、时间及数字存储单位。",
+    "unitConverter.from": "原单位",
+    "unitConverter.to": "目标单位",
+    "unitConverter.value": "输入数值",
+    "unitConverter.result": "转换结果",
+    "unitConverter.swap": "对调单位",
+    "unitConverter.formula": "转换公式",
+    "unitConverter.allUnits": "全单位对比表",
+    "unitConverter.presets": "热门快捷转换",
+    "unitConverter.copyResult": "复制结果",
+    "unitConverter.copied": "已复制!",
+    "unitConverter.cat.length": "长度",
+    "unitConverter.cat.weight": "重量",
+    "unitConverter.cat.temperature": "温度",
+    "unitConverter.cat.area": "面积",
+    "unitConverter.cat.volume": "体积",
+    "unitConverter.cat.speed": "速度",
+    "unitConverter.cat.time": "时间",
+    "unitConverter.cat.storage": "数字存储",
+    "unitConverter.guide.title": "工具指南与说明",
+    "unitConverter.guide.aboutTitle": "什么是 desktools.run 单位转换器？",
+    "unitConverter.guide.aboutDesc": "desktools.run 单位转换器是一款免费、快速且基于浏览器的多功能单位计算工具。可在公制、英制及传统单位之间无延迟实时转换。",
+    "unitConverter.guide.howTitle": "使用方法",
+    "unitConverter.guide.step1": "在顶部选择所需的分类标签（长度、重量、温度、面积等）。",
+    "unitConverter.guide.step2": "输入数值并选择原单位与目标单位。",
+    "unitConverter.guide.step3": "实时查看转换结果、换算公式及所有单位对照表。",
+    "unitConverter.guide.faqTitle": "常见问题 (FAQ)",
+    "unitConverter.guide.faq1Q": "温度换算公式是什么？",
+    "unitConverter.guide.faq1A": "温度转换采用带有偏移量的精确公式：华氏度 °F = (°C × 1.8) + 32。",
+    "unitConverter.guide.faq2Q": "所有计算都是在本地进行的吗？",
+    "unitConverter.guide.faq2A": "是的！所有换算均 100% 在您的浏览器内即时完成，不会上传任何数据。",
+    "unitConverter.guide.faq3Q": "如何快速复制结果？",
+    "unitConverter.guide.faq3A": "只需点击“复制结果”按钮即可一键复制到剪贴板。",
+
+    "passwordGen.title": "密码生成器",
+    "passwordGen.subtitle": "即时生成密码学安全的强随机密码，保护您的账户。",
+    "passwordGen.length": "密码长度",
+    "passwordGen.uppercase": "包含大写字母 (A-Z)",
+    "passwordGen.lowercase": "包含小写字母 (a-z)",
+    "passwordGen.numbers": "包含数字 (0-9)",
+    "passwordGen.symbols": "包含特殊符号 (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "排除易混淆字符 (0, O, o, 1, l, I)",
+    "passwordGen.strength": "密码强度",
+    "passwordGen.strength.veryWeak": "极弱",
+    "passwordGen.strength.weak": "较弱",
+    "passwordGen.strength.medium": "中等",
+    "passwordGen.strength.strong": "强",
+    "passwordGen.strength.veryStrong": "极强 (非常安全)",
+    "passwordGen.generate": "重新生成",
+    "passwordGen.copy": "复制密码",
+    "passwordGen.copied": "已复制!",
+    "passwordGen.bulk": "批量生成 (5组)",
+    "passwordGen.guide.title": "工具指南与安全说明",
+    "passwordGen.guide.aboutTitle": "安全密码的生成原理是什么？",
+    "passwordGen.guide.aboutDesc": "desktools.run 密码生成器采用 Web Cryptography API (window.crypto) 生成不可预测的强随机值。所有过程均在浏览器本地进行。",
+    "passwordGen.guide.howTitle": "使用方法",
+    "passwordGen.guide.step1": "滑动选择所需密码长度（建议 16 位以上）。",
+    "passwordGen.guide.step2": "勾选字符组合选项及排除易混淆字符。",
+    "passwordGen.guide.step3": "点击“复制密码”即可快速使用。",
+    "passwordGen.guide.faqTitle": "常见问题 (FAQ)",
+    "passwordGen.guide.faq1Q": "生成的密码会被上传到服务器吗？",
+    "passwordGen.guide.faq1A": "绝对不会！所有密码均为 100% 本地浏览器内存即时生成，绝无网络传输。",
+    "passwordGen.guide.faq2Q": "什么是密码信息熵 (Entropy)？",
+    "passwordGen.guide.faq2A": "熵是衡量随机性的位数指标。熵值超过 60 比特的密码足以抵御超级计算机暴力破解。",
+    "passwordGen.guide.faq3Q": "为什么要排除易混淆字符？",
+    "passwordGen.guide.faq3A": "避免数字 0 与字母 O、数字 1 与字母 l 等形似字符带来的手动输入错误。",
+
+    "hashGen.title": "哈希生成器",
+    "hashGen.subtitle": "实时生成 MD5、SHA-1、SHA-256、SHA-384 和 SHA-512 密码学哈希及文件校验码。",
+    "hashGen.inputPlaceholder": "输入文本即可实时计算哈希，或将文件拖放到此处...",
+    "hashGen.uppercaseHex": "大写 HEX",
+    "hashGen.lowercaseHex": "小写 hex",
+    "hashGen.copy": "复制",
+    "hashGen.copied": "已复制!",
+    "hashGen.copyAll": "复制所有哈希",
+    "hashGen.clear": "清空",
+    "hashGen.dropPrompt": "将文件拖放到此处计算文件哈希校验码",
+    "hashGen.fileLoaded": "文件哈希校验码计算完成",
+    "hashGen.guide.title": "工具指南与哈希说明",
+    "hashGen.guide.aboutTitle": "什么是密码学哈希函数？",
+    "hashGen.guide.aboutDesc": "哈希函数可将任意文本或二进制文件转换为固定长度的 16 进制校验码字符串。输入内容的任何微小变动都会产生截然不同的哈希值。",
+    "hashGen.guide.howTitle": "使用方法",
+    "hashGen.guide.step1": "在输入框中输入文本，或拖放需要校验的文件。",
+    "hashGen.guide.step2": "实时查看生成的 MD5、SHA-1、SHA-256、SHA-384 和 SHA-512 哈希值。",
+    "hashGen.guide.step3": "支持切换大小写 Hex，点击“复制”即可复制到剪贴板。",
+    "hashGen.guide.faqTitle": "常见问题 (FAQ)",
+    "hashGen.guide.faq1Q": "SHA-256 与 MD5 有何区别？",
+    "hashGen.guide.faq1A": "SHA-256 是 256 位的安全哈希标准；MD5 为 128 位哈希，常用于快速校验文件完整性。",
+    "hashGen.guide.faq2Q": "哈希值可以还原出原始文本吗？",
+    "hashGen.guide.faq2A": "不能。哈希函数是严格的单向不可逆数学算法。",
+    "hashGen.guide.faq3Q": "文本或文件会被上传到服务器吗？",
+    "hashGen.guide.faq3A": "绝对不会！所有哈希均基于浏览器的原生 Web Crypto API 在本地即时计算。",
+
+    "colorGen.title": "颜色转换器与选择器",
+    "colorGen.subtitle": "即时转换 HEX、RGB、HSL、HSV 和 CMYK 颜色代码，提供调色板及对比度可访问性检测。",
+    "colorGen.picker": "颜色选择器",
+    "colorGen.hex": "HEX 代码",
+    "colorGen.rgb": "RGB 数值",
+    "colorGen.hsl": "HSL 数值",
+    "colorGen.hsv": "HSV 数值",
+    "colorGen.cmyk": "CMYK (印刷专用)",
+    "colorGen.contrast": "Web 可访问性对比度",
+    "colorGen.shades": "明暗与阶调调色板 (Tints & Shades)",
+    "colorGen.harmonies": "和谐色彩搭配 (互补色/类似色)",
+    "colorGen.copy": "复制",
+    "colorGen.copied": "已复制!",
+    "colorGen.guide.title": "工具指南与色彩空间说明",
+    "colorGen.guide.aboutTitle": "RGB、HSL 与 CMYK 有何区别？",
+    "colorGen.guide.aboutDesc": "RGB 是显示器发光加色模型；HSL（色相、饱和度、亮度）适合直观调整设计；CMYK 是专业印刷用的减色模型。",
+    "colorGen.guide.howTitle": "使用方法",
+    "colorGen.guide.step1": "使用取色器选择颜色，或输入 HEX/RGB/HSL 数值。",
+    "colorGen.guide.step2": "实时查看 HEX、RGB、HSL、HSV 及 CMYK 转换结果。",
+    "colorGen.guide.step3": "查看自动生成的明暗阶调与互补色搭配，复制 CSS 代码。",
+    "colorGen.guide.faqTitle": "常见问题 (FAQ)",
+    "colorGen.guide.faq1Q": "为什么网页设计用 RGB，印刷用 CMYK？",
+    "colorGen.guide.faq1A": "屏幕使用 RGB 像素发光，而纸张印刷依靠 CMYK 墨水吸收光线，因此需要色彩模型转换。",
+    "colorGen.guide.faq2Q": "什么是对比度 (Contrast Ratio)？",
+    "colorGen.guide.faq2A": "衡量背景与文字明暗差的指标。WCAG 标准要求普通文字对比度至少达到 4.5:1。",
+    "colorGen.guide.faq3Q": "互补色 (Complementary Color) 是什么原理？",
+    "colorGen.guide.faq3A": "指色相环上相差 180 度的对立颜色，具有最强烈的视觉对比效果。",
+
+    "privacy.title": "隐私政策",
+    "privacy.subtitle": "最后更新日期：2026年8月21日。desktools.run 如何保护您的隐私并 100% 在本地处理数据。",
+    "privacy.badge": "100% 浏览器本地数据隐私保证",
+    "privacy.sec1Title": "1. 零服务器文件与文本传输",
+    "privacy.sec1Desc": "desktools.run 的所有实用工具（字数统计、单位转换、密码生成、哈希计算、颜色转换等）均 100% 在您的浏览器内部运行。您输入的文本、上传的文件、生成的密码及哈希值绝不会上传到任何外部服务器。",
+    "privacy.sec2Title": "2. 我们不收集的信息",
+    "privacy.sec2Desc": "本平台不收集任何个人身份识别信息（PII），如姓名、邮箱、电话号码或支付信息。",
+    "privacy.sec3Title": "3. 本地存储 (LocalStorage) 的使用",
+    "privacy.sec3Desc": "我们仅在浏览器 LocalStorage 中保存您的偏好设置：'desktools_theme'（深色/浅色模式）和 'desktools_locale'（语言选择）。",
+    "privacy.sec4Title": "4. Cookie 与访问分析",
+    "privacy.sec4Desc": "desktools.run 不使用侵入性的跨站追踪 Cookie，也不会向第三方出售任何数据。",
+    "privacy.sec5Title": "5. 您的数据权利与联系方式",
+    "privacy.sec5Desc": "由于我们不在服务器端存储您的任何数据，您拥有对数据的绝对控制权。隐私咨询邮箱：privacy@desktools.run。",
+
+    "terms.title": "服务条款",
+    "terms.subtitle": "最后更新日期：2026年8月21日。使用 desktools.run 需遵守的服务条款与条件。",
+    "terms.badge": "无需注册 · 100% 免费 Web 工具",
+    "terms.sec1Title": "1. 条款的接受",
+    "terms.sec1Desc": "访问或使用 desktools.run 即表示您同意遵守本服务条款。如果您不同意，请勿使用本平台。",
+    "terms.sec2Title": "2. 服务范围与免费许可",
+    "terms.sec2Desc": "desktools.run 提供无需注册的免费 Web 实用工具（字数统计、单位转换、密码生成、哈希计算、颜色转换等），支持个人与商业用途。",
+    "terms.sec3Title": "3. 免责声明与责任限制",
+    "terms.sec3Desc": "本服务“按原样 (AS IS)”提供，不提供任何形式的明示或暗示保证。对因使用工具计算结果产生的损失概不负责。",
+    "terms.sec4Title": "4. 知识产权与合理使用",
+    "terms.sec4Desc": "网站设计、品牌及代码知识产权归 desktools.run 所有。严禁恶意自动化抓取或发起网络攻击 (DDoS)。",
+    "terms.sec5Title": "5. 条款修改与联系方式",
+    "terms.sec5Desc": "我们保留随时更新本条款的权利。技术支持与咨询邮箱：support@desktools.run。",
+
+    "cookies.title": "Cookie 政策",
+    "cookies.subtitle": "最后更新日期：2026年8月21日。了解 desktools.run 如何通过零追踪 Cookie 保护您的隐私。",
+    "cookies.badge": "零追踪 Cookie 隐私保证",
+    "cookies.sec1Title": "1. 无侵入性追踪 Cookie",
+    "cookies.sec1Desc": "desktools.run 不使用第三方广告 Cookie 或跨站追踪器。您可以完全无忧地使用所有工具。",
+    "cookies.sec2Title": "2. 我们存储的内容 (必要的本地存储)",
+    "cookies.sec2Desc": "我们使用 HTML5 LocalStorage 仅用于保存您的偏好：'desktools_theme'（深色/浅色模式）和 'desktools_locale'（语言选择）。",
+    "cookies.sec3Title": "3. Cookie 与本地存储原理",
+    "cookies.sec3Desc": "这些是保存在您浏览器本地的小文件，用于在您再次访问时记住偏好设置，绝不传输个人数据。",
+    "cookies.sec4Title": "4. 如何管理或删除浏览器数据",
+    "cookies.sec4Desc": "您可以随时在浏览器（Chrome、Safari、Firefox、Edge）设置中清除 LocalStorage 和 Cookie。",
+    "cookies.sec5Title": "5. 政策更新与联系方式",
+    "cookies.sec5Desc": "如有关于 Cookie 的任何疑问，请联系 privacy@desktools.run。",
+
+    "imageResizer.title": "图片调整大小 (Image Resizer)",
+    "imageResizer.subtitle": "实时调整 PNG、JPG 和 WEBP 图片的分辨率、比例与压缩质量。",
+    "imageResizer.dropPrompt": "将图片拖放到此处，或点击浏览文件...",
+    "imageResizer.width": "宽度 (px)",
+    "imageResizer.height": "高度 (px)",
+    "imageResizer.lockAspect": "锁定宽高比",
+    "imageResizer.byPercent": "按百分比调整",
+    "imageResizer.format": "输出格式",
+    "imageResizer.quality": "质量",
+    "imageResizer.original": "原始图片",
+    "imageResizer.resized": "调整后预览",
+    "imageResizer.download": "下载调整后的图片",
+    "imageResizer.reset": "重置图片",
+    "imageResizer.guide.title": "图片调整大小完整指南",
+    "imageResizer.guide.aboutTitle": "什么是图片调整大小工具？",
+    "imageResizer.guide.aboutDesc": "无需上传服务器，100% 在您的浏览器本地调整图片像素分辨率、缩放比例与质量。",
+    "imageResizer.guide.howTitle": "使用步骤",
+    "imageResizer.guide.step1": "1. 拖放上传 PNG、JPG 或 WEBP 图片。",
+    "imageResizer.guide.step2": "2. 设置目标像素或点击百分比预设（如 50%）。保持锁定宽高比以防变形。",
+    "imageResizer.guide.step3": "3. 选择输出格式与压缩质量，点击下载。",
+    "imageResizer.guide.faqTitle": "常见问题",
+    "imageResizer.guide.faq1Q": "图片会上传到服务器吗？",
+    "imageResizer.guide.faq1A": "不会。所有画布渲染与压缩均 100% 在本地浏览器内存中完成。",
+    "imageResizer.guide.faq2Q": "PNG、JPG 与 WEBP 有什么区别？",
+    "imageResizer.guide.faq2A": "PNG 支持透明背景，JPG 适合照片压缩，WEBP 是兼具透明度与高压缩率的新一代格式。",
+    "imageResizer.guide.faq3Q": "为什么要锁定宽高比？",
+    "imageResizer.guide.faq3A": "保持宽高比例可防止图片拉伸或变形。",
+  },
+
+  // ── French ─────────────────────────────────────────────────
+  fr: {
+    "header.search.placeholder": "Rechercher des outils... (ex: PDF, redimensionner, JSON)",
+
+    "hero.badge": "Sans installation · Sans inscription · 100% Gratuit",
+    "hero.title1": "Utilitaires Web Rapides",
+    "hero.title2": "Sur Votre Bureau",
+    "hero.subtitle":
+      "Outils PDF, édition d'images, traitement de texte, utilitaires développeur — tout s'exécute instantanément dans votre navigateur.",
+    "hero.search.placeholder": "Recherchez 21 outils — essayez 'PDF', 'resize', 'JSON'...",
+    "hero.search.button": "Rechercher",
+    "hero.popular": "Populaire :",
+    "hero.stats.tools": "Outils Gratuits",
+    "hero.stats.categories": "Catégories",
+    "hero.stats.browser": "Basé Navigateur",
+    "hero.stats.signup": "Inscription Requise",
+
+    "grid.allTools": "Tous les Outils",
+    "grid.subtitle": "21 utilitaires · 6 catégories · tous gratuits",
+    "grid.tools": "outils",
+    "grid.runTool": "Lancer",
+    "grid.noResults.title": "Aucun outil trouvé",
+    "grid.noResults.body": 'Essayez un autre terme — ex: "PDF", "image", ou "JSON".',
+    "grid.search.results": "résultats trouvés",
+    "grid.search.result": "résultat trouvé",
+    "grid.showAll": "← Tout afficher",
+    "grid.searchLabel": "Résultats pour",
+
+    "footer.tagline":
+      "Des utilitaires web rapides et légers — sur votre bureau. Sans installation ni inscription. Ouvrez et exécutez.",
+    "footer.privacy":
+      "Tout le traitement se passe localement dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.",
+    "footer.nav.product": "Produit",
+    "footer.nav.company": "Entreprise",
+    "footer.nav.legal": "Légal",
+    "footer.links.allTools": "Tous les Outils",
+    "footer.links.pdfTools": "Outils PDF",
+    "footer.links.imageTools": "Outils Image",
+    "footer.links.devTools": "Outils Dev",
+    "footer.links.changelog": "Changelog",
+    "footer.links.about": "À Propos",
+    "footer.links.blog": "Blog",
+    "footer.links.request": "Demander un Outil",
+    "footer.links.status": "Statut",
+    "footer.links.privacy": "Politique de Confidentialité",
+    "footer.links.terms": "Conditions d'Utilisation",
+    "footer.links.cookies": "Politique Cookies",
+    "footer.links.contact": "Contact",
+    "footer.copyright": "Tous droits réservés.",
+
+    "wordCount.title": "Compteur de Mots et Caractères",
+    "wordCount.subtitle": "Comptez les mots, caractères, phrases, temps de lecture et analysez la densité des mots-clés en temps réel.",
+    "wordCount.placeholder": "Saisissez ou collez votre texte ici, ou glissez-déposez un fichier texte (.txt, .md)...",
+    "wordCount.words": "Mots",
+    "wordCount.chars": "Caractères",
+    "wordCount.charsNoSpace": "Caract. (sans espace)",
+    "wordCount.sentences": "Phrases",
+    "wordCount.paragraphs": "Paragraphes",
+    "wordCount.lines": "Lignes",
+    "wordCount.readTime": "Temps de lecture",
+    "wordCount.speakTime": "Temps de parole",
+    "wordCount.density": "Mots-clés fréquents",
+    "wordCount.clear": "Effacer",
+    "wordCount.copy": "Copier",
+    "wordCount.copied": "Copié!",
+    "wordCount.uppercase": "MAJUSCULES",
+    "wordCount.lowercase": "minuscules",
+    "wordCount.titlecase": "Casse Titre",
+    "wordCount.cleanSpaces": "Nettoyer Espaces",
+    "wordCount.dropPrompt": "Déposez un fichier texte ici",
+    "wordCount.guide.title": "Guide et Description de l'Outil",
+    "wordCount.guide.aboutTitle": "Qu'est-ce que le compteur de mots et caractères ?",
+    "wordCount.guide.aboutDesc": "Le compteur de mots desktools.run est un outil gratuit et rapide basé sur navigateur. Il calcule instantanément les mots, caractères (avec et sans espaces), phrases, paragraphes, temps de lecture/parole estimé et densité de mots-clés. Idéal pour étudiants, rédacteurs, blogueurs et experts SEO.",
+    "wordCount.guide.howTitle": "Comment Utiliser",
+    "wordCount.guide.step1": "Saisissez ou collez du texte dans l'éditeur, ou glissez-déposez un fichier (.txt, .md).",
+    "wordCount.guide.step2": "Consultez les statistiques en temps réel, le temps de lecture et les mots-clés fréquents.",
+    "wordCount.guide.step3": "Utilisez les boutons d'action pour changer la casse, nettoyer les espaces ou copier le texte.",
+    "wordCount.guide.faqTitle": "Foire Aux Questions (FAQ)",
+    "wordCount.guide.faq1Q": "Mon texte est-il envoyé ou sauvegardé sur un serveur ?",
+    "wordCount.guide.faq1A": "Non. Tout le traitement s'exécute à 100% localement dans votre navigateur web. Votre texte ne quitte jamais votre appareil.",
+    "wordCount.guide.faq2Q": "Comment le temps de lecture estimé est-il calculé ?",
+    "wordCount.guide.faq2A": "Il est basé sur une vitesse moyenne de lecture de 200 mots par minute (WPM) et 130 WPM pour le discours oral.",
+    "wordCount.guide.faq3Q": "Quelle est la différence entre caractères avec et sans espaces ?",
+    "wordCount.guide.faq3A": "Les caractères avec espaces comptent toutes les touches saisies (espaces et retours à la ligne). Les caractères sans espaces excluent les blancs, standard pour les devoirs académiques et essais.",
+
+    "unitConverter.title": "Convertisseur d'Unités",
+    "unitConverter.subtitle": "Convertissez instantanément longueur, masse, température, superficie, volume, vitesse, temps et stockage numérique.",
+    "unitConverter.from": "De",
+    "unitConverter.to": "Vers",
+    "unitConverter.value": "Valeur",
+    "unitConverter.result": "Résultat Converti",
+    "unitConverter.swap": "Intervertir",
+    "unitConverter.formula": "Formule de Conversion",
+    "unitConverter.allUnits": "Tableau Comparatif de Toutes les Unités",
+    "unitConverter.presets": "Raccourcis Populaires",
+    "unitConverter.copyResult": "Copier le Résultat",
+    "unitConverter.copied": "Copié!",
+    "unitConverter.cat.length": "Longueur",
+    "unitConverter.cat.weight": "Masse / Poids",
+    "unitConverter.cat.temperature": "Température",
+    "unitConverter.cat.area": "Superficie",
+    "unitConverter.cat.volume": "Volume",
+    "unitConverter.cat.speed": "Vitesse",
+    "unitConverter.cat.time": "Temps",
+    "unitConverter.cat.storage": "Stockage Numérique",
+    "unitConverter.guide.title": "Guide & Description",
+    "unitConverter.guide.aboutTitle": "Qu'est-ce que le Convertisseur d'Unités desktools.run ?",
+    "unitConverter.guide.aboutDesc": "Il s'agit d'un outil de calcul d'unités gratuit et rapide basé sur navigateur. Convertissez instantanément entre systèmes métrique et impérial avec zéro latence et 100% de confidentialité.",
+    "unitConverter.guide.howTitle": "Comment Utiliser",
+    "unitConverter.guide.step1": "Sélectionnez une catégorie (Longueur, Poids, Température, etc.) en haut.",
+    "unitConverter.guide.step2": "Entrez la valeur et choisissez les unités de départ et d'arrivée.",
+    "unitConverter.guide.step3": "Consultez le résultat en direct, la formule et le tableau comparatif complet.",
+    "unitConverter.guide.faqTitle": "Foire Aux Questions",
+    "unitConverter.guide.faq1Q": "Comment est calculée la conversion de température ?",
+    "unitConverter.guide.faq1A": "Elle utilise les formules mathématiques exactes avec décalage : °F = (°C × 9/5) + 32.",
+    "unitConverter.guide.faq2Q": "Les calculs sont-ils effectués localement ?",
+    "unitConverter.guide.faq2A": "Oui, 100% des calculs s'exécutent dans votre navigateur sans aucun envoi de données.",
+    "unitConverter.guide.faq3Q": "Puis-je copier rapidement le résultat ?",
+    "unitConverter.guide.faq3A": "Oui, cliquez sur le bouton 'Copier le Résultat' pour le copier dans votre presse-papiers.",
+
+    "passwordGen.title": "Générateur de Mots de Passe",
+    "passwordGen.subtitle": "Générez instantanément des mots de passe aléatoires ultra-sécurisés.",
+    "passwordGen.length": "Longueur du Mot de Passe",
+    "passwordGen.uppercase": "Inclure Majuscules (A-Z)",
+    "passwordGen.lowercase": "Inclure Minuscules (a-z)",
+    "passwordGen.numbers": "Inclure Chiffres (0-9)",
+    "passwordGen.symbols": "Inclure Symboles (!@#$%^&*)",
+    "passwordGen.excludeAmbiguous": "Exclure Caractères Ambigus (0, O, o, 1, l, I)",
+    "passwordGen.strength": "Force du Mot de Passe",
+    "passwordGen.strength.veryWeak": "Très Faible",
+    "passwordGen.strength.weak": "Faible",
+    "passwordGen.strength.medium": "Moyen",
+    "passwordGen.strength.strong": "Fort",
+    "passwordGen.strength.veryStrong": "Très Fort",
+    "passwordGen.generate": "Régénérer",
+    "passwordGen.copy": "Copier le Mot de Passe",
+    "passwordGen.copied": "Copié!",
+    "passwordGen.bulk": "Génération en Lot (5)",
+    "passwordGen.guide.title": "Guide & Sécurité",
+    "passwordGen.guide.aboutTitle": "Qu'est-ce qui rend un mot de passe sécurisé ?",
+    "passwordGen.guide.aboutDesc": "Il utilise l'API Web Cryptography (window.crypto) pour créer des valeurs aléatoires sécurisées localement dans votre navigateur.",
+    "passwordGen.guide.howTitle": "Comment Utiliser",
+    "passwordGen.guide.step1": "Ajustez la longueur avec le curseur (16+ caractères recommandés).",
+    "passwordGen.guide.step2": "Cochez les options de caractères souhaitées.",
+    "passwordGen.guide.step3": "Cliquez sur 'Copier le Mot de Passe' pour l'utiliser.",
+    "passwordGen.guide.faqTitle": "Foire Aux Questions",
+    "passwordGen.guide.faq1Q": "Mon mot de passe est-il envoyé sur un serveur ?",
+    "passwordGen.guide.faq1A": "Non, 100% de la génération se produit localement dans la mémoire de votre navigateur.",
+    "passwordGen.guide.faq2Q": "Qu'est-ce que l'entropie ?",
+    "passwordGen.guide.faq2A": "Elle mesure l'aléa en bits. Plus de 60 bits offre une protection robuste contre la force brute.",
+    "passwordGen.guide.faq3Q": "Pourquoi exclure les caractères ambigus ?",
+    "passwordGen.guide.faq3A": "Cela évite les confusions visuelles entre le chiffre 0 et la lettre O lors de la saisie.",
+
+    "hashGen.title": "Générateur de Hash",
+    "hashGen.subtitle": "Générez instantanément des empreintes MD5, SHA-1, SHA-256, SHA-384 et SHA-512 et checksums de fichiers.",
+    "hashGen.inputPlaceholder": "Saisissez du texte pour calculer les hashes en direct, ou glissez un fichier...",
+    "hashGen.uppercaseHex": "HEX MAJUSCULES",
+    "hashGen.lowercaseHex": "hex minuscules",
+    "hashGen.copy": "Copier",
+    "hashGen.copied": "Copié!",
+    "hashGen.copyAll": "Tout Copier",
+    "hashGen.clear": "Effacer",
+    "hashGen.dropPrompt": "Déposez un fichier ici pour calculer son checksum",
+    "hashGen.fileLoaded": "Checksum du fichier calculé",
+    "hashGen.guide.title": "Guide & Cryptographie",
+    "hashGen.guide.aboutTitle": "Qu'est-ce qu'une fonction de hachage ?",
+    "hashGen.guide.aboutDesc": "Une fonction de hachage convertit du texte ou un fichier binaire en une chaîne hexadécimale unique de longueur fixe.",
+    "hashGen.guide.howTitle": "Comment Utiliser",
+    "hashGen.guide.step1": "Saisissez du texte ou déposez un fichier.",
+    "hashGen.guide.step2": "Consultez immédiatement les hashes MD5, SHA-1, SHA-256, SHA-384 et SHA-512.",
+    "hashGen.guide.step3": "Basculez majuscules/minuscules et copiez dans le presse-papiers.",
+    "hashGen.guide.faqTitle": "Foire Aux Questions",
+    "hashGen.guide.faq1Q": "Différence entre SHA-256 et MD5 ?",
+    "hashGen.guide.faq1A": "SHA-256 est le standard moderne sécurisé de 256 bits ; MD5 fait 128 bits pour vérification rapide.",
+    "hashGen.guide.faq2Q": "Un hash est-il réversible ?",
+    "hashGen.guide.faq2A": "Non, les fonctions de hachage sont strictement unidirectionnelles.",
+    "hashGen.guide.faq3Q": "Mes fichiers sont-ils envoyés sur un serveur ?",
+    "hashGen.guide.faq3A": "Non, 100% des calculs s'exécutent localement via Web Crypto API dans votre navigateur.",
+
+    "colorGen.title": "Convertisseur & Sélecteur de Couleur",
+    "colorGen.subtitle": "Convertissez instantanément HEX, RGB, HSL, HSV et CMYK avec vérification de contraste et palettes.",
+    "colorGen.picker": "Sélecteur de Couleur",
+    "colorGen.hex": "Code HEX",
+    "colorGen.rgb": "Valeur RGB",
+    "colorGen.hsl": "Valeur HSL",
+    "colorGen.hsv": "Valeur HSV",
+    "colorGen.cmyk": "CMYK (Impression)",
+    "colorGen.contrast": "Ratio de Contraste & Accessibilité",
+    "colorGen.shades": "Palette de Nuances et Teintes",
+    "colorGen.harmonies": "Harmonies de Couleurs & Palettes",
+    "colorGen.copy": "Copier",
+    "colorGen.copied": "Copié!",
+    "colorGen.guide.title": "Guide & Espaces Colorimétriques",
+    "colorGen.guide.aboutTitle": "Différence entre RGB, HSL et CMYK ?",
+    "colorGen.guide.aboutDesc": "RGB est le modèle additif des écrans, HSL est intuitif pour la conception et CMYK est le modèle soustractif pour l'impression.",
+    "colorGen.guide.howTitle": "Comment Utiliser",
+    "colorGen.guide.step1": "Choisissez une couleur avec la pipette ou saisissez les codes HEX/RGB.",
+    "colorGen.guide.step2": "Consultez les conversions en direct en HEX, RGB, HSL, HSV et CMYK.",
+    "colorGen.guide.step3": "Explorez les nuances et harmonies et copiez le code CSS.",
+    "colorGen.guide.faqTitle": "Foire Aux Questions",
+    "colorGen.guide.faq1Q": "Pourquoi le Web utilise RGB et l'impression CMYK ?",
+    "colorGen.guide.faq1A": "Les écrans émettent de la lumière (RGB) tandis que l'encre physique en absorbe (CMYK).",
+    "colorGen.guide.faq2Q": "Qu'est-ce que le ratio de contraste ?",
+    "colorGen.guide.faq2A": "Il mesure la différence de luminance entre le texte et le fond. La norme WCAG exige au moins 4.5:1.",
+    "colorGen.guide.faq3Q": "Comment fonctionnent les couleurs complémentaires ?",
+    "colorGen.guide.faq3A": "Elles sont situées à l'opposé (180°) sur la roue chromatique, créant un contraste maximal.",
+
+    "privacy.title": "Politique de Confidentialité",
+    "privacy.subtitle": "Dernière mise à jour : 21 août 2026. Comment desktools.run protège votre vie privée avec un traitement 100% local.",
+    "privacy.badge": "Garantie de Confidentialité 100% Locale",
+    "privacy.sec1Title": "1. Aucune Transmission de Fichiers ni de Textes",
+    "privacy.sec1Desc": "Tous nos outils (Compteur de Mots, Convertisseur d'Unités, Mots de Passe, Hashes, Couleurs) s'exécutent 100% dans votre navigateur web. Vos données NE QUITTENT JAMAIS votre appareil.",
+    "privacy.sec2Title": "2. Informations Non Collectées",
+    "privacy.sec2Desc": "Nous ne collectons aucune donnée personnelle identifiable (PII) telle que votre nom, email ou coordonnées bancaires.",
+    "privacy.sec3Title": "3. Utilisation du Stockage Local",
+    "privacy.sec3Desc": "Nous utilisons le LocalStorage uniquement pour enregistrer vos préférences de thème ('desktools_theme') et de langue ('desktools_locale').",
+    "privacy.sec4Title": "4. Cookies et Analyses",
+    "privacy.sec4Desc": "desktools.run n'utilise aucun cookie de suivi publicitaire ni de traçage tiers.",
+    "privacy.sec5Title": "5. Vos Droits et Contact",
+    "privacy.sec5Desc": "Puisque nous ne stockons aucune donnée sur serveur, vous conservez un contrôle total. Contact : privacy@desktools.run.",
+
+    "terms.title": "Conditions d'Utilisation",
+    "terms.subtitle": "Dernière mise à jour : 21 août 2026. Conditions régissant l'utilisation de desktools.run.",
+    "terms.badge": "Outils Web Gratuits Sans Inscription",
+    "terms.sec1Title": "1. Acceptation des Conditions",
+    "terms.sec1Desc": "En accédant à desktools.run, vous acceptez d'être lié par les présentes Conditions d'Utilisation.",
+    "terms.sec2Title": "2. Portée du Service et Licence Gratuite",
+    "terms.sec2Desc": "Nous fournissons des outils gratuits sans inscription (compteur de mots, convertisseurs, générateurs) pour usage personnel et commercial.",
+    "terms.sec3Title": "3. Exclusion de Garanties et Limitation de Responsabilité",
+    "terms.sec3Desc": "Les services sont fournis 'EN L'ÉTAT' ('AS IS'). desktools.run décline toute responsabilité en cas de dommages liés à l'utilisation des résultats.",
+    "terms.sec4Title": "4. Propriété Intellectuelle et Usage Acceptable",
+    "terms.sec4Desc": "Le design et le code restent la propriété de desktools.run. Le scraping abusif et les attaques DDoS sont strictement interdits.",
+    "terms.sec5Title": "5. Modifications et Contact",
+    "terms.sec5Desc": "Nous nous réservons le droit de modifier ces conditions à tout moment. Contact : support@desktools.run.",
+
+    "cookies.title": "Politique de Cookies",
+    "cookies.subtitle": "Dernière mise à jour : 21 août 2026. Découvrez comment desktools.run respecte votre vie privée sans cookies de suivi.",
+    "cookies.badge": "Garantie Zéro Cookie de Suivi",
+    "cookies.sec1Title": "1. Aucun Cookie de Suivi Invasif",
+    "cookies.sec1Desc": "desktools.run n'utilise AUCUN cookie publicitaire tierce partie ni traqueur de profilage.",
+    "cookies.sec2Title": "2. Ce que Nous Stockons (LocalStorage Essentiel)",
+    "cookies.sec2Desc": "Nous utilisons le LocalStorage uniquement pour mémoriser vos préférences de thème ('desktools_theme') et de langue ('desktools_locale').",
+    "cookies.sec3Title": "3. Fonctionnement des Cookies et du Stockage",
+    "cookies.sec3Desc": "Ce sont de petits fichiers locaux conservés par votre navigateur pour mémoriser vos réglages entre vos visites.",
+    "cookies.sec4Title": "4. Comment Gérer ou Supprimer les Données",
+    "cookies.sec4Desc": "Vous pouvez effacer le LocalStorage et les cookies à tout moment dans les paramètres de votre navigateur (Chrome, Safari, Firefox, Edge).",
+    "cookies.sec5Title": "5. Mises à Jour et Contact",
+    "cookies.sec5Desc": "Pour toute question concernant nos pratiques : privacy@desktools.run.",
+
+    "imageResizer.title": "Redimensionner une Image",
+    "imageResizer.subtitle": "Ajustez instantanément les dimensions et la qualité des images PNG, JPG et WEBP.",
+    "imageResizer.dropPrompt": "Glissez-déposez une image ici, ou cliquez pour parcourir...",
+    "imageResizer.width": "Largeur (px)",
+    "imageResizer.height": "Hauteur (px)",
+    "imageResizer.lockAspect": "Conserver les proportions",
+    "imageResizer.byPercent": "Redimensionner par pourcentage",
+    "imageResizer.format": "Format de sortie",
+    "imageResizer.quality": "Qualité",
+    "imageResizer.original": "Image originale",
+    "imageResizer.resized": "Aperçu redimensionné",
+    "imageResizer.download": "Télécharger l'image",
+    "imageResizer.reset": "Réinitialiser",
+    "imageResizer.guide.title": "Guide Complet de Redimensionnement",
+    "imageResizer.guide.aboutTitle": "Qu'est-ce que l'outil de redimensionnement ?",
+    "imageResizer.guide.aboutDesc": "Permet de modifier la taille et le poids des images 100% dans votre navigateur sans transfert de données.",
+    "imageResizer.guide.howTitle": "Comment l'utiliser",
+    "imageResizer.guide.step1": "1. Déposez votre fichier image (PNG, JPG, WEBP).",
+    "imageResizer.guide.step2": "2. Indiquez la largeur/hauteur ou choisissez un pourcentage.",
+    "imageResizer.guide.step3": "3. Choisissez le format, la qualité et téléchargez.",
+    "imageResizer.guide.faqTitle": "Foire Aux Questions",
+    "imageResizer.guide.faq1Q": "Mon image est-elle envoyée sur un serveur ?",
+    "imageResizer.guide.faq1A": "Non, tout le traitement est 100% local sur votre navigateur.",
+    "imageResizer.guide.faq2Q": "Quelle est la différence entre PNG, JPG et WEBP ?",
+    "imageResizer.guide.faq2A": "PNG gère la transparence, JPG réduit le poids des photos, WEBP offre une compression optimale.",
+    "imageResizer.guide.faq3Q": "Pourquoi verrouiller les proportions ?",
+    "imageResizer.guide.faq3A": "Pour éviter toute déformation lors du changement de taille.",
+  },
+};
