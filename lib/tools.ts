@@ -55,7 +55,7 @@ export const TOOLS: Tool[] = [
     category: "PDF Tools",
     icon: "Scissors",
     href: "/tools/pdf-split",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "pdf-compress",
