@@ -34,11 +34,12 @@ const LocaleContext = createContext<LocaleContextValue>({
   t: (key) => key,
 });
 
-// Helper to detect OS / Browser language for first-time visitors
 function detectSystemLocale(): Locale {
   if (typeof window === "undefined" || !navigator) return "en";
 
-  const languages = navigator.languages || [navigator.language];
+  const languages = navigator.languages || [
+    navigator.language || (navigator as any).userLanguage,
+  ];
   for (const lang of languages) {
     if (!lang) continue;
     const lower = lang.toLowerCase();
@@ -52,25 +53,38 @@ function detectSystemLocale(): Locale {
   return "en";
 }
 
-// ── Provider ───────────────────────────────────────────────────
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
-
-  // Restore saved language from localStorage or detect OS/Browser language on first visit
-  useEffect(() => {
+function getInitialLocale(): Locale {
+  if (typeof window === "undefined") return "en";
+  try {
     const saved = localStorage.getItem("desktools-locale") as Locale | null;
     if (saved && saved in translations) {
-      setLocaleState(saved);
-    } else {
-      // First visit: Auto-detect OS/Browser language
-      const detected = detectSystemLocale();
-      setLocaleState(detected);
+      return saved;
+    }
+    return detectSystemLocale();
+  } catch {
+    return "en";
+  }
+}
+
+// ── Provider ───────────────────────────────────────────────────
+export function LocaleProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
+
+  useEffect(() => {
+    // Sync html lang attribute and state on mount if needed
+    const initial = getInitialLocale();
+    setLocaleState(initial);
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = initial;
     }
   }, []);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     localStorage.setItem("desktools-locale", next);
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = next;
+    }
   }, []);
 
   // Translate function — falls back to English if key missing

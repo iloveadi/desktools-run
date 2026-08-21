@@ -351,9 +351,95 @@ export interface Translations {
   "pdfCompress.guide.faq1Q": string;
   "pdfCompress.guide.faq1A": string;
   "pdfCompress.guide.faq2Q": string;
-  "pdfCompress.guide.faq2A": string;
-  "pdfCompress.guide.faq3Q": string;
-  "pdfCompress.guide.faq3A": string;
+  // ── Image Converter Tool ──────────────────────────────────────
+  "imageConverter.title": string;
+  "imageConverter.subtitle": string;
+  "imageConverter.dropPrompt": string;
+  "imageConverter.convertAll": string;
+  "imageConverter.converting": string;
+  "imageConverter.download": string;
+  "imageConverter.downloadAll": string;
+  "imageConverter.reset": string;
+  "imageConverter.targetFormat": string;
+  "imageConverter.quality": string;
+  "imageConverter.bgColor": string;
+  "imageConverter.white": string;
+  "imageConverter.black": string;
+  "imageConverter.transparent": string;
+  "imageConverter.filesSelected": string;
+  "imageConverter.guide.title": string;
+  "imageConverter.guide.aboutTitle": string;
+  "imageConverter.guide.aboutDesc": string;
+  "imageConverter.guide.howTitle": string;
+  "imageConverter.guide.step1": string;
+  "imageConverter.guide.step2": string;
+  "imageConverter.guide.step3": string;
+  "imageConverter.guide.faqTitle": string;
+  "imageConverter.guide.faq1Q": string;
+  "imageConverter.guide.faq1A": string;
+  // ── Image Compress Tool ─────────────────────────────────────────
+  "imageCompress.title": string;
+  "imageCompress.subtitle": string;
+  "imageCompress.dropPrompt": string;
+  "imageCompress.compressLevel": string;
+  "imageCompress.levelRecommended": string;
+  "imageCompress.levelHigh": string;
+  "imageCompress.levelLow": string;
+  "imageCompress.levelCustom": string;
+  "imageCompress.quality": string;
+  "imageCompress.autoWebp": string;
+  "imageCompress.originalSize": string;
+  "imageCompress.compressedSize": string;
+  "imageCompress.savings": string;
+  "imageCompress.download": string;
+  "imageCompress.downloadAll": string;
+  "imageCompress.reset": string;
+  "imageCompress.filesSelected": string;
+  "imageCompress.compressing": string;
+  "imageCompress.guide.title": string;
+  "imageCompress.guide.aboutTitle": string;
+  "imageCompress.guide.aboutDesc": string;
+  "imageCompress.guide.howTitle": string;
+  "imageCompress.guide.step1": string;
+  "imageCompress.guide.step2": string;
+  "imageCompress.guide.step3": string;
+  "imageCompress.guide.faqTitle": string;
+  "imageCompress.guide.faq1Q": string;
+  "imageCompress.guide.faq1A": string;
+  // ── Background Remover Tool ─────────────────────────────────────
+  "backgroundRemover.title": string;
+  "backgroundRemover.subtitle": string;
+  "backgroundRemover.dropPrompt": string;
+  "backgroundRemover.pickColor": string;
+  "backgroundRemover.tolerance": string;
+  "backgroundRemover.feather": string;
+  "backgroundRemover.method": string;
+  "backgroundRemover.methodMagicWand": string;
+  "backgroundRemover.methodGlobal": string;
+  "backgroundRemover.bgStyle": string;
+  "backgroundRemover.bgTransparent": string;
+  "backgroundRemover.bgWhite": string;
+  "backgroundRemover.bgBlack": string;
+  "backgroundRemover.bgCustom": string;
+  "backgroundRemover.original": string;
+  "backgroundRemover.removed": string;
+  "backgroundRemover.download": string;
+  "backgroundRemover.reset": string;
+  "backgroundRemover.clickHint": string;
+  "backgroundRemover.guide.title": string;
+  "backgroundRemover.guide.aboutTitle": string;
+  "backgroundRemover.guide.aboutDesc": string;
+  "backgroundRemover.guide.howTitle": string;
+  "backgroundRemover.guide.step1": string;
+  "backgroundRemover.guide.step2": string;
+  "backgroundRemover.guide.step3": string;
+  "backgroundRemover.guide.faqTitle": string;
+  "backgroundRemover.guide.faq1Q": string;
+  "backgroundRemover.guide.faq1A": string;
+  "backgroundRemover.guide.faq2Q": string;
+  "backgroundRemover.guide.faq2A": string;
+  "backgroundRemover.guide.faq3Q": string;
+  "backgroundRemover.guide.faq3A": string;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -697,6 +783,106 @@ export const translations: Record<Locale, Translations> = {
     "pdfCompress.guide.faq2A": "No! Text fonts, vector artwork, and document text remain crisp while stream objects and metadata dictionaries are optimized.",
     "pdfCompress.guide.faq3Q": "Is there a file size limit?",
     "pdfCompress.guide.faq3A": "There is no artificial limit. You can process large PDF files as long as your system memory permits.",
+
+    // Image Converter
+    "imageConverter.title": "Image Converter",
+    "imageConverter.subtitle": "Convert JPG, PNG, WEBP, BMP, and ICO image formats instantly in your browser.",
+    "imageConverter.dropPrompt": "Drag & drop image files here, or click to browse...",
+    "imageConverter.convertAll": "Convert All Images",
+    "imageConverter.converting": "Converting...",
+    "imageConverter.download": "Download",
+    "imageConverter.downloadAll": "Download All",
+    "imageConverter.reset": "Clear All",
+    "imageConverter.targetFormat": "Target Format",
+    "imageConverter.quality": "Quality",
+    "imageConverter.bgColor": "Background (for JPG)",
+    "imageConverter.white": "White",
+    "imageConverter.black": "Black",
+    "imageConverter.transparent": "Transparent",
+    "imageConverter.filesSelected": "files selected",
+    "imageConverter.guide.title": "Complete Image Converter Guide",
+    "imageConverter.guide.aboutTitle": "What is the Image Converter Tool?",
+    "imageConverter.guide.aboutDesc": "The Image Converter allows you to convert multiple images between formats (PNG, JPG, WEBP, BMP, ICO) 100% inside your browser using HTML5 Canvas—no file uploads required.",
+    "imageConverter.guide.howTitle": "How to Convert Images",
+    "imageConverter.guide.step1": "1. Drag & drop or select single or multiple images.",
+    "imageConverter.guide.step2": "2. Choose your target output format (PNG, JPG, WEBP, BMP, ICO) and set quality or background color.",
+    "imageConverter.guide.step3": "3. Click Download on individual files or Download All to save converted images.",
+    "imageConverter.guide.faqTitle": "Frequently Asked Questions",
+    "imageConverter.guide.faq1Q": "Are my images uploaded to any server?",
+    "imageConverter.guide.faq1A": "No! All image rendering and format conversion run 100% locally in your web browser memory.",
+    "imageConverter.guide.faq2Q": "What happens when converting a transparent PNG to JPG?",
+    "imageConverter.guide.faq2A": "Since JPG does not support transparency, the transparent background will automatically be filled with your selected background color (default: white).",
+    "imageConverter.guide.faq3Q": "Can I convert multiple images at once?",
+    "imageConverter.guide.faq3A": "Yes! You can select multiple images and convert them all simultaneously with custom quality settings.",
+
+    // Image Compress
+    "imageCompress.title": "Image Compress",
+    "imageCompress.subtitle": "Compress PNG, JPG, and WEBP images directly in your browser with zero quality loss.",
+    "imageCompress.dropPrompt": "Drag & drop image files here to compress, or click to browse...",
+    "imageCompress.compressLevel": "Compression Mode",
+    "imageCompress.levelRecommended": "Recommended (Balanced)",
+    "imageCompress.levelHigh": "Maximum Compression",
+    "imageCompress.levelLow": "Quality First",
+    "imageCompress.levelCustom": "Custom Quality",
+    "imageCompress.quality": "Quality Level",
+    "imageCompress.autoWebp": "Convert PNG to WEBP for extra savings",
+    "imageCompress.originalSize": "Original Size",
+    "imageCompress.compressedSize": "Compressed Size",
+    "imageCompress.savings": "Savings",
+    "imageCompress.download": "Download",
+    "imageCompress.downloadAll": "Download All",
+    "imageCompress.reset": "Clear All",
+    "imageCompress.filesSelected": "files ready for compression",
+    "imageCompress.compressing": "Compressing...",
+    "imageCompress.guide.title": "Complete Image Compression Guide",
+    "imageCompress.guide.aboutTitle": "What is the Image Compression Tool?",
+    "imageCompress.guide.aboutDesc": "The Image Compress tool reduces image file sizes (PNG, JPG, WEBP) directly inside your browser by using smart HTML5 canvas algorithms—with zero server uploads.",
+    "imageCompress.guide.howTitle": "How to Compress Images",
+    "imageCompress.guide.step1": "1. Drag & drop or select single or multiple images to compress.",
+    "imageCompress.guide.step2": "2. Select your compression preset (Recommended, High Compression, or Custom Quality).",
+    "imageCompress.guide.step3": "3. Instantly review the file size savings percentage and download your optimized images.",
+    "imageCompress.guide.faqTitle": "Frequently Asked Questions",
+    "imageCompress.guide.faq1Q": "Are my photos uploaded to any remote server?",
+    "imageCompress.guide.faq1A": "No! All compression rendering runs 100% locally in your web browser. Your photos never leave your device.",
+    "imageCompress.guide.faq2Q": "How does PNG image compression work?",
+    "imageCompress.guide.faq2A": "PNG compression optimizes color palettes and metadata streams. Optionally converting PNG to WEBP can save up to 80% more space with transparent support.",
+    "imageCompress.guide.faq3Q": "Is there a limit on how many images I can compress?",
+    "imageCompress.guide.faq3A": "No! You can compress as many images as you need with zero limits and 100% free usage.",
+
+    // Background Remover
+    "backgroundRemover.title": "Background Remover",
+    "backgroundRemover.subtitle": "Remove background from images instantly in your browser with color picking & tolerance controls.",
+    "backgroundRemover.dropPrompt": "Drag & drop an image here, or click to browse...",
+    "backgroundRemover.pickColor": "Picked Background Color",
+    "backgroundRemover.tolerance": "Color Tolerance",
+    "backgroundRemover.feather": "Edge Softness (Feather)",
+    "backgroundRemover.method": "Removal Method",
+    "backgroundRemover.methodMagicWand": "Magic Wand (Connected Area)",
+    "backgroundRemover.methodGlobal": "Global Color Match",
+    "backgroundRemover.bgStyle": "New Background Style",
+    "backgroundRemover.bgTransparent": "Transparent PNG",
+    "backgroundRemover.bgWhite": "White Background",
+    "backgroundRemover.bgBlack": "Black Background",
+    "backgroundRemover.bgCustom": "Custom Color",
+    "backgroundRemover.original": "Original Image (Click to pick color)",
+    "backgroundRemover.removed": "Background Removed Preview",
+    "backgroundRemover.download": "Download Transparent Image",
+    "backgroundRemover.reset": "Clear Image",
+    "backgroundRemover.clickHint": "Click anywhere on the original image to select background color",
+    "backgroundRemover.guide.title": "Complete Background Removal Guide",
+    "backgroundRemover.guide.aboutTitle": "What is the Background Remover Tool?",
+    "backgroundRemover.guide.aboutDesc": "The Background Remover allows you to instantly erase image backgrounds and make them transparent directly in your web browser memory using HTML5 canvas color difference algorithms—with zero server uploads.",
+    "backgroundRemover.guide.howTitle": "How to Remove Image Backgrounds",
+    "backgroundRemover.guide.step1": "1. Drag & drop or upload your product or photo image.",
+    "backgroundRemover.guide.step2": "2. Click on the original image background to select the color, then adjust Tolerance and Edge Softness.",
+    "backgroundRemover.guide.step3": "3. Choose transparent PNG or custom color background, then click Download.",
+    "backgroundRemover.guide.faqTitle": "Frequently Asked Questions",
+    "backgroundRemover.guide.faq1Q": "Is my image uploaded to any remote server?",
+    "backgroundRemover.guide.faq1A": "No! All image pixel operations and background removal happen 100% locally in your web browser memory.",
+    "backgroundRemover.guide.faq2Q": "How does Tolerance work?",
+    "backgroundRemover.guide.faq2A": "Tolerance controls how similar adjacent colors must be to the selected background color. Increasing tolerance removes broader color shades.",
+    "backgroundRemover.guide.faq3Q": "Can I save as a transparent PNG file?",
+    "backgroundRemover.guide.faq3A": "Yes! The output is exported as an alpha-channel transparent PNG file that can be placed anywhere.",
   },
 
   // ── Korean ─────────────────────────────────────────────────
@@ -1038,6 +1224,106 @@ export const translations: Record<Locale, Translations> = {
     "pdfCompress.guide.faq2A": "아닙니다! 텍스트 및 벡터 글꼴은 100% 선명하게 유지되며, 객체 스트림 및 구조 메타데이터가 압축 정리됩니다.",
     "pdfCompress.guide.faq3Q": "파일 용량 및 횟수에 제한이 있나요?",
     "pdfCompress.guide.faq3A": "제한이 없습니다. 횟수나 용량 제한 없이 필요한 만큼 자유롭게 압축할 수 있습니다.",
+
+    // Image Converter
+    "imageConverter.title": "이미지 포맷 변환기",
+    "imageConverter.subtitle": "PNG, JPG, WebP, BMP, ICO 등 다양한 이미지 포맷을 브라우저에서 즉시 상호 변환하세요.",
+    "imageConverter.dropPrompt": "이미지 파일들을 여기에 드래그하거나 클릭하여 선택하세요...",
+    "imageConverter.convertAll": "모두 변환하기",
+    "imageConverter.converting": "변환 중...",
+    "imageConverter.download": "다운로드",
+    "imageConverter.downloadAll": "전체 다운로드",
+    "imageConverter.reset": "전체 삭제",
+    "imageConverter.targetFormat": "변환할 포맷",
+    "imageConverter.quality": "품질",
+    "imageConverter.bgColor": "배경색 (JPG 변환용)",
+    "imageConverter.white": "흰색",
+    "imageConverter.black": "검은색",
+    "imageConverter.transparent": "투명 / 원본",
+    "imageConverter.filesSelected": "개 파일 선택됨",
+    "imageConverter.guide.title": "이미지 변환기 완벽 가이드",
+    "imageConverter.guide.aboutTitle": "이미지 포맷 변환기란 무엇인가요?",
+    "imageConverter.guide.aboutDesc": "HTML5 Canvas 기술을 이용해 별도의 프로그램 설치나 서버 업로드 없이 웹 브라우저 내부에서 이미지 파일의 포맷(PNG, JPG, WEBP, BMP, ICO)을 즉시 변환해 주는 유틸리티입니다.",
+    "imageConverter.guide.howTitle": "사용 방법",
+    "imageConverter.guide.step1": "1. 변환할 이미지를 하나 이상 드래그 앤 드롭하거나 파일 선택 버튼을 클릭합니다.",
+    "imageConverter.guide.step2": "2. 변환하고자 하는 타겟 포맷(PNG, JPG, WebP, BMP, ICO)과 품질/배경색을 설정합니다.",
+    "imageConverter.guide.step3": "3. 개별 다운로드 또는 '전체 다운로드' 버튼을 눌러 변환된 이미지를 저장합니다.",
+    "imageConverter.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "imageConverter.guide.faq1Q": "업로드한 이미지가 외부 서버에 저장되나요?",
+    "imageConverter.guide.faq1A": "아닙니다! 모든 이미지 렌더링 및 포맷 변환 과정은 사용자의 웹 브라우저 메모리 상에서 100% 처리되므로 완벽한 보안을 자랑합니다.",
+    "imageConverter.guide.faq2Q": "투명 배경 PNG를 JPG로 변환하면 어떻게 되나요?",
+    "imageConverter.guide.faq2A": "JPG 포맷은 투명도를 지원하지 않으므로, 선택한 배경색(기본값: 흰색)으로 투명 부분이 자동 채워집니다.",
+    "imageConverter.guide.faq3Q": "여러 이미지를 한 번에 변환할 수 있나요?",
+    "imageConverter.guide.faq3A": "네! 수십 개의 이미지 파일도 한 번에 선택하여 타겟 포맷으로 일괄 변환하실 수 있습니다.",
+
+    // Image Compress
+    "imageCompress.title": "이미지 용량 압축기",
+    "imageCompress.subtitle": "브라우저에서 직접 PNG, JPG, WEBP 이미지의 용량을 화질 저하 없이 극대화하여 줄이세요.",
+    "imageCompress.dropPrompt": "압축할 이미지 파일들을 여기에 드래그하거나 클릭하여 선택하세요...",
+    "imageCompress.compressLevel": "압축 모드",
+    "imageCompress.levelRecommended": "추천 압축 (화질 균형)",
+    "imageCompress.levelHigh": "최대 압축 (용량 최소화)",
+    "imageCompress.levelLow": "고화질 유지 (미세 압축)",
+    "imageCompress.levelCustom": "사용자 지정 품질",
+    "imageCompress.quality": "품질 설정",
+    "imageCompress.autoWebp": "PNG를 WEBP로 전환하여 추가 절감",
+    "imageCompress.originalSize": "원본 용량",
+    "imageCompress.compressedSize": "압축 용량",
+    "imageCompress.savings": "절감률",
+    "imageCompress.download": "다운로드",
+    "imageCompress.downloadAll": "전체 다운로드",
+    "imageCompress.reset": "전체 삭제",
+    "imageCompress.filesSelected": "개 파일 압축 준비됨",
+    "imageCompress.compressing": "압축 중...",
+    "imageCompress.guide.title": "이미지 용량 압축 완벽 가이드",
+    "imageCompress.guide.aboutTitle": "이미지 용량 압축기란 무엇인가요?",
+    "imageCompress.guide.aboutDesc": "서버 전송 없이 웹 브라우저 메모리 내부의 스마트 캔버스 압축 알고리즘을 사용하여 이미지(PNG, JPG, WEBP)의 용량을 수십 % 이상 획기적으로 줄여주는 무료 유틸리티입니다.",
+    "imageCompress.guide.howTitle": "사용 방법",
+    "imageCompress.guide.step1": "1. 용량을 줄이고자 하는 이미지를 드래그 앤 드롭하거나 클릭하여 선택합니다.",
+    "imageCompress.guide.step2": "2. 원하는 압축 프리셋(추천 압축, 최대 압축, 고화질 유지) 또는 커스텀 품질을 선택합니다.",
+    "imageCompress.guide.step3": "3. 실시간으로 절감된 용량과 절감률(%)을 확인하고 다운로드 버튼을 누릅니다.",
+    "imageCompress.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "imageCompress.guide.faq1Q": "업로드한 사진이 서버에 저장되나요?",
+    "imageCompress.guide.faq1A": "아닙니다! 모든 압축 연산은 사용자의 웹 브라우저 내에서 100% 진행되므로 개인정보 및 소중한 사진 파일이 외부로 유출되지 않습니다.",
+    "imageCompress.guide.faq2Q": "PNG 이미지 압축은 어떻게 동작하나요?",
+    "imageCompress.guide.faq2A": "PNG 압축은 색상 팔레트 및 메타데이터를 최적화합니다. 또한 필요시 WEBP 포맷 전환 옵션을 통해 투명도를 유지하면서 최고 80% 이상의 추가 절감을 이끌어냅니다.",
+    "imageCompress.guide.faq3Q": "압축할 수 있는 이미지 파일 수에 제한이 있나요?",
+    "imageCompress.guide.faq3A": "제한이 없습니다! 몇 십, 몇 백 개의 이미지도 횟수나 제한 없이 자유롭게 압축할 수 있습니다.",
+
+    // Background Remover
+    "backgroundRemover.title": "이미지 배경 제거기 (누끼 따기)",
+    "backgroundRemover.subtitle": "클릭 한 번으로 이미지 배경을 투명하게 지우고 원하는 단색 배경으로 교체하세요.",
+    "backgroundRemover.dropPrompt": "배경을 지울 이미지를 여기에 드래그하거나 클릭하여 선택하세요...",
+    "backgroundRemover.pickColor": "선택된 배경색",
+    "backgroundRemover.tolerance": "색상 허용 오차 (Tolerance)",
+    "backgroundRemover.feather": "경계선 부드럽게 (Feather)",
+    "backgroundRemover.method": "제거 모드",
+    "backgroundRemover.methodMagicWand": "마술봉 (연결된 배경 제거 - 인물 보호)",
+    "backgroundRemover.methodGlobal": "전역 색상 제거",
+    "backgroundRemover.bgStyle": "새 배경 스타일",
+    "backgroundRemover.bgTransparent": "투명 배경 (PNG)",
+    "backgroundRemover.bgWhite": "흰색 배경",
+    "backgroundRemover.bgBlack": "검은색 배경",
+    "backgroundRemover.bgCustom": "커스텀 배경색",
+    "backgroundRemover.original": "원본 이미지 (클릭하여 배경색 선택)",
+    "backgroundRemover.removed": "배경 제거 결과 프리뷰",
+    "backgroundRemover.download": "투명 이미지 다운로드",
+    "backgroundRemover.reset": "이미지 초기화",
+    "backgroundRemover.clickHint": "원본 이미지 위를 클릭하면 해당 색상이 배경색으로 선택됩니다",
+    "backgroundRemover.guide.title": "이미지 배경 제거 완벽 가이드",
+    "backgroundRemover.guide.aboutTitle": "배경 제거기(누끼 따기) 도구란 무엇인가요?",
+    "backgroundRemover.guide.aboutDesc": "서버 전송 없이 웹 브라우저 내부의 색상 마스킹 알고리즘을 사용하여 이미지의 배경을 즉시 투명하게 만들거나 원하는 단색 배경으로 변경해 주는 무료 유틸리티입니다.",
+    "backgroundRemover.guide.howTitle": "사용 방법",
+    "backgroundRemover.guide.step1": "1. 배경을 지우고자 하는 이미지 파일을 업로드합니다.",
+    "backgroundRemover.guide.step2": "2. 원본 이미지의 배경 부분을 스포이드로 클릭하고 색상 허용 오차 및 경계 부드럽기를 조절합니다.",
+    "backgroundRemover.guide.step3": "3. 투명 PNG 또는 원하는 배경색을 선택한 후 다운로드 버튼을 누릅니다.",
+    "backgroundRemover.guide.faqTitle": "자주 묻는 질문 (FAQ)",
+    "backgroundRemover.guide.faq1Q": "업로드한 사진이 서버로 전송되나요?",
+    "backgroundRemover.guide.faq1A": "아닙니다! 모든 이미지 픽셀 마스킹 연산은 웹 브라우저 내부에서 100% 진행되어 완벽한 개인정보 및 사진 보안을 보장합니다.",
+    "backgroundRemover.guide.faq2Q": "색상 허용 오차(Tolerance)란 무엇인가요?",
+    "backgroundRemover.guide.faq2A": "선택한 배경색과 유사한 주변 색상까지 제거할 범위를 조절합니다. 수치를 높일수록 비슷한 그림자나 밝기의 색상까지 함께 투명하게 처리됩니다.",
+    "backgroundRemover.guide.faq3Q": "투명 PNG 파일로 저장할 수 있나요?",
+    "backgroundRemover.guide.faq3A": "네! 알파 채널 투명도가 보장된 PNG 파일로 저장되어 쇼핑몰 상품 이미지, 자소서, 카드뉴스 등에 바로 활용하실 수 있습니다.",
   },
 
   // ── Japanese ───────────────────────────────────────────────

@@ -94,8 +94,9 @@ export const TOOLS: Tool[] = [
     description: "Convert between JPG, PNG, WebP, AVIF, GIF, and more formats.",
     category: "Image Tools",
     icon: "RefreshCw",
+    badge: "Popular",
     href: "/tools/image-converter",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "image-compress",
@@ -103,8 +104,9 @@ export const TOOLS: Tool[] = [
     description: "Shrink image file sizes for faster web loading.",
     category: "Image Tools",
     icon: "ZoomOut",
+    badge: "Popular",
     href: "/tools/image-compress",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "background-remover",
@@ -114,7 +116,7 @@ export const TOOLS: Tool[] = [
     icon: "Eraser",
     badge: "New",
     href: "/tools/background-remover",
-    isDev: true,
+    isDev: false,
   },
 
   // ── Text & Formatting ─────────────────────────────────────
