@@ -185,35 +185,6 @@ export default function Header({ onSearch }: HeaderProps) {
           </span>
         </Link>
 
-        {/* ── Center Search (desktop) ───────────────────── */}
-        <div style={{ flex: 1, maxWidth: "480px", margin: "0 auto" }} className="hidden-mobile">
-          <div style={{ position: "relative", width: "100%" }}>
-            <Search
-              size={15}
-              style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }}
-            />
-            <input
-              id="header-search"
-              type="search"
-              placeholder={t("header.search.placeholder")}
-              value={searchQuery}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="search-input"
-              style={{ width: "100%", padding: "8px 36px 8px 36px", fontSize: "13.5px" }}
-              aria-label={t("header.search.placeholder")}
-            />
-            {searchQuery && (
-              <button
-                onClick={clearSearch}
-                style={{ position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", padding: "2px" }}
-                aria-label="Clear search"
-              >
-                <X size={14} />
-              </button>
-            )}
-          </div>
-        </div>
-
         {/* ── Right Controls ────────────────────────────── */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto", flexShrink: 0 }}>
           {/* Language Dropdown */}
@@ -294,32 +265,9 @@ export default function Header({ onSearch }: HeaderProps) {
         </div>
       </div>
 
-      {/* ── Mobile search bar ─────────────────────────── */}
-      <div className="mobile-search" style={{ display: "none", padding: "0 16px 12px" }}>
-        <div style={{ position: "relative" }}>
-          <Search size={15} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }} />
-          <input
-            type="search"
-            placeholder={t("header.search.placeholder")}
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="search-input"
-            style={{ width: "100%", padding: "9px 36px", fontSize: "14px" }}
-            aria-label="Search tools mobile"
-          />
-        </div>
-      </div>
-
       {langOpen && (
         <div onClick={() => setLangOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} aria-hidden="true" />
       )}
-
-      <style>{`
-        @media (max-width: 640px) {
-          .hidden-mobile { display: none !important; }
-          .mobile-search { display: block !important; }
-        }
-      `}</style>
     </header>
   );
 }
