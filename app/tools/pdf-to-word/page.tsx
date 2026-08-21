@@ -19,7 +19,6 @@ import {
   FileCheck2,
   RefreshCw,
   Table as TableIcon,
-  CheckCircle2,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -122,16 +121,15 @@ export default function PdfToWordPage() {
         const page = await pdfDoc.getPage(pageNum);
         const textContent = await page.getTextContent();
 
-        // 1. Group text items by Y-coordinate (Row Detection)
+        // 1. Group text items by Y-coordinate (Tolerance 12pt for clean row alignment)
         const rowMap = new Map<number, { text: string; x: number }[]>();
 
         for (const item of textContent.items as any[]) {
           if (!item.str || item.str.trim() === "") continue;
 
-          // Round Y coordinate to group text on the same visual line (tolerance 6pt)
           const rawY = item.transform[5];
           const rawX = item.transform[4];
-          const yKey = Math.round(rawY / 8) * 8;
+          const yKey = Math.round(rawY / 12) * 12;
 
           if (!rowMap.has(yKey)) {
             rowMap.set(yKey, []);
@@ -143,35 +141,21 @@ export default function PdfToWordPage() {
         const sortedYKeys = Array.from(rowMap.keys()).sort((a, b) => b - a);
 
         const pageElements: any[] = [];
-
-        // Add Page Header Indicator
-        pageElements.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `--- PAGE ${pageNum} ---`,
-                bold: true,
-                color: "888888",
-                size: 18,
-              }),
-            ],
-            spacing: { before: 240, after: 120 },
-          })
-        );
-
-        // Group contiguous multi-column rows into Word Tables
         let currentTableRows: { text: string; x: number }[][] = [];
 
         const flushCurrentTable = () => {
           if (currentTableRows.length === 0) return;
 
-          // Determine column boundaries across the table rows
+          // Determine column boundaries across table rows
           const tableXmlRows = currentTableRows.map((rowCells) => {
-            // Sort cells left to right by X coordinate
             rowCells.sort((a, b) => a.x - b.x);
+
+            const colCount = Math.max(rowCells.length, 1);
+            const cellPercentWidth = Math.floor(100 / colCount);
 
             const tableCells = rowCells.map((c) => {
               return new TableCell({
+                width: { size: cellPercentWidth, type: WidthType.PERCENTAGE },
                 children: [
                   new Paragraph({
                     children: [
@@ -180,7 +164,7 @@ export default function PdfToWordPage() {
                         size: 20, // 10pt
                       }),
                     ],
-                    spacing: { before: 40, after: 40 },
+                    spacing: { before: 60, after: 60 },
                   }),
                 ],
                 borders: {
@@ -219,7 +203,7 @@ export default function PdfToWordPage() {
           const lineItems = rowMap.get(yKey)!;
           lineItems.sort((a, b) => a.x - b.x);
 
-          // If line has multiple spaced items, treat as table row
+          // If line has 2 or more spaced items, treat as table row
           const isTableRow = lineItems.length >= 2;
 
           if (isTableRow) {
@@ -228,15 +212,15 @@ export default function PdfToWordPage() {
             // Single text paragraph
             flushCurrentTable();
             const textStr = lineItems.map((it) => it.text).join(" ");
-            const isTitle = textStr.includes("견적서") || textStr.length < 15;
+            const isHeading = textStr.includes("견적서") || textStr.length < 15;
 
             pageElements.push(
               new Paragraph({
                 children: [
                   new TextRun({
                     text: textStr,
-                    bold: isTitle,
-                    size: isTitle ? 32 : 22,
+                    bold: isHeading,
+                    size: isHeading ? 32 : 22,
                   }),
                 ],
                 spacing: { after: 120 },
@@ -245,7 +229,7 @@ export default function PdfToWordPage() {
           }
         }
 
-        // Flush any remaining table at page end
+        // Flush remaining table
         flushCurrentTable();
 
         docSections.push({
