@@ -5,6 +5,7 @@
  * ─────────────────────────────────────────────────────────────
  * Browser-native AI Background Removal tool for desktools.run
  * Powered by 100% Client-Side WebAI Neural Network (@imgly/background-removal)
+ * Includes Alpha Cutoff & Solidify Detail Protection Controls
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -17,10 +18,9 @@ import {
   RotateCcw,
   Sparkles,
   Bot,
-  Wand2,
-  CheckCircle2,
+  Sliders,
   RefreshCw,
-  Layers,
+  ShieldCheck,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -39,6 +39,8 @@ export default function BackgroundRemoverPage() {
 
   const [bgStyle, setBgStyle] = useState<BgStyle>("transparent");
   const [customBgColor, setCustomBgColor] = useState<string>("#6366f1");
+  const [alphaCutoff, setAlphaCutoff] = useState<number>(15); // 1~100 (Default 15: solidifies semi-transparent object areas like laptops/legs)
+  const [solidifyEdges, setSolidifyEdges] = useState<boolean>(true);
 
   const [aiCutoutBlob, setAiCutoutBlob] = useState<Blob | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string>("");
@@ -118,7 +120,7 @@ export default function BackgroundRemoverPage() {
     };
   }, [imageFile]);
 
-  // Apply Background Style (Transparent / White / Black / Custom Color) over AI Cutout
+  // Render Canvas with Background Style & Alpha Cutoff Detail Protection
   useEffect(() => {
     if (!aiCutoutBlob || origWidth === 0 || origHeight === 0) return;
 
@@ -132,31 +134,67 @@ export default function BackgroundRemoverPage() {
       const ctx = canvas.getContext("2d");
 
       if (ctx) {
-        if (bgStyle === "white") {
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(0, 0, origWidth, origHeight);
-        } else if (bgStyle === "black") {
-          ctx.fillStyle = "#000000";
-          ctx.fillRect(0, 0, origWidth, origHeight);
-        } else if (bgStyle === "custom") {
-          ctx.fillStyle = customBgColor;
-          ctx.fillRect(0, 0, origWidth, origHeight);
-        }
-
+        // Draw AI Cutout image
         ctx.drawImage(img, 0, 0, origWidth, origHeight);
 
-        canvas.toBlob((finalBlob) => {
-          if (finalBlob) {
-            const url = URL.createObjectURL(finalBlob);
-            setProcessedUrl(url);
+        // Alpha Cutoff Pixel Enhancement (Solidify semi-transparent hand/laptop/leg pixels)
+        const imgData = ctx.getImageData(0, 0, origWidth, origHeight);
+        const data = imgData.data;
+
+        // Cutoff threshold (1 ~ 255)
+        const cutoffVal = Math.round((alphaCutoff / 100) * 255);
+
+        for (let i = 0; i < data.length; i += 4) {
+          const a = data[i + 3];
+          if (a >= cutoffVal) {
+            // Restore semi-transparent object areas to 100% solid opacity
+            data[i + 3] = 255;
+          } else {
+            // Drop background completely to 0 alpha
+            data[i + 3] = 0;
           }
-        }, "image/png");
+        }
+        ctx.putImageData(imgData, 0, 0);
+
+        // Render target background style if not transparent
+        if (bgStyle !== "transparent") {
+          const finalCanvas = document.createElement("canvas");
+          finalCanvas.width = origWidth;
+          finalCanvas.height = origHeight;
+          const finalCtx = finalCanvas.getContext("2d");
+
+          if (finalCtx) {
+            if (bgStyle === "white") {
+              finalCtx.fillStyle = "#ffffff";
+            } else if (bgStyle === "black") {
+              finalCtx.fillStyle = "#000000";
+            } else if (bgStyle === "custom") {
+              finalCtx.fillStyle = customBgColor;
+            }
+            finalCtx.fillRect(0, 0, origWidth, origHeight);
+            finalCtx.drawImage(canvas, 0, 0);
+
+            finalCanvas.toBlob((finalBlob) => {
+              if (finalBlob) {
+                const url = URL.createObjectURL(finalBlob);
+                setProcessedUrl(url);
+              }
+            }, "image/png");
+          }
+        } else {
+          canvas.toBlob((finalBlob) => {
+            if (finalBlob) {
+              const url = URL.createObjectURL(finalBlob);
+              setProcessedUrl(url);
+            }
+          }, "image/png");
+        }
       }
       URL.revokeObjectURL(cutoutUrl);
     };
 
     img.src = cutoutUrl;
-  }, [aiCutoutBlob, bgStyle, customBgColor, origWidth, origHeight]);
+  }, [aiCutoutBlob, bgStyle, customBgColor, origWidth, origHeight, alphaCutoff, solidifyEdges]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -265,7 +303,7 @@ export default function BackgroundRemoverPage() {
               }}
             >
               <Bot size={14} />
-              100% Client-Side Web AI Neural Net (remove.bg Quality)
+              100% Client-Side Web AI Neural Net
             </div>
           </div>
         </section>
@@ -497,17 +535,28 @@ export default function BackgroundRemoverPage() {
               {/* Sidebar Controls */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  AI Background Options
+                  AI Mask Tuning
                 </h3>
 
-                {/* AI Badge */}
-                <div style={{ padding: "12px 14px", borderRadius: "8px", background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.2)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#f472b6", fontWeight: 700, fontSize: "13px", marginBottom: "4px" }}>
-                    <Bot size={16} />
-                    Neural Network AI Model
+                {/* Subject Protection Cutoff Slider */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--text-secondary)", marginBottom: "6px" }}>
+                    <span style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
+                      <ShieldCheck size={14} color="#f472b6" />
+                      {t("backgroundRemover.alphaCutoff")}
+                    </span>
+                    <span style={{ color: "#f472b6", fontWeight: 700 }}>{alphaCutoff}%</span>
                   </div>
-                  <p style={{ fontSize: "12px", color: "var(--text-muted)", lineHeight: 1.4 }}>
-                    Automated deep learning model segments human portraits, products, and complex backgrounds instantly inside your browser.
+                  <input
+                    type="range"
+                    min={1}
+                    max={60}
+                    value={alphaCutoff}
+                    onChange={(e) => setAlphaCutoff(parseInt(e.target.value))}
+                    style={{ width: "100%", accentColor: "#ec4899", cursor: "pointer" }}
+                  />
+                  <p style={{ fontSize: "11.5px", color: "var(--text-muted)", marginTop: "4px" }}>
+                    Adjust to restore semi-transparent laptops, hands, legs & clothes.
                   </p>
                 </div>
 
