@@ -51,7 +51,7 @@ export const translations: Record<Locale, Translations> = {
     "footer.privacy":
       "All processing happens locally in your browser. Your files never leave your device.",
     "footer.nav.product": "Product",
-    "footer.nav.company": "Company",
+    "footer.nav.company": "desktools",
     "footer.nav.legal": "Legal",
     "footer.links.allTools": "All Tools",
     "footer.links.pdfTools": "PDF Tools",
@@ -561,7 +561,7 @@ export const translations: Record<Locale, Translations> = {
     "footer.privacy":
       "모든 처리는 브라우저 내에서 로컬로 이루어집니다. 파일은 절대 서버로 전송되지 않습니다.",
     "footer.nav.product": "제품",
-    "footer.nav.company": "회사",
+    "footer.nav.company": "desktools",
     "footer.nav.legal": "법적 고지",
     "footer.links.allTools": "전체 도구",
     "footer.links.pdfTools": "PDF 도구",
