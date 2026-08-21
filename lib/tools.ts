@@ -67,15 +67,7 @@ export const TOOLS: Tool[] = [
     href: "/tools/pdf-compress",
     isDev: false,
   },
-  {
-    id: "pdf-to-word",
-    title: "PDF to Word",
-    description: "Convert PDF documents to editable .docx format in seconds.",
-    category: "PDF Tools",
-    icon: "FileText",
-    href: "/tools/pdf-to-word",
-    isDev: true,
-  },
+
 
   // ── Image Tools ───────────────────────────────────────────
   {
