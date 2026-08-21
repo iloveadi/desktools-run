@@ -27,6 +27,7 @@ import {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
+import ToolUsageTracker from "@/components/common/ToolUsageTracker";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── Text Analysis Calculations ─────────────────────────────────
@@ -193,6 +194,7 @@ export default function WordCountPage() {
 
   return (
     <>
+      <ToolUsageTracker toolId="word-count" />
       <Header />
 
       <main style={{ flex: 1, paddingBottom: "80px" }}>

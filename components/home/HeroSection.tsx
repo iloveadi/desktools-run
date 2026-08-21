@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Sparkles, ArrowRight } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
+import { getTotalSiteUsageCount, formatCount } from "@/lib/stats";
 
 interface HeroSectionProps {
   onSearch: (query: string) => void;
@@ -17,16 +18,14 @@ const POPULAR_TAGS = [
   { en: "Base64",             ko: "Base64",            ja: "Base64",            es: "Base64",           zh: "Base64",   fr: "Base64",          query: "Base64" },
 ];
 
-const STATS_KEYS = [
-  { value: "21+",   labelKey: "hero.stats.tools" as const },
-  { value: "6",     labelKey: "hero.stats.categories" as const },
-  { value: "100%",  labelKey: "hero.stats.browser" as const },
-  { value: "0",     labelKey: "hero.stats.signup" as const },
-];
-
 export default function HeroSection({ onSearch }: HeroSectionProps) {
   const { locale, t } = useLocale();
   const [query, setQuery] = useState("");
+  const [totalUsage, setTotalUsage] = useState<number>(685000);
+
+  useEffect(() => {
+    setTotalUsage(getTotalSiteUsageCount());
+  }, []);
 
   const handleChange = useCallback(
     (val: string) => {
@@ -43,6 +42,13 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
     },
     [onSearch]
   );
+
+  const STATS_ITEMS = [
+    { value: `${formatCount(totalUsage, locale)}+`, label: locale === "ko" ? "누적 도구 이용" : "Total Uses" },
+    { value: "21+",   label: t("hero.stats.tools") },
+    { value: "100%",  label: t("hero.stats.browser") },
+    { value: "0",     label: t("hero.stats.signup") },
+  ];
 
   return (
     <section style={{ position: "relative", overflow: "hidden", padding: "100px 24px 80px", textAlign: "center" }}>
@@ -159,19 +165,19 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
           background: "var(--stats-bg)", border: "1px solid var(--stats-border)",
           borderRadius: "14px", padding: "0", overflow: "hidden",
         }}>
-          {STATS_KEYS.map((stat, i) => (
+          {STATS_ITEMS.map((stat, i) => (
             <div
-              key={stat.labelKey}
+              key={stat.label}
               style={{
                 flex: "1 1 120px", padding: "20px 24px", textAlign: "center",
-                borderRight: i < STATS_KEYS.length - 1 ? "1px solid var(--border-subtle)" : "none",
+                borderRight: i < STATS_ITEMS.length - 1 ? "1px solid var(--border-subtle)" : "none",
               }}
             >
               <div style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", marginBottom: "2px" }} className="gradient-text">
                 {stat.value}
               </div>
               <div style={{ fontSize: "11.5px", color: "var(--text-muted)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-                {t(stat.labelKey)}
+                {stat.label}
               </div>
             </div>
           ))}

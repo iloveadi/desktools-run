@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
+import ToolUsageTracker from "@/components/common/ToolUsageTracker";
 import { Code2, ArrowLeft, Copy, Check, Download } from "lucide-react";
 
 export default function MarkdownPreviewPage() {
@@ -61,11 +62,12 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
 
   return (
     <>
+      <ToolUsageTracker toolId="markdown-preview" />
       <Header />
       <main style={{ flex: 1, paddingBottom: "80px" }}>
         <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-secondary)", textDecoration: "none", marginBottom: "16px" }}>
-            <ArrowLeft size={14} /> Back to All Tools
+            <ArrowLeft size={14} /> {t("markdownPreview.backLink") || "Back to All Tools"}
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
             <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(99,102,241,0.15)", color: "#818cf8", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -81,9 +83,9 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
             {/* Editor */}
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>Markdown Input</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>{t("markdownPreview.inputTitle") || "Markdown Input"}</span>
                 <button onClick={handleDownloadMd} style={{ padding: "4px 10px", borderRadius: "6px", background: "rgba(255,255,255,0.06)", border: "1px solid var(--border-subtle)", color: "var(--text-secondary)", fontSize: "12px", fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
-                  <Download size={13} /> Save .md
+                  <Download size={13} /> {t("markdownPreview.saveMd") || "Save .md"}
                 </button>
               </div>
               <textarea
@@ -97,10 +99,10 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
             {/* Preview */}
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>Rendered HTML Preview</span>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>{t("markdownPreview.previewTitle") || "Rendered HTML Preview"}</span>
                 <button onClick={handleCopyHtml} style={{ padding: "4px 10px", borderRadius: "6px", background: copied ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.15)", border: "none", color: copied ? "#4ade80" : "#818cf8", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
                   {copied ? <Check size={13} /> : <Copy size={13} />}
-                  {copied ? "HTML Copied" : "Copy HTML"}
+                  {copied ? (t("markdownPreview.copiedHtml") || "HTML Copied") : (t("markdownPreview.copyHtml") || "Copy HTML")}
                 </button>
               </div>
               <div
@@ -112,12 +114,25 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
         </section>
 
         <ToolGuide
-          badgeText="100% Client-Side & Live"
-          aboutTitle="What is Markdown Live Preview?"
-          aboutDesc="Write and preview Markdown documents in real-time with zero server uploads."
-          howTitle="How to Use Markdown Preview"
-          steps={["1. Type Markdown on the left panel.", "2. Watch live HTML render on the right panel.", "3. Export or copy rendered HTML with one click."]}
-          faqs={[{ q: "Is Markdown parsed locally?", a: "Yes, all Markdown rendering happens 100% inside your browser." }]}
+          badgeText={t("markdownPreview.badgeText") || "100% Client-Side & Live"}
+          aboutTitle={t("markdownPreview.guide.aboutTitle") || "What is Markdown Live Preview?"}
+          aboutDesc={t("markdownPreview.guide.aboutDesc") || "Write and preview Markdown documents in real-time with zero server uploads."}
+          howTitle={t("markdownPreview.guide.howTitle") || "How to Use Markdown Live Preview"}
+          steps={[
+            t("markdownPreview.guide.step1") || "1. Type or paste your Markdown text into the left editor panel.",
+            t("markdownPreview.guide.step2") || "2. Watch the live rendered HTML preview instantly on the right panel as you type.",
+            t("markdownPreview.guide.step3") || "3. Click 'Save .md' to download your markdown file or 'Copy HTML' to copy the converted HTML code.",
+          ]}
+          faqs={[
+            {
+              q: t("markdownPreview.guide.faq1Q") || "Is my Markdown text or HTML stored on any server?",
+              a: t("markdownPreview.guide.faq1A") || "No! 100% of Markdown parsing and HTML rendering runs locally inside your browser memory.",
+            },
+            {
+              q: t("markdownPreview.guide.faq2Q") || "What Markdown syntax is supported?",
+              a: t("markdownPreview.guide.faq2A") || "It supports standard Markdown syntax including headings (#, ##, ###), text formatting (bold, italic, strikethrough), blockquotes (>), inline code, lists, and hyperlinks.",
+            },
+          ]}
         />
       </main>
       <Footer />

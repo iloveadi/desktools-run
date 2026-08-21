@@ -8,11 +8,13 @@ import {
   Braces, Binary, Link as LinkIcon, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck,
-  ChevronRight, Sparkles, TrendingUp, Hammer,
+  ChevronRight, Sparkles, TrendingUp, Hammer, Flame
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { groupToolsByCategory } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
+import { useState, useEffect } from "react";
+import { getToolUsageCount, incrementToolUsage, formatCount } from "@/lib/stats";
 
 type ToolLocale = { title: string; description: string };
 
@@ -106,6 +108,19 @@ function ToolCard({ tool }: { tool: Tool }) {
   const meta = CATEGORY_META[tool.category];
   const IconComponent = ICON_MAP[tool.icon];
 
+  const [usageCount, setUsageCount] = useState<number>(0);
+
+  useEffect(() => {
+    setUsageCount(getToolUsageCount(tool.id));
+  }, [tool.id]);
+
+  const handleRunClick = () => {
+    if (!tool.isDev) {
+      const updated = incrementToolUsage(tool.id);
+      setUsageCount(updated);
+    }
+  };
+
   const localeData = TOOL_TRANSLATIONS[tool.id]?.[locale];
   const title = localeData?.title ?? tool.title;
   const description = localeData?.description ?? tool.description;
@@ -164,10 +179,11 @@ function ToolCard({ tool }: { tool: Tool }) {
         </p>
       </div>
 
-      <div style={{ marginTop: "auto" }}>
+      <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", paddingTop: "8px" }}>
         <Link
           href={tool.href}
           id={`tool-${tool.id}`}
+          onClick={handleRunClick}
           style={{
             display: "inline-flex", alignItems: "center", gap: "5px",
             padding: "7px 14px", borderRadius: "8px", fontSize: "12.5px", fontWeight: 600,
@@ -191,6 +207,28 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.isDev ? (DEV_LABEL[locale] ?? "In Dev") : t("grid.runTool")}
           <ChevronRight size={12} />
         </Link>
+
+        {usageCount > 0 && (
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              fontSize: "11px",
+              color: "var(--text-muted)",
+              fontWeight: 500,
+              background: "var(--btn-secondary-bg)",
+              padding: "4px 8px",
+              borderRadius: "6px",
+              border: "1px solid var(--border-subtle)",
+              letterSpacing: "-0.2px",
+            }}
+            title={locale === "ko" ? `총 ${usageCount.toLocaleString()}회 이용됨` : `${usageCount.toLocaleString()} total uses`}
+          >
+            <Flame size={11} color="#f97316" />
+            <span>{formatCount(usageCount, locale)}</span>
+          </div>
+        )}
       </div>
     </div>
   );
