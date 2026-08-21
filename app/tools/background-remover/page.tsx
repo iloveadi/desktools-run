@@ -5,7 +5,7 @@
  * ─────────────────────────────────────────────────────────────
  * Browser-native AI Background Removal tool for desktools.run
  * Powered by 100% Client-Side WebAI Neural Network (@imgly/background-removal)
- * Includes Alpha Cutoff & Solidify Detail Protection Controls
+ * Features interactive Manual Touch-Up Brush (Restore & Erase)
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -16,11 +16,13 @@ import {
   ArrowLeft,
   Download,
   RotateCcw,
-  Sparkles,
   Bot,
-  Sliders,
+  Paintbrush,
+  Undo,
+  CheckCircle2,
   RefreshCw,
   ShieldCheck,
+  Zap,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -28,6 +30,7 @@ import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 type BgStyle = "transparent" | "white" | "black" | "custom";
+type BrushMode = "none" | "restore" | "erase";
 
 export default function BackgroundRemoverPage() {
   const { t } = useLocale();
@@ -39,8 +42,11 @@ export default function BackgroundRemoverPage() {
 
   const [bgStyle, setBgStyle] = useState<BgStyle>("transparent");
   const [customBgColor, setCustomBgColor] = useState<string>("#6366f1");
-  const [alphaCutoff, setAlphaCutoff] = useState<number>(15); // 1~100 (Default 15: solidifies semi-transparent object areas like laptops/legs)
-  const [solidifyEdges, setSolidifyEdges] = useState<boolean>(true);
+
+  // Touch-up Brush Controls
+  const [brushMode, setBrushMode] = useState<BrushMode>("none");
+  const [brushSize, setBrushSize] = useState<number>(30);
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   const [aiCutoutBlob, setAiCutoutBlob] = useState<Blob | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string>("");
@@ -50,6 +56,8 @@ export default function BackgroundRemoverPage() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const resultCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const originalImgElementRef = useRef<HTMLImageElement | null>(null);
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
@@ -59,6 +67,7 @@ export default function BackgroundRemoverPage() {
     setProcessedUrl("");
     setProgressPercent(0);
     setStatusMessage("");
+    setBrushMode("none");
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -69,6 +78,7 @@ export default function BackgroundRemoverPage() {
       img.onload = () => {
         setOrigWidth(img.naturalWidth);
         setOrigHeight(img.naturalHeight);
+        originalImgElementRef.current = img;
       };
       img.src = src;
     };
@@ -120,7 +130,39 @@ export default function BackgroundRemoverPage() {
     };
   }, [imageFile]);
 
-  // Render Canvas with Background Style & Alpha Cutoff Detail Protection
+  // Initial rendering of AI Cutout onto hidden working Canvas
+  const updateResultUrl = useCallback(() => {
+    if (!resultCanvasRef.current || origWidth === 0 || origHeight === 0) return;
+    const workCanvas = resultCanvasRef.current;
+
+    if (bgStyle !== "transparent") {
+      const finalCanvas = document.createElement("canvas");
+      finalCanvas.width = origWidth;
+      finalCanvas.height = origHeight;
+      const finalCtx = finalCanvas.getContext("2d");
+
+      if (finalCtx) {
+        if (bgStyle === "white") {
+          finalCtx.fillStyle = "#ffffff";
+        } else if (bgStyle === "black") {
+          finalCtx.fillStyle = "#000000";
+        } else if (bgStyle === "custom") {
+          finalCtx.fillStyle = customBgColor;
+        }
+        finalCtx.fillRect(0, 0, origWidth, origHeight);
+        finalCtx.drawImage(workCanvas, 0, 0);
+
+        finalCanvas.toBlob((finalBlob) => {
+          if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
+        }, "image/png");
+      }
+    } else {
+      workCanvas.toBlob((finalBlob) => {
+        if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
+      }, "image/png");
+    }
+  }, [bgStyle, customBgColor, origWidth, origHeight]);
+
   useEffect(() => {
     if (!aiCutoutBlob || origWidth === 0 || origHeight === 0) return;
 
@@ -134,67 +176,88 @@ export default function BackgroundRemoverPage() {
       const ctx = canvas.getContext("2d");
 
       if (ctx) {
-        // Draw AI Cutout image
         ctx.drawImage(img, 0, 0, origWidth, origHeight);
-
-        // Alpha Cutoff Pixel Enhancement (Solidify semi-transparent hand/laptop/leg pixels)
-        const imgData = ctx.getImageData(0, 0, origWidth, origHeight);
-        const data = imgData.data;
-
-        // Cutoff threshold (1 ~ 255)
-        const cutoffVal = Math.round((alphaCutoff / 100) * 255);
-
-        for (let i = 0; i < data.length; i += 4) {
-          const a = data[i + 3];
-          if (a >= cutoffVal) {
-            // Restore semi-transparent object areas to 100% solid opacity
-            data[i + 3] = 255;
-          } else {
-            // Drop background completely to 0 alpha
-            data[i + 3] = 0;
-          }
-        }
-        ctx.putImageData(imgData, 0, 0);
-
-        // Render target background style if not transparent
-        if (bgStyle !== "transparent") {
-          const finalCanvas = document.createElement("canvas");
-          finalCanvas.width = origWidth;
-          finalCanvas.height = origHeight;
-          const finalCtx = finalCanvas.getContext("2d");
-
-          if (finalCtx) {
-            if (bgStyle === "white") {
-              finalCtx.fillStyle = "#ffffff";
-            } else if (bgStyle === "black") {
-              finalCtx.fillStyle = "#000000";
-            } else if (bgStyle === "custom") {
-              finalCtx.fillStyle = customBgColor;
-            }
-            finalCtx.fillRect(0, 0, origWidth, origHeight);
-            finalCtx.drawImage(canvas, 0, 0);
-
-            finalCanvas.toBlob((finalBlob) => {
-              if (finalBlob) {
-                const url = URL.createObjectURL(finalBlob);
-                setProcessedUrl(url);
-              }
-            }, "image/png");
-          }
-        } else {
-          canvas.toBlob((finalBlob) => {
-            if (finalBlob) {
-              const url = URL.createObjectURL(finalBlob);
-              setProcessedUrl(url);
-            }
-          }, "image/png");
-        }
+        resultCanvasRef.current = canvas;
+        updateResultUrl();
       }
       URL.revokeObjectURL(cutoutUrl);
     };
 
     img.src = cutoutUrl;
-  }, [aiCutoutBlob, bgStyle, customBgColor, origWidth, origHeight, alphaCutoff, solidifyEdges]);
+  }, [aiCutoutBlob, origWidth, origHeight, updateResultUrl]);
+
+  useEffect(() => {
+    updateResultUrl();
+  }, [bgStyle, customBgColor, updateResultUrl]);
+
+  // Interactive Brush Touch-Up (Restore / Erase)
+  const applyBrushAt = (clientX: number, clientY: number, targetImgEl: HTMLImageElement) => {
+    if (brushMode === "none" || !resultCanvasRef.current || !originalImgElementRef.current) return;
+    const canvas = resultCanvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const rect = targetImgEl.getBoundingClientRect();
+    const imgRatio = origWidth / origHeight;
+    const containerRatio = rect.width / rect.height;
+
+    let renderW = rect.width;
+    let renderH = rect.height;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (containerRatio > imgRatio) {
+      renderW = rect.height * imgRatio;
+      offsetX = (rect.width - renderW) / 2;
+    } else {
+      renderH = rect.width / imgRatio;
+      offsetY = (rect.height - renderH) / 2;
+    }
+
+    const relativeX = clientX - rect.left - offsetX;
+    const relativeY = clientY - rect.top - offsetY;
+
+    if (relativeX < 0 || relativeX > renderW || relativeY < 0 || relativeY > renderH) return;
+
+    const canvasX = (relativeX / renderW) * origWidth;
+    const canvasY = (relativeY / renderH) * origHeight;
+
+    const scaledBrushRadius = (brushSize / renderW) * origWidth;
+
+    if (brushMode === "erase") {
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(canvasX, canvasY, scaledBrushRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else if (brushMode === "restore") {
+      // Restore original pixels inside circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(canvasX, canvasY, scaledBrushRadius, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(originalImgElementRef.current, 0, 0, origWidth, origHeight);
+      ctx.restore();
+    }
+
+    updateResultUrl();
+  };
+
+  const handleResultMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (brushMode === "none") return;
+    setIsDrawing(true);
+    applyBrushAt(e.clientX, e.clientY, e.currentTarget);
+  };
+
+  const handleResultMouseMove = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (!isDrawing || brushMode === "none") return;
+    applyBrushAt(e.clientX, e.clientY, e.currentTarget);
+  };
+
+  const handleResultMouseUp = () => {
+    setIsDrawing(false);
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -234,6 +297,7 @@ export default function BackgroundRemoverPage() {
     setAiCutoutBlob(null);
     setProcessedUrl("");
     setProgressPercent(0);
+    setBrushMode("none");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -381,7 +445,7 @@ export default function BackgroundRemoverPage() {
                     <div
                       style={{
                         width: "100%",
-                        height: "360px",
+                        height: "380px",
                         borderRadius: "10px",
                         overflow: "hidden",
                         background: "rgba(0,0,0,0.3)",
@@ -393,7 +457,7 @@ export default function BackgroundRemoverPage() {
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imageSrc}
-                        alt="Original image"
+                        alt="Original photo"
                         style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
                       />
                     </div>
@@ -403,7 +467,7 @@ export default function BackgroundRemoverPage() {
                     </p>
                   </div>
 
-                  {/* AI Removed Background Result */}
+                  {/* AI Removed Background Result with Touch-up Brush Canvas */}
                   <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", fontWeight: 700, color: "#f472b6", display: "flex", alignItems: "center", gap: "4px" }}>
@@ -418,7 +482,7 @@ export default function BackgroundRemoverPage() {
                     <div
                       style={{
                         width: "100%",
-                        height: "360px",
+                        height: "380px",
                         borderRadius: "10px",
                         overflow: "hidden",
                         background:
@@ -437,6 +501,7 @@ export default function BackgroundRemoverPage() {
                         alignItems: "center",
                         justifyContent: "center",
                         position: "relative",
+                        cursor: brushMode !== "none" ? "crosshair" : "default",
                       }}
                     >
                       {isProcessing ? (
@@ -468,7 +533,10 @@ export default function BackgroundRemoverPage() {
                         <img
                           src={processedUrl}
                           alt="AI Cutout Result"
-                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                          onMouseDown={handleResultMouseDown}
+                          onMouseMove={handleResultMouseMove}
+                          onMouseUp={handleResultMouseUp}
+                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", userSelect: "none" }}
                         />
                       ) : (
                         <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>Waiting for AI processing...</div>
@@ -535,29 +603,79 @@ export default function BackgroundRemoverPage() {
               {/* Sidebar Controls */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  AI Mask Tuning
+                  Touch-up & Tools
                 </h3>
 
-                {/* Subject Protection Cutoff Slider */}
+                {/* Touch-up Restoration Brush Tools */}
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--text-secondary)", marginBottom: "6px" }}>
-                    <span style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
-                      <ShieldCheck size={14} color="#f472b6" />
-                      {t("backgroundRemover.alphaCutoff")}
-                    </span>
-                    <span style={{ color: "#f472b6", fontWeight: 700 }}>{alphaCutoff}%</span>
+                  <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", display: "block", marginBottom: "8px", textTransform: "uppercase" }}>
+                    수동 터치업 브러시 (지워진 부분 살리기)
+                  </label>
+                  <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+                    <button
+                      onClick={() => setBrushMode(brushMode === "restore" ? "none" : "restore")}
+                      style={{
+                        flex: 1,
+                        padding: "10px",
+                        borderRadius: "8px",
+                        background: brushMode === "restore" ? "rgba(236,72,153,0.25)" : "rgba(255,255,255,0.05)",
+                        border: brushMode === "restore" ? "1px solid #f472b6" : "1px solid var(--border-subtle)",
+                        color: brushMode === "restore" ? "#f472b6" : "var(--text-secondary)",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <Paintbrush size={15} />
+                      복원 브러시
+                    </button>
+
+                    <button
+                      onClick={() => setBrushMode(brushMode === "erase" ? "none" : "erase")}
+                      style={{
+                        flex: 1,
+                        padding: "10px",
+                        borderRadius: "8px",
+                        background: brushMode === "erase" ? "rgba(236,72,153,0.25)" : "rgba(255,255,255,0.05)",
+                        border: brushMode === "erase" ? "1px solid #f472b6" : "1px solid var(--border-subtle)",
+                        color: brushMode === "erase" ? "#f472b6" : "var(--text-secondary)",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <Eraser size={15} />
+                      지우개 브러시
+                    </button>
                   </div>
-                  <input
-                    type="range"
-                    min={1}
-                    max={60}
-                    value={alphaCutoff}
-                    onChange={(e) => setAlphaCutoff(parseInt(e.target.value))}
-                    style={{ width: "100%", accentColor: "#ec4899", cursor: "pointer" }}
-                  />
-                  <p style={{ fontSize: "11.5px", color: "var(--text-muted)", marginTop: "4px" }}>
-                    Adjust to restore semi-transparent laptops, hands, legs & clothes.
-                  </p>
+
+                  {brushMode !== "none" && (
+                    <div style={{ padding: "12px", borderRadius: "8px", background: "rgba(236,72,153,0.08)", border: "1px solid rgba(236,72,153,0.2)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "6px" }}>
+                        <span style={{ fontWeight: 600 }}>브러시 크기</span>
+                        <span style={{ color: "#f472b6", fontWeight: 700 }}>{brushSize}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={10}
+                        max={100}
+                        value={brushSize}
+                        onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                        style={{ width: "100%", accentColor: "#ec4899", cursor: "pointer" }}
+                      />
+                      <p style={{ fontSize: "11px", color: "#f472b6", marginTop: "6px", fontWeight: 600 }}>
+                        💡 이미지 위를 드래그하여 지워진 노트북/옷을 100% 원본으로 복원하세요!
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Background Replacement Style */}
