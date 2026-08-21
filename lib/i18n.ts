@@ -369,6 +369,27 @@ export const translations: Record<Locale, Translations> = {
     "pages.changelog.subtitle": "Track recent updates, new tool releases, and engine performance improvements.",
     "pages.contact.title": "Contact Us",
     "pages.contact.subtitle": "Have a question, feedback, or bug report? Get in touch with our team.",
+    // Text Case
+    "textCase.title": "Text Case Converter",
+    "textCase.subtitle": "Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, and more.",
+    // Markdown Preview
+    "markdownPreview.title": "Markdown Live Preview",
+    "markdownPreview.subtitle": "Write Markdown text and view instant rendered HTML side-by-side.",
+    // Text Diff
+    "textDiff.title": "Text Diff Checker",
+    "textDiff.subtitle": "Compare two blocks of text and highlight line-by-line differences.",
+    // JSON Formatter
+    "jsonFormatter.title": "JSON Formatter & Validator",
+    "jsonFormatter.subtitle": "Prettify, minify, and validate JSON data with instant syntax highlighting.",
+    // Base64
+    "base64.title": "Base64 Encode & Decode",
+    "base64.subtitle": "Convert plain text or binary files to Base64 strings and back.",
+    // URL Encoder
+    "urlEncoder.title": "URL Encode & Decode",
+    "urlEncoder.subtitle": "Encode or decode special characters and parameters in URLs.",
+    // Regex Tester
+    "regexTester.title": "Regex Tester & Debugger",
+    "regexTester.subtitle": "Test regular expressions with real-time match highlighting and capture groups.",
     // PDF Compress
     "pdfCompress.title": "PDF Compress",
     "pdfCompress.subtitle": "Reduce PDF file size while maintaining visual quality—100% free and private.",
@@ -879,6 +900,27 @@ export const translations: Record<Locale, Translations> = {
     "pages.changelog.subtitle": "desktools.run의 신규 도구 출시, 성능 개선 및 버전 업데이트 히스토리입니다.",
     "pages.contact.title": "문의하기 & 피드백",
     "pages.contact.subtitle": "버그 제보, 기술 문의, 서비스 제휴 등 문의사항이 있으시면 언제든지 연락해 주세요.",
+    // Text Case
+    "textCase.title": "대소문자 / 표기법 변환기",
+    "textCase.subtitle": "영문 대문자, 소문자, Title Case, camelCase, snake_case, PascalCase 등 다양한 표기법으로 즉시 변환하세요.",
+    // Markdown Preview
+    "markdownPreview.title": "마크다운 실시간 미리보기",
+    "markdownPreview.subtitle": "마크다운 문서를 작성하면서 실시간으로 렌더링된 HTML 뷰를 듀얼 모니터링하세요.",
+    // Text Diff
+    "textDiff.title": "텍스트 차이점 비교 (Diff Checker)",
+    "textDiff.subtitle": "두 개의 텍스트를 비교하여 변경, 추가, 삭제된 문장을 실시간으로 하이라이트 비교하세요.",
+    // JSON Formatter
+    "jsonFormatter.title": "JSON 정렬 / 검증기",
+    "jsonFormatter.subtitle": "JSON 데이터를 정돈(Prettify), 압축(Minify)하고 오류 줄번호를 실시간 검증하세요.",
+    // Base64
+    "base64.title": "Base64 인코더 / 디코더",
+    "base64.subtitle": "텍스트 및 파일 데이터를 Base64 문자열로 상호 변환하세요.",
+    // URL Encoder
+    "urlEncoder.title": "URL 인코더 / 디코더",
+    "urlEncoder.subtitle": "URL 주소의 한글 및 특수문자를 안전한 인코딩 포맷으로 상호 변환하세요.",
+    // Regex Tester
+    "regexTester.title": "정규표현식(Regex) 테스터",
+    "regexTester.subtitle": "정규표현식 패턴을 입력하여 샘플 텍스트에서의 매칭 및 캡처 그룹을 실시간 테스트하세요.",
     // PDF Compress
     "pdfCompress.title": "PDF 압축 & 용량 줄이기",
     "pdfCompress.subtitle": "품질 손실을 최소화하면서 PDF 파일 용량을 획기적으로 줄여줍니다—100% 무료 및 보안 유지.",

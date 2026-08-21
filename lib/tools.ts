@@ -129,7 +129,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "CaseSensitive",
     href: "/tools/text-case",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "markdown-preview",
@@ -138,7 +138,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "Code2",
     href: "/tools/markdown-preview",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "text-diff",
@@ -147,7 +147,7 @@ export const TOOLS: Tool[] = [
     category: "Text & Formatting",
     icon: "GitCompare",
     href: "/tools/text-diff",
-    isDev: true,
+    isDev: false,
   },
 
   // ── Dev Tools ─────────────────────────────────────────────
@@ -159,7 +159,7 @@ export const TOOLS: Tool[] = [
     icon: "Braces",
     badge: "Popular",
     href: "/tools/json-formatter",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "base64",
@@ -168,7 +168,7 @@ export const TOOLS: Tool[] = [
     category: "Dev Tools",
     icon: "Binary",
     href: "/tools/base64",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "url-encoder",
@@ -177,7 +177,7 @@ export const TOOLS: Tool[] = [
     category: "Dev Tools",
     icon: "Link",
     href: "/tools/url-encoder",
-    isDev: true,
+    isDev: false,
   },
   {
     id: "regex-tester",
@@ -187,7 +187,7 @@ export const TOOLS: Tool[] = [
     icon: "Search",
     badge: "New",
     href: "/tools/regex-tester",
-    isDev: true,
+    isDev: false,
   },
 
   // ── Converter ─────────────────────────────────────────────

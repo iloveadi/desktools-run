@@ -2,7 +2,11 @@ import { TOOLS } from "@/lib/tools";
 import DevToolClient from "@/components/common/DevToolClient";
 
 export function generateStaticParams() {
-  return TOOLS.filter((t) => t.isDev).map((t) => ({ id: t.id }));
+  const devTools = TOOLS.filter((t) => t.isDev).map((t) => ({ id: t.id }));
+  if (devTools.length === 0) {
+    return [{ id: "coming-soon" }];
+  }
+  return devTools;
 }
 
 export default async function DevToolPage({ params }: { params: Promise<{ id: string }> }) {
