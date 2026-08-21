@@ -5,7 +5,7 @@
  * ─────────────────────────────────────────────────────────────
  * Browser-native AI Background Removal tool for desktools.run
  * Powered by 100% Client-Side WebAI Neural Network (@imgly/background-removal)
- * Includes Automatic AI Enclosed Hole Filling Engine for laptops/clothes
+ * Includes Automatic AI Hole Filling & Foreground Alpha Solidifier Engine
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -20,7 +20,7 @@ import {
   Bot,
   RefreshCw,
   Zap,
-  CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -39,7 +39,7 @@ export default function BackgroundRemoverPage() {
 
   const [bgStyle, setBgStyle] = useState<BgStyle>("transparent");
   const [customBgColor, setCustomBgColor] = useState<string>("#6366f1");
-  const [autoFillHoles, setAutoFillHoles] = useState<boolean>(true); // Auto fill internal holes (like laptops/clothes)
+  const [solidifySubject, setSolidifySubject] = useState<boolean>(true); // Solidify semi-transparent hand/leg areas
 
   const [aiCutoutBlob, setAiCutoutBlob] = useState<Blob | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string>("");
@@ -121,7 +121,7 @@ export default function BackgroundRemoverPage() {
     };
   }, [imageFile]);
 
-  // Process AI Cutout + Automatic Internal Hole Filling Algorithm
+  // Process AI Cutout + Automatic Foreground Alpha Solidifier Engine
   useEffect(() => {
     if (!aiCutoutBlob || origWidth === 0 || origHeight === 0 || !originalImgRef.current) return;
 
@@ -138,82 +138,87 @@ export default function BackgroundRemoverPage() {
         ctx.drawImage(img, 0, 0, origWidth, origHeight);
         const imgData = ctx.getImageData(0, 0, origWidth, origHeight);
         const data = imgData.data;
+        const totalPixels = origWidth * origHeight;
 
-        // Automatic AI Enclosed Hole Filling Engine
-        if (autoFillHoles) {
-          const totalPixels = origWidth * origHeight;
-          const isOuterBg = new Uint8Array(totalPixels);
-          const queue: number[] = [];
+        // 1. Mark outer image edges as seed background pixels (Flood Fill)
+        const isOuterBg = new Uint8Array(totalPixels);
+        const queue: number[] = [];
 
-          // 1. Mark outer image edges as seed background pixels
-          for (let x = 0; x < origWidth; x++) {
-            const topIdx = x;
-            const botIdx = (origHeight - 1) * origWidth + x;
-            if (data[topIdx * 4 + 3] < 128) {
-              isOuterBg[topIdx] = 1;
-              queue.push(topIdx);
-            }
-            if (data[botIdx * 4 + 3] < 128) {
-              isOuterBg[botIdx] = 1;
-              queue.push(botIdx);
-            }
+        // Check top & bottom outer borders
+        for (let x = 0; x < origWidth; x++) {
+          const topIdx = x;
+          const botIdx = (origHeight - 1) * origWidth + x;
+          if (data[topIdx * 4 + 3] < 100) {
+            isOuterBg[topIdx] = 1;
+            queue.push(topIdx);
           }
-
-          for (let y = 0; y < origHeight; y++) {
-            const leftIdx = y * origWidth;
-            const rightIdx = y * origWidth + (origWidth - 1);
-            if (data[leftIdx * 4 + 3] < 128 && !isOuterBg[leftIdx]) {
-              isOuterBg[leftIdx] = 1;
-              queue.push(leftIdx);
-            }
-            if (data[rightIdx * 4 + 3] < 128 && !isOuterBg[rightIdx]) {
-              isOuterBg[rightIdx] = 1;
-              queue.push(rightIdx);
-            }
+          if (data[botIdx * 4 + 3] < 100) {
+            isOuterBg[botIdx] = 1;
+            queue.push(botIdx);
           }
+        }
 
-          // 2. BFS to flood fill true outer background
-          let head = 0;
-          while (head < queue.length) {
-            const curr = queue[head++];
-            const px = curr % origWidth;
-            const py = Math.floor(curr / origWidth);
+        // Check left & right outer borders
+        for (let y = 0; y < origHeight; y++) {
+          const leftIdx = y * origWidth;
+          const rightIdx = y * origWidth + (origWidth - 1);
+          if (data[leftIdx * 4 + 3] < 100 && !isOuterBg[leftIdx]) {
+            isOuterBg[leftIdx] = 1;
+            queue.push(leftIdx);
+          }
+          if (data[rightIdx * 4 + 3] < 100 && !isOuterBg[rightIdx]) {
+            isOuterBg[rightIdx] = 1;
+            queue.push(rightIdx);
+          }
+        }
 
-            const neighbors = [
-              [px + 1, py],
-              [px - 1, py],
-              [px, py + 1],
-              [px, py - 1],
-            ];
+        // BFS to flood fill true outer background
+        let head = 0;
+        while (head < queue.length) {
+          const curr = queue[head++];
+          const px = curr % origWidth;
+          const py = Math.floor(curr / origWidth);
 
-            for (const [nx, ny] of neighbors) {
-              if (nx >= 0 && nx < origWidth && ny >= 0 && ny < origHeight) {
-                const nIdx = ny * origWidth + nx;
-                if (!isOuterBg[nIdx] && data[nIdx * 4 + 3] < 128) {
-                  isOuterBg[nIdx] = 1;
-                  queue.push(nIdx);
-                }
+          const neighbors = [
+            [px + 1, py],
+            [px - 1, py],
+            [px, py + 1],
+            [px, py - 1],
+          ];
+
+          for (const [nx, ny] of neighbors) {
+            if (nx >= 0 && nx < origWidth && ny >= 0 && ny < origHeight) {
+              const nIdx = ny * origWidth + nx;
+              if (!isOuterBg[nIdx] && data[nIdx * 4 + 3] < 100) {
+                isOuterBg[nIdx] = 1;
+                queue.push(nIdx);
               }
             }
           }
+        }
 
-          // 3. Fill enclosed holes (laptops, clothes reflections) with original image pixels!
+        // 2. Foreground Solidifier: Fill all non-outer background pixels with 100% solid original image!
+        if (solidifySubject) {
           const origCanvas = document.createElement("canvas");
           origCanvas.width = origWidth;
           origCanvas.height = origHeight;
           const origCtx = origCanvas.getContext("2d");
+
           if (origCtx && originalImgRef.current) {
             origCtx.drawImage(originalImgRef.current, 0, 0);
             const origData = origCtx.getImageData(0, 0, origWidth, origHeight).data;
 
             for (let i = 0; i < totalPixels; i++) {
+              const idx = i * 4;
               if (!isOuterBg[i]) {
-                const idx = i * 4;
-                // Restore original RGB and set full opacity 255
+                // Restore 100% solid original pixels for hands, legs, clothes & laptop!
                 data[idx] = origData[idx];
                 data[idx + 1] = origData[idx + 1];
                 data[idx + 2] = origData[idx + 2];
                 data[idx + 3] = 255;
+              } else {
+                // Ensure true background is fully 0 transparent
+                data[idx + 3] = 0;
               }
             }
           }
@@ -253,7 +258,7 @@ export default function BackgroundRemoverPage() {
     };
 
     img.src = cutoutUrl;
-  }, [aiCutoutBlob, origWidth, origHeight, bgStyle, customBgColor, autoFillHoles]);
+  }, [aiCutoutBlob, origWidth, origHeight, bgStyle, customBgColor, solidifySubject]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -594,25 +599,25 @@ export default function BackgroundRemoverPage() {
               {/* Sidebar Controls */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  AI Background Options
+                  AI Enhancement Options
                 </h3>
 
-                {/* Automatic AI Hole Filling Toggle */}
+                {/* Foreground Solidifier Toggle */}
                 <div style={{ padding: "14px", borderRadius: "10px", background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.25)" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
                     <span style={{ fontSize: "13px", fontWeight: 700, color: "#f472b6", display: "flex", alignItems: "center", gap: "6px" }}>
-                      <Zap size={15} />
-                      피사체 내부 구멍 자동 보원 (AI)
+                      <ShieldCheck size={15} />
+                      손·다리 피사체 영역 100% 또렷하게 보존
                     </span>
                     <input
                       type="checkbox"
-                      checked={autoFillHoles}
-                      onChange={(e) => setAutoFillHoles(e.target.checked)}
+                      checked={solidifySubject}
+                      onChange={(e) => setSolidifySubject(e.target.checked)}
                       style={{ accentColor: "#ec4899", cursor: "pointer", width: "16px", height: "16px" }}
                     />
                   </div>
                   <p style={{ fontSize: "11.5px", color: "var(--text-muted)", lineHeight: 1.4 }}>
-                    노트북 광택이나 옷 내부 등 피사체 속에 발생하는 불필요한 구멍을 100% 인공지능으로 자동 복원합니다.
+                    손, 무릎, 바지 등 하단 영역이 반투명하게 투명해지지 않고 100% 또렷하고 불투명하게 완전 보존됩니다.
                   </p>
                 </div>
 
