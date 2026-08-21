@@ -74,7 +74,7 @@ export const TOOLS: Tool[] = [
     category: "PDF Tools",
     icon: "FileText",
     href: "/tools/pdf-to-word",
-    isDev: true,
+    isDev: false,
   },
 
   // ── Image Tools ───────────────────────────────────────────
