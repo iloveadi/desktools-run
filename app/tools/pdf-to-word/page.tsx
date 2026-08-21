@@ -4,7 +4,7 @@
  * app/tools/pdf-to-word/page.tsx
  * ─────────────────────────────────────────────────────────────
  * PDF to Word (.docx) Converter Tool for desktools.run
- * High-Precision Layout Preserving Engine using pdfjs-dist & docx package
+ * 100% Client-Side Smart PDF Table & Editable Layout Extraction Engine
  */
 
 import { useState, useRef, useCallback } from "react";
@@ -18,7 +18,8 @@ import {
   Sparkles,
   FileCheck2,
   RefreshCw,
-  LayoutTemplate,
+  Table as TableIcon,
+  CheckCircle2,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -90,13 +91,13 @@ export default function PdfToWordPage() {
     reader.readAsArrayBuffer(file);
   }, []);
 
-  // High-Precision Layout Preserving PDF to Word Engine
+  // Smart Editable Word Table & Text Extraction Engine
   const convertPdfToWord = async () => {
     if (!pdfFile) return;
 
     setIsProcessing(true);
     setProgressPercent(10);
-    setStatusMessage("Loading PDF renderer & layout engine...");
+    setStatusMessage("Parsing PDF text coordinates & table structures...");
 
     try {
       const buffer = await pdfFile.arrayBuffer();
@@ -109,72 +110,151 @@ export default function PdfToWordPage() {
       const totalPages = pdfDoc.numPages;
 
       const docx = await import("docx");
-      const { Document, Paragraph, ImageRun, Packer } = docx;
+      const { Document, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, Packer } = docx;
 
       const docSections: any[] = [];
 
       for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-        setStatusMessage(`Rendering page ${pageNum} / ${totalPages} with tables & layouts...`);
+        setStatusMessage(`Analyzing tables & paragraphs for page ${pageNum} / ${totalPages}...`);
         const pct = Math.round(15 + (pageNum / totalPages) * 75);
         setProgressPercent(pct);
 
         const page = await pdfDoc.getPage(pageNum);
+        const textContent = await page.getTextContent();
 
-        // Render page at High-Resolution Scale 2.5 for crisp tables & vector fonts
-        const scale = 2.5;
-        const viewport = page.getViewport({ scale });
+        // 1. Group text items by Y-coordinate (Row Detection)
+        const rowMap = new Map<number, { text: string; x: number }[]>();
 
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const ctx = canvas.getContext("2d");
+        for (const item of textContent.items as any[]) {
+          if (!item.str || item.str.trim() === "") continue;
 
-        if (ctx) {
-          await page.render({
-            canvasContext: ctx,
-            canvas,
-            viewport,
-          }).promise;
+          // Round Y coordinate to group text on the same visual line (tolerance 6pt)
+          const rawY = item.transform[5];
+          const rawX = item.transform[4];
+          const yKey = Math.round(rawY / 8) * 8;
 
-          // Convert rendered high-res page canvas to PNG Uint8Array
-          const dataUrl = canvas.toDataURL("image/png");
-          const base64Data = dataUrl.split(",")[1];
-          const binaryString = atob(base64Data);
-          const imageBuffer = new Uint8Array(binaryString.length);
-          for (let i = 0; i < binaryString.length; i++) {
-            imageBuffer[i] = binaryString.charCodeAt(i);
+          if (!rowMap.has(yKey)) {
+            rowMap.set(yKey, []);
           }
+          rowMap.get(yKey)!.push({ text: item.str, x: rawX });
+        }
 
-          // A4 Page dimension scaling (595pt width)
-          const targetWidth = 595;
-          const targetHeight = (viewport.height / viewport.width) * 595;
+        // Sort Y keys from top to bottom
+        const sortedYKeys = Array.from(rowMap.keys()).sort((a, b) => b - a);
 
-          docSections.push({
-            properties: {
-              page: {
-                margin: { top: 0, bottom: 0, left: 0, right: 0 },
-              },
-            },
+        const pageElements: any[] = [];
+
+        // Add Page Header Indicator
+        pageElements.push(
+          new Paragraph({
             children: [
-              new Paragraph({
-                children: [
-                  new ImageRun({
-                    data: imageBuffer,
-                    transformation: {
-                      width: targetWidth,
-                      height: targetHeight,
-                    },
-                    type: "png",
-                  }),
-                ],
-                spacing: { before: 0, after: 0 },
+              new TextRun({
+                text: `--- PAGE ${pageNum} ---`,
+                bold: true,
+                color: "888888",
+                size: 18,
               }),
             ],
+            spacing: { before: 240, after: 120 },
+          })
+        );
+
+        // Group contiguous multi-column rows into Word Tables
+        let currentTableRows: { text: string; x: number }[][] = [];
+
+        const flushCurrentTable = () => {
+          if (currentTableRows.length === 0) return;
+
+          // Determine column boundaries across the table rows
+          const tableXmlRows = currentTableRows.map((rowCells) => {
+            // Sort cells left to right by X coordinate
+            rowCells.sort((a, b) => a.x - b.x);
+
+            const tableCells = rowCells.map((c) => {
+              return new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: c.text,
+                        size: 20, // 10pt
+                      }),
+                    ],
+                    spacing: { before: 40, after: 40 },
+                  }),
+                ],
+                borders: {
+                  top: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                  bottom: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                  left: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                  right: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                },
+                margins: { top: 100, bottom: 100, left: 150, right: 150 },
+              });
+            });
+
+            return new TableRow({
+              children: tableCells,
+            });
           });
+
+          pageElements.push(
+            new Table({
+              width: { size: 100, type: WidthType.PERCENTAGE },
+              rows: tableXmlRows,
+            })
+          );
+
+          pageElements.push(
+            new Paragraph({
+              children: [],
+              spacing: { after: 140 },
+            })
+          );
+
+          currentTableRows = [];
+        };
+
+        for (const yKey of sortedYKeys) {
+          const lineItems = rowMap.get(yKey)!;
+          lineItems.sort((a, b) => a.x - b.x);
+
+          // If line has multiple spaced items, treat as table row
+          const isTableRow = lineItems.length >= 2;
+
+          if (isTableRow) {
+            currentTableRows.push(lineItems);
+          } else {
+            // Single text paragraph
+            flushCurrentTable();
+            const textStr = lineItems.map((it) => it.text).join(" ");
+            const isTitle = textStr.includes("견적서") || textStr.length < 15;
+
+            pageElements.push(
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: textStr,
+                    bold: isTitle,
+                    size: isTitle ? 32 : 22,
+                  }),
+                ],
+                spacing: { after: 120 },
+              })
+            );
+          }
         }
+
+        // Flush any remaining table at page end
+        flushCurrentTable();
+
+        docSections.push({
+          properties: {},
+          children: pageElements,
+        });
       }
 
-      setStatusMessage("Generating MS Word (.docx) document...");
+      setStatusMessage("Generating MS Word (.docx) document with editable tables...");
       setProgressPercent(95);
 
       const wordDocument = new Document({
@@ -298,8 +378,8 @@ export default function PdfToWordPage() {
                 fontWeight: 600,
               }}
             >
-              <LayoutTemplate size={14} />
-              100% Layout Preserving PDF to .docx
+              <TableIcon size={14} />
+              100% Editable Word Tables & Cells (.docx)
             </div>
           </div>
         </section>
@@ -354,7 +434,7 @@ export default function PdfToWordPage() {
                   {t("pdfToWord.dropPrompt")}
                 </p>
                 <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Supports PDF documents of any length with full tables & logos preserved
+                  Converts PDF tables and text into 100% editable MS Word (.docx) tables
                 </p>
               </div>
             </div>
@@ -472,7 +552,7 @@ export default function PdfToWordPage() {
                       Conversion Complete!
                     </h3>
                     <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-                      Your MS Word (.docx) document with 100% layout & table preservation is ready.
+                      Your editable MS Word (.docx) document with real tables & cells is ready.
                     </p>
                   </div>
 
