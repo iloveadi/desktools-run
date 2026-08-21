@@ -5,7 +5,7 @@
  * ─────────────────────────────────────────────────────────────
  * Browser-native AI Background Removal tool for desktools.run
  * Powered by 100% Client-Side WebAI Neural Network (@imgly/background-removal)
- * Features interactive Manual Touch-Up Brush (Restore & Erase)
+ * Includes Automatic AI Enclosed Hole Filling Engine for laptops/clothes
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -16,13 +16,11 @@ import {
   ArrowLeft,
   Download,
   RotateCcw,
+  Sparkles,
   Bot,
-  Paintbrush,
-  Undo,
-  CheckCircle2,
   RefreshCw,
-  ShieldCheck,
   Zap,
+  CheckCircle2,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -30,7 +28,6 @@ import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 type BgStyle = "transparent" | "white" | "black" | "custom";
-type BrushMode = "none" | "restore" | "erase";
 
 export default function BackgroundRemoverPage() {
   const { t } = useLocale();
@@ -42,11 +39,7 @@ export default function BackgroundRemoverPage() {
 
   const [bgStyle, setBgStyle] = useState<BgStyle>("transparent");
   const [customBgColor, setCustomBgColor] = useState<string>("#6366f1");
-
-  // Touch-up Brush Controls
-  const [brushMode, setBrushMode] = useState<BrushMode>("none");
-  const [brushSize, setBrushSize] = useState<number>(30);
-  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [autoFillHoles, setAutoFillHoles] = useState<boolean>(true); // Auto fill internal holes (like laptops/clothes)
 
   const [aiCutoutBlob, setAiCutoutBlob] = useState<Blob | null>(null);
   const [processedUrl, setProcessedUrl] = useState<string>("");
@@ -56,8 +49,7 @@ export default function BackgroundRemoverPage() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const resultCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const originalImgElementRef = useRef<HTMLImageElement | null>(null);
+  const originalImgRef = useRef<HTMLImageElement | null>(null);
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
@@ -67,7 +59,6 @@ export default function BackgroundRemoverPage() {
     setProcessedUrl("");
     setProgressPercent(0);
     setStatusMessage("");
-    setBrushMode("none");
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -78,7 +69,7 @@ export default function BackgroundRemoverPage() {
       img.onload = () => {
         setOrigWidth(img.naturalWidth);
         setOrigHeight(img.naturalHeight);
-        originalImgElementRef.current = img;
+        originalImgRef.current = img;
       };
       img.src = src;
     };
@@ -130,41 +121,9 @@ export default function BackgroundRemoverPage() {
     };
   }, [imageFile]);
 
-  // Initial rendering of AI Cutout onto hidden working Canvas
-  const updateResultUrl = useCallback(() => {
-    if (!resultCanvasRef.current || origWidth === 0 || origHeight === 0) return;
-    const workCanvas = resultCanvasRef.current;
-
-    if (bgStyle !== "transparent") {
-      const finalCanvas = document.createElement("canvas");
-      finalCanvas.width = origWidth;
-      finalCanvas.height = origHeight;
-      const finalCtx = finalCanvas.getContext("2d");
-
-      if (finalCtx) {
-        if (bgStyle === "white") {
-          finalCtx.fillStyle = "#ffffff";
-        } else if (bgStyle === "black") {
-          finalCtx.fillStyle = "#000000";
-        } else if (bgStyle === "custom") {
-          finalCtx.fillStyle = customBgColor;
-        }
-        finalCtx.fillRect(0, 0, origWidth, origHeight);
-        finalCtx.drawImage(workCanvas, 0, 0);
-
-        finalCanvas.toBlob((finalBlob) => {
-          if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
-        }, "image/png");
-      }
-    } else {
-      workCanvas.toBlob((finalBlob) => {
-        if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
-      }, "image/png");
-    }
-  }, [bgStyle, customBgColor, origWidth, origHeight]);
-
+  // Process AI Cutout + Automatic Internal Hole Filling Algorithm
   useEffect(() => {
-    if (!aiCutoutBlob || origWidth === 0 || origHeight === 0) return;
+    if (!aiCutoutBlob || origWidth === 0 || origHeight === 0 || !originalImgRef.current) return;
 
     const img = new Image();
     const cutoutUrl = URL.createObjectURL(aiCutoutBlob);
@@ -177,87 +136,124 @@ export default function BackgroundRemoverPage() {
 
       if (ctx) {
         ctx.drawImage(img, 0, 0, origWidth, origHeight);
-        resultCanvasRef.current = canvas;
-        updateResultUrl();
+        const imgData = ctx.getImageData(0, 0, origWidth, origHeight);
+        const data = imgData.data;
+
+        // Automatic AI Enclosed Hole Filling Engine
+        if (autoFillHoles) {
+          const totalPixels = origWidth * origHeight;
+          const isOuterBg = new Uint8Array(totalPixels);
+          const queue: number[] = [];
+
+          // 1. Mark outer image edges as seed background pixels
+          for (let x = 0; x < origWidth; x++) {
+            const topIdx = x;
+            const botIdx = (origHeight - 1) * origWidth + x;
+            if (data[topIdx * 4 + 3] < 128) {
+              isOuterBg[topIdx] = 1;
+              queue.push(topIdx);
+            }
+            if (data[botIdx * 4 + 3] < 128) {
+              isOuterBg[botIdx] = 1;
+              queue.push(botIdx);
+            }
+          }
+
+          for (let y = 0; y < origHeight; y++) {
+            const leftIdx = y * origWidth;
+            const rightIdx = y * origWidth + (origWidth - 1);
+            if (data[leftIdx * 4 + 3] < 128 && !isOuterBg[leftIdx]) {
+              isOuterBg[leftIdx] = 1;
+              queue.push(leftIdx);
+            }
+            if (data[rightIdx * 4 + 3] < 128 && !isOuterBg[rightIdx]) {
+              isOuterBg[rightIdx] = 1;
+              queue.push(rightIdx);
+            }
+          }
+
+          // 2. BFS to flood fill true outer background
+          let head = 0;
+          while (head < queue.length) {
+            const curr = queue[head++];
+            const px = curr % origWidth;
+            const py = Math.floor(curr / origWidth);
+
+            const neighbors = [
+              [px + 1, py],
+              [px - 1, py],
+              [px, py + 1],
+              [px, py - 1],
+            ];
+
+            for (const [nx, ny] of neighbors) {
+              if (nx >= 0 && nx < origWidth && ny >= 0 && ny < origHeight) {
+                const nIdx = ny * origWidth + nx;
+                if (!isOuterBg[nIdx] && data[nIdx * 4 + 3] < 128) {
+                  isOuterBg[nIdx] = 1;
+                  queue.push(nIdx);
+                }
+              }
+            }
+          }
+
+          // 3. Fill enclosed holes (laptops, clothes reflections) with original image pixels!
+          const origCanvas = document.createElement("canvas");
+          origCanvas.width = origWidth;
+          origCanvas.height = origHeight;
+          const origCtx = origCanvas.getContext("2d");
+          if (origCtx && originalImgRef.current) {
+            origCtx.drawImage(originalImgRef.current, 0, 0);
+            const origData = origCtx.getImageData(0, 0, origWidth, origHeight).data;
+
+            for (let i = 0; i < totalPixels; i++) {
+              if (!isOuterBg[i]) {
+                const idx = i * 4;
+                // Restore original RGB and set full opacity 255
+                data[idx] = origData[idx];
+                data[idx + 1] = origData[idx + 1];
+                data[idx + 2] = origData[idx + 2];
+                data[idx + 3] = 255;
+              }
+            }
+          }
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+
+        // Apply background style
+        if (bgStyle !== "transparent") {
+          const finalCanvas = document.createElement("canvas");
+          finalCanvas.width = origWidth;
+          finalCanvas.height = origHeight;
+          const finalCtx = finalCanvas.getContext("2d");
+
+          if (finalCtx) {
+            if (bgStyle === "white") {
+              finalCtx.fillStyle = "#ffffff";
+            } else if (bgStyle === "black") {
+              finalCtx.fillStyle = "#000000";
+            } else if (bgStyle === "custom") {
+              finalCtx.fillStyle = customBgColor;
+            }
+            finalCtx.fillRect(0, 0, origWidth, origHeight);
+            finalCtx.drawImage(canvas, 0, 0);
+
+            finalCanvas.toBlob((finalBlob) => {
+              if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
+            }, "image/png");
+          }
+        } else {
+          canvas.toBlob((finalBlob) => {
+            if (finalBlob) setProcessedUrl(URL.createObjectURL(finalBlob));
+          }, "image/png");
+        }
       }
       URL.revokeObjectURL(cutoutUrl);
     };
 
     img.src = cutoutUrl;
-  }, [aiCutoutBlob, origWidth, origHeight, updateResultUrl]);
-
-  useEffect(() => {
-    updateResultUrl();
-  }, [bgStyle, customBgColor, updateResultUrl]);
-
-  // Interactive Brush Touch-Up (Restore / Erase)
-  const applyBrushAt = (clientX: number, clientY: number, targetImgEl: HTMLImageElement) => {
-    if (brushMode === "none" || !resultCanvasRef.current || !originalImgElementRef.current) return;
-    const canvas = resultCanvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const rect = targetImgEl.getBoundingClientRect();
-    const imgRatio = origWidth / origHeight;
-    const containerRatio = rect.width / rect.height;
-
-    let renderW = rect.width;
-    let renderH = rect.height;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    if (containerRatio > imgRatio) {
-      renderW = rect.height * imgRatio;
-      offsetX = (rect.width - renderW) / 2;
-    } else {
-      renderH = rect.width / imgRatio;
-      offsetY = (rect.height - renderH) / 2;
-    }
-
-    const relativeX = clientX - rect.left - offsetX;
-    const relativeY = clientY - rect.top - offsetY;
-
-    if (relativeX < 0 || relativeX > renderW || relativeY < 0 || relativeY > renderH) return;
-
-    const canvasX = (relativeX / renderW) * origWidth;
-    const canvasY = (relativeY / renderH) * origHeight;
-
-    const scaledBrushRadius = (brushSize / renderW) * origWidth;
-
-    if (brushMode === "erase") {
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      ctx.arc(canvasX, canvasY, scaledBrushRadius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    } else if (brushMode === "restore") {
-      // Restore original pixels inside circle
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(canvasX, canvasY, scaledBrushRadius, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(originalImgElementRef.current, 0, 0, origWidth, origHeight);
-      ctx.restore();
-    }
-
-    updateResultUrl();
-  };
-
-  const handleResultMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
-    if (brushMode === "none") return;
-    setIsDrawing(true);
-    applyBrushAt(e.clientX, e.clientY, e.currentTarget);
-  };
-
-  const handleResultMouseMove = (e: React.MouseEvent<HTMLImageElement>) => {
-    if (!isDrawing || brushMode === "none") return;
-    applyBrushAt(e.clientX, e.clientY, e.currentTarget);
-  };
-
-  const handleResultMouseUp = () => {
-    setIsDrawing(false);
-  };
+  }, [aiCutoutBlob, origWidth, origHeight, bgStyle, customBgColor, autoFillHoles]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -297,7 +293,6 @@ export default function BackgroundRemoverPage() {
     setAiCutoutBlob(null);
     setProcessedUrl("");
     setProgressPercent(0);
-    setBrushMode("none");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -467,7 +462,7 @@ export default function BackgroundRemoverPage() {
                     </p>
                   </div>
 
-                  {/* AI Removed Background Result with Touch-up Brush Canvas */}
+                  {/* AI Removed Background Result */}
                   <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "13px", fontWeight: 700, color: "#f472b6", display: "flex", alignItems: "center", gap: "4px" }}>
@@ -501,7 +496,6 @@ export default function BackgroundRemoverPage() {
                         alignItems: "center",
                         justifyContent: "center",
                         position: "relative",
-                        cursor: brushMode !== "none" ? "crosshair" : "default",
                       }}
                     >
                       {isProcessing ? (
@@ -533,10 +527,7 @@ export default function BackgroundRemoverPage() {
                         <img
                           src={processedUrl}
                           alt="AI Cutout Result"
-                          onMouseDown={handleResultMouseDown}
-                          onMouseMove={handleResultMouseMove}
-                          onMouseUp={handleResultMouseUp}
-                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", userSelect: "none" }}
+                          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
                         />
                       ) : (
                         <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>Waiting for AI processing...</div>
@@ -603,79 +594,26 @@ export default function BackgroundRemoverPage() {
               {/* Sidebar Controls */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  Touch-up & Tools
+                  AI Background Options
                 </h3>
 
-                {/* Touch-up Restoration Brush Tools */}
-                <div>
-                  <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", display: "block", marginBottom: "8px", textTransform: "uppercase" }}>
-                    수동 터치업 브러시 (지워진 부분 살리기)
-                  </label>
-                  <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-                    <button
-                      onClick={() => setBrushMode(brushMode === "restore" ? "none" : "restore")}
-                      style={{
-                        flex: 1,
-                        padding: "10px",
-                        borderRadius: "8px",
-                        background: brushMode === "restore" ? "rgba(236,72,153,0.25)" : "rgba(255,255,255,0.05)",
-                        border: brushMode === "restore" ? "1px solid #f472b6" : "1px solid var(--border-subtle)",
-                        color: brushMode === "restore" ? "#f472b6" : "var(--text-secondary)",
-                        fontSize: "12px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "6px",
-                      }}
-                    >
-                      <Paintbrush size={15} />
-                      복원 브러시
-                    </button>
-
-                    <button
-                      onClick={() => setBrushMode(brushMode === "erase" ? "none" : "erase")}
-                      style={{
-                        flex: 1,
-                        padding: "10px",
-                        borderRadius: "8px",
-                        background: brushMode === "erase" ? "rgba(236,72,153,0.25)" : "rgba(255,255,255,0.05)",
-                        border: brushMode === "erase" ? "1px solid #f472b6" : "1px solid var(--border-subtle)",
-                        color: brushMode === "erase" ? "#f472b6" : "var(--text-secondary)",
-                        fontSize: "12px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "6px",
-                      }}
-                    >
-                      <Eraser size={15} />
-                      지우개 브러시
-                    </button>
+                {/* Automatic AI Hole Filling Toggle */}
+                <div style={{ padding: "14px", borderRadius: "10px", background: "rgba(236,72,153,0.1)", border: "1px solid rgba(236,72,153,0.25)" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#f472b6", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <Zap size={15} />
+                      피사체 내부 구멍 자동 보원 (AI)
+                    </span>
+                    <input
+                      type="checkbox"
+                      checked={autoFillHoles}
+                      onChange={(e) => setAutoFillHoles(e.target.checked)}
+                      style={{ accentColor: "#ec4899", cursor: "pointer", width: "16px", height: "16px" }}
+                    />
                   </div>
-
-                  {brushMode !== "none" && (
-                    <div style={{ padding: "12px", borderRadius: "8px", background: "rgba(236,72,153,0.08)", border: "1px solid rgba(236,72,153,0.2)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "6px" }}>
-                        <span style={{ fontWeight: 600 }}>브러시 크기</span>
-                        <span style={{ color: "#f472b6", fontWeight: 700 }}>{brushSize}px</span>
-                      </div>
-                      <input
-                        type="range"
-                        min={10}
-                        max={100}
-                        value={brushSize}
-                        onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                        style={{ width: "100%", accentColor: "#ec4899", cursor: "pointer" }}
-                      />
-                      <p style={{ fontSize: "11px", color: "#f472b6", marginTop: "6px", fontWeight: 600 }}>
-                        💡 이미지 위를 드래그하여 지워진 노트북/옷을 100% 원본으로 복원하세요!
-                      </p>
-                    </div>
-                  )}
+                  <p style={{ fontSize: "11.5px", color: "var(--text-muted)", lineHeight: 1.4 }}>
+                    노트북 광택이나 옷 내부 등 피사체 속에 발생하는 불필요한 구멍을 100% 인공지능으로 자동 복원합니다.
+                  </p>
                 </div>
 
                 {/* Background Replacement Style */}
