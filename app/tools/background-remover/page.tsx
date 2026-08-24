@@ -322,7 +322,7 @@ export default function BackgroundRemoverPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("backgroundRemover.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -367,7 +367,7 @@ export default function BackgroundRemoverPage() {
               }}
             >
               <Bot size={14} />
-              100% Client-Side Web AI Neural Net
+              {t("backgroundRemover.badge")}
             </div>
           </div>
         </section>
@@ -422,7 +422,7 @@ export default function BackgroundRemoverPage() {
                   {t("backgroundRemover.dropPrompt")}
                 </p>
                 <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Supports PNG, JPG, WEBP, BMP (Automatic AI Subject Segmentation)
+                  {t("backgroundRemover.dropDesc")}
                 </p>
               </div>
             </div>
@@ -692,7 +692,7 @@ export default function BackgroundRemoverPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────── */}
         <ToolGuide
-          badgeText="100% Client-Side Web AI"
+          badgeText={t("backgroundRemover.guideBadge")}
           aboutTitle={t("backgroundRemover.guide.aboutTitle")}
           aboutDesc={t("backgroundRemover.guide.aboutDesc")}
           howTitle={t("backgroundRemover.guide.howTitle")}
