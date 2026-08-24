@@ -268,7 +268,7 @@ export default function ImageCompressPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("imageCompress.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -313,7 +313,7 @@ export default function ImageCompressPage() {
               }}
             >
               <Sparkles size={12} />
-              100% Client-Side Smart Compression
+              {t("imageCompress.badge")}
             </div>
           </div>
         </section>
@@ -512,7 +512,7 @@ export default function ImageCompressPage() {
                     {t("imageCompress.dropPrompt")}
                   </p>
                   <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                    Supports PNG, JPG, WEBP, GIF, BMP (Batch upload & compression)
+                    {t("imageCompress.dropDesc")}
                   </p>
                 </div>
               </div>
@@ -541,7 +541,7 @@ export default function ImageCompressPage() {
                     }}
                   >
                     <Upload size={13} />
-                    Add More Images
+                    {t("imageCompress.addMore")}
                   </button>
                 </div>
 
@@ -697,7 +697,7 @@ export default function ImageCompressPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────── */}
         <ToolGuide
-          badgeText="100% Client-Side & Private"
+          badgeText={t("imageCompress.guideBadge")}
           aboutTitle={t("imageCompress.guide.aboutTitle")}
           aboutDesc={t("imageCompress.guide.aboutDesc")}
           howTitle={t("imageCompress.guide.howTitle")}
