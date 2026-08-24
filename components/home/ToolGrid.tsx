@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import {
-  FilePlus2, Scissors, FileArchive, FileText,
-  Scaling, RefreshCw, Minimize2, Sparkles,
+  FilePlus2, Scissors, FolderArchive, FileText,
+  Maximize2, RefreshCw, Minimize2, Wand2,
   Type, Eye, Code2, GitCompare,
   Braces, Binary, Link2, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
-  ChevronRight, TrendingUp, Hammer, Flame
+  ChevronRight, TrendingUp, Hammer, Flame, Sparkles
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { TOOLS, groupToolsByCategory } from "@/lib/tools";
@@ -48,7 +48,7 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
 
   // Converter & Security
   "unit-converter":    { en: { title: "Unit Converter", description: "Convert length, weight, temperature, area, volume, and speed." }, ko: { title: "단위 변환기", description: "길이, 무게, 온도, 넓이, 부피, 속도 등 다양한 단위를 즉시 변환합니다." }, ja: { title: "単位変換ツール", description: "長さ、重さ、温度、面積などを即座に相互変換します。" }, es: { title: "Convertidor de Unidades", description: "Convierte longitud, peso, temperatura y mas al instante." }, zh: { title: "多功能单位转换", description: "长度、重量、温度、面积等多维度单位换算。" }, fr: { title: "Convertisseur d'Unités", description: "Convertissez longueur, poids, température et plus." } },
-  "color-converter":   { en: { title: "Color Converter & Picker", description: "Convert between HEX, RGB, HSL, HSV, and CMYK color codes." }, ko: { title: "색상 변환기 & 피커", description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 상호 변환합니다." }, ja: { title: "カラー変換＆ピッカー", description: "HEX、RGB、HSL、HSVコードを即座に相互変換。" }, es: { title: "Convertidor de Color", description: "Convierte entre formatos de color HEX, RGB y HSL." }, zh: { title: "颜色格式转换与拾色器", description: "HEX、RGB、HSL、HSV 颜色代码相互转换。" }, fr: { title: "Convertisseur de Couleur", description: "Convertissez entre les formats HEX, RGB et HSL." } },
+  "color-converter":   { en: { title: "Color Converter & Picker", description: "Convert between HEX, RGB, HSL, HSV, and CMYK color codes." }, ko: { title: "색상 변환기 & 피커", description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 상호 변환합니다." }, ja: { title: "カラー変換＆ピッカー", description: "HEX、RGB、HSL、HSVコード를 즉시 상호변환." }, es: { title: "Convertidor de Color", description: "Convierte entre formatos de color HEX, RGB y HSL." }, zh: { title: "颜色格式转换与拾色器", description: "HEX、RGB、HSL、HSV 颜色代码相互转换。" }, fr: { title: "Convertisseur de Couleur", description: "Convertissez entre les formats HEX, RGB et HSL." } },
   "csv-to-json":       { en: { title: "CSV → JSON", description: "Upload a CSV file and convert it to structured JSON data." }, ko: { title: "CSV → JSON 변환기", description: "CSV 파일을 업로드하고 구조화된 JSON 데이터로 변환합니다." }, ja: { title: "CSV→JSON", description: "CSVファイルを構造化JSONデータに変換します。" }, es: { title: "CSV a JSON", description: "Sube un archivo CSV y conviértelo a datos JSON." }, zh: { title: "CSV 转 JSON 数据", description: "将 CSV 文件解析转换为 JSON 结构化数据。" }, fr: { title: "CSV vers JSON", description: "Convertissez un fichier CSV en données JSON." } },
   "password-generator": { en: { title: "Password Generator", description: "Generate strong, cryptographically secure random passwords." }, ko: { title: "비밀번호 생성기", description: "안전한 무작위 비밀번호를 암호학적으로 생성합니다." }, ja: { title: "パスワード自動生成", description: "暗号学的に安全なランダムパスワードを生成します。" }, es: { title: "Generador de Contraseñas", description: "Genera contraseñas aleatorias seguras." }, zh: { title: "随机密码生成器", description: "生成具备密码学强度的随机高难度安全密码。" }, fr: { title: "Générateur de Mots de Passe", description: "Générez des mots de passe aléatoires sécurisés." } },
   "hash-generator":     { en: { title: "Hash Generator", description: "Generate MD5, SHA-1, SHA-256, or SHA-512 hashes from text." }, ko: { title: "해시 생성기 (MD5 / SHA-256)", description: "텍스트에서 MD5, SHA-1, SHA-256, SHA-512 해시를 생성합니다." }, ja: { title: "ハッシュ生成", description: "テキストからMD5、SHA-256などのハッシュを生成します。" }, es: { title: "Generador de Hash", description: "Genera hashes MD5, SHA-1 o SHA-256." }, zh: { title: "哈希值计算", description: "计算文本的 MD5、SHA-1 及 SHA-256 校验和。" }, fr: { title: "Générateur de Hachage", description: "Générez des hachages MD5, SHA-1 ou SHA-256." } },
@@ -57,7 +57,7 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
 const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
   "PDF Tools":         { ko: "PDF 도구",        ja: "PDFツール",      es: "Herramientas PDF",    zh: "PDF工具",      fr: "Outils PDF" },
   "Image Tools":       { ko: "이미지 도구",      ja: "画像ツール",     es: "Herramientas Imagen", zh: "图像工具",     fr: "Outils Image" },
-  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "텍스트整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
+  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "テキスト整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
   "Dev Tools":         { ko: "개발자 도구",      ja: "開発者ツール",   es: "Herramientas Dev",    zh: "开发工具",     fr: "Outils Dev" },
   "Converter":         { ko: "변환기",           ja: "コンバーター",   es: "Conversor",           zh: "转换器",       fr: "Convertisseur" },
   "Security":          { ko: "보안",             ja: "セキュリティ",   es: "Seguridad",           zh: "安全",         fr: "Sécurité" },
@@ -72,13 +72,30 @@ const CAT_NAV_TRANSLATIONS: Record<string, Record<string, string>> = {
   "Security":  { ko: "보안",   ja: "セキュリティ", es: "Seguridad", zh: "安全", fr: "Sécu." },
 };
 
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
-  FilePlus2, Scissors, FileArchive, FileText,
-  Scaling, RefreshCw, Minimize2, Sparkles,
-  Type, Eye, Code2, GitCompare,
-  Braces, Binary, Link2, Search,
-  ArrowLeftRight, Palette, Table,
-  KeyRound, ShieldCheck, QrCode, Clock,
+const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
+  "pdf-merger": FilePlus2,
+  "pdf-split": Scissors,
+  "pdf-compress": FolderArchive,
+  "image-resizer": Maximize2,
+  "image-converter": RefreshCw,
+  "image-compress": Minimize2,
+  "background-remover": Wand2,
+  "word-count": FileText,
+  "text-case": Type,
+  "markdown-preview": Eye,
+  "text-diff": GitCompare,
+  "json-formatter": Braces,
+  "base64": Code2,
+  "url-encoder": Link2,
+  "regex-tester": Search,
+  "jwt-decoder": KeyRound,
+  "qr-generator": QrCode,
+  "cron-parser": Clock,
+  "unit-converter": ArrowLeftRight,
+  "color-converter": Palette,
+  "csv-to-json": Table,
+  "password-generator": ShieldCheck,
+  "hash-generator": Binary,
 };
 
 const CATEGORY_META: Record<ToolCategory, { iconClass: string; badgeClass: string; accent: string }> = {
@@ -258,7 +275,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                   }}
                 >
                   {categoryTools.map((tool) => {
-                    const IconComponent = ICON_MAP[tool.icon];
+                    const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
                     const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
 
                     if (tool.isDev) {
@@ -290,7 +307,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                                   justifyContent: "center",
                                 }}
                               >
-                                {IconComponent ? <IconComponent size={20} strokeWidth={1.75} /> : <Hammer size={20} />}
+                                <IconComponent size={20} strokeWidth={1.75} />
                               </div>
 
                               <span
@@ -357,7 +374,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                                 justifyContent: "center",
                               }}
                             >
-                              {IconComponent ? <IconComponent size={20} strokeWidth={1.75} /> : <Sparkles size={20} />}
+                              <IconComponent size={20} strokeWidth={1.75} />
                             </div>
 
                             {tool.badge && (
