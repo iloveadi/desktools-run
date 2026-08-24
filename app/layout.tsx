@@ -12,17 +12,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "desktools.run — Fast & Lightweight Web Utilities",
+  title: "desktools.run — 무료 웹 유틸리티",
   description:
-    "Run powerful web utilities instantly in your browser. No install required. PDF tools, image editing, text processing, developer tools and more — all free.",
+    "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하는 웹 유틸리티 모음.",
   keywords: [
-    "web utilities", "online tools", "PDF tools", "image resizer",
-    "text tools", "developer tools", "free online tools", "browser tools",
+    "웹 유틸리티", "온라인 도구", "PDF 합치기", "이미지 리사이즈",
+    "글자수 세기", "개발자 도구", "desktools", "무료 유틸리티",
   ],
   authors: [{ name: "desktools.run" }],
   openGraph: {
-    title: "desktools.run — Fast & Lightweight Web Utilities",
-    description: "Run powerful web utilities instantly in your browser. No install required.",
+    title: "desktools.run — 무료 웹 유틸리티",
+    description: "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하세요.",
     type: "website",
     siteName: "desktools.run",
   },
