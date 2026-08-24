@@ -273,7 +273,7 @@ export default function ImageConverterPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("imageConverter.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -318,7 +318,7 @@ export default function ImageConverterPage() {
               }}
             >
               <Sparkles size={12} />
-              100% Client-Side Batch Conversion
+              {t("imageConverter.badge")}
             </div>
           </div>
         </section>
@@ -515,7 +515,7 @@ export default function ImageConverterPage() {
                     {t("imageConverter.dropPrompt")}
                   </p>
                   <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                    Supports PNG, JPG, WEBP, BMP, GIF, SVG (Multiple batch conversion)
+                    {t("imageConverter.dropDesc")}
                   </p>
                 </div>
               </div>
@@ -544,7 +544,7 @@ export default function ImageConverterPage() {
                     }}
                   >
                     <Upload size={13} />
-                    Add More Files
+                    {t("imageConverter.addMore")}
                   </button>
                 </div>
 
@@ -689,7 +689,7 @@ export default function ImageConverterPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────── */}
         <ToolGuide
-          badgeText="100% Client-Side & Private"
+          badgeText={t("imageConverter.guideBadge")}
           aboutTitle={t("imageConverter.guide.aboutTitle")}
           aboutDesc={t("imageConverter.guide.aboutDesc")}
           howTitle={t("imageConverter.guide.howTitle")}
