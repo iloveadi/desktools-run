@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>desktools.run — 빠른 브라우저 로컬 웹 유틸리티</title>
+  <link>https://desktools.run/</link>
+  <description>설치나 회원가입 없이 100% 브라우저 내에서 안전하게 작동하는 무료 웹 유틸리티 (PDF, 이미지, 텍스트, 개발자 도구)</description>
+  <language>ko-KR</language>
+  <lastBuildDate>Mon, 24 Aug 2026 12:00:00 GMT</lastBuildDate>
+  <atom:link href="https://desktools.run/rss.xml" rel="self" type="application/rss+xml" />
+
+  <item>
+    <title>이미지 워터마크 추가기 (Image Watermark Adder)</title>
+    <link>https://desktools.run/tools/image-watermark</link>
+    <description>사진이나 이미지에 텍스트 및 로고 워터마크를 투명도, 회전, 격자 반복 패턴으로 자유롭게 합성하세요.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/image-watermark</guid>
+  </item>
+
+  <item>
+    <title>PDF 합치기 (PDF Merge)</title>
+    <link>https://desktools.run/tools/pdf-merger</link>
+    <description>여러 PDF 파일을 하나의 문서로 즉시 합성합니다. 서버 전송 없이 100% 브라우저 로컬에서 안전하게 처리됩니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/pdf-merger</guid>
+  </item>
+
+  <item>
+    <title>PDF 압축 (PDF Compress)</title>
+    <link>https://desktools.run/tools/pdf-compress</link>
+    <description>화질 손상 없이 PDF 파일 용량을 대폭 줄여 드립니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/pdf-compress</guid>
+  </item>
+
+  <item>
+    <title>배경 제거 / 누끼 따기 (Background Remover)</title>
+    <link>https://desktools.run/tools/background-remover</link>
+    <description>이미지 배경을 투명하게 즉시 정밀 제거합니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/background-remover</guid>
+  </item>
+
+  <item>
+    <title>이미지 리사이즈 &amp; 크기 조절 (Image Resizer)</title>
+    <link>https://desktools.run/tools/image-resizer</link>
+    <description>해상도 비율을 유지하면서 이미지 크기와 용량을 원하는 픽셀 단위로 변경합니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/image-resizer</guid>
+  </item>
+
+  <item>
+    <title>글자 수 &amp; 단어 세기 (Word Count)</title>
+    <link>https://desktools.run/tools/word-count</link>
+    <description>공백 포함/제외 글자 수, 단어 수, 문장 수, 예상 읽기 시간을 실시간 분석합니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/word-count</guid>
+  </item>
+
+  <item>
+    <title>JSON 포맷터 &amp; 검증기 (JSON Formatter)</title>
+    <link>https://desktools.run/tools/json-formatter</link>
+    <description>JSON 구문 정렬(Prettify), 압축(Minify), 검증 및 구문 강조 기능을 제공합니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/json-formatter</guid>
+  </item>
+
+  <item>
+    <title>QR 코드 생성기 (QR Code Generator)</title>
+    <link>https://desktools.run/tools/qr-generator</link>
+    <description>URL, 텍스트, Wi-Fi 정보를 고해상도 QR 코드로 즉시 생성하고 저장합니다.</description>
+    <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+    <guid>https://desktools.run/tools/qr-generator</guid>
+  </item>
+</channel>
+</rss>
