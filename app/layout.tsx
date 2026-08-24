@@ -27,6 +27,11 @@ export const metadata: Metadata = {
     siteName: "desktools.run",
   },
   robots: { index: true, follow: true },
+  verification: {
+    other: {
+      "naver-site-verification": "78cc45882494368515599712d3cbe77cb0321e65",
+    },
+  },
 };
 
 // Inline script: runs before React hydration to prevent flash of wrong theme & language
@@ -67,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
+        <meta name="naver-site-verification" content="78cc45882494368515599712d3cbe77cb0321e65" />
         {/* Anti-flash theme & locale script — must run before any CSS paints */}
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
