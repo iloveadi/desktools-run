@@ -215,7 +215,7 @@ export default function ImageResizerPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("imageResizer.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -260,7 +260,7 @@ export default function ImageResizerPage() {
               }}
             >
               <Sparkles size={12} />
-              100% Client-Side Canvas
+              {t("imageResizer.badge")}
             </div>
           </div>
         </section>
@@ -315,7 +315,7 @@ export default function ImageResizerPage() {
                   {t("imageResizer.dropPrompt")}
                 </p>
                 <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Supports PNG, JPG, WEBP, GIF, SVG (Max 50MB)
+                  {t("imageResizer.dropDesc")}
                 </p>
               </div>
             </div>
@@ -369,13 +369,13 @@ export default function ImageResizerPage() {
                           style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", opacity: isProcessing ? 0.5 : 1, transition: "opacity 0.15s" }}
                         />
                       ) : (
-                        <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>Rendering...</div>
+                        <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>{t("imageResizer.rendering")}</div>
                       )}
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "12.5px", color: "var(--text-muted)" }}>
                       <span>
-                        Size: <strong style={{ color: "var(--text-primary)" }}>{formatBytes(resizedSize)}</strong>
+                        {t("imageResizer.sizeLabel")}: <strong style={{ color: "var(--text-primary)" }}>{formatBytes(resizedSize)}</strong>
                       </span>
                       {origSize > 0 && resizedSize > 0 && (
                         <span style={{ fontWeight: 700, color: resizedSize < origSize ? "#34d399" : "#fbbf24" }}>
@@ -437,13 +437,13 @@ export default function ImageResizerPage() {
 
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  Resize Settings
+                  {t("imageResizer.settings")}
                 </h3>
 
                 <div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                     <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)" }}>
-                      Dimensions (px)
+                      {t("imageResizer.dimensions")}
                     </label>
                     <button
                       onClick={() => setLockAspect(!lockAspect)}

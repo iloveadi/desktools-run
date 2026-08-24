@@ -100,7 +100,7 @@ export default function PdfSplitPage() {
 
   const handleFileSelect = useCallback((file: File) => {
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      alert("Please select a valid PDF file.");
+      alert(t("pdfSplit.alertValidPdf"));
       return;
     }
 
@@ -159,14 +159,14 @@ export default function PdfSplitPage() {
       }
     };
     reader.readAsArrayBuffer(file);
-  }, []);
+  }, [t]);
 
   const handleSplitPdf = async () => {
     if (!pdfFile || !pdfMeta) return;
 
     setIsProcessing(true);
     setProgressPercent(10);
-    setStatusMessage("Reading PDF document...");
+    setStatusMessage(t("pdfSplit.statusReading"));
 
     try {
       const { PDFDocument } = await import("pdf-lib");
@@ -180,7 +180,11 @@ export default function PdfSplitPage() {
       if (splitMode === "all") {
         // Split every single page into individual 1-page PDF
         for (let i = 0; i < totalPages; i++) {
-          setStatusMessage(`Extracting page ${i + 1} / ${totalPages}...`);
+          setStatusMessage(
+            t("pdfSplit.statusExtractingPage")
+              .replace("{current}", String(i + 1))
+              .replace("{total}", String(totalPages))
+          );
           const pct = Math.round(15 + ((i + 1) / totalPages) * 75);
           setProgressPercent(pct);
 
@@ -202,12 +206,14 @@ export default function PdfSplitPage() {
         const targetIndices = parsePageRange(pageRangeStr, totalPages);
 
         if (targetIndices.length === 0) {
-          alert("Please enter a valid page range (e.g. 1-3, 5).");
+          alert(t("pdfSplit.alertValidRange"));
           setIsProcessing(false);
           return;
         }
 
-        setStatusMessage(`Extracting ${targetIndices.length} pages...`);
+        setStatusMessage(
+          t("pdfSplit.statusExtractingPages").replace("{count}", String(targetIndices.length))
+        );
         setProgressPercent(50);
 
         const newDoc = await PDFDocument.create();
@@ -227,12 +233,14 @@ export default function PdfSplitPage() {
         const selectedIndices = thumbnails.filter((t) => t.selected).map((t) => t.pageNum - 1);
 
         if (selectedIndices.length === 0) {
-          alert("Please select at least one page thumbnail.");
+          alert(t("pdfSplit.alertSelectPage"));
           setIsProcessing(false);
           return;
         }
 
-        setStatusMessage(`Extracting ${selectedIndices.length} selected pages...`);
+        setStatusMessage(
+          t("pdfSplit.statusExtractingSelected").replace("{count}", String(selectedIndices.length))
+        );
         setProgressPercent(50);
 
         const newDoc = await PDFDocument.create();
@@ -255,7 +263,7 @@ export default function PdfSplitPage() {
     } catch (err) {
       console.error("PDF Split Error:", err);
       setIsProcessing(false);
-      alert("An error occurred while splitting the PDF file.");
+      alert(t("pdfSplit.alertError"));
     }
   };
 
@@ -323,7 +331,7 @@ export default function PdfSplitPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("pdfSplit.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -368,7 +376,7 @@ export default function PdfSplitPage() {
               }}
             >
               <Sparkles size={14} />
-              100% Client-Side PDF Splitter & Extractor
+              {t("pdfSplit.badge")}
             </div>
           </div>
         </section>
@@ -423,7 +431,7 @@ export default function PdfSplitPage() {
                   {t("pdfSplit.dropPrompt")}
                 </p>
                 <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Supports single & multi-page PDF documents of any size
+                  {t("pdfSplit.dropDesc")}
                 </p>
               </div>
             </div>
@@ -441,9 +449,9 @@ export default function PdfSplitPage() {
                         {pdfMeta?.name}
                       </h3>
                       <div style={{ display: "flex", gap: "10px", fontSize: "12px", color: "var(--text-muted)" }}>
-                        <span>Size: {pdfMeta?.sizeFormatted}</span>
+                        <span>{t("pdfSplit.fileSize")}: {pdfMeta?.sizeFormatted}</span>
                         <span>•</span>
-                        <span>Total Pages: <strong>{pdfMeta?.numPages} pages</strong></span>
+                        <span>{t("pdfSplit.totalPages")}: <strong>{pdfMeta?.numPages} {t("pdfSplit.pagesUnit")}</strong></span>
                       </div>
                     </div>
                   </div>
@@ -465,7 +473,7 @@ export default function PdfSplitPage() {
                     }}
                   >
                     <RotateCcw size={13} />
-                    Change File
+                    {t("pdfSplit.changeFile")}
                   </button>
                 </div>
 
@@ -474,7 +482,7 @@ export default function PdfSplitPage() {
                   <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "16px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-                        Visual Thumbnail Page Selection
+                        {t("pdfSplit.visualTitle")}
                       </span>
                       <div style={{ display: "flex", gap: "8px" }}>
                         <button
@@ -494,7 +502,7 @@ export default function PdfSplitPage() {
 
                     {isLoadingThumbs ? (
                       <div style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)", fontSize: "13px" }}>
-                        Rendering page thumbnails...
+                        {t("pdfSplit.renderingThumbs")}
                       </div>
                     ) : (
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "12px", maxHeight: "420px", overflowY: "auto", padding: "4px" }}>
@@ -522,12 +530,12 @@ export default function PdfSplitPage() {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={tb.dataUrl}
-                              alt={`Page ${tb.pageNum}`}
+                              alt={`${t("pdfSplit.pageLabel")} ${tb.pageNum}`}
                               style={{ width: "100%", height: "120px", objectFit: "contain", borderRadius: "4px", marginBottom: "6px" }}
                             />
 
                             <span style={{ fontSize: "11px", fontWeight: 700, color: tb.selected ? "#f87171" : "var(--text-muted)" }}>
-                              Page {tb.pageNum}
+                              {t("pdfSplit.pageLabel")} {tb.pageNum}
                             </span>
                           </div>
                         ))}
@@ -543,10 +551,10 @@ export default function PdfSplitPage() {
                       <FileCheck2 size={24} style={{ color: "#f87171" }} />
                       <div>
                         <h4 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                          PDF Split Successfully!
+                          {t("pdfSplit.successTitle")}
                         </h4>
                         <p style={{ fontSize: "12.5px", color: "var(--text-secondary)" }}>
-                          Generated {resultBlobs.length} split PDF document(s).
+                          {t("pdfSplit.successDesc").replace("{count}", String(resultBlobs.length))}
                         </p>
                       </div>
                     </div>
@@ -562,7 +570,7 @@ export default function PdfSplitPage() {
                             style={{ padding: "6px 12px", borderRadius: "6px", background: "linear-gradient(135deg, #ef4444, #dc2626)", border: "none", color: "white", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
                           >
                             <Download size={13} />
-                            Download
+                            {t("pdfSplit.downloadBtn")}
                           </button>
                         </div>
                       ))}
@@ -610,7 +618,7 @@ export default function PdfSplitPage() {
                 {splitMode === "range" && (
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-                      Page Range (1 - {pdfMeta?.numPages})
+                      {t("pdfSplit.pageRangeLabel")} (1 - {pdfMeta?.numPages})
                     </label>
                     <input
                       type="text"
@@ -673,7 +681,7 @@ export default function PdfSplitPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────── */}
         <ToolGuide
-          badgeText="100% Client-Side & Private"
+          badgeText={t("pdfSplit.badge")}
           aboutTitle={t("pdfSplit.guide.aboutTitle")}
           aboutDesc={t("pdfSplit.guide.aboutDesc")}
           howTitle={t("pdfSplit.guide.howTitle")}
