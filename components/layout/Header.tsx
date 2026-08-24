@@ -44,28 +44,24 @@ const FlagKR = () => (
       </g>
       
       {/* 4괘: 건(☰ 11시), 곤(☷ 5시), 감(☵ 1시), 리(☲ 7시) */}
-      {/* 건 (☰) */}
       <g transform="rotate(-33.69) translate(-9.5 0)" fill="#000000">
         <rect x="-0.4" y="-3" width="0.5" height="6"/>
         <rect x="-1.2" y="-3" width="0.5" height="6"/>
         <rect x="-2.0" y="-3" width="0.5" height="6"/>
       </g>
       
-      {/* 곤 (☷) */}
       <g transform="rotate(-33.69) translate(9.5 0)" fill="#000000">
         <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
         <path d="M1.2-3h0.5v2.7H1.2zm0 3.3h0.5v2.7H1.2z"/>
         <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
       </g>
 
-      {/* 감 (☵) */}
       <g transform="rotate(33.69) translate(9.5 0)" fill="#000000">
         <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
         <rect x="1.2" y="-3" width="0.5" height="6"/>
         <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
       </g>
 
-      {/* 리 (☲) */}
       <g transform="rotate(33.69) translate(-9.5 0)" fill="#000000">
         <rect x="-0.4" y="-3" width="0.5" height="6"/>
         <path d="M-1.2-3h0.5v2.7h-0.5zm0 3.3h0.5v2.7h-0.5z"/>
@@ -126,15 +122,17 @@ export default function Header({ onSearch }: HeaderProps) {
   const [langOpen, setLangOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [totalUsage, setTotalUsage] = useState<number>(685000);
-  const [liveUsers, setLiveUsers] = useState<number>(184);
+  const [totalUsage, setTotalUsage] = useState<number>(2042);
+  const [liveUsers, setLiveUsers] = useState<number>(12);
 
   useEffect(() => {
     setTotalUsage(getTotalSiteUsageCount());
+
     const interval = setInterval(() => {
-      setLiveUsers(175 + Math.floor(Math.random() * 25));
+      setLiveUsers(8 + Math.floor(Math.random() * 7));
       setTotalUsage(getTotalSiteUsageCount());
     }, 4000);
+
     return () => clearInterval(interval);
   }, []);
 

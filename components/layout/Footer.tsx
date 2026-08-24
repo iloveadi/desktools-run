@@ -10,11 +10,8 @@ export default function Footer() {
 
   const FOOTER_LINKS = {
     [t("footer.nav.product")]: [
-      { label: t("footer.links.allTools"),    href: "/tools" },
-      { label: t("footer.links.pdfTools"),    href: "/tools#pdf-tools" },
-      { label: t("footer.links.imageTools"),  href: "/tools#image-tools" },
-      { label: t("footer.links.devTools"),    href: "/tools#dev-tools" },
-      { label: t("footer.links.changelog"),   href: "/changelog" },
+      { label: t("footer.links.allTools"),  href: "/tools" },
+      { label: t("footer.links.changelog"), href: "/changelog" },
     ],
     [t("footer.nav.company")]: [
       { label: t("footer.links.about"),   href: "/about" },
@@ -93,7 +90,7 @@ export default function Footer() {
             </h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "9px" }}>
               {links.map(({ label, href }) => (
-                <li key={href}>
+                <li key={label}>
                   <Link
                     href={href}
                     style={{ fontSize: "13.5px", color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s", display: "flex", alignItems: "center", gap: "4px" }}
@@ -110,10 +107,18 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Copyright bar */}
+      {/* Copyright bar with subtle secret admin entrance dot */}
       <div style={{ borderTop: "1px solid var(--border-subtle)", maxWidth: "1280px", margin: "0 auto", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
         <p style={{ fontSize: "12.5px", color: "var(--text-muted)" }}>
           © {year} desktools.run — {t("footer.copyright")}
+          {/* Secret discreet link on period '.' */}
+          <Link
+            href="/admin/requests"
+            style={{ color: "inherit", textDecoration: "none", cursor: "default" }}
+            title="desktools admin"
+          >
+            .
+          </Link>
         </p>
         <p style={{ fontSize: "12.5px", color: "var(--text-muted)" }}>
           {t("footer.privacy")}

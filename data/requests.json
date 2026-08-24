@@ -1,0 +1,20 @@
+[
+  {
+    "id": "req-1724500000000",
+    "toolTitle": "SVG to PNG Converter",
+    "category": "Image Tools",
+    "description": "Convert vector SVG graphics into high-resolution transparent PNG images directly in browser without server upload.",
+    "contact": "admin@desktools.run",
+    "createdAt": "2026-08-24T21:00:00.000Z",
+    "status": "In Review"
+  },
+  {
+    "id": "req-1724501000000",
+    "toolTitle": "CSV Column Filter & Reorder",
+    "category": "Converter",
+    "description": "Upload a CSV file, select specific columns to keep or remove, reorder columns, and export to new CSV.",
+    "contact": "dev@desktools.run",
+    "createdAt": "2026-08-24T21:15:00.000Z",
+    "status": "Planned"
+  }
+]

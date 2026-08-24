@@ -8,29 +8,29 @@
 
 const STORAGE_KEY = "desktools_stats_v1";
 
-// Base realistic usage counts for tools
+// Base realistic usage counts for tools (Modest & Realistic numbers)
 const BASE_TOOL_COUNTS: Record<string, number> = {
-  "pdf-merger": 48290,
-  "pdf-split": 23410,
-  "pdf-compress": 39820,
-  "pdf-to-word": 18950,
-  "image-resizer": 38940,
-  "image-converter": 41200,
-  "image-compress": 51630,
-  "background-remover": 29830,
-  "word-count": 65410,
-  "text-case": 19420,
-  "markdown-preview": 15830,
-  "text-diff": 22150,
-  "json-formatter": 52100,
-  "base64": 31400,
-  "url-encoder": 27800,
-  "regex-tester": 18230,
-  "unit-converter": 24600,
-  "color-converter": 33150,
-  "csv-to-json": 16900,
-  "password-generator": 44800,
-  "hash-generator": 21300,
+  "pdf-merger": 145,
+  "pdf-split": 82,
+  "pdf-compress": 110,
+  "pdf-to-word": 64,
+  "image-resizer": 135,
+  "image-converter": 128,
+  "image-compress": 152,
+  "background-remover": 94,
+  "word-count": 180,
+  "text-case": 62,
+  "markdown-preview": 58,
+  "text-diff": 74,
+  "json-formatter": 140,
+  "base64": 88,
+  "url-encoder": 72,
+  "regex-tester": 54,
+  "unit-converter": 86,
+  "color-converter": 95,
+  "csv-to-json": 48,
+  "password-generator": 160,
+  "hash-generator": 65,
 };
 
 export interface LocalStats {
@@ -67,7 +67,7 @@ export function saveLocalStats(stats: LocalStats): void {
 
 /** Get current total usage count for a specific tool */
 export function getToolUsageCount(toolId: string): number {
-  const base = BASE_TOOL_COUNTS[toolId] || 12500;
+  const base = BASE_TOOL_COUNTS[toolId] || 50;
   const stats = getLocalStats();
   const increment = stats.toolIncrements[toolId] || 0;
   return base + increment;
@@ -81,7 +81,7 @@ export function incrementToolUsage(toolId: string): number {
   stats.totalVisits += 1;
   stats.lastVisitTimestamp = Date.now();
   saveLocalStats(stats);
-  return (BASE_TOOL_COUNTS[toolId] || 12500) + stats.toolIncrements[toolId];
+  return (BASE_TOOL_COUNTS[toolId] || 50) + stats.toolIncrements[toolId];
 }
 
 /** Calculate total usage count across all tools */
@@ -92,7 +92,7 @@ export function getTotalSiteUsageCount(): number {
   return baseTotal + extraTotal;
 }
 
-/** Format numbers gracefully according to locale (e.g. 48.2k or 4.8만 or 48,290) */
+/** Format numbers gracefully according to locale (e.g. 1.2k or 1.2천 or 1,280) */
 export function formatCount(count: number, locale: string = "ko", short: boolean = true): string {
   if (!short) {
     return count.toLocaleString();
