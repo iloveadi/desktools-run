@@ -26,7 +26,7 @@ import {
 type PositionMode = "center" | "tile" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 export default function ImageWatermarkPage() {
-  const { locale } = useLocale();
+  const { t } = useLocale();
 
   // Source Image State
   const [sourceImage, setSourceImage] = useState<HTMLImageElement | null>(null);
@@ -245,14 +245,7 @@ export default function ImageWatermarkPage() {
     link.click();
   };
 
-  const getLabel = (ko: string, en: string, ja?: string, es?: string, zh?: string, fr?: string) => {
-    if (locale === "ko") return ko;
-    if (locale === "ja") return ja || en;
-    if (locale === "es") return es || en;
-    if (locale === "zh") return zh || en;
-    if (locale === "fr") return fr || en;
-    return en;
-  };
+
 
   return (
     <>
@@ -275,7 +268,7 @@ export default function ImageWatermarkPage() {
             }}
           >
             <ArrowLeft size={14} />
-            {getLabel("모든 도구로 돌아가기", "Back to Tools", "ツール一覧へ戻る", "Volver a herramientas", "返回工具列表", "Retour aux outils")}
+            {t("imageWatermark.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
@@ -296,17 +289,10 @@ export default function ImageWatermarkPage() {
             </div>
             <div>
               <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>
-                {getLabel("이미지 워터마크 추가기", "Image Watermark Adder", "画像ウォーターマーク追加", "Añadir Marca de Agua", "图片水印添加器", "Filigrane d'Image")}
+                {t("imageWatermark.title")}
               </h1>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-                {getLabel(
-                  "텍스트 또는 로고 워터마크를 투명도, 회전 및 패턴으로 자유롭게 합성하세요. 100% 브라우저 연산.",
-                  "Protect your images with customizable text or logo watermarks. 100% private client-side canvas processing.",
-                  "テキストやロゴの透かしを画像に自由合成。100%ブラウザ内で安全に処理。",
-                  "Protege tus imágenes con marcas de agua personalizadas de texto o logo. 100% privado.",
-                  "添加自定义文本与 Logo 水印，保护图片版权。100% 浏览器本地安全处理。",
-                  "Protégez vos images avec des filigranes personnalisés de texte ou de logo. 100% privé."
-                )}
+                {t("imageWatermark.subtitle")}
               </p>
             </div>
           </div>
@@ -357,10 +343,10 @@ export default function ImageWatermarkPage() {
                 <Upload size={32} />
               </div>
               <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                {getLabel("워터마크를 추가할 이미지를 업로드하세요", "Upload Image for Watermarking", "画像ファイルをアップロード", "Sube una imagen para añadir marca de agua", "上传需添加水印的图片", "Télécharger une image à filigraner")}
+                {t("imageWatermark.uploadTitle")}
               </h3>
               <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", maxWidth: "440px", margin: "0 auto 20px" }}>
-                {getLabel("JPG, PNG, WebP, GIF, AVIF 지원. 파일은 서버에 업로드되지 않고 100% 로컬에서만 처리됩니다.", "Supports JPG, PNG, WebP, GIF. 100% client-side rendering with zero server uploads.", "JPG, PNG, WebP対応。サーバー転送なしで安心。", "Soporta JPG, PNG, WebP. 100% cliente sin subida a servidor.", "支持 JPG、PNG、WebP。100% 本地渲染，无需上传服务器。", "Prend en charge JPG, PNG, WebP. 100% local." )}
+                {t("imageWatermark.uploadDesc")}
               </p>
               <button
                 className="btn-primary"
@@ -376,7 +362,7 @@ export default function ImageWatermarkPage() {
                 }}
               >
                 <ImageIcon size={18} />
-                {getLabel("이미지 파일 선택", "Select Image File", "画像ファイルを選択", "Seleccionar Imagen", "选择图片文件", "Sélectionner une image")}
+                {t("imageWatermark.selectFile")}
               </button>
             </div>
           ) : (
@@ -408,7 +394,7 @@ export default function ImageWatermarkPage() {
                     }}
                   >
                     <Upload size={13} />
-                    {getLabel("교체", "Change", "変更", "Cambiar", "更换", "Changer")}
+                    {t("imageWatermark.change")}
                     <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} />
                   </label>
                 </div>
@@ -416,7 +402,7 @@ export default function ImageWatermarkPage() {
                 {/* Mode Selector */}
                 <div className="glass-card" style={{ padding: "18px" }}>
                   <label style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "block" }}>
-                    {getLabel("워터마크 유형", "Watermark Type", "透かしタイプ", "Tipo de marca", "水印类型", "Type de filigrane")}
+                    {t("imageWatermark.watermarkType")}
                   </label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                     <button
@@ -437,7 +423,7 @@ export default function ImageWatermarkPage() {
                       }}
                     >
                       <Type size={15} />
-                      {getLabel("텍스트 워터마크", "Text", "テキスト", "Texto", "文本水印", "Texte")}
+                      {t("imageWatermark.textMode")}
                     </button>
 
                     <button
@@ -458,7 +444,7 @@ export default function ImageWatermarkPage() {
                       }}
                     >
                       <ImageIcon size={15} />
-                      {getLabel("로고 이미지", "Logo Image", "ロゴ画像", "Imagen Logo", "Logo 图片", "Logo")}
+                      {t("imageWatermark.logoMode")}
                     </button>
                   </div>
                 </div>
@@ -468,7 +454,7 @@ export default function ImageWatermarkPage() {
                   <div className="glass-card" style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "14px" }}>
                     <div>
                       <label style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", display: "block" }}>
-                        {getLabel("워터마크 문구", "Watermark Text", "透かしテキスト", "Texto de marca", "水印文字内容", "Texte du filigrane")}
+                        {t("imageWatermark.textLabel")}
                       </label>
                       <input
                         type="text"
@@ -492,7 +478,7 @@ export default function ImageWatermarkPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                       <div>
                         <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                          {getLabel("글꼴", "Font Family", "フォント", "Fuente", "字体", "Police")}
+                          {t("imageWatermark.font")}
                         </label>
                         <select
                           value={fontFamily}
@@ -518,7 +504,7 @@ export default function ImageWatermarkPage() {
 
                       <div>
                         <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                          {getLabel("크기", "Font Size", "サイズ", "Tamaño", "字号", "Taille")}: {fontSize}px
+                          {t("imageWatermark.size")}: {fontSize}px
                         </label>
                         <input
                           type="range"
@@ -535,7 +521,7 @@ export default function ImageWatermarkPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                       <div>
                         <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                          {getLabel("색상", "Color", "カラー", "Color", "颜色", "Couleur")}
+                          {t("imageWatermark.color")}
                         </label>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           <input
@@ -559,7 +545,7 @@ export default function ImageWatermarkPage() {
 
                       <div>
                         <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                          {getLabel("투명도", "Opacity", "不透明度", "Opacidad", "透明度", "Opacité")}: {Math.round(textOpacity * 100)}%
+                          {t("imageWatermark.opacity")}: {Math.round(textOpacity * 100)}%
                         </label>
                         <input
                           type="range"
@@ -576,7 +562,7 @@ export default function ImageWatermarkPage() {
                     {/* Rotation */}
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px" }}>
-                        <span>{getLabel("회전 각도", "Rotation", "回転角度", "Rotación", "旋转角度", "Angle de rotation")}</span>
+                        <span>{t("imageWatermark.rotation")}</span>
                         <span>{textRotation}°</span>
                       </div>
                       <input
@@ -610,7 +596,7 @@ export default function ImageWatermarkPage() {
                           }}
                         >
                           <Upload size={14} />
-                          {getLabel("로고 PNG 업로드", "Upload Logo Image", "ロゴ画像をアップロード", "Subir Logo PNG", "上传 Logo 图片", "Télécharger le logo")}
+                          {t("imageWatermark.uploadLogo")}
                           <input type="file" accept="image/*" onChange={handleLogoUpload} style={{ display: "none" }} />
                         </label>
                       </div>
@@ -618,14 +604,14 @@ export default function ImageWatermarkPage() {
                       <>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                           <span style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text-primary)" }}>
-                            {getLabel("로고 조절", "Logo Settings", "ロゴ設定", "Ajustes de logo", "Logo 设置", "Réglages du logo")}
+                            {t("imageWatermark.logoSettings")}
                           </span>
                           <button
                             onClick={() => setLogoImage(null)}
                             style={{ background: "none", border: "none", color: "#f87171", cursor: "pointer", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
                           >
                             <Trash2 size={12} />
-                            {getLabel("삭제", "Remove", "削除", "Quitar", "移除", "Supprimer")}
+                            {t("imageWatermark.remove")}
                           </button>
                         </div>
 
@@ -633,7 +619,7 @@ export default function ImageWatermarkPage() {
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                           <div>
                             <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                              {getLabel("크기 배율", "Scale", "拡大縮小", "Escala", "缩放比例", "Échelle")}: {Math.round(logoScale * 100)}%
+                              {t("imageWatermark.scale")}: {Math.round(logoScale * 100)}%
                             </label>
                             <input
                               type="range"
@@ -648,7 +634,7 @@ export default function ImageWatermarkPage() {
 
                           <div>
                             <label style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px", display: "block" }}>
-                              {getLabel("투명도", "Opacity", "不透明度", "Opacidad", "透明度", "Opacité")}: {Math.round(logoOpacity * 100)}%
+                              {t("imageWatermark.opacity")}: {Math.round(logoOpacity * 100)}%
                             </label>
                             <input
                               type="range"
@@ -665,7 +651,7 @@ export default function ImageWatermarkPage() {
                         {/* Rotation */}
                         <div>
                           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px" }}>
-                            <span>{getLabel("회전 각도", "Rotation", "回転角度", "Rotación", "旋转角度", "Angle de rotation")}</span>
+                            <span>{t("imageWatermark.rotation")}</span>
                             <span>{logoRotation}°</span>
                           </div>
                           <input
@@ -685,7 +671,7 @@ export default function ImageWatermarkPage() {
                 {/* Position & Pattern Selector */}
                 <div className="glass-card" style={{ padding: "18px" }}>
                   <label style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "block" }}>
-                    {getLabel("배치 / 패턴 위치", "Position & Pattern", "配置・パターン", "Posición y patrón", "位置与模式", "Position et motif")}
+                    {t("imageWatermark.position")}
                   </label>
 
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
@@ -708,7 +694,7 @@ export default function ImageWatermarkPage() {
                       }}
                     >
                       <Grid size={14} />
-                      {getLabel("화면 전체 격자 패턴 (Tiled Pattern)", "Full Grid Tile Pattern", "画面全体グリッドパターン", "Patrón de rejilla completa", "全图网格重复平铺", "Motif de grille répété")}
+                      {t("imageWatermark.tilePattern")}
                     </button>
 
                     {[
@@ -742,7 +728,7 @@ export default function ImageWatermarkPage() {
                 {/* Export Options */}
                 <div className="glass-card" style={{ padding: "18px" }}>
                   <label style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "10px", display: "block" }}>
-                    {getLabel("저장 포맷", "Export Format", "保存フォーマット", "Formato de guardado", "导出格式", "Format d'export")}
+                    {t("imageWatermark.exportFormat")}
                   </label>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", marginBottom: "14px" }}>
                     {(["png", "jpeg", "webp"] as const).map((fmt) => (
@@ -783,7 +769,7 @@ export default function ImageWatermarkPage() {
                     }}
                   >
                     <Download size={16} />
-                    {getLabel("워터마크 이미지 다운로드", "Download Watermarked Image", "画像をダウンロード", "Descargar imagen", "下载水印图片", "Télécharger l'image")}
+                    {t("imageWatermark.download")}
                   </button>
                 </div>
               </div>
@@ -794,7 +780,7 @@ export default function ImageWatermarkPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <Eye size={16} style={{ color: "#818cf8" }} />
                     <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-                      {getLabel("실시간 워터마크 미리보기", "Real-Time Preview", "リアルタイムプレビュー", "Vista previa en tiempo real", "实时水印合成预览", "Aperçu en temps réel")}
+                      {t("imageWatermark.preview")}
                     </span>
                   </div>
                   <span style={{ fontSize: "11.5px", color: "#34d399", background: "rgba(52,211,153,0.12)", padding: "2px 8px", borderRadius: "100px", fontWeight: 600 }}>
@@ -835,25 +821,24 @@ export default function ImageWatermarkPage() {
         {/* SEO Guide Section */}
         <div style={{ maxWidth: "1280px", margin: "40px auto 0", padding: "0 24px" }}>
           <ToolGuide
-            aboutTitle={getLabel("이미지 워터마크 추가기 소개", "About Image Watermark Adder")}
-            aboutDesc={getLabel(
-              "이미지 워터마크 추가기는 소중한 사진, 디자인, 카탈로그, 문서에 텍스트 또는 로고 워터마크를 투명도 및 패턴으로 안전하게 합성할 수 있는 웹 유틸리티입니다. 업로드된 파일은 서버로 전송되지 않고 100% 브라우저 로컬에서 연산됩니다.",
-              "desktools.run Image Watermark Adder is a browser-based tool to add text or logo watermarks to your pictures, photography, and graphics. All processing runs 100% locally with zero server uploads."
-            )}
+            badgeText={t("imageWatermark.guideBadge")}
+            aboutTitle={t("imageWatermark.guide.aboutTitle")}
+            aboutDesc={t("imageWatermark.guide.aboutDesc")}
+            howTitle={t("imageWatermark.guide.howTitle")}
             steps={[
-              getLabel("워터마크를 추가할 사진 또는 이미지 파일을 업로드합니다.", "Upload photo or image file."),
-              getLabel("텍스트 문구 작성 또는 로고 PNG 이미지를 업로드합니다.", "Set text content or upload logo image."),
-              getLabel("투명도, 회전 각도 및 배치 위치(격자 패턴/중앙 등)를 조절합니다.", "Adjust opacity, rotation, and layout position."),
-              getLabel("워터마크가 합성된 고해상도 이미지를 즉시 다운로드합니다.", "Download watermarked high-res image."),
+              t("imageWatermark.guide.step1"),
+              t("imageWatermark.guide.step2"),
+              t("imageWatermark.guide.step3"),
+              t("imageWatermark.guide.step4"),
             ]}
             faqs={[
               {
-                q: getLabel("업로드한 원본 사진이 외부 서버에 저장되나요?", "Is my photo stored on a remote server?"),
-                a: getLabel("아닙니다. 모든 워터마크 연산은 HTML5 Canvas 기술을 이용해 사용자의 웹 브라우저 내에서 100% 로컬로만 처리됩니다.", "No. All canvas rendering happens 100% locally inside your web browser."),
+                q: t("imageWatermark.guide.faq1Q"),
+                a: t("imageWatermark.guide.faq1A"),
               },
               {
-                q: getLabel("어떤 이미지 포맷을 지원하나요?", "What image formats are supported?"),
-                a: getLabel("JPG, PNG, WebP, GIF, AVIF 등 주요 이미지 포맷을 모두 지원하며, PNG/JPG/WebP 포맷으로 다운로드할 수 있습니다.", "Supports JPG, PNG, WebP, GIF, AVIF input, and PNG/JPG/WebP export."),
+                q: t("imageWatermark.guide.faq2Q"),
+                a: t("imageWatermark.guide.faq2A"),
               },
             ]}
           />
