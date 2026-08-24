@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   verification: {
     other: {
       "naver-site-verification": "78cc45882494368515599712d3cbe77cb0321e65",
+      "google-site-verification": "h6rIrI3xMIgonXn1PDKk5T5FHzgHbXtiOpgut4AtuZM",
     },
   },
 };
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="naver-site-verification" content="78cc45882494368515599712d3cbe77cb0321e65" />
+        <meta name="google-site-verification" content="h6rIrI3xMIgonXn1PDKk5T5FHzgHbXtiOpgut4AtuZM" />
         {/* Anti-flash theme & locale script — must run before any CSS paints */}
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
