@@ -23,7 +23,7 @@ export default function UrlEncoderPage() {
         return decodeURIComponent(inputStr.trim());
       }
     } catch (err) {
-      return "Invalid URL encoding format.";
+      return t("urlEncoder.invalidFormat");
     }
   };
 
@@ -41,7 +41,7 @@ export default function UrlEncoderPage() {
       <main style={{ flex: 1, paddingBottom: "80px" }}>
         <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-secondary)", textDecoration: "none", marginBottom: "16px" }}>
-            <ArrowLeft size={14} /> Back to All Tools
+            <ArrowLeft size={14} /> {t("urlEncoder.back")}
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
             <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(99,102,241,0.15)", color: "#818cf8", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -59,13 +59,13 @@ export default function UrlEncoderPage() {
                 onClick={() => setMode("encode")}
                 style={{ padding: "8px 18px", borderRadius: "8px", background: mode === "encode" ? "linear-gradient(135deg, #6366f1, #4f46e5)" : "rgba(255,255,255,0.05)", border: "none", color: mode === "encode" ? "white" : "var(--text-secondary)", fontSize: "13.5px", fontWeight: 700, cursor: "pointer" }}
               >
-                Encode URL
+                {t("urlEncoder.encodeMode")}
               </button>
               <button
                 onClick={() => setMode("decode")}
                 style={{ padding: "8px 18px", borderRadius: "8px", background: mode === "decode" ? "linear-gradient(135deg, #6366f1, #4f46e5)" : "rgba(255,255,255,0.05)", border: "none", color: mode === "decode" ? "white" : "var(--text-secondary)", fontSize: "13.5px", fontWeight: 700, cursor: "pointer" }}
               >
-                Decode URL
+                {t("urlEncoder.decodeMode")}
               </button>
             </div>
 
@@ -74,13 +74,13 @@ export default function UrlEncoderPage() {
               style={{ padding: "8px 16px", borderRadius: "8px", background: copied ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.15)", border: "none", color: copied ? "#4ade80" : "#818cf8", fontWeight: 700, fontSize: "13px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
-              {copied ? "Copied" : "Copy Result"}
+              {copied ? t("urlEncoder.copied") : t("urlEncoder.copyResult")}
             </button>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>Input URL / Query</span>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>{t("urlEncoder.inputLabel")}</span>
               <textarea
                 rows={10}
                 value={inputStr}
@@ -90,7 +90,7 @@ export default function UrlEncoderPage() {
             </div>
 
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>Output Result</span>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>{t("urlEncoder.outputLabel")}</span>
               <textarea
                 readOnly
                 rows={10}
@@ -102,12 +102,18 @@ export default function UrlEncoderPage() {
         </section>
 
         <ToolGuide
-          badgeText="100% Client-Side & Fast"
-          aboutTitle="What is URL Encode & Decode?"
-          aboutDesc="Convert special characters in URLs to safe percent-encoded format and decode them back."
-          howTitle="How to Use URL Encoder"
-          steps={["1. Choose Encode or Decode mode.", "2. Enter your URL string.", "3. Copy the converted output."] }
-          faqs={[{ q: "Is URL encoding processed locally?", a: "Yes, 100% inside your web browser." }]}
+          badgeText={t("urlEncoder.guideBadge")}
+          aboutTitle={t("urlEncoder.guide.aboutTitle")}
+          aboutDesc={t("urlEncoder.guide.aboutDesc")}
+          howTitle={t("urlEncoder.guide.howTitle")}
+          steps={[
+            t("urlEncoder.guide.step1"),
+            t("urlEncoder.guide.step2"),
+            t("urlEncoder.guide.step3"),
+          ]}
+          faqs={[
+            { q: t("urlEncoder.guide.faq1Q"), a: t("urlEncoder.guide.faq1A") }
+          ]}
         />
       </main>
       <Footer />
