@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import {
-  FilePlus2, Scissors, PackageMinus, FileText,
-  ScanLine, RefreshCw, ZoomOut, Eraser,
-  Type, CaseSensitive, Code2, GitCompare,
-  Braces, Binary, Link as LinkIcon, Search,
+  FilePlus2, Scissors, FileArchive, FileText,
+  Scaling, RefreshCw, Minimize2, Sparkles,
+  Type, Eye, Code2, GitCompare,
+  Braces, Binary, Link2, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
-  ChevronRight, Sparkles, TrendingUp, Hammer, Flame
+  ChevronRight, TrendingUp, Hammer, Flame
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
-import { groupToolsByCategory } from "@/lib/tools";
+import { TOOLS, groupToolsByCategory } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
 import { useState, useEffect } from "react";
 import { getToolUsageCount, incrementToolUsage, formatCount } from "@/lib/stats";
@@ -50,14 +50,14 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "unit-converter":    { en: { title: "Unit Converter", description: "Convert length, weight, temperature, area, volume, and speed." }, ko: { title: "단위 변환기", description: "길이, 무게, 온도, 넓이, 부피, 속도 등 다양한 단위를 즉시 변환합니다." }, ja: { title: "単位変換ツール", description: "長さ、重さ、温度、面積などを即座に相互変換します。" }, es: { title: "Convertidor de Unidades", description: "Convierte longitud, peso, temperatura y mas al instante." }, zh: { title: "多功能单位转换", description: "长度、重量、温度、面积等多维度单位换算。" }, fr: { title: "Convertisseur d'Unités", description: "Convertissez longueur, poids, température et plus." } },
   "color-converter":   { en: { title: "Color Converter & Picker", description: "Convert between HEX, RGB, HSL, HSV, and CMYK color codes." }, ko: { title: "색상 변환기 & 피커", description: "HEX, RGB, HSL, HSV, CMYK 색상 코드를 상호 변환합니다." }, ja: { title: "カラー変換＆ピッカー", description: "HEX、RGB、HSL、HSVコードを即座に相互変換。" }, es: { title: "Convertidor de Color", description: "Convierte entre formatos de color HEX, RGB y HSL." }, zh: { title: "颜色格式转换与拾色器", description: "HEX、RGB、HSL、HSV 颜色代码相互转换。" }, fr: { title: "Convertisseur de Couleur", description: "Convertissez entre les formats HEX, RGB et HSL." } },
   "csv-to-json":       { en: { title: "CSV → JSON", description: "Upload a CSV file and convert it to structured JSON data." }, ko: { title: "CSV → JSON 변환기", description: "CSV 파일을 업로드하고 구조화된 JSON 데이터로 변환합니다." }, ja: { title: "CSV→JSON", description: "CSVファイルを構造化JSONデータに変換します。" }, es: { title: "CSV a JSON", description: "Sube un archivo CSV y conviértelo a datos JSON." }, zh: { title: "CSV 转 JSON 数据", description: "将 CSV 文件解析转换为 JSON 结构化数据。" }, fr: { title: "CSV vers JSON", description: "Convertissez un fichier CSV en données JSON." } },
-  "password-generator": { en: { title: "Password Generator", description: "Generate strong, cryptographically secure random passwords." }, ko: { title: "비밀번호 생성기", description: "안전한 무작위 비밀번호를 암호학적으로 생성합니다." }, ja: { title: "パスワード生成", description: "暗号学的に安全なランダムパスワードを生成します。" }, es: { title: "Generador de Contraseñas", description: "Genera contraseñas aleatorias seguras." }, zh: { title: "随机密码生成器", description: "生成具备密码学强度的随机高难度安全密码。" }, fr: { title: "Générateur de Mots de Passe", description: "Générez des mots de passe aléatoires sécurisés." } },
+  "password-generator": { en: { title: "Password Generator", description: "Generate strong, cryptographically secure random passwords." }, ko: { title: "비밀번호 생성기", description: "안전한 무작위 비밀번호를 암호학적으로 생성합니다." }, ja: { title: "パスワード自動生成", description: "暗号学的に安全なランダムパスワードを生成します。" }, es: { title: "Generador de Contraseñas", description: "Genera contraseñas aleatorias seguras." }, zh: { title: "随机密码生成器", description: "生成具备密码学强度的随机高难度安全密码。" }, fr: { title: "Générateur de Mots de Passe", description: "Générez des mots de passe aléatoires sécurisés." } },
   "hash-generator":     { en: { title: "Hash Generator", description: "Generate MD5, SHA-1, SHA-256, or SHA-512 hashes from text." }, ko: { title: "해시 생성기 (MD5 / SHA-256)", description: "텍스트에서 MD5, SHA-1, SHA-256, SHA-512 해시를 생성합니다." }, ja: { title: "ハッシュ生成", description: "テキストからMD5、SHA-256などのハッシュを生成します。" }, es: { title: "Generador de Hash", description: "Genera hashes MD5, SHA-1 o SHA-256." }, zh: { title: "哈希值计算", description: "计算文本的 MD5、SHA-1 及 SHA-256 校验和。" }, fr: { title: "Générateur de Hachage", description: "Générez des hachages MD5, SHA-1 ou SHA-256." } },
 };
 
 const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
   "PDF Tools":         { ko: "PDF 도구",        ja: "PDFツール",      es: "Herramientas PDF",    zh: "PDF工具",      fr: "Outils PDF" },
   "Image Tools":       { ko: "이미지 도구",      ja: "画像ツール",     es: "Herramientas Imagen", zh: "图像工具",     fr: "Outils Image" },
-  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "テキスト整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
+  "Text & Formatting": { ko: "텍스트 & 서식",    ja: "텍스트整形",   es: "Texto & Formato",     zh: "文本&格式",    fr: "Texte & Format" },
   "Dev Tools":         { ko: "개발자 도구",      ja: "開発者ツール",   es: "Herramientas Dev",    zh: "开发工具",     fr: "Outils Dev" },
   "Converter":         { ko: "변환기",           ja: "コンバーター",   es: "Conversor",           zh: "转换器",       fr: "Convertisseur" },
   "Security":          { ko: "보안",             ja: "セキュリティ",   es: "Seguridad",           zh: "安全",         fr: "Sécurité" },
@@ -73,10 +73,10 @@ const CAT_NAV_TRANSLATIONS: Record<string, Record<string, string>> = {
 };
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
-  FilePlus2, Scissors, PackageMinus, FileText,
-  ScanLine, RefreshCw, ZoomOut, Eraser,
-  Type, CaseSensitive, Code2, GitCompare,
-  Braces, Binary, Link: LinkIcon, Search,
+  FilePlus2, Scissors, FileArchive, FileText,
+  Scaling, RefreshCw, Minimize2, Sparkles,
+  Type, Eye, Code2, GitCompare,
+  Braces, Binary, Link2, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
 };
@@ -98,259 +98,340 @@ const BADGE_TRANSLATIONS: Record<string, Record<string, string>> = {
 const DEV_LABEL: Record<string, string> = {
   ko: "개발 중",
   ja: "開発中",
-  es: "En Dev",
+  es: "En desarrollo",
   zh: "开发中",
-  fr: "En Dev",
+  fr: "En développement",
   en: "In Dev",
 };
 
 interface ToolGridProps {
-  tools: Tool[];
-  isSearching: boolean;
-  onCategorySearch: (query: string) => void;
+  tools?: Tool[];
+  isSearching?: boolean;
+  onCategorySearch?: (query: string) => void;
 }
 
-// ── Single Tool Card ───────────────────────────────────────────
-function ToolCard({ tool }: { tool: Tool }) {
-  const { locale, t } = useLocale();
-  const meta = CATEGORY_META[tool.category];
-  const IconComponent = ICON_MAP[tool.icon];
+export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
+  const grouped = groupToolsByCategory(tools);
+  const { locale } = useLocale();
 
-  const [usageCount, setUsageCount] = useState<number>(0);
+  const [usageCounts, setUsageCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    setUsageCount(getToolUsageCount(tool.id));
-  }, [tool.id]);
+    const counts: Record<string, number> = {};
+    grouped.forEach(({ tools: categoryTools }) => {
+      categoryTools.forEach((tool) => {
+        counts[tool.id] = getToolUsageCount(tool.id);
+      });
+    });
+    setUsageCounts(counts);
+  }, []);
 
-  const handleRunClick = () => {
-    if (!tool.isDev) {
-      const updated = incrementToolUsage(tool.id);
-      setUsageCount(updated);
-    }
+  const handleToolClick = (toolId: string) => {
+    const newCount = incrementToolUsage(toolId);
+    setUsageCounts((prev) => ({ ...prev, [toolId]: newCount }));
   };
 
-  const localeData = TOOL_TRANSLATIONS[tool.id]?.[locale];
-  const title = localeData?.title ?? tool.title;
-  const description = localeData?.description ?? tool.description;
+  const getTitle = (tool: Tool) => {
+    return TOOL_TRANSLATIONS[tool.id]?.[locale]?.title ?? tool.title;
+  };
 
-  const badgeLabel = tool.isDev
-    ? (DEV_LABEL[locale] ?? "In Dev")
-    : tool.badge
-    ? (BADGE_TRANSLATIONS[tool.badge]?.[locale] ?? tool.badge)
-    : null;
+  const getDesc = (tool: Tool) => {
+    return TOOL_TRANSLATIONS[tool.id]?.[locale]?.description ?? tool.description;
+  };
+
+  const getCatName = (cat: string) => {
+    return CATEGORY_TRANSLATIONS[cat]?.[locale] ?? cat;
+  };
+
+  const getBadgeText = (badge?: string) => {
+    if (!badge) return null;
+    return BADGE_TRANSLATIONS[badge]?.[locale] ?? badge;
+  };
 
   return (
-    <div
-      className="glass-card tool-card"
-      style={{
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "12px",
-        opacity: tool.isDev ? 0.88 : 1,
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
-        <div className={meta.iconClass} style={{ width: "40px", height: "40px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }} aria-hidden="true">
-          {IconComponent && <IconComponent size={18} strokeWidth={1.8} />}
+    <section id="tools" style={{ padding: "32px 0 80px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+        
+        {/* Category Jump Bar */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            overflowX: "auto",
+            paddingBottom: "12px",
+            marginBottom: "40px",
+            scrollbarWidth: "none",
+          }}
+        >
+          <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", paddingRight: "4px", flexShrink: 0 }}>
+            JUMP TO:
+          </span>
+          {grouped.map(({ category }) => {
+            const shortKey = category.split(" ")[0];
+            const displayLabel = CAT_NAV_TRANSLATIONS[shortKey]?.[locale] ?? shortKey;
+            const meta = CATEGORY_META[category];
+
+            return (
+              <a
+                key={category}
+                href={`#cat-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "6px 14px",
+                  borderRadius: "100px",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid var(--border-subtle)",
+                  color: "var(--text-secondary)",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget;
+                  el.style.borderColor = meta.accent;
+                  el.style.color = meta.accent;
+                  el.style.background = `${meta.accent}12`;
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget;
+                  el.style.borderColor = "var(--border-subtle)";
+                  el.style.color = "var(--text-secondary)";
+                  el.style.background = "rgba(255,255,255,0.04)";
+                }}
+              >
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: meta.accent }} />
+                {displayLabel}
+              </a>
+            );
+          })}
         </div>
 
-        {badgeLabel && (
-          <span
-            style={{
-              fontSize: "10px",
-              fontWeight: 700,
-              padding: "2px 8px",
-              borderRadius: "100px",
-              letterSpacing: "0.04em",
-              display: "flex",
-              alignItems: "center",
-              gap: "3px",
-              flexShrink: 0,
-              background: tool.isDev ? "rgba(245, 158, 11, 0.15)" : tool.badge === "Popular" ? "rgba(239, 68, 68, 0.15)" : "rgba(99, 102, 241, 0.15)",
-              color: tool.isDev ? "#fbbf24" : tool.badge === "Popular" ? "#f87171" : "#818cf8",
-              border: tool.isDev ? "1px solid rgba(245, 158, 11, 0.3)" : tool.badge === "Popular" ? "1px solid rgba(239, 68, 68, 0.25)" : "1px solid rgba(99, 102, 241, 0.25)",
-            }}
-          >
-            {tool.isDev ? <Hammer size={9} /> : tool.badge === "Popular" ? <TrendingUp size={9} /> : <Sparkles size={9} />}
-            {badgeLabel}
-          </span>
-        )}
-      </div>
+        {/* Categories Sections */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "56px" }}>
+          {grouped.map(({ category, tools: categoryTools }) => {
+            const meta = CATEGORY_META[category];
+            const sectionId = `cat-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
 
-      <div>
-        <h3 style={{ fontSize: "14.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "5px", letterSpacing: "-0.2px" }}>
-          {title}
-        </h3>
-        <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: 1.55 }}>
-          {description}
-        </p>
-      </div>
+            if (categoryTools.length === 0) return null;
 
-      <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", paddingTop: "8px" }}>
-        <Link
-          href={tool.href}
-          id={`tool-${tool.id}`}
-          onClick={handleRunClick}
-          style={{
-            display: "inline-flex", alignItems: "center", gap: "5px",
-            padding: "7px 14px", borderRadius: "8px", fontSize: "12.5px", fontWeight: 600,
-            color: tool.isDev ? "#fbbf24" : meta.accent,
-            background: tool.isDev ? "rgba(245, 158, 11, 0.08)" : "var(--btn-secondary-bg)",
-            border: tool.isDev ? "1px solid rgba(245, 158, 11, 0.25)" : "1px solid var(--btn-secondary-border)",
-            textDecoration: "none", transition: "all 0.2s", fontFamily: "Inter, sans-serif",
-          }}
-          onMouseEnter={(e) => {
-            const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = tool.isDev ? "rgba(245, 158, 11, 0.15)" : "var(--btn-secondary-hover)";
-            el.style.borderColor = tool.isDev ? "rgba(245, 158, 11, 0.4)" : `${meta.accent}33`;
-          }}
-          onMouseLeave={(e) => {
-            const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = tool.isDev ? "rgba(245, 158, 11, 0.08)" : "var(--btn-secondary-bg)";
-            el.style.borderColor = tool.isDev ? "rgba(245, 158, 11, 0.25)" : "var(--btn-secondary-border)";
-          }}
-          aria-label={`${tool.isDev ? DEV_LABEL[locale] : t("grid.runTool")} — ${title}`}
-        >
-          {tool.isDev ? (DEV_LABEL[locale] ?? "In Dev") : t("grid.runTool")}
-          <ChevronRight size={12} />
-        </Link>
+            return (
+              <div key={category} id={sectionId} style={{ scrollMarginTop: "90px" }}>
+                {/* Category Title */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+                  <div
+                    style={{
+                      width: "4px",
+                      height: "20px",
+                      borderRadius: "2px",
+                      background: meta.accent,
+                    }}
+                  />
+                  <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px" }}>
+                    {getCatName(category)}
+                  </h2>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      color: "var(--text-muted)",
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid var(--border-subtle)",
+                      padding: "2px 8px",
+                      borderRadius: "100px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {categoryTools.length}{locale === "ko" ? "개 도구" : " tools"}
+                  </span>
+                </div>
 
-        {usageCount > 0 && (
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-              fontSize: "11px",
-              color: "var(--text-muted)",
-              fontWeight: 500,
-              background: "var(--btn-secondary-bg)",
-              padding: "4px 8px",
-              borderRadius: "6px",
-              border: "1px solid var(--border-subtle)",
-              letterSpacing: "-0.2px",
-            }}
-            title={locale === "ko" ? `총 ${usageCount.toLocaleString()}회 이용됨` : `${usageCount.toLocaleString()} total uses`}
-          >
-            <Flame size={11} color="#f97316" />
-            <span>{formatCount(usageCount, locale)}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+                {/* Cards Grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
+                    gap: "16px",
+                  }}
+                >
+                  {categoryTools.map((tool) => {
+                    const IconComponent = ICON_MAP[tool.icon];
+                    const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
 
-// ── Category Section ───────────────────────────────────────────
-function CategorySection({ category, tools }: { category: ToolCategory; tools: Tool[] }) {
-  const { locale, t } = useLocale();
-  const meta = CATEGORY_META[category];
-  const catLabel = CATEGORY_TRANSLATIONS[category]?.[locale] ?? category;
+                    if (tool.isDev) {
+                      return (
+                        <div
+                          key={tool.id}
+                          className="glass-card"
+                          style={{
+                            padding: "22px",
+                            opacity: 0.6,
+                            cursor: "not-allowed",
+                            position: "relative",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            gap: "14px",
+                          }}
+                        >
+                          <div>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                              <div
+                                className={meta.iconClass}
+                                style={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "10px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                {IconComponent ? <IconComponent size={20} strokeWidth={1.75} /> : <Hammer size={20} />}
+                              </div>
 
-  return (
-    <section style={{ marginBottom: "56px" }} aria-labelledby={`cat-${category.replace(/\s/g, "-")}`}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-        <div style={{ width: "4px", height: "20px", borderRadius: "2px", background: `linear-gradient(to bottom, ${meta.accent}, transparent)` }} aria-hidden="true" />
-        <h2 id={`cat-${category.replace(/\s/g, "-")}`} style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.2px" }}>
-          {catLabel}
-        </h2>
-        <span className={meta.badgeClass} style={{ fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: "100px" }}>
-          {tools.length} {t("grid.tools")}
-        </span>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "14px" }}>
-        {tools.map((tool) => <ToolCard key={tool.id} tool={tool} />)}
+                              <span
+                                style={{
+                                  fontSize: "11px",
+                                  fontWeight: 700,
+                                  color: "var(--text-muted)",
+                                  background: "rgba(255,255,255,0.06)",
+                                  padding: "2px 8px",
+                                  borderRadius: "100px",
+                                  border: "1px solid var(--border-subtle)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                }}
+                              >
+                                <Hammer size={10} />
+                                {DEV_LABEL[locale] ?? "In Dev"}
+                              </span>
+                            </div>
+
+                            <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
+                              {getTitle(tool)}
+                            </h3>
+
+                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+                              {getDesc(tool)}
+                            </p>
+                          </div>
+
+                          <div style={{ fontSize: "12.5px", color: "var(--text-muted)", fontWeight: 600 }}>
+                            {locale === "ko" ? "곧 출시 예정" : "Coming Soon"}
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={tool.id}
+                        href={tool.href}
+                        onClick={() => handleToolClick(tool.id)}
+                        className="glass-card card-hover"
+                        style={{
+                          padding: "22px",
+                          textDecoration: "none",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          gap: "14px",
+                          position: "relative",
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                            <div
+                              className={meta.iconClass}
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                borderRadius: "10px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {IconComponent ? <IconComponent size={20} strokeWidth={1.75} /> : <Sparkles size={20} />}
+                            </div>
+
+                            {tool.badge && (
+                              <span
+                                className={meta.badgeClass}
+                                style={{
+                                  fontSize: "11px",
+                                  fontWeight: 700,
+                                  padding: "2px 8px",
+                                  borderRadius: "100px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "3px",
+                                }}
+                              >
+                                {tool.badge === "Popular" && <TrendingUp size={10} />}
+                                {tool.badge === "New" && <Sparkles size={10} />}
+                                {getBadgeText(tool.badge)}
+                              </span>
+                            )}
+                          </div>
+
+                          <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.2px" }}>
+                            {getTitle(tool)}
+                          </h3>
+
+                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55" }}>
+                            {getDesc(tool)}
+                          </p>
+                        </div>
+
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "6px" }}>
+                          <span
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: 600,
+                              color: meta.accent,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "2px",
+                            }}
+                          >
+                            {locale === "ko" ? "실행하기" : "Run"}
+                            <ChevronRight size={14} />
+                          </span>
+
+                          <span
+                            style={{
+                              fontSize: "11.5px",
+                              color: "var(--text-muted)",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "3px",
+                              background: "rgba(255,255,255,0.03)",
+                              padding: "2px 7px",
+                              borderRadius: "6px",
+                              border: "1px solid var(--border-subtle)",
+                            }}
+                            title="사용 횟수"
+                          >
+                            <Flame size={11} style={{ color: "#f97316" }} />
+                            {formatCount(count)}
+                          </span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </section>
-  );
-}
-
-// ── ToolGrid ───────────────────────────────────────────────────
-export default function ToolGrid({ tools, isSearching, onCategorySearch }: ToolGridProps) {
-  const { locale, t } = useLocale();
-
-  if (tools.length === 0) {
-    return (
-      <div style={{ textAlign: "center", padding: "80px 24px" }}>
-        <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "var(--bg-card)", border: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color: "var(--text-muted)" }}>
-          <Search size={24} />
-        </div>
-        <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-          {t("grid.noResults.title")}
-        </h3>
-        <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>{t("grid.noResults.body")}</p>
-      </div>
-    );
-  }
-
-  const CAT_NAVS = [
-    { label: "PDF",       query: "PDF Tools" },
-    { label: "Image",     query: "Image" },
-    { label: "Text",      query: "Text" },
-    { label: "Dev",       query: "Dev" },
-    { label: "Converter", query: "Converter" },
-    { label: "Security",  query: "Security" },
-  ];
-
-  if (isSearching) {
-    const count = tools.length;
-    return (
-      <div>
-        <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "20px" }}>
-          {count} {count === 1 ? t("grid.search.result") : t("grid.search.results")}
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "14px" }}>
-          {tools.map((tool) => <ToolCard key={tool.id} tool={tool} />)}
-        </div>
-      </div>
-    );
-  }
-
-  const groups = groupToolsByCategory(tools);
-  return (
-    <div>
-      {/* Section header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "40px", paddingBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div>
-          <h2 style={{ fontSize: "22px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.4px", marginBottom: "4px" }}>
-            {t("grid.allTools")}
-          </h2>
-          <p style={{ fontSize: "13.5px", color: "var(--text-muted)" }}>{t("grid.subtitle")}</p>
-        </div>
-
-        {/* Category quick nav */}
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end" }} className="cat-nav">
-          {CAT_NAVS.map((c) => (
-            <button
-              key={c.label}
-              onClick={() => onCategorySearch(c.query)}
-              style={{
-                padding: "5px 12px", borderRadius: "100px",
-                background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
-                color: "var(--text-secondary)", fontSize: "12px", fontWeight: 500,
-                cursor: "pointer", transition: "all 0.15s", fontFamily: "Inter, sans-serif",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "var(--btn-secondary-hover)";
-                (e.currentTarget as HTMLButtonElement).style.color = "var(--text-primary)";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-active)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "var(--btn-secondary-bg)";
-                (e.currentTarget as HTMLButtonElement).style.color = "var(--text-secondary)";
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--btn-secondary-border)";
-              }}
-            >
-              {CAT_NAV_TRANSLATIONS[c.label]?.[locale] ?? c.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {groups.map(({ category, tools: catTools }) => (
-        <CategorySection key={category} category={category} tools={catTools} />
-      ))}
-    </div>
   );
 }
