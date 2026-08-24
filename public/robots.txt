@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Sitemap: https://desktools.run/sitemap.xml
+
+User-agent: Yeti
+Allow: /
+
+User-agent: Naverbot
+Allow: /
