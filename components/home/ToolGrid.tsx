@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   FilePlus2, Scissors, FolderArchive, FileText,
-  Maximize2, RefreshCw, Minimize2, Wand2,
+  Maximize2, RefreshCw, Minimize2, Wand2, Stamp,
   Type, Eye, Code2, GitCompare,
   Braces, Binary, Link2, Search,
   ArrowLeftRight, Palette, Table,
@@ -30,6 +30,7 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "image-converter":  { en: { title: "Image Converter", description: "Convert between JPG, PNG, WebP, AVIF, GIF, and more formats." }, ko: { title: "이미지 변환기", description: "JPG, PNG, WebP, AVIF, GIF 등 다양한 형식으로 변환합니다." }, ja: { title: "画像変換", description: "JPG, PNG, WebP, AVIF, GIF間で変換します。" }, es: { title: "Convertidor de Imagen", description: "Convierte entre formatos JPG, PNG, WebP, AVIF y GIF." }, zh: { title: "图片格式转换器", description: "在 JPG, PNG, WebP, AVIF, GIF 等格式间转换。" }, fr: { title: "Convertisseur d'Image", description: "Convertissez entre les formats JPG, PNG, WebP, AVIF et GIF." } },
   "image-compress":   { en: { title: "Image Compress", description: "Shrink image file sizes for faster web loading." }, ko: { title: "이미지 압축", description: "웹 로딩 속도를 높이기 위해 이미지 파일 크기를 줄입니다." }, ja: { title: "画像圧縮", description: "ウェブ読み込みを速めるため画像を圧縮します。" }, es: { title: "Comprimir Imagen", description: "Reduce el tamano de la imagen para una carga web mas rapida." }, zh: { title: "图片压缩", description: "缩小图片文件体积，加快网页加载速度。" }, fr: { title: "Compresser Image", description: "Reduisez la taille des images pour un chargement web plus rapide." } },
   "background-remover": { en: { title: "Background Remover", description: "Automatically remove image backgrounds with AI precision." }, ko: { title: "배경 제거 (누끼 따기)", description: "AI로 이미지 배경을 자동으로 정밀하게 제거합니다." }, ja: { title: "背景除去", description: "AIで画像の背景を自動で精密に除去します。" }, es: { title: "Eliminar Fondo", description: "Elimina fondos de imagen automaticamente con precision IA." }, zh: { title: "抠图去背景", description: "利用 AI 精准自动去除图片背景。" }, fr: { title: "Supprimer l'Arriere-Plan", description: "Supprimez l'arriere-plan des images automatiquement avec precision IA." } },
+  "image-watermark":  { en: { title: "Image Watermark Adder", description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls." }, ko: { title: "이미지 워터마크 추가기", description: "이미지에 텍스트 및 로고 워터마크를 투명도, 회전, 격자 패턴으로 추가합니다." }, ja: { title: "画像ウォーターマーク追加", description: "画像にテキストやロゴの透かし（ウォーターマーク）を追加します。" }, es: { title: "Añadir Marca de Agua", description: "Añade marcas de agua de texto o logo a tus imágenes con control total." }, zh: { title: "图片水印添加器", description: "给图片添加自定义文本或 Logo 水印，支持透明度、旋转与平铺。" }, fr: { title: "Filigrane d'Image", description: "Ajoutez des filigranes de texte ou de logo à vos images en toute confidentialité." } },
 
   // Text
   "word-count":       { en: { title: "Word Count", description: "Count words, characters, sentences, and reading time." }, ko: { title: "단어 수 세기", description: "단어, 글자, 문장 수 및 읽기 시간을 계산합니다." }, ja: { title: "文字数カウント", description: "単語数、文字数、文章数、読了時間を計測します。" }, es: { title: "Contador de Palabras", description: "Cuenta palabras, caracteres, oraciones y tiempo de lectura." }, zh: { title: "字数统计", description: "统计单词数、字符数、句子数及阅读时间。" }, fr: { title: "Compteur de Mots", description: "Comptez les mots, caracteres, phrases et temps de lecture." } },
@@ -80,6 +81,7 @@ const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strok
   "image-converter": RefreshCw,
   "image-compress": Minimize2,
   "background-remover": Wand2,
+  "image-watermark": Stamp,
   "word-count": FileText,
   "text-case": Type,
   "markdown-preview": Eye,

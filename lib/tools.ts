@@ -107,6 +107,16 @@ export const TOOLS: Tool[] = [
     href: "/tools/background-remover",
     isDev: false,
   },
+  {
+    id: "image-watermark",
+    title: "Image Watermark Adder",
+    description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls.",
+    category: "Image Tools",
+    icon: "Stamp",
+    badge: "New",
+    href: "/tools/image-watermark",
+    isDev: false,
+  },
 
   // ── Text & Formatting ─────────────────────────────────────
   {
@@ -319,6 +329,13 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       es: { title: "Eliminador de Fondo", description: "Elimina el fondo de las imágenes de forma transparente en el navegador." },
       zh: { title: "智能扣图 (背景消除)", description: "浏览器本地抠图，一键将图片背景处理为透明。" },
       fr: { title: "Suppression d'Arrière-Plan", description: "Supprimez l'arrière-plan des images instantanément dans votre navigateur." },
+    },
+    "image-watermark": {
+      ko: { title: "이미지 워터마크 추가기", description: "이미지에 텍스트 및 로고 워터마크를 투명도, 회전, 격자 패턴으로 추가합니다." },
+      ja: { title: "画像ウォーターマーク追加", description: "画像にテキストやロゴの透かし（ウォーターマーク）を追加します。" },
+      es: { title: "Añadir Marca de Agua", description: "Añade marcas de agua de texto o logo a tus imágenes con control total." },
+      zh: { title: "图片水印添加器", description: "给图片添加自定义文本或 Logo 水印，支持透明度、旋转与平铺。" },
+      fr: { title: "Filigrane d'Image", description: "Ajoutez des filigranes de texte ou de logo à vos images en toute confidentialité." },
     },
     "word-count": {
       ko: { title: "글자 수 & 단어 세기", description: "단어, 글자 수, 문장 수, 예상 읽기 시간을 실시간 분석합니다." },
