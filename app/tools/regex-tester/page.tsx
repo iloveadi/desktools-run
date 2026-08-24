@@ -13,7 +13,7 @@ export default function RegexTesterPage() {
 
   const [pattern, setPattern] = useState("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
   const [flags, setFlags] = useState("g");
-  const [testText, setTestText] = useState(`Contact us at support@desktools.run or sales@example.com for help!
+  const [testText, setTestText] = useState(`Contact us at iloveadi@gmail.com or sales@example.com for help!
 Invalid emails: test@domain, user@.com`);
 
   const getMatches = () => {

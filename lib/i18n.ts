@@ -239,7 +239,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. Cookies & Analytics",
     "privacy.sec4Desc": "desktools.run does not use invasive cross-site tracking cookies. Anonymous web telemetry may be processed to measure basic site uptime and pageview statistics.",
     "privacy.sec5Title": "5. Your Data Rights & Contact",
-    "privacy.sec5Desc": "Because we do not store your data on any server, you retain 100% control over your files and text. If you have any privacy questions, please contact privacy@desktools.run.",
+    "privacy.sec5Desc": "Because we do not store your data on any server, you retain 100% control over your files and text. If you have any privacy questions, please contact iloveadi@gmail.com.",
 
     "terms.title": "Terms of Service",
     "terms.subtitle": "Last updated: August 21, 2026. Terms and conditions governing your use of desktools.run.",
@@ -253,7 +253,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. Intellectual Property & Acceptable Use",
     "terms.sec4Desc": "The site design, branding, code, and interface remain the property of desktools.run. You agree not to perform automated abusive scraping, denial-of-service (DDoS) attacks, or attempt to compromise site infrastructure.",
     "terms.sec5Title": "5. Modifications & Support Contact",
-    "terms.sec5Desc": "We reserve the right to revise these terms at any time. Continued use of the platform after updates constitutes acceptance of the new terms. For questions, contact support@desktools.run.",
+    "terms.sec5Desc": "We reserve the right to revise these terms at any time. Continued use of the platform after updates constitutes acceptance of the new terms. For questions, contact iloveadi@gmail.com.",
 
     "cookies.title": "Cookie Policy",
     "cookies.subtitle": "Last updated: August 21, 2026. Learn how desktools.run respects your privacy with zero tracking cookies.",
@@ -267,7 +267,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. How to Manage or Delete Browser Data",
     "cookies.sec4Desc": "You can clear or block LocalStorage and cookies at any time through your web browser settings (Chrome, Safari, Firefox, Edge). Note that clearing storage will reset your theme and language preferences to defaults.",
     "cookies.sec5Title": "5. Policy Updates & Contact",
-    "cookies.sec5Desc": "We may update this policy to reflect site improvements. If you have questions regarding our cookie practices, please contact privacy@desktools.run.",
+    "cookies.sec5Desc": "We may update this policy to reflect site improvements. If you have questions regarding our cookie practices, please contact iloveadi@gmail.com.",
 
     "imageResizer.title": "Image Resizer",
     "imageResizer.subtitle": "Resize PNG, JPG, and WEBP images instantly with custom dimensions, aspect ratio lock, and quality controls.",
@@ -815,7 +815,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. 쿠키 및 방문 분석 정책",
     "privacy.sec4Desc": "desktools.run은 사용자를 추적하는 타사 마케팅 쿠키를 사용하지 않습니다. 사이트 가동률 및 기본적인 방문 통계 측정을 위해 최소한의 익명 기술 로그만 활용될 수 있습니다.",
     "privacy.sec5Title": "5. 데이터 권리 및 개인정보 문의처",
-    "privacy.sec5Desc": "사용자의 정보가 서버에 전혀 수집되지 않으므로, 사용자는 자신의 데이터에 대한 완전한 통제권을 가집니다. 개인정보 방침 관련 문의 사항은 privacy@desktools.run으로 연락해 주시기 바랍니다.",
+    "privacy.sec5Desc": "사용자의 정보가 서버에 전혀 수집되지 않으므로, 사용자는 자신의 데이터에 대한 완전한 통제권을 가집니다. 개인정보 방침 관련 문의 사항은 iloveadi@gmail.com으로 연락해 주시기 바랍니다.",
 
     "terms.title": "이용약관",
     "terms.subtitle": "최종 수정일: 2026년 8월 21일. desktools.run 서비스를 이용함에 있어 적용되는 이용 조건입니다.",
@@ -829,7 +829,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. 지적재산권 및 공정 이용 (Acceptable Use)",
     "terms.sec4Desc": "플랫폼의 디자인, 브랜딩, 소스코드 및 인터페이스에 대한 지적재산권은 desktools.run에 귀속됩니다. 악의적인 비정상적 자동화 트래픽(DDoS), 서버 공격 또는 서비스 침해 행위는 엄격히 금지됩니다.",
     "terms.sec5Title": "5. 약관의 개정 및 지원 문의",
-    "terms.sec5Desc": "본 약관은 관련 법령 개정 또는 서비스 업데이트에 따라 변경될 수 있습니다. 약관 및 서비스에 대한 문의 사항은 support@desktools.run으로 연락 바랍니다.",
+    "terms.sec5Desc": "본 약관은 관련 법령 개정 또는 서비스 업데이트에 따라 변경될 수 있습니다. 약관 및 서비스에 대한 문의 사항은 iloveadi@gmail.com으로 연락 바랍니다.",
 
     "cookies.title": "쿠키 정책",
     "cookies.subtitle": "최종 수정일: 2026년 8월 21일. desktools.run이 추적 쿠키 없이 사용자의 개인정보를 보호하는 방식 안내입니다.",
@@ -843,7 +843,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. 브라우저 스토리지 및 쿠키 관리 방법",
     "cookies.sec4Desc": "이용자는 사용하는 웹 브라우저(Chrome, Safari, Firefox, Edge 등)의 설정 메뉴에서 언제든지 저장된 쿠키 및 로컬 스토리지를 삭제하거나 차단할 수 있습니다. (삭제 시 테마 및 언어 설정이 초기화됩니다.)",
     "cookies.sec5Title": "5. 방침 개정 및 개인정보 문의처",
-    "cookies.sec5Desc": "본 쿠키 정책은 서비스 기능 추가 등에 따라 변경될 수 있습니다. 쿠키 및 개인정보 관련 문의 사항은 privacy@desktools.run으로 연락 바랍니다.",
+    "cookies.sec5Desc": "본 쿠키 정책은 서비스 기능 추가 등에 따라 변경될 수 있습니다. 쿠키 및 개인정보 관련 문의 사항은 iloveadi@gmail.com으로 연락 바랍니다.",
 
     "imageResizer.title": "이미지 리사이즈 & 크기 조절",
     "imageResizer.subtitle": "PNG, JPG, WEBP 이미지의 해상도(픽셀/퍼센트) 및 품질을 실시간으로 자유롭게 조절하세요.",
@@ -1423,7 +1423,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. クッキーおよびアクセス解析",
     "privacy.sec4Desc": "追跡目的のサードパーティ製クッキーは使用しておりません。稼働率計測用の最小限の匿名ログのみが利用されます。",
     "privacy.sec5Title": "5. お客様の権利とお問い合わせ",
-    "privacy.sec5Desc": "お客様のデータはサーバーに保存されないため、データは完全にユーザー自身で制御できます。お問い合わせ: privacy@desktools.run",
+    "privacy.sec5Desc": "お客様のデータはサーバーに保存されないため、データは完全にユーザー自身で制御できます。お問い合わせ: iloveadi@gmail.com",
 
     "terms.title": "利用規約",
     "terms.subtitle": "最終更新日: 2026年8月21日。desktools.runのご利用に関する条件。",
@@ -1437,7 +1437,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. 知的財産権と適正利用",
     "terms.sec4Desc": "デザイン、ブランド、コードの権利はdesktools.runに帰属します。不正な自動スクレイピングやDDoS攻撃行為は固く禁止されています。",
     "terms.sec5Title": "5. 規約の変更とお問い合わせ",
-    "terms.sec5Desc": "規約は予告なく変更される場合があります。お問い合わせ: support@desktools.run",
+    "terms.sec5Desc": "規約は予告なく変更される場合があります。お問い合わせ: iloveadi@gmail.com",
 
     "cookies.title": "クッキーポリシー",
     "cookies.subtitle": "最終更新日: 2026年8月21日。desktools.runがトラッキングクッキーなしでプライバシーを保護する方法。",
@@ -1451,7 +1451,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. 管理・削除方法",
     "cookies.sec4Desc": "お使いのブラウザ（Chrome, Safari, Firefox, Edgeなど）の設定画面からいつでもデータをクリア・ブロックできます。",
     "cookies.sec5Title": "5. 改定とお問い合わせ",
-    "cookies.sec5Desc": "ポリシーに関するお問い合わせ: privacy@desktools.run",
+    "cookies.sec5Desc": "ポリシーに関するお問い合わせ: iloveadi@gmail.com",
 
     "imageResizer.title": "画像リサイズ",
     "imageResizer.subtitle": "PNG, JPG, WEBP画像の解像度と品質を瞬時に変更。",
@@ -1769,7 +1769,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. Cookies y Análisis",
     "privacy.sec4Desc": "No utilizamos cookies de seguimiento de terceros ni rastreadores publicitarios.",
     "privacy.sec5Title": "5. Tus Derechos y Contacto",
-    "privacy.sec5Desc": "Como no guardamos tus datos en servidores, tienes el control absoluto de tu información. Para consultas: privacy@desktools.run.",
+    "privacy.sec5Desc": "Como no guardamos tus datos en servidores, tienes el control absoluto de tu información. Para consultas: iloveadi@gmail.com.",
 
     "terms.title": "Términos de Servicio",
     "terms.subtitle": "Última actualización: 21 de agosto de 2026. Términos y condiciones para el uso de desktools.run.",
@@ -1783,7 +1783,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. Propiedad Intelectual y Uso Aceptable",
     "terms.sec4Desc": "El diseño y código pertenecen a desktools.run. Queda prohibido el scraping masivo automatizado o ataques informáticos.",
     "terms.sec5Title": "5. Modificaciones y Contacto",
-    "terms.sec5Desc": "Nos reservamos el derecho de modificar estos términos. Para consultas: support@desktools.run.",
+    "terms.sec5Desc": "Nos reservamos el derecho de modificar estos términos. Para consultas: iloveadi@gmail.com.",
 
     "cookies.title": "Política de Cookies",
     "cookies.subtitle": "Última actualización: 21 de agosto de 2026. Cómo desktools.run respeta tu privacidad sin cookies de rastreo.",
@@ -1797,7 +1797,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. Cómo Administrar o Eliminar Datos",
     "cookies.sec4Desc": "Puedes borrar el almacenamiento local o bloquear cookies en la configuración de tu navegador (Chrome, Safari, Firefox, Edge).",
     "cookies.sec5Title": "5. Actualizaciones y Contacto",
-    "cookies.sec5Desc": "Para preguntas sobre nuestras prácticas: privacy@desktools.run.",
+    "cookies.sec5Desc": "Para preguntas sobre nuestras prácticas: iloveadi@gmail.com.",
 
     "imageResizer.title": "Redimensionar Imágenes",
     "imageResizer.subtitle": "Cambia el tamaño y calidad de imágenes PNG, JPG y WEBP al instante.",
@@ -2145,7 +2145,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. Cookie 与访问分析",
     "privacy.sec4Desc": "desktools.run 不使用侵入性的跨站追踪 Cookie，也不会向第三方出售任何数据。",
     "privacy.sec5Title": "5. 您的数据权利与联系方式",
-    "privacy.sec5Desc": "由于我们不在服务器端存储您的任何数据，您拥有对数据的绝对控制权。隐私咨询邮箱：privacy@desktools.run。",
+    "privacy.sec5Desc": "由于我们不在服务器端存储您的任何数据，您拥有对数据的绝对控制权。隐私咨询邮箱：iloveadi@gmail.com。",
 
     "terms.title": "服务条款",
     "terms.subtitle": "最后更新日期：2026年8月21日。使用 desktools.run 需遵守的服务条款与条件。",
@@ -2159,7 +2159,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. 知识产权与合理使用",
     "terms.sec4Desc": "网站设计、品牌及代码知识产权归 desktools.run 所有。严禁恶意自动化抓取或发起网络攻击 (DDoS)。",
     "terms.sec5Title": "5. 条款修改与联系方式",
-    "terms.sec5Desc": "我们保留随时更新本条款的权利。技术支持与咨询邮箱：support@desktools.run。",
+    "terms.sec5Desc": "我们保留随时更新本条款的权利。技术支持与咨询邮箱：iloveadi@gmail.com。",
 
     "cookies.title": "Cookie 政策",
     "cookies.subtitle": "最后更新日期：2026年8月21日。了解 desktools.run 如何通过零追踪 Cookie 保护您的隐私。",
@@ -2173,7 +2173,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. 如何管理或删除浏览器数据",
     "cookies.sec4Desc": "您可以随时在浏览器（Chrome、Safari、Firefox、Edge）设置中清除 LocalStorage 和 Cookie。",
     "cookies.sec5Title": "5. 政策更新与联系方式",
-    "cookies.sec5Desc": "如有关于 Cookie 的任何疑问，请联系 privacy@desktools.run。",
+    "cookies.sec5Desc": "如有关于 Cookie 的任何疑问，请联系 iloveadi@gmail.com。",
 
     "imageResizer.title": "图片调整大小 (Image Resizer)",
     "imageResizer.subtitle": "实时调整 PNG、JPG 和 WEBP 图片的分辨率、比例与压缩质量。",
@@ -2521,7 +2521,7 @@ export const translations: Record<Locale, Translations> = {
     "privacy.sec4Title": "4. Cookies et Analyses",
     "privacy.sec4Desc": "desktools.run n'utilise aucun cookie de suivi publicitaire ni de traçage tiers.",
     "privacy.sec5Title": "5. Vos Droits et Contact",
-    "privacy.sec5Desc": "Puisque nous ne stockons aucune donnée sur serveur, vous conservez un contrôle total. Contact : privacy@desktools.run.",
+    "privacy.sec5Desc": "Puisque nous ne stockons aucune donnée sur serveur, vous conservez un contrôle total. Contact : iloveadi@gmail.com.",
 
     "terms.title": "Conditions d'Utilisation",
     "terms.subtitle": "Dernière mise à jour : 21 août 2026. Conditions régissant l'utilisation de desktools.run.",
@@ -2535,7 +2535,7 @@ export const translations: Record<Locale, Translations> = {
     "terms.sec4Title": "4. Propriété Intellectuelle et Usage Acceptable",
     "terms.sec4Desc": "Le design et le code restent la propriété de desktools.run. Le scraping abusif et les attaques DDoS sont strictement interdits.",
     "terms.sec5Title": "5. Modifications et Contact",
-    "terms.sec5Desc": "Nous nous réservons le droit de modifier ces conditions à tout moment. Contact : support@desktools.run.",
+    "terms.sec5Desc": "Nous nous réservons le droit de modifier ces conditions à tout moment. Contact : iloveadi@gmail.com.",
 
     "cookies.title": "Politique de Cookies",
     "cookies.subtitle": "Dernière mise à jour : 21 août 2026. Découvrez comment desktools.run respecte votre vie privée sans cookies de suivi.",
@@ -2549,7 +2549,7 @@ export const translations: Record<Locale, Translations> = {
     "cookies.sec4Title": "4. Comment Gérer ou Supprimer les Données",
     "cookies.sec4Desc": "Vous pouvez effacer le LocalStorage et les cookies à tout moment dans les paramètres de votre navigateur (Chrome, Safari, Firefox, Edge).",
     "cookies.sec5Title": "5. Mises à Jour et Contact",
-    "cookies.sec5Desc": "Pour toute question concernant nos pratiques : privacy@desktools.run.",
+    "cookies.sec5Desc": "Pour toute question concernant nos pratiques : iloveadi@gmail.com.",
 
     "imageResizer.title": "Redimensionner une Image",
     "imageResizer.subtitle": "Ajustez instantanément les dimensions et la qualité des images PNG, JPG et WEBP.",
