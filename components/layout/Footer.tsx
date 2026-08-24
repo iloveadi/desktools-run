@@ -39,9 +39,9 @@ export default function Footer() {
             <div style={{ width: "28px", height: "28px", borderRadius: "7px", background: "linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Zap size={13} color="white" strokeWidth={2.5} />
             </div>
-            <span style={{ fontSize: "15px", fontWeight: 700, letterSpacing: "-0.3px" }}>
+            <span style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "-0.3px" }}>
               <span className="gradient-text">desktools</span>
-              <span style={{ color: "rgba(255,255,255,0.3)" }}>.run</span>
+              <span style={{ color: "var(--text-secondary)", marginLeft: "1px" }}>.run</span>
             </span>
           </Link>
 
@@ -49,36 +49,61 @@ export default function Footer() {
             {t("footer.tagline")}
           </p>
 
-          {/* Social links */}
+          {/* Social / Contact icon links */}
           <div style={{ display: "flex", gap: "8px" }}>
             {[
-              { icon: Code2, href: "https://github.com",           label: "GitHub" },
-              { icon: X,     href: "https://x.com",                label: "X" },
-              { icon: Mail,  href: "mailto:hello@desktools.run",   label: "Email" },
-            ].map(({ icon: Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                aria-label={label}
-                style={{ width: "34px", height: "34px", borderRadius: "8px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", textDecoration: "none", transition: "all 0.2s" }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.background = "rgba(99,102,241,0.15)";
-                  el.style.color = "#a5b4fc";
-                  el.style.borderColor = "rgba(99,102,241,0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.background = "rgba(255,255,255,0.05)";
-                  el.style.color = "var(--text-muted)";
-                  el.style.borderColor = "rgba(255,255,255,0.07)";
-                }}
-              >
-                <Icon size={14} />
-              </a>
-            ))}
+              { icon: Code2, href: "https://github.com", label: "GitHub", external: true },
+              { icon: X,     href: "https://x.com",      label: "X",      external: true },
+              { icon: Mail,  href: "/contact",           label: "Contact", external: false },
+            ].map(({ icon: Icon, href, label, external }) => {
+              const content = (
+                <div
+                  style={{
+                    width: "34px",
+                    height: "34px",
+                    borderRadius: "8px",
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "var(--text-muted)",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.background = "rgba(99,102,241,0.15)";
+                    el.style.color = "#a5b4fc";
+                    el.style.borderColor = "rgba(99,102,241,0.3)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.background = "rgba(255,255,255,0.05)";
+                    el.style.color = "var(--text-muted)";
+                    el.style.borderColor = "rgba(255,255,255,0.07)";
+                  }}
+                >
+                  <Icon size={14} />
+                </div>
+              );
+
+              return external ? (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  style={{ textDecoration: "none" }}
+                >
+                  {content}
+                </a>
+              ) : (
+                <Link key={label} href={href} aria-label={label} style={{ textDecoration: "none" }}>
+                  {content}
+                </Link>
+              );
+            })}
           </div>
         </div>
 
