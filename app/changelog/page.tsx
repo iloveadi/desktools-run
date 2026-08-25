@@ -17,6 +17,50 @@ export default function ChangelogPage() {
 
   const releases: ReleaseItem[] = [
     {
+      version: "v1.4.0",
+      date: "August 25, 2026",
+      title: {
+        ko: "신규 이미지 유틸리티 2종 출시 & 전 도구 다국어 번역 시스템 확장",
+        en: "2 New Image Utilities Released & Expanded Multi-Language Translation System",
+        ja: "新規画像ツール2種リリース＆全ツール多言語翻訳システム拡張",
+        es: "2 Nuevas utilidades de imagen y expansión del sistema multilingüe",
+        zh: "新增 2 款图像实用工具与全站多语言翻译系统扩展",
+        fr: "2 Nouveaux utilitaires d'image et extension du système multilingue",
+      },
+      changes: {
+        ko: [
+          "이미지 EXIF 메타데이터 제거기 (/tools/exif-remover) 출시: 사진에 숨겨진 GPS 위치 좌표, 카메라 모델, 렌즈 및 촬영 일시 메타데이터 확인 및 1클릭 완벽 무손실 제거.",
+          "Favicon & 앱 아이콘 생성기 (/tools/favicon-generator) 출시: 로고 하나로 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico, site.webmanifest 세트 생성 및 ZIP 일괄 다운로드.",
+          "전체 26개 도구 페이지의 옵션, 가이드, 미리보기, FAQ 문구에 대한 한국어·영어·일본어·스페인어·중국어·프랑스어 6개 국어 동적 바인딩 리팩토링 완결.",
+        ],
+        en: [
+          "Released Image EXIF Metadata Cleaner & Viewer (/tools/exif-remover): Inspect GPS location, camera specs, and date/time metadata with 1-click lossless removal.",
+          "Released Favicon & App Icon Generator (/tools/favicon-generator): Generate multi-resolution PNGs, apple-touch-icon, favicon.ico, and site.webmanifest ZIP package.",
+          "Completed 6-language (EN, KO, JA, ES, ZH, FR) dynamic translation refactoring for all 26 tool utility pages.",
+        ],
+        ja: [
+          "画像EXIF情報削除・閲覧 (/tools/exif-remover) リリース: 写真の位置情報(GPS)、撮影機器、日時EXIFを確認し1クリックで完全削除。",
+          "ファビコン＆アプリアイコン作成 (/tools/favicon-generator) リリース: ロゴ画像1枚からマルチサイズPNG、favicon.ico、ZIPパッケージを一括生成。",
+          "全26ツールのUIオプション、ガイド、FAQテキストの6言語リアルタイム多言語バインディングリファクタリング完了。",
+        ],
+        es: [
+          "Lanzamiento de Visor y Eliminador de EXIF (/tools/exif-remover): Inspecciona metadatos GPS y detalles de cámara con eliminación sin pérdida.",
+          "Lanzamiento de Generador de Favicon (/tools/favicon-generator): Genera paquetes de favicons PNG, favicon.ico y manifest en ZIP.",
+          "Refactorización multilingüe completa en 6 idiomas (EN, KO, JA, ES, ZH, FR) para las 26 herramientas.",
+        ],
+        zh: [
+          "发布 图片 EXIF 元数据查看与清除 (/tools/exif-remover): 查看照片中的 GPS 位置、拍摄设备与日期，一键无损清除。",
+          "发布 Favicon 与应用图标生成器 (/tools/favicon-generator): 上传 Logo 一键合成 16x16、32x32、apple-touch-icon 和 favicon.ico 图标 ZIP 包。",
+          "完成全站 26 款工具页面在 6 种语言下的动态翻译与 UI 绑定重构。",
+        ],
+        fr: [
+          "Lancement de Nettoyeur & Visionneuse EXIF (/tools/exif-remover): Inspectez la géolocalisation GPS et supprimez l'EXIF en 1 clic.",
+          "Lancement de Générateur de Favicon (/tools/favicon-generator): Générez un pack complet de favicons PNG, favicon.ico et manifest en ZIP.",
+          "Refactorisation multilingue dynamique complète en 6 langues pour les 26 outils.",
+        ],
+      },
+    },
+    {
       version: "v1.3.0",
       date: "August 24, 2026",
       title: {
