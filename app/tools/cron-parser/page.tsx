@@ -16,67 +16,102 @@ import {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
+import { useLocale } from "@/lib/context/LocaleContext";
 
 // Preset definitions
 const CRON_PRESETS = [
-  { label: "Every 5 Minutes", expr: "*/5 * * * *" },
-  { label: "Every Hour", expr: "0 * * * *" },
-  { label: "Every Day at Midnight", expr: "0 0 * * *" },
-  { label: "Every Day at 9:00 AM", expr: "0 9 * * *" },
-  { label: "Every Monday at 9:00 AM", expr: "0 9 * * 1" },
-  { label: "1st of Every Month at Midnight", expr: "0 0 1 * *" },
+  { key: "cronParser.presetEvery5Min", expr: "*/5 * * * *" },
+  { key: "cronParser.presetEveryHour", expr: "0 * * * *" },
+  { key: "cronParser.presetEveryDayMidnight", expr: "0 0 * * *" },
+  { key: "cronParser.presetEveryDay9AM", expr: "0 9 * * *" },
+  { key: "cronParser.presetEveryMon9AM", expr: "0 9 * * 1" },
+  { key: "cronParser.presetFirstOfMonth", expr: "0 0 1 * *" },
 ];
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const WEEKDAYS_KR = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
-
-// Translate cron expression to human description
-function parseCronToDescription(expr: string) {
+// Translate cron expression to human description for active locale
+function parseCronToDescription(expr: string, locale: string = "en") {
   const parts = expr.trim().split(/\s+/);
   if (parts.length !== 5) {
-    return {
-      isValid: false,
+    const invalidMsg: Record<string, string> = {
       en: "Invalid cron expression. Must have exactly 5 fields (minute hour day month weekday).",
-      kr: "유효하지 않은 Cron 표현식입니다. 5개 필드(분 시 일 월 요일)가 필요합니다.",
+      ko: "유효하지 않은 Cron 표현식입니다. 5개 필드(분 시 일 월 요일)가 필요합니다.",
+      ja: "無効な Cron 式です。5 つのフィールド (分 時 日 月 曜日) が必要です。",
+      es: "Expresión Cron no válida. Debe tener exactamente 5 campos (minuto hora día mes día_de_semana).",
+      zh: "无效的 Cron 表达式。必须包含 5 个字段（分 时 日 月 星期）。",
+      fr: "Expression Cron non valide. Doit contenir exactement 5 champs (minute heure jour mois jour_semaine).",
     };
+    return { isValid: false, text: invalidMsg[locale] || invalidMsg.en };
   }
 
   const [min, hour, dom, month, dow] = parts;
 
-  // Simple Humanizer logic
-  let minText = min === "*" ? "every minute" : min.startsWith("*/") ? `every ${min.split("/")[1]} minutes` : `at minute ${min}`;
-  let minTextKr = min === "*" ? "매 분" : min.startsWith("*/") ? `${min.split("/")[1]}분마다` : `${min}분에`;
-
-  let hourText = hour === "*" ? "every hour" : hour.startsWith("*/") ? `every ${hour.split("/")[1]} hours` : `at ${hour.padStart(2, "0")}:00`;
-  let hourTextKr = hour === "*" ? "매 시간" : hour.startsWith("*/") ? `${hour.split("/")[1]}시간마다` : `${hour}시에`;
-
-  let dowText = dow === "*" ? "" : `on ${dow.split(",").map((d) => WEEKDAYS[parseInt(d)] || d).join(", ")}`;
-  let dowTextKr = dow === "*" ? "" : `${dow.split(",").map((d) => WEEKDAYS_KR[parseInt(d)] || d).join(", ")}마다`;
-
-  let domText = dom === "*" ? "" : `on day ${dom} of the month`;
-  let domTextKr = dom === "*" ? "" : `매월 ${dom}일에`;
-
-  let summaryEn = "";
-  let summaryKr = "";
-
   if (min.startsWith("*/") && hour === "*" && dom === "*" && dow === "*") {
-    summaryEn = `Every ${min.split("/")[1]} minutes`;
-    summaryKr = `${min.split("/")[1]}분마다 실행`;
-  } else if (min === "0" && hour === "*" && dom === "*" && dow === "*") {
-    summaryEn = `At minute 0 of every hour`;
-    summaryKr = `매 시간 정각(0분)마다 실행`;
-  } else if (min === "0" && hour !== "*" && dom === "*" && dow === "*") {
-    summaryEn = `Every day at ${hour.padStart(2, "0")}:00`;
-    summaryKr = `매일 ${hour}시 정각에 실행`;
-  } else if (min === "0" && hour !== "*" && dow !== "*") {
-    summaryEn = `At ${hour.padStart(2, "0")}:00 on ${WEEKDAYS[parseInt(dow)] || dow}`;
-    summaryKr = `매주 ${WEEKDAYS_KR[parseInt(dow)] || dow} ${hour}시 정각에 실행`;
-  } else {
-    summaryEn = `${minText} ${hourText} ${domText} ${dowText}`.trim();
-    summaryKr = `${domTextKr} ${dowTextKr} ${hourTextKr} ${minTextKr} 실행`.trim();
+    const interval = min.split("/")[1];
+    const map: Record<string, string> = {
+      en: `Every ${interval} minutes`,
+      ko: `${interval}분마다 실행`,
+      ja: `${interval}分ごとに実行`,
+      es: `Cada ${interval} minutos`,
+      zh: `每 ${interval} 分钟执行一次`,
+      fr: `Toutes les ${interval} minutes`,
+    };
+    return { isValid: true, text: map[locale] || map.en };
   }
 
-  return { isValid: true, en: summaryEn, kr: summaryKr };
+  if (min === "0" && hour === "*" && dom === "*" && dow === "*") {
+    const map: Record<string, string> = {
+      en: `At minute 0 of every hour`,
+      ko: `매 시간 정각(0분)마다 실행`,
+      ja: `毎時 0 分に実行`,
+      es: `En el minuto 0 de cada hora`,
+      zh: `每小时 0 分时执行`,
+      fr: `À la minute 0 de chaque heure`,
+    };
+    return { isValid: true, text: map[locale] || map.en };
+  }
+
+  if (min === "0" && hour !== "*" && dom === "*" && dow === "*") {
+    const formattedHour = hour.padStart(2, "0");
+    const map: Record<string, string> = {
+      en: `Every day at ${formattedHour}:00`,
+      ko: `매일 ${hour}시 정각에 실행`,
+      ja: `毎日 ${hour}:00 に実行`,
+      es: `Todos los días a las ${formattedHour}:00`,
+      zh: `每天 ${hour}:00 执行`,
+      fr: `Chaque jour à ${formattedHour}:00`,
+    };
+    return { isValid: true, text: map[locale] || map.en };
+  }
+
+  const weekdaysMap: Record<string, string[]> = {
+    en: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    ko: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
+    ja: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+    es: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    zh: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+    fr: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+  };
+
+  const dayList = weekdaysMap[locale] || weekdaysMap.en;
+
+  if (min === "0" && hour !== "*" && dow !== "*") {
+    const dayName = dayList[parseInt(dow)] || dow;
+    const formattedHour = hour.padStart(2, "0");
+    const map: Record<string, string> = {
+      en: `At ${formattedHour}:00 on ${dayName}`,
+      ko: `매주 ${dayName} ${hour}시 정각에 실행`,
+      ja: `毎週${dayName}の ${hour}:00 に実行`,
+      es: `Cada ${dayName} a las ${formattedHour}:00`,
+      zh: `每周${dayName} ${hour}:00 执行`,
+      fr: `Chaque ${dayName} à ${formattedHour}:00`,
+    };
+    return { isValid: true, text: map[locale] || map.en };
+  }
+
+  return {
+    isValid: true,
+    text: `[Min: ${min}, Hour: ${hour}, Day: ${dom}, Mon: ${month}, Dow: ${dow}]`,
+  };
 }
 
 // Compute next 5 run times
@@ -114,6 +149,7 @@ function calculateNextRuns(expr: string, count: number = 5): Date[] {
 }
 
 export default function CronParserPage() {
+  const { t, locale } = useLocale();
   const [cronInput, setCronInput] = useState("*/5 * * * *");
   const [copied, setCopied] = useState(false);
 
@@ -124,7 +160,7 @@ export default function CronParserPage() {
   const [bMon, setBMon] = useState("*");
   const [bDow, setBDow] = useState("*");
 
-  const parsed = useMemo(() => parseCronToDescription(cronInput), [cronInput]);
+  const parsed = useMemo(() => parseCronToDescription(cronInput, locale), [cronInput, locale]);
   const nextRuns = useMemo(() => calculateNextRuns(cronInput), [cronInput]);
 
   const copyToClipboard = useCallback(() => {
@@ -141,6 +177,15 @@ export default function CronParserPage() {
     setBMon(mon);
     setBDow(dow);
     setCronInput(`${min} ${hour} ${dom} ${mon} ${dow}`);
+  };
+
+  const dateLocaleMap: Record<string, string> = {
+    ko: "ko-KR",
+    ja: "ja-JP",
+    es: "es-ES",
+    zh: "zh-CN",
+    fr: "fr-FR",
+    en: "en-US",
   };
 
   return (
@@ -164,7 +209,7 @@ export default function CronParserPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("cronParser.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
@@ -183,11 +228,11 @@ export default function CronParserPage() {
               <Clock size={20} />
             </div>
             <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-primary)" }}>
-              Cron Expression Parser & Builder
+              {t("cronParser.title")}
             </h1>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: "14.5px", maxWidth: "640px" }}>
-            Cron 표현식을 입력하여 한국어/영어 의미를 해석하고, 다음 5회 실행 스케줄을 미리 계산해 확인하세요.
+            {t("cronParser.subtitle")}
           </p>
         </section>
 
@@ -197,12 +242,12 @@ export default function CronParserPage() {
           <div className="glass-card" style={{ padding: "28px", marginBottom: "28px", display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <label style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)" }}>
-                Cron Expression Input (5 fields)
+                {t("cronParser.inputLabel")}
               </label>
 
               {/* Presets dropdown */}
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>Presets:</span>
+                <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>{t("cronParser.presetsLabel")}</span>
                 <select
                   onChange={(e) => {
                     if (e.target.value) setCronInput(e.target.value);
@@ -218,10 +263,10 @@ export default function CronParserPage() {
                     cursor: "pointer",
                   }}
                 >
-                  <option value="">-- Select Preset --</option>
+                  <option value="">{t("cronParser.presetSelect")}</option>
                   {CRON_PRESETS.map((p) => (
-                    <option key={p.label} value={p.expr}>
-                      {p.label} ({p.expr})
+                    <option key={p.key} value={p.expr}>
+                      {t(p.key)} ({p.expr})
                     </option>
                   ))}
                 </select>
@@ -269,7 +314,7 @@ export default function CronParserPage() {
                 }}
               >
                 {copied ? <Check size={16} /> : <Copy size={16} />}
-                {copied ? "Copied" : "Copy"}
+                {copied ? t("cronParser.copied") : t("cronParser.copy")}
               </button>
             </div>
 
@@ -286,13 +331,10 @@ export default function CronParserPage() {
               }}
             >
               <div style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#818cf8" }}>
-                Human Readable Translation
+                {t("cronParser.translationLabel")}
               </div>
               <div style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)" }}>
-                {parsed.kr}
-              </div>
-              <div style={{ fontSize: "13.5px", color: "var(--text-secondary)", fontStyle: "italic" }}>
-                "{parsed.en}"
+                {parsed.text}
               </div>
             </div>
           </div>
@@ -303,12 +345,12 @@ export default function CronParserPage() {
             <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
               <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
                 <Calendar size={18} style={{ color: "#34d399" }} />
-                Upcoming 5 Scheduled Execution Times
+                {t("cronParser.upcomingLabel")}
               </h3>
 
               {nextRuns.length === 0 ? (
                 <p style={{ color: "var(--text-muted)", fontSize: "13.5px" }}>
-                  Unable to calculate next runs for this expression.
+                  {t("cronParser.unableToCalc")}
                 </p>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -330,11 +372,11 @@ export default function CronParserPage() {
                           #{idx + 1}
                         </span>
                         <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
-                          {date.toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "medium" })}
+                          {date.toLocaleString(dateLocaleMap[locale] || "en-US", { dateStyle: "medium", timeStyle: "medium" })}
                         </span>
                       </div>
                       <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                        {date.toLocaleString("en-US", { weekday: "short" })}
+                        {date.toLocaleString(dateLocaleMap[locale] || "en-US", { weekday: "short" })}
                       </span>
                     </div>
                   ))}
@@ -346,16 +388,16 @@ export default function CronParserPage() {
             <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "16px" }}>
               <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
                 <Sliders size={18} style={{ color: "#c084fc" }} />
-                Visual Cron Builder
+                {t("cronParser.builderTitle")}
               </h3>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {[
-                  { label: "Minute (0-59)", val: bMin, set: setBMin, options: ["*", "0", "*/5", "*/10", "*/15", "*/30"] },
-                  { label: "Hour (0-23)", val: bHour, set: setBHour, options: ["*", "0", "9", "12", "18", "*/2", "*/6"] },
-                  { label: "Day of Month (1-31)", val: bDom, set: setBDom, options: ["*", "1", "15", "30"] },
-                  { label: "Month (1-12)", val: bMon, set: setBMon, options: ["*", "1", "6", "12"] },
-                  { label: "Day of Week (0-6)", val: bDow, set: setBDow, options: ["*", "0 (Sun)", "1 (Mon)", "5 (Fri)"] },
+                  { label: t("cronParser.minLabel"), val: bMin, set: setBMin, options: ["*", "0", "*/5", "*/10", "*/15", "*/30"] },
+                  { label: t("cronParser.hourLabel"), val: bHour, set: setBHour, options: ["*", "0", "9", "12", "18", "*/2", "*/6"] },
+                  { label: t("cronParser.domLabel"), val: bDom, set: setBDom, options: ["*", "1", "15", "30"] },
+                  { label: t("cronParser.monLabel"), val: bMon, set: setBMon, options: ["*", "1", "6", "12"] },
+                  { label: t("cronParser.dowLabel"), val: bDow, set: setBDow, options: ["*", t("cronParser.dowSun"), t("cronParser.dowMon"), t("cronParser.dowFri")] },
                 ].map(({ label, val, set, options }, idx) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
                     <span style={{ fontSize: "13px", color: "var(--text-secondary)", fontWeight: 500 }}>{label}</span>
@@ -392,18 +434,18 @@ export default function CronParserPage() {
 
         {/* Tool Guide */}
         <ToolGuide
-          badgeText="Developer Essential"
-          aboutTitle="Cron 표현식이란 무엇인가요?"
-          aboutDesc="리눅스/유닉스 서버나 클라우드 작업 스케줄러에서 정기적인 배치 작업(매 5분마다 데이터 수집, 매일 자정 데이터베이스 백업 등)을 실행 시각을 지정하기 위해 사용되는 표준 문자열 표현 방식입니다."
-          howTitle="사용 방법"
+          badgeText={t("cronParser.guideBadge")}
+          aboutTitle={t("cronParser.guide.aboutTitle")}
+          aboutDesc={t("cronParser.guide.aboutDesc")}
+          howTitle={t("cronParser.guide.howTitle")}
           steps={[
-            "상단 입력창에 5자리 Cron 표현식(예: */5 * * * *)을 직접 입력하거나 프리셋 선택 메뉴를 활용합니다.",
-            "실시간 번역 상자에서 한국어 및 영문 설명을 확인합니다.",
-            "오른쪽 하단 Visual Cron Builder를 이용해 각 항목(분, 시, 일, 월, 요일)을 클릭하여 새로운 표현식을 작성합니다.",
+            t("cronParser.guide.step1"),
+            t("cronParser.guide.step2"),
+            t("cronParser.guide.step3"),
           ]}
           faqs={[
-            { q: "5자리 표현식은 각각 무엇을 의미하나요?", a: "[분 (0-59)] [시 (0-23)] [일 (1-31)] [월 (1-12)] [요일 (0-6, 0=일요일)] 순서로 구성됩니다." },
-            { q: "*/5 의 별표와 슬래시는 무엇인가요?", a: "*는 '매 번'을 의미하고 /5는 '5단위 간격'을 의미하므로, */5 는 '매 5분마다'라는 뜻이 됩니다." },
+            { q: t("cronParser.guide.faq1Q"), a: t("cronParser.guide.faq1A") },
+            { q: t("cronParser.guide.faq2Q"), a: t("cronParser.guide.faq2A") },
           ]}
         />
       </main>
@@ -420,3 +462,4 @@ export default function CronParserPage() {
     </>
   );
 }
+

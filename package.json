@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "next build && npx wrangler pages deploy ./out"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",

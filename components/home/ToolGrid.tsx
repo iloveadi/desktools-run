@@ -8,10 +8,11 @@ import {
   Braces, Binary, Link2, Search,
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
-  ChevronRight, TrendingUp, Hammer, Flame, Sparkles
+  ChevronRight, TrendingUp, Hammer, Flame, Sparkles,
+  ShieldAlert, AppWindow
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
-import { TOOLS, groupToolsByCategory } from "@/lib/tools";
+import { TOOLS, groupToolsByCategory, getLocalizedTool } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
 import { useState, useEffect } from "react";
 import { getToolUsageCount, incrementToolUsage, formatCount } from "@/lib/stats";
@@ -82,6 +83,8 @@ const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strok
   "image-compress": Minimize2,
   "background-remover": Wand2,
   "image-watermark": Stamp,
+  "exif-remover": ShieldAlert,
+  "favicon-generator": AppWindow,
   "word-count": FileText,
   "text-case": Type,
   "markdown-preview": Eye,
@@ -151,11 +154,15 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
   };
 
   const getTitle = (tool: Tool) => {
-    return TOOL_TRANSLATIONS[tool.id]?.[locale]?.title ?? tool.title;
+    const loc = TOOL_TRANSLATIONS[tool.id]?.[locale]?.title;
+    if (loc) return loc;
+    return getLocalizedTool(tool, locale).title;
   };
 
   const getDesc = (tool: Tool) => {
-    return TOOL_TRANSLATIONS[tool.id]?.[locale]?.description ?? tool.description;
+    const loc = TOOL_TRANSLATIONS[tool.id]?.[locale]?.description;
+    if (loc) return loc;
+    return getLocalizedTool(tool, locale).description;
   };
 
   const getCatName = (cat: string) => {

@@ -39,7 +39,7 @@ export default function JsonFormatterPage() {
       <main style={{ flex: 1, paddingBottom: "80px" }}>
         <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-secondary)", textDecoration: "none", marginBottom: "16px" }}>
-            <ArrowLeft size={14} /> Back to All Tools
+            <ArrowLeft size={14} /> {t("jsonFormatter.back")}
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
             <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(99,102,241,0.15)", color: "#818cf8", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -58,13 +58,13 @@ export default function JsonFormatterPage() {
                 onClick={() => formatJson(2)}
                 style={{ padding: "8px 16px", borderRadius: "8px", background: "linear-gradient(135deg, #6366f1, #4f46e5)", color: "white", border: "none", fontWeight: 700, fontSize: "13px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
               >
-                <Maximize2 size={14} /> Prettify (2 Spaces)
+                <Maximize2 size={14} /> {t("jsonFormatter.prettify")}
               </button>
               <button
                 onClick={() => formatJson(0)}
                 style={{ padding: "8px 16px", borderRadius: "8px", background: "rgba(255,255,255,0.06)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", fontWeight: 600, fontSize: "13px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
               >
-                <Minimize2 size={14} /> Minify (Compact)
+                <Minimize2 size={14} /> {t("jsonFormatter.minify")}
               </button>
             </div>
 
@@ -73,20 +73,20 @@ export default function JsonFormatterPage() {
               style={{ padding: "8px 16px", borderRadius: "8px", background: copied ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.15)", border: "none", color: copied ? "#4ade80" : "#818cf8", fontWeight: 700, fontSize: "13px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
-              {copied ? "Copied" : "Copy Result"}
+              {copied ? t("jsonFormatter.copied") : t("jsonFormatter.copyResult")}
             </button>
           </div>
 
           {errorMsg && (
             <div className="glass-card" style={{ padding: "16px 20px", background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)", color: "#f87171", display: "flex", alignItems: "center", gap: "10px", fontSize: "13.5px", fontWeight: 600 }}>
               <AlertCircle size={18} />
-              JSON Syntax Error: {errorMsg}
+              {t("jsonFormatter.syntaxError")}: {errorMsg}
             </div>
           )}
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>Input JSON</span>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>{t("jsonFormatter.inputJson")}</span>
               <textarea
                 rows={16}
                 value={inputJson}
@@ -96,7 +96,7 @@ export default function JsonFormatterPage() {
             </div>
 
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>Formatted Output</span>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>{t("jsonFormatter.formattedOutput")}</span>
               <textarea
                 readOnly
                 rows={16}
@@ -108,12 +108,18 @@ export default function JsonFormatterPage() {
         </section>
 
         <ToolGuide
-          badgeText="100% Client-Side & Fast"
-          aboutTitle="What is JSON Formatter?"
-          aboutDesc="Format, validate, prettify, and minify JSON data instantly in your browser."
-          howTitle="How to Use JSON Formatter"
-          steps={["1. Paste raw JSON into the Input box.", "2. Click 'Prettify' or 'Minify'.", "3. Copy formatted output with one click."]}
-          faqs={[{ q: "Is JSON sent to any server?", a: "No, all JSON parsing runs 100% locally inside browser JS memory." }]}
+          badgeText={t("jsonFormatter.badge")}
+          aboutTitle={t("jsonFormatter.guide.aboutTitle")}
+          aboutDesc={t("jsonFormatter.guide.aboutDesc")}
+          howTitle={t("jsonFormatter.guide.howTitle")}
+          steps={[
+            t("jsonFormatter.guide.step1"),
+            t("jsonFormatter.guide.step2"),
+            t("jsonFormatter.guide.step3"),
+          ]}
+          faqs={[
+            { q: t("jsonFormatter.guide.faq1Q"), a: t("jsonFormatter.guide.faq1A") }
+          ]}
         />
       </main>
       <Footer />

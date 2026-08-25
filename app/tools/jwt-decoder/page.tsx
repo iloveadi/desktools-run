@@ -17,6 +17,7 @@ import {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
+import { useLocale } from "@/lib/context/LocaleContext";
 
 // Sample JWT for testing
 const SAMPLE_JWT =
@@ -70,6 +71,7 @@ function parseJwt(token: string) {
 }
 
 export default function JwtDecoderPage() {
+  const { t } = useLocale();
   const [tokenInput, setTokenInput] = useState<string>(SAMPLE_JWT);
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
 
@@ -127,7 +129,7 @@ export default function JwtDecoderPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("jwtDecoder.back")}
           </Link>
 
           <div
@@ -163,11 +165,11 @@ export default function JwtDecoderPage() {
                     color: "var(--text-primary)",
                   }}
                 >
-                  JWT Decoder & Inspector
+                  {t("jwtDecoder.title")}
                 </h1>
               </div>
               <p style={{ color: "var(--text-secondary)", fontSize: "14.5px", maxWidth: "640px" }}>
-                JSON Web Token(JWT)을 실시간 디코딩하고 Header, Payload, Claim 및 만료 상태를 100% 브라우저에서 안전하게 확인하세요.
+                {t("jwtDecoder.subtitle")}
               </p>
             </div>
 
@@ -186,7 +188,7 @@ export default function JwtDecoderPage() {
               }}
             >
               <Lock size={12} />
-              100% Client-Side Processing (Zero Data Sent)
+              {t("jwtDecoder.badge")}
             </div>
           </div>
         </section>
@@ -199,7 +201,7 @@ export default function JwtDecoderPage() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <label style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
                   <Key size={16} style={{ color: "#818cf8" }} />
-                  Encoded Token Input
+                  {t("jwtDecoder.inputLabel")}
                 </label>
 
                 <button
@@ -219,14 +221,14 @@ export default function JwtDecoderPage() {
                   }}
                 >
                   <RefreshCw size={12} />
-                  Load Sample JWT
+                  {t("jwtDecoder.loadSample")}
                 </button>
               </div>
 
               <textarea
                 value={tokenInput}
                 onChange={(e) => setTokenInput(e.target.value)}
-                placeholder="Paste your JWT token here (eyJhbGciOi...)"
+                placeholder={t("jwtDecoder.placeholder")}
                 rows={14}
                 style={{
                   width: "100%",
@@ -256,7 +258,7 @@ export default function JwtDecoderPage() {
                     cursor: "pointer",
                   }}
                 >
-                  Clear Input
+                  {t("jwtDecoder.clear")}
                 </button>
               )}
             </div>
@@ -277,7 +279,7 @@ export default function JwtDecoderPage() {
                   <AlertTriangle size={20} style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }} />
                   <div>
                     <h4 style={{ fontSize: "15px", fontWeight: 700, color: "#f87171", marginBottom: "4px" }}>
-                      Invalid JWT
+                      {t("jwtDecoder.invalidJwt")}
                     </h4>
                     <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
                       {parsed.error}
@@ -301,14 +303,14 @@ export default function JwtDecoderPage() {
                       <Clock size={18} style={{ color: expInfo ? (expInfo.isExpired ? "#f87171" : "#34d399") : "#818cf8" }} />
                       <div>
                         <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-                          Token Expiration Status
+                          {t("jwtDecoder.expStatus")}
                         </div>
                         <div style={{ fontSize: "12.5px", color: "var(--text-secondary)" }}>
                           {expInfo
                             ? expInfo.isExpired
-                              ? `Expired at ${expInfo.local}`
-                              : `Expires at ${expInfo.local}`
-                            : "No expiration ('exp') claim specified"}
+                              ? `${t("jwtDecoder.expiredAt")} ${expInfo.local}`
+                              : `${t("jwtDecoder.expiresAt")} ${expInfo.local}`
+                            : t("jwtDecoder.noExp")}
                         </div>
                       </div>
                     </div>
@@ -325,7 +327,7 @@ export default function JwtDecoderPage() {
                           border: expInfo.isExpired ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(16,185,129,0.3)",
                         }}
                       >
-                        {expInfo.isExpired ? "EXPIRED" : "VALID"}
+                        {expInfo.isExpired ? t("jwtDecoder.expired") : t("jwtDecoder.valid")}
                       </span>
                     )}
                   </div>
@@ -334,7 +336,7 @@ export default function JwtDecoderPage() {
                   <div className="glass-card" style={{ padding: "20px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                       <span style={{ fontSize: "14px", fontWeight: 700, color: "#f43f5e", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <FileJson size={16} /> Header: Algorithm & Token Type
+                        <FileJson size={16} /> {t("jwtDecoder.headerLabel")}
                       </span>
                       <button
                         onClick={() => copyToClipboard(parsed.headerRaw || "", "header")}
@@ -352,7 +354,7 @@ export default function JwtDecoderPage() {
                         }}
                       >
                         {copiedSection === "header" ? <Check size={12} /> : <Copy size={12} />}
-                        {copiedSection === "header" ? "Copied" : "Copy"}
+                        {copiedSection === "header" ? t("jwtDecoder.copied") : t("jwtDecoder.copy")}
                       </button>
                     </div>
                     <pre
@@ -375,7 +377,7 @@ export default function JwtDecoderPage() {
                   <div className="glass-card" style={{ padding: "20px" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                       <span style={{ fontSize: "14px", fontWeight: 700, color: "#c084fc", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <FileJson size={16} /> Payload: Claims & Data
+                        <FileJson size={16} /> {t("jwtDecoder.payloadLabel")}
                       </span>
                       <button
                         onClick={() => copyToClipboard(parsed.payloadRaw || "", "payload")}
@@ -393,7 +395,7 @@ export default function JwtDecoderPage() {
                         }}
                       >
                         {copiedSection === "payload" ? <Check size={12} /> : <Copy size={12} />}
-                        {copiedSection === "payload" ? "Copied" : "Copy"}
+                        {copiedSection === "payload" ? t("jwtDecoder.copied") : t("jwtDecoder.copy")}
                       </button>
                     </div>
                     <pre
@@ -419,18 +421,18 @@ export default function JwtDecoderPage() {
 
         {/* Tool Guide */}
         <ToolGuide
-          badgeText="Safe & Client-Side"
-          aboutTitle="JWT 디코더 도구란 무엇인가요?"
-          aboutDesc="웹 기반 인증에 광범위하게 사용되는 JSON Web Token(JWT)을 서버 전송 없이 브라우저 내에서 즉시 디코딩하여, 토큰 내부의 Header, Payload 클레임 정보 및 만료 시간(exp)을 한눈에 확인할 수 있는 도구입니다."
-          howTitle="사용 방법"
+          badgeText={t("jwtDecoder.guide.badge")}
+          aboutTitle={t("jwtDecoder.guide.aboutTitle")}
+          aboutDesc={t("jwtDecoder.guide.aboutDesc")}
+          howTitle={t("jwtDecoder.guide.howTitle")}
           steps={[
-            "분석하고자 하는 JWT 토큰 문자열(eyJhbGci...)을 왼쪽 입력창에 붙여넣습니다.",
-            "오른쪽 결과 창에서 Header(알고리즘 및 유형)와 Payload(클레임 데이터)를 실시간으로 확인합니다.",
-            "토큰의 만료 시간(exp) 및 발급 시간(iat) 상태와 토큰의 유효성을 체크합니다.",
+            t("jwtDecoder.guide.step1"),
+            t("jwtDecoder.guide.step2"),
+            t("jwtDecoder.guide.step3"),
           ]}
           faqs={[
-            { q: "입력한 토큰이 외부 서버로 전송되나요?", a: "전혀 전송되지 않습니다! 본 도구는 모든 디코딩 작업을 100% 사용자의 브라우저(JavaScript)에서만 수행합니다." },
-            { q: "비밀키(Secret Key) 없이 디코딩이 가능한가요?", a: "네, 가능합니다. JWT의 Header와 Payload는 Base64URL로 암호화가 아닌 단순 인코딩만 되어 있으므로 누구든지 읽을 수 있습니다. 비밀키는 서명(Signature) 검증 시에만 필요합니다." },
+            { q: t("jwtDecoder.guide.faq1Q"), a: t("jwtDecoder.guide.faq1A") },
+            { q: t("jwtDecoder.guide.faq2Q"), a: t("jwtDecoder.guide.faq2A") },
           ]}
         />
       </main>
@@ -447,3 +449,4 @@ export default function JwtDecoderPage() {
     </>
   );
 }
+

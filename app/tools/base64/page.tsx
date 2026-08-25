@@ -30,7 +30,7 @@ export default function Base64Page() {
         return decodeURIComponent(escape(atob(inputStr.trim())));
       }
     } catch (err) {
-      return "Invalid Base64 format for decoding.";
+      return t("base64.invalidFormat");
     }
   };
 
@@ -49,7 +49,7 @@ export default function Base64Page() {
         {/* ── Breadcrumb & Title ──────────────────────── */}
         <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "var(--text-secondary)", textDecoration: "none", marginBottom: "16px" }}>
-            <ArrowLeft size={14} /> Back to All Tools
+            <ArrowLeft size={14} /> {t("base64.back")}
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
             <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(99,102,241,0.15)", color: "#818cf8", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -114,7 +114,7 @@ export default function Base64Page() {
 
         {/* ── Tool Guide ──────────────────────────────── */}
         <ToolGuide
-          badgeText="100% Client-Side & Private"
+          badgeText={t("base64.badge")}
           aboutTitle={t("base64.guide.aboutTitle")}
           aboutDesc={t("base64.guide.aboutDesc")}
           howTitle={t("base64.guide.howTitle")}

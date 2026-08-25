@@ -324,7 +324,7 @@ export default function UnitConverterPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("unitConverter.back")}
           </Link>
 
           <div
@@ -717,8 +717,8 @@ export default function UnitConverterPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────────── */}
         <ToolGuide
-          badgeText="100% Free & Browser-Native"
-          aboutTitle={t("unitConverter.guide.aboutTitle") || "단위 변환기 도구란 무엇인가요?"}
+          badgeText={t("unitConverter.guideBadge")}
+          aboutTitle={t("unitConverter.guide.aboutTitle")}
           aboutDesc={t("unitConverter.guide.aboutDesc") || "길이, 무게, 온도, 넓이, 부피, 속도, 시간, 디지털 데이터 용량 등 8가지 카테고리의 주요 단위를 초고속으로 변환해 주는 통합 정밀 단위 변환 도구입니다."}
           howTitle={t("unitConverter.guide.howTitle") || "사용 방법"}
           steps={[

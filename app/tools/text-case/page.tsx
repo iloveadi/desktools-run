@@ -72,14 +72,14 @@ export default function TextCasePage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
             {[
-              { label: "UPPERCASE", value: results.upper, key: "upper" },
-              { label: "lowercase", value: results.lower, key: "lower" },
-              { label: "Title Case", value: results.title, key: "title" },
-              { label: "camelCase", value: results.camel, key: "camel" },
-              { label: "PascalCase", value: results.pascal, key: "pascal" },
-              { label: "snake_case", value: results.snake, key: "snake" },
-              { label: "kebab-case", value: results.kebab, key: "kebab" },
-              { label: "CONSTANT_CASE", value: results.constant, key: "constant" },
+              { label: t("textCase.style.upper"), value: results.upper, key: "upper" },
+              { label: t("textCase.style.lower"), value: results.lower, key: "lower" },
+              { label: t("textCase.style.title"), value: results.title, key: "title" },
+              { label: t("textCase.style.camel"), value: results.camel, key: "camel" },
+              { label: t("textCase.style.pascal"), value: results.pascal, key: "pascal" },
+              { label: t("textCase.style.snake"), value: results.snake, key: "snake" },
+              { label: t("textCase.style.kebab"), value: results.kebab, key: "kebab" },
+              { label: t("textCase.style.constant"), value: results.constant, key: "constant" },
             ].map((item) => (
               <div key={item.key} className="glass-card" style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "8px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

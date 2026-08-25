@@ -449,6 +449,20 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       zh: { title: "哈希值计算 (Hash)", description: "计算文本与文件的 MD5、SHA-1、SHA-256 及 SHA-512 校验和。" },
       fr: { title: "Générateur de Hachage", description: "Générez des hachages cryptographiques MD5, SHA-1, SHA-256." },
     },
+    "exif-remover": {
+      ko: { title: "이미지 EXIF 메타데이터 제거기 / 보기", description: "사진에 담긴 GPS 위치 좌표, 촬영 기기, 날짜 등 개인정보 EXIF 데이터를 확인하고 1클릭 완벽 제거 후 다운로드." },
+      ja: { title: "画像EXIF情報削除・閲覧", description: "写真に含まれる位置情報（GPS）、撮影機器、日時などの個人情報EXIFを確認し1クリックで完全削除。" },
+      es: { title: "Visor y Eliminador de EXIF", description: "Inspecciona la ubicación GPS y datos EXIF de tus fotos y elimínalos en 1 clic." },
+      zh: { title: "图片 EXIF 元数据查看与清除", description: "查看照片中的 GPS 位置、拍摄设备与日期等隐私元数据，一键无损清除并下载。" },
+      fr: { title: "Nettoyeur & Visionneuse EXIF", description: "Inspectez la géolocalisation GPS et les métadonnées EXIF de vos photos et supprimez-les en 1 clic." },
+    },
+    "favicon-generator": {
+      ko: { title: "Favicon & 앱 아이콘 생성기", description: "하나의 로고 이미지를 올리면 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico 세트를 일괄 생성하여 다운로드." },
+      ja: { title: "ファビコン＆アプリアイコン作成", description: "1つのロゴ画像から16x16、32x32、apple-touch-icon、favicon.icoパッケージを1クリック生成。" },
+      es: { title: "Generador de Favicon e Iconos App", description: "Genera paquetes de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." },
+      zh: { title: "Favicon 与应用图标生成器", description: "上传单个 Logo 图像，一键生成 16x16、32x32、apple-touch-icon 和 favicon.ico 图标包。" },
+      fr: { title: "Générateur de Favicon & Icônes d'App", description: "Générez un ensemble complet de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." },
+    },
   };
 
   const info = map[tool.id]?.[locale];

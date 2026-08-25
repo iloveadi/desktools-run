@@ -27,6 +27,7 @@ import {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
+import { useLocale } from "@/lib/context/LocaleContext";
 
 // ── CSV Parser ─────────────────────────────────────────────────
 function parseCSV(
@@ -40,7 +41,7 @@ function parseCSV(
       .map((l) => l.trim())
       .filter((l) => l.length > 0);
 
-    if (lines.length === 0) return { headers: [], rows: [], error: "빈 파일입니다." };
+    if (lines.length === 0) return { headers: [], rows: [], error: "Empty file" };
 
     // Parse a single CSV line respecting quoted fields
     function parseLine(line: string): string[] {
@@ -90,12 +91,14 @@ function parseCSV(
 
     return { headers, rows, error: null };
   } catch {
-    return { headers: [], rows: [], error: "CSV 파싱 중 오류가 발생했습니다." };
+    return { headers: [], rows: [], error: "CSV Parse Error" };
   }
 }
 
 // ── Component ──────────────────────────────────────────────────
 export default function CsvToJsonPage() {
+  const { t } = useLocale();
+
   const [csvText, setCsvText] = useState("");
   const [delimiter, setDelimiter] = useState(",");
   const [hasHeader, setHasHeader] = useState(true);
@@ -128,7 +131,7 @@ export default function CsvToJsonPage() {
     return JSON.stringify(result.rows, null, indentSize);
   })();
 
-  const lineCount = jsonOutput.split("\n").length;
+  const lineCount = jsonOutput ? jsonOutput.split("\n").length : 0;
   const byteSize = new TextEncoder().encode(jsonOutput).length;
 
   // File read
@@ -188,10 +191,10 @@ export default function CsvToJsonPage() {
   };
 
   const DELIMITER_OPTIONS = [
-    { label: "쉼표 (,)", value: "," },
-    { label: "세미콜론 (;)", value: ";" },
-    { label: "탭 (\\t)", value: "\\t" },
-    { label: "파이프 (|)", value: "|" },
+    { label: t("csvToJson.delimComma"), value: "," },
+    { label: t("csvToJson.delimSemicolon"), value: ";" },
+    { label: t("csvToJson.delimTab"), value: "\\t" },
+    { label: t("csvToJson.delimPipe"), value: "|" },
   ];
 
   return (
@@ -214,7 +217,7 @@ export default function CsvToJsonPage() {
             }}
           >
             <ArrowLeft size={14} />
-            모든 도구로 돌아가기
+            {t("csvToJson.back")}
           </Link>
         </section>
 
@@ -238,10 +241,10 @@ export default function CsvToJsonPage() {
             </div>
             <div>
               <h1 style={{ fontSize: "26px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.4px" }}>
-                CSV → JSON 변환기
+                {t("csvToJson.title")}
               </h1>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "2px" }}>
-                CSV 파일을 브라우저에서 즉시 JSON으로 변환합니다 — 서버 전송 없음, 100% 로컬 처리
+                {t("csvToJson.subtitle")}
               </p>
             </div>
           </div>
@@ -272,7 +275,7 @@ export default function CsvToJsonPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <FileText size={16} style={{ color: "var(--brand-mid)" }} />
                     <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-                      CSV 입력
+                      {t("csvToJson.inputLabel")}
                     </span>
                     {fileName && (
                       <span style={{
@@ -305,7 +308,7 @@ export default function CsvToJsonPage() {
                       }}
                     >
                       <Upload size={13} />
-                      파일 업로드
+                      {t("csvToJson.uploadFile")}
                     </button>
                     {csvText && (
                       <button
@@ -325,7 +328,7 @@ export default function CsvToJsonPage() {
                         }}
                       >
                         <Trash2 size={13} />
-                        초기화
+                        {t("csvToJson.clear")}
                       </button>
                     )}
                   </div>
@@ -334,7 +337,7 @@ export default function CsvToJsonPage() {
                 <textarea
                   value={csvText}
                   onChange={(e) => { setCsvText(e.target.value); setFileName(""); }}
-                  placeholder={"name,age,city\n홍길동,30,서울\n김철수,25,부산\n\n→ CSV를 붙여넣거나 파일을 드래그하세요"}
+                  placeholder={t("csvToJson.placeholder")}
                   style={{
                     width: "100%",
                     minHeight: "260px",
@@ -352,8 +355,8 @@ export default function CsvToJsonPage() {
                 />
                 <div style={{ marginTop: "8px", fontSize: "12px", color: "var(--text-muted)" }}>
                   {csvText
-                    ? `${csvText.split(/\r?\n/).filter(Boolean).length}행 · ${new TextEncoder().encode(csvText).length} bytes`
-                    : "CSV 파일을 이 영역에 드래그하거나 직접 붙여넣기 하세요"}
+                    ? `${csvText.split(/\r?\n/).filter(Boolean).length} ${t("csvToJson.statRows")} · ${new TextEncoder().encode(csvText).length} bytes`
+                    : t("csvToJson.dropNotice")}
                 </div>
               </div>
 
@@ -361,14 +364,16 @@ export default function CsvToJsonPage() {
               <div className="glass-card" style={{ padding: "20px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
                   <Settings2 size={15} style={{ color: "var(--brand-mid)" }} />
-                  <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>변환 옵션</span>
+                  <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                    {t("csvToJson.optionsTitle")}
+                  </span>
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                   {/* Delimiter */}
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-                      구분자 (Delimiter)
+                      {t("csvToJson.delimiterLabel")}
                     </label>
                     <select
                       value={delimiter}
@@ -394,7 +399,7 @@ export default function CsvToJsonPage() {
                   {/* Indent */}
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-                      들여쓰기 (Indent)
+                      {t("csvToJson.indentLabel")}
                     </label>
                     <select
                       value={indentSize}
@@ -411,21 +416,21 @@ export default function CsvToJsonPage() {
                         outline: "none",
                       }}
                     >
-                      <option value={2}>2칸</option>
-                      <option value={4}>4칸</option>
-                      <option value={0}>압축 (Minify)</option>
+                      <option value={2}>{t("csvToJson.indent2")}</option>
+                      <option value={4}>{t("csvToJson.indent4")}</option>
+                      <option value={0}>{t("csvToJson.indentMinify")}</option>
                     </select>
                   </div>
 
                   {/* Output Format */}
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-                      출력 형식
+                      {t("csvToJson.outputFormatLabel")}
                     </label>
                     <div style={{ display: "flex", gap: "8px" }}>
                       {[
-                        { val: "array", label: "배열 [ ]" },
-                        { val: "object", label: "객체 { }" },
+                        { val: "array", label: t("csvToJson.formatArray") },
+                        { val: "object", label: t("csvToJson.formatObject") },
                       ].map(({ val, label }) => (
                         <button
                           key={val}
@@ -456,7 +461,7 @@ export default function CsvToJsonPage() {
                   {/* Header Toggle */}
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>
-                      첫 행 헤더 사용
+                      {t("csvToJson.headerToggleLabel")}
                     </label>
                     <button
                       onClick={() => setHasHeader((v) => !v)}
@@ -473,7 +478,7 @@ export default function CsvToJsonPage() {
                         transition: "all 0.15s",
                       }}
                     >
-                      {hasHeader ? "✓ 헤더 있음" : "헤더 없음 (auto)"}
+                      {hasHeader ? t("csvToJson.headerHas") : t("csvToJson.headerNone")}
                     </button>
                   </div>
                 </div>
@@ -493,7 +498,7 @@ export default function CsvToJsonPage() {
                   fontWeight: 700,
                 }}>
                   <ArrowRight size={16} />
-                  JSON 변환 중...
+                  {t("csvToJson.convertingNotice")}
                 </div>
               </div>
             </div>
@@ -528,10 +533,10 @@ export default function CsvToJsonPage() {
                   flexWrap: "wrap",
                 }}>
                   {[
-                    { label: "행", val: result.rows.length },
-                    { label: "열", val: result.headers.length },
-                    { label: "줄 수", val: lineCount },
-                    { label: "크기", val: byteSize < 1024 ? `${byteSize}B` : `${(byteSize / 1024).toFixed(1)}KB` },
+                    { label: t("csvToJson.statRows"), val: result.rows.length },
+                    { label: t("csvToJson.statCols"), val: result.headers.length },
+                    { label: t("csvToJson.statLines"), val: lineCount },
+                    { label: t("csvToJson.statSize"), val: byteSize < 1024 ? `${byteSize}B` : `${(byteSize / 1024).toFixed(1)}KB` },
                   ].map(({ label, val }) => (
                     <div key={label} style={{
                       flex: 1,
@@ -553,8 +558,8 @@ export default function CsvToJsonPage() {
               {result && !result.error && result.rows.length > 0 && (
                 <div style={{ display: "flex", gap: "8px" }}>
                   {[
-                    { key: "json", label: "JSON 출력" },
-                    { key: "table", label: "테이블 미리보기" },
+                    { key: "json", label: t("csvToJson.tabJson") },
+                    { key: "table", label: t("csvToJson.tabTable") },
                   ].map(({ key, label }) => (
                     <button
                       key={key}
@@ -590,7 +595,7 @@ export default function CsvToJsonPage() {
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                   <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
-                    {activeTab === "json" ? "JSON 출력" : "테이블 미리보기"}
+                    {activeTab === "json" ? t("csvToJson.jsonOutputTitle") : t("csvToJson.tablePreviewTitle")}
                   </span>
                   {jsonOutput && (
                     <div style={{ display: "flex", gap: "8px" }}>
@@ -612,7 +617,7 @@ export default function CsvToJsonPage() {
                         }}
                       >
                         {copied ? <Check size={13} /> : <Copy size={13} />}
-                        {copied ? "복사됨!" : "복사"}
+                        {copied ? t("csvToJson.copied") : t("csvToJson.copy")}
                       </button>
                       <button
                         onClick={handleDownload}
@@ -631,7 +636,7 @@ export default function CsvToJsonPage() {
                         }}
                       >
                         <Download size={13} />
-                        .json 저장
+                        {t("csvToJson.saveJson")}
                       </button>
                     </div>
                   )}
@@ -670,7 +675,7 @@ export default function CsvToJsonPage() {
                         gap: "10px",
                       }}>
                         <ArrowRight size={32} style={{ opacity: 0.3 }} />
-                        <span style={{ fontSize: "14px" }}>왼쪽에 CSV를 입력하면 JSON이 여기 표시됩니다</span>
+                        <span style={{ fontSize: "14px" }}>{t("csvToJson.emptyNotice")}</span>
                       </div>
                     )}
                   </div>
@@ -719,7 +724,7 @@ export default function CsvToJsonPage() {
                     </table>
                     {result.rows.length > 100 && (
                       <div style={{ padding: "10px 14px", fontSize: "12px", color: "var(--text-muted)", textAlign: "center" }}>
-                        처음 100행만 표시 중 (전체 {result.rows.length}행)
+                        {t("csvToJson.tableLimitNotice")} ({t("csvToJson.statRows")}: {result.rows.length})
                       </div>
                     )}
                   </div>
@@ -731,20 +736,20 @@ export default function CsvToJsonPage() {
 
         {/* ── Tool Guide ── */}
         <ToolGuide
-          badgeText="100% Free & Browser-Native"
-          aboutTitle="CSV → JSON 변환기란 무엇인가요?"
-          aboutDesc="CSV 형식의 스프레드시트 데이터를 JavaScript 및 API에서 바로 사용할 수 있는 JSON 형식으로 변환하는 도구입니다. 모든 처리는 사용자의 브라우저 내에서만 수행되므로 파일이 서버로 업로드되지 않아 개인정보가 완벽하게 보호됩니다."
-          howTitle="사용 방법"
+          badgeText={t("csvToJson.guideBadge")}
+          aboutTitle={t("csvToJson.guide.aboutTitle")}
+          aboutDesc={t("csvToJson.guide.aboutDesc")}
+          howTitle={t("csvToJson.guide.howTitle")}
           steps={[
-            "CSV 파일을 드래그앤드롭하거나 '파일 업로드' 버튼으로 선택하세요. 또는 텍스트 영역에 CSV를 직접 붙여넣어도 됩니다.",
-            "구분자(쉼표, 세미콜론, 탭 등), 들여쓰기, 출력 형식(배열/객체) 옵션을 필요에 따라 조정하세요.",
-            "오른쪽에 즉시 변환된 JSON이 표시됩니다. '복사' 또는 '.json 저장' 버튼으로 결과물을 내보내세요.",
+            t("csvToJson.guide.step1"),
+            t("csvToJson.guide.step2"),
+            t("csvToJson.guide.step3"),
           ]}
           faqs={[
-            { q: "파일이 서버로 업로드되나요?", a: "아니요. 모든 CSV 파싱 및 JSON 변환은 사용자의 브라우저 메모리 내에서만 수행됩니다. 데이터가 외부로 절대 전송되지 않습니다." },
-            { q: "어떤 구분자를 지원하나요?", a: "쉼표(,), 세미콜론(;), 탭(\\t), 파이프(|)를 지원합니다. 엑셀에서 내보낼 경우 보통 쉼표 또는 세미콜론을 사용합니다." },
-            { q: "한글이나 특수문자도 처리되나요?", a: "네. UTF-8 인코딩 기반으로 파일을 읽으므로 한국어를 포함한 모든 언어와 특수문자가 정확하게 처리됩니다." },
-            { q: "출력 형식 '객체 { }'는 무엇인가요?", a: "배열 대신 첫 번째 컬럼 값을 키로 사용하는 객체 형태로 출력합니다. 특정 키로 데이터를 빠르게 조회해야 할 때 유용합니다." },
+            { q: t("csvToJson.guide.faq1Q"), a: t("csvToJson.guide.faq1A") },
+            { q: t("csvToJson.guide.faq2Q"), a: t("csvToJson.guide.faq2A") },
+            { q: t("csvToJson.guide.faq3Q"), a: t("csvToJson.guide.faq3A") },
+            { q: t("csvToJson.guide.faq4Q"), a: t("csvToJson.guide.faq4A") },
           ]}
         />
       </main>

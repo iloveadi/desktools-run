@@ -19,10 +19,12 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
 import { generateQRCodeMatrix } from "@/lib/qrcode";
+import { useLocale } from "@/lib/context/LocaleContext";
 
 type InputTab = "url" | "text" | "wifi";
 
 export default function QrGeneratorPage() {
+  const { t } = useLocale();
   const [activeTab, setActiveTab] = useState<InputTab>("url");
   const [urlInput, setUrlInput] = useState("https://desktools.run");
   const [textInput, setTextInput] = useState("Hello, World!");
@@ -176,7 +178,7 @@ export default function QrGeneratorPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("qrGenerator.back")}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
@@ -195,11 +197,11 @@ export default function QrGeneratorPage() {
               <QrCode size={20} />
             </div>
             <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-primary)" }}>
-              QR Code Generator
+              {t("qrGenerator.title")}
             </h1>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: "14.5px", maxWidth: "640px" }}>
-            웹 주소, 텍스트, 와이파이 연결 정보를 고해상도 QR 코드로 커스텀 생성하고 PNG/SVG로 다운로드하세요.
+            {t("qrGenerator.subtitle")}
           </p>
         </section>
 
@@ -212,9 +214,9 @@ export default function QrGeneratorPage() {
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
                 <div style={{ display: "flex", gap: "10px" }}>
                   {[
-                    { id: "url", label: "Web URL", icon: Globe },
-                    { id: "text", label: "Plain Text", icon: Type },
-                    { id: "wifi", label: "Wi-Fi Config", icon: Wifi },
+                    { id: "url", label: t("qrGenerator.tabUrl"), icon: Globe },
+                    { id: "text", label: t("qrGenerator.tabText"), icon: Type },
+                    { id: "wifi", label: t("qrGenerator.tabWifi"), icon: Wifi },
                   ].map(({ id, label, icon: Icon }) => (
                     <button
                       key={id}
@@ -246,7 +248,7 @@ export default function QrGeneratorPage() {
                 {activeTab === "url" && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <label style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
-                      Target Web URL
+                      {t("qrGenerator.urlLabel")}
                     </label>
                     <input
                       type="url"
@@ -271,12 +273,12 @@ export default function QrGeneratorPage() {
                 {activeTab === "text" && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <label style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-primary)" }}>
-                      Text Content
+                      {t("qrGenerator.textLabel")}
                     </label>
                     <textarea
                       value={textInput}
                       onChange={(e) => setTextInput(e.target.value)}
-                      placeholder="Type text or notes here..."
+                      placeholder={t("qrGenerator.textPlaceholder")}
                       rows={4}
                       style={{
                         borderRadius: "10px",
@@ -297,7 +299,7 @@ export default function QrGeneratorPage() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        Network Name (SSID)
+                        {t("qrGenerator.ssidLabel")}
                       </label>
                       <input
                         type="text"
@@ -317,7 +319,7 @@ export default function QrGeneratorPage() {
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        Password
+                        {t("qrGenerator.passLabel")}
                       </label>
                       <input
                         type="text"
@@ -337,7 +339,7 @@ export default function QrGeneratorPage() {
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                       <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        Encryption Type
+                        {t("qrGenerator.encLabel")}
                       </label>
                       <select
                         value={wifiType}
@@ -352,9 +354,9 @@ export default function QrGeneratorPage() {
                           fontSize: "13.5px",
                         }}
                       >
-                        <option value="WPA">WPA / WPA2 / WPA3</option>
-                        <option value="WEP">WEP</option>
-                        <option value="nopass">None (Open)</option>
+                        <option value="WPA">{t("qrGenerator.encWpa")}</option>
+                        <option value="WEP">{t("qrGenerator.encWep")}</option>
+                        <option value="nopass">{t("qrGenerator.encNone")}</option>
                       </select>
                     </div>
                   </div>
@@ -365,13 +367,13 @@ export default function QrGeneratorPage() {
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
                   <Palette size={18} style={{ color: "#818cf8" }} />
-                  Colors & Styling
+                  {t("qrGenerator.stylingTitle")}
                 </h3>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)" }}>
-                      Foreground Color
+                      {t("qrGenerator.fgLabel")}
                     </label>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <input
@@ -388,7 +390,7 @@ export default function QrGeneratorPage() {
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-secondary)" }}>
-                      Background Color
+                      {t("qrGenerator.bgLabel")}
                     </label>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <input
@@ -406,12 +408,12 @@ export default function QrGeneratorPage() {
 
                 {/* Color Presets */}
                 <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                  <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>Presets:</span>
+                  <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>{t("qrGenerator.presetsLabel")}</span>
                   {[
-                    { name: "Classic", fg: "#000000", bg: "#ffffff" },
-                    { name: "Indigo", fg: "#4f46e5", bg: "#ffffff" },
-                    { name: "Emerald", fg: "#059669", bg: "#ffffff" },
-                    { name: "Dark Neon", fg: "#38bdf8", bg: "#0f172a" },
+                    { name: t("qrGenerator.presetClassic"), fg: "#000000", bg: "#ffffff" },
+                    { name: t("qrGenerator.presetIndigo"), fg: "#4f46e5", bg: "#ffffff" },
+                    { name: t("qrGenerator.presetEmerald"), fg: "#059669", bg: "#ffffff" },
+                    { name: t("qrGenerator.presetDarkNeon"), fg: "#38bdf8", bg: "#0f172a" },
                   ].map((p) => (
                     <button
                       key={p.name}
@@ -440,10 +442,10 @@ export default function QrGeneratorPage() {
             <div className="glass-card" style={{ padding: "28px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
               <div style={{ textAlign: "center" }}>
                 <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "#818cf8" }}>
-                  Live Preview
+                  {t("qrGenerator.previewLabel")}
                 </span>
                 <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginTop: "4px" }}>
-                  Generated QR Code
+                  {t("qrGenerator.generatedTitle")}
                 </h3>
               </div>
 
@@ -484,7 +486,7 @@ export default function QrGeneratorPage() {
                   }}
                 >
                   <Download size={16} />
-                  Download PNG
+                  {t("qrGenerator.downloadPng")}
                 </button>
 
                 <div style={{ display: "flex", gap: "10px" }}>
@@ -507,7 +509,7 @@ export default function QrGeneratorPage() {
                     }}
                   >
                     <Download size={14} />
-                    SVG Vector
+                    {t("qrGenerator.downloadSvg")}
                   </button>
 
                   <button
@@ -529,7 +531,7 @@ export default function QrGeneratorPage() {
                     }}
                   >
                     {copied ? <Check size={14} /> : <Copy size={14} />}
-                    {copied ? "Copied!" : "Copy Image"}
+                    {copied ? t("qrGenerator.copied") : t("qrGenerator.copyImage")}
                   </button>
                 </div>
               </div>
@@ -539,18 +541,18 @@ export default function QrGeneratorPage() {
 
         {/* Tool Guide */}
         <ToolGuide
-          badgeText="100% Free & Unlimited"
-          aboutTitle="QR 코드 생성기란 무엇인가요?"
-          aboutDesc="웹사이트 URL, 텍스트 메모, Wi-Fi 바로 연결 정보 등을 한눈에 스캔할 수 있는 고해상도 2차원 바코드(QR 코드)로 즉시 변환해 주는 도구입니다."
-          howTitle="사용 방법"
+          badgeText={t("qrGenerator.guideBadge")}
+          aboutTitle={t("qrGenerator.guide.aboutTitle")}
+          aboutDesc={t("qrGenerator.guide.aboutDesc")}
+          howTitle={t("qrGenerator.guide.howTitle")}
           steps={[
-            "상단 탭에서 웹주소(URL), 일반 텍스트, Wi-Fi 설정 중 원하는 형식을 선택합니다.",
-            "전경색 및 배경색, 색상 프리셋을 활용해 디자인을 자유롭게 변경합니다.",
-            "'Download PNG' 또는 'SVG Vector' 버튼을 눌러 생성된 고해상도 QR 이미지를 저장합니다.",
+            t("qrGenerator.guide.step1"),
+            t("qrGenerator.guide.step2"),
+            t("qrGenerator.guide.step3"),
           ]}
           faqs={[
-            { q: "생성된 QR 코드의 유효기간이 있나요?", a: "없습니다! 생성된 QR 코드는 만료되지 않으며 영구적으로 무료 사용 가능합니다." },
-            { q: "Wi-Fi QR 코드는 어떻게 동작하나요?", a: "스마트폰 카메라로 스캔하면 암호를 직접 입력할 필요 없이 한 번의 터치로 자동으로 와이파이에 접속할 수 있습니다." },
+            { q: t("qrGenerator.guide.faq1Q"), a: t("qrGenerator.guide.faq1A") },
+            { q: t("qrGenerator.guide.faq2Q"), a: t("qrGenerator.guide.faq2A") },
           ]}
         />
       </main>
@@ -567,3 +569,4 @@ export default function QrGeneratorPage() {
     </>
   );
 }
+
