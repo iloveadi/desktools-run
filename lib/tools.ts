@@ -117,6 +117,26 @@ export const TOOLS: Tool[] = [
     href: "/tools/image-watermark",
     isDev: false,
   },
+  {
+    id: "exif-remover",
+    title: "Image EXIF Cleaner & Viewer",
+    description: "Inspect GPS location, camera details, and date metadata from photos and strip all EXIF data in 1 click for 100% privacy.",
+    category: "Image Tools",
+    icon: "ShieldAlert",
+    badge: "New",
+    href: "/tools/exif-remover",
+    isDev: false,
+  },
+  {
+    id: "favicon-generator",
+    title: "Favicon & App Icon Generator",
+    description: "Generate complete 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico, and site.webmanifest packages in 1 click.",
+    category: "Image Tools",
+    icon: "AppWindow",
+    badge: "New",
+    href: "/tools/favicon-generator",
+    isDev: false,
+  },
 
   // ── Text & Formatting ─────────────────────────────────────
   {
