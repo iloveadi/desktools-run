@@ -517,7 +517,7 @@ export default function FaviconGeneratorPage() {
                 <div className="glass-card" style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "14px" }}>
                   <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "6px" }}>
                     <Sliders size={16} color="#818cf8" />
-                    아이콘 커스텀 디자인
+                    {t("faviconGen.customDesign")}
                   </div>
 
                   {/* Background Color */}
@@ -527,10 +527,10 @@ export default function FaviconGeneratorPage() {
                     </label>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
                       {[
-                        { id: "transparent", label: "투명" },
-                        { id: "#ffffff", label: "흰색" },
-                        { id: "#0f172a", label: "다크" },
-                        { id: "#4f46e5", label: "인디고" },
+                        { id: "transparent", label: t("faviconGen.transparent") },
+                        { id: "#ffffff", label: t("faviconGen.white") },
+                        { id: "#0f172a", label: t("faviconGen.dark") },
+                        { id: "#4f46e5", label: t("faviconGen.indigo") },
                       ].map((bg) => (
                         <button
                           key={bg.id}
@@ -559,9 +559,9 @@ export default function FaviconGeneratorPage() {
                     </label>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
                       {[
-                        { id: "square", label: "직사각형" },
-                        { id: "rounded", label: "라운드" },
-                        { id: "circle", label: "원형" },
+                        { id: "square", label: t("faviconGen.square") },
+                        { id: "rounded", label: t("faviconGen.rounded") },
+                        { id: "circle", label: t("faviconGen.circle") },
                       ].map((shp) => (
                         <button
                           key={shp.id}
@@ -638,7 +638,7 @@ export default function FaviconGeneratorPage() {
                     <div style={{ background: "#1e293b", borderRadius: "10px", padding: "10px", border: "1px solid rgba(255,255,255,0.1)" }}>
                       <div style={{ fontSize: "11px", color: "#94a3b8", marginBottom: "8px", display: "flex", alignItems: "center", gap: "4px" }}>
                         <Globe size={12} />
-                        다크 모드 브라우저 탭
+                        {t("faviconGen.darkTabPreview")}
                       </div>
                       <div style={{ background: "#0f172a", borderRadius: "6px 6px 0 0", padding: "6px 12px", display: "inline-flex", alignItems: "center", gap: "8px", maxWidth: "180px" }}>
                         {icon16 && <img src={icon16} alt="tab icon" style={{ width: "16px", height: "16px" }} />}
@@ -652,7 +652,7 @@ export default function FaviconGeneratorPage() {
                     <div style={{ background: "#090d16", borderRadius: "10px", padding: "10px", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                       <div style={{ fontSize: "11px", color: "#94a3b8", marginBottom: "8px", display: "flex", alignItems: "center", gap: "4px" }}>
                         <Smartphone size={12} />
-                        iOS 홈 화면 아이콘 (180px)
+                        {t("faviconGen.iosPreview")}
                       </div>
                       {icon180 && (
                         <div style={{ width: "54px", height: "54px", borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.5)" }}>
@@ -666,7 +666,7 @@ export default function FaviconGeneratorPage() {
                 {/* Generated Icon Assets Grid */}
                 <div className="glass-card" style={{ padding: "20px" }}>
                   <div style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "14px" }}>
-                    생성된 파비콘 에셋 패키지 ({generatedIcons.length + 2}개)
+                    {t("faviconGen.generatedAssets")} ({generatedIcons.length + 2})
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "10px" }}>
@@ -694,7 +694,7 @@ export default function FaviconGeneratorPage() {
                         <button
                           onClick={() => handleDownloadSingle(icon.dataUrl, icon.name)}
                           style={{ background: "none", border: "none", color: "#818cf8", cursor: "pointer", padding: "4px" }}
-                          title="다운로드"
+                          title={t("faviconGen.downloadSingle")}
                         >
                           <Download size={14} />
                         </button>
@@ -730,7 +730,7 @@ export default function FaviconGeneratorPage() {
                             a.click();
                           }}
                           style={{ background: "none", border: "none", color: "#818cf8", cursor: "pointer", padding: "4px" }}
-                          title="다운로드"
+                          title={t("faviconGen.downloadSingle")}
                         >
                           <Download size={14} />
                         </button>
@@ -805,8 +805,8 @@ export default function FaviconGeneratorPage() {
                   a: t("faviconGen.guide.faq1A"),
                 },
                 {
-                  q: "favicon.ico 파일에는 어떤 크기가 들어있나요?",
-                  a: "desktools.run에서 생성된 favicon.ico 바이너리 파일에는 구형 및 신형 PC 브라우저가 모두 호환되는 16x16, 32x32, 48x48 3개 해상도 PNG가 모두 번들로 합성되어 들어있습니다.",
+                  q: t("faviconGen.guide.faq2Q"),
+                  a: t("faviconGen.guide.faq2A"),
                 },
               ]}
             />

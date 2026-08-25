@@ -487,8 +487,8 @@ export default function ExifRemoverPage() {
                       </div>
                       <div style={{ fontSize: "11.5px", color: "var(--text-secondary)", marginTop: "1px" }}>
                         {hasExifData
-                          ? "GPS, 기기 정보 또는 촬영 일시 메타데이터가 포함되어 있습니다."
-                          : "이 이미지는 숨겨진 개인정보 EXIF 메타데이터가 없습니다."}
+                          ? t("exifRemover.hasExifDesc")
+                          : t("exifRemover.noExifDesc")}
                       </div>
                     </div>
                   </div>
@@ -496,7 +496,7 @@ export default function ExifRemoverPage() {
                   {/* Export Format Controls */}
                   <div style={{ marginBottom: "14px" }}>
                     <label style={{ fontSize: "12.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px", display: "block" }}>
-                      저장 포맷 & 품질
+                      {t("exifRemover.exportQuality")}
                     </label>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", marginBottom: "10px" }}>
                       {(["jpeg", "png", "webp"] as const).map((fmt) => (
@@ -588,20 +588,20 @@ export default function ExifRemoverPage() {
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", background: "rgba(0,0,0,0.2)", padding: "12px", borderRadius: "8px" }}>
                       <div>
-                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>위도 (Latitude)</div>
+                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.latitude")}</div>
                         <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
                           {exifInfo.gpsLat}°
                         </div>
                       </div>
                       <div>
-                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>경도 (Longitude)</div>
+                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.longitude")}</div>
                         <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
                           {exifInfo.gpsLng}°
                         </div>
                       </div>
                       {exifInfo.gpsAlt !== undefined && (
                         <div>
-                          <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>고도 (Altitude)</div>
+                          <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.altitude")}</div>
                           <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
                             {exifInfo.gpsAlt}m
                           </div>
@@ -622,44 +622,44 @@ export default function ExifRemoverPage() {
 
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px" }}>
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>제조사 (Make)</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.make")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.make || "미포함"}
+                        {exifInfo?.make || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>카메라 모델 (Model)</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.model")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.model || "미포함"}
+                        {exifInfo?.model || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>셔터 스피드</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.shutterSpeed")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.exposureTime || "미포함"}
+                        {exifInfo?.exposureTime || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>조리개 (Aperture)</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.aperture")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.fNumber || "미포함"}
+                        {exifInfo?.fNumber || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>ISO 감도</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.iso")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.iso || "미포함"}
+                        {exifInfo?.iso || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>초점 거리 (Focal Length)</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.focalLength")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.focalLength || "미포함"}
+                        {exifInfo?.focalLength || t("exifRemover.notIncluded")}
                       </div>
                     </div>
                   </div>
@@ -670,22 +670,22 @@ export default function ExifRemoverPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#34d399", marginBottom: "14px" }}>
                     <Calendar size={18} />
                     <span style={{ fontSize: "15px", fontWeight: 700 }}>
-                      {t("exifRemover.captureDate")} & 소프트웨어
+                      {t("exifRemover.captureDate")}
                     </span>
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>촬영 시각 (DateTime Original)</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.captureDate")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.dateTimeOriginal || exifInfo?.dateTime || "미포함"}
+                        {exifInfo?.dateTimeOriginal || exifInfo?.dateTime || t("exifRemover.notIncluded")}
                       </div>
                     </div>
 
                     <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>소프트웨어 / 편집 프로그램</div>
+                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.software")}</div>
                       <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.software || "미포함"}
+                        {exifInfo?.software || t("exifRemover.notIncluded")}
                       </div>
                     </div>
                   </div>
@@ -711,8 +711,8 @@ export default function ExifRemoverPage() {
                   a: t("exifRemover.guide.faq1A"),
                 },
                 {
-                  q: "EXIF 메타데이터를 지우면 사진 화질이 저하되나요?",
-                  a: "아닙니다. 픽셀 데이터 원본 해상도를 그대로 캔버스에 재렌더링하여 무손실(PNG/WebP/High quality JPEG)로 변환되므로 시각적 화질 손상 없이 메타데이터만 완벽하게 제거됩니다.",
+                  q: t("exifRemover.guide.faq2Q"),
+                  a: t("exifRemover.guide.faq2A"),
                 },
               ]}
             />
