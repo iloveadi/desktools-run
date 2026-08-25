@@ -29,13 +29,13 @@ interface LocaleContextValue {
 
 // ── Create context ─────────────────────────────────────────────
 const LocaleContext = createContext<LocaleContextValue>({
-  locale: "en",
+  locale: "ko",
   setLocale: () => {},
   t: (key) => key,
 });
 
 function detectSystemLocale(): Locale {
-  if (typeof window === "undefined" || !navigator) return "en";
+  if (typeof window === "undefined" || !navigator) return "ko";
 
   const languages = navigator.languages || [
     navigator.language || (navigator as any).userLanguage,
@@ -50,11 +50,11 @@ function detectSystemLocale(): Locale {
     if (lower.startsWith("fr")) return "fr";
     if (lower.startsWith("en")) return "en";
   }
-  return "en";
+  return "ko";
 }
 
 function getInitialLocale(): Locale {
-  if (typeof window === "undefined") return "en";
+  if (typeof window === "undefined") return "ko";
   try {
     const saved = localStorage.getItem("desktools-locale") as Locale | null;
     if (saved && saved in translations) {
@@ -62,7 +62,7 @@ function getInitialLocale(): Locale {
     }
     return detectSystemLocale();
   } catch {
-    return "en";
+    return "ko";
   }
 }
 

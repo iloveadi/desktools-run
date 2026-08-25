@@ -74,7 +74,7 @@ const initScript = `
         document.documentElement.lang = savedLocale;
       } else {
         var langs = navigator.languages || [navigator.language || navigator.userLanguage];
-        var detected = 'en';
+        var detected = 'ko';
         for (var i = 0; i < langs.length; i++) {
           if (!langs[i]) continue;
           var l = langs[i].toLowerCase();
@@ -95,7 +95,7 @@ const initScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="ko" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="naver-site-verification" content="78cc45882494368515599712d3cbe77cb0321e65" />
         <meta name="google-site-verification" content="h6rIrI3xMIgonXn1PDKk5T5FHzgHbXtiOpgut4AtuZM" />
