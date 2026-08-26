@@ -137,6 +137,16 @@ export const TOOLS: Tool[] = [
     href: "/tools/favicon-generator",
     isDev: false,
   },
+  {
+    id: "image-to-pdf",
+    title: "Image to PDF Converter",
+    description: "Combine and convert multiple JPG, PNG, and WebP images into a single clean PDF document.",
+    category: "Image Tools",
+    icon: "Images",
+    badge: "New",
+    href: "/tools/image-to-pdf",
+    isDev: false,
+  },
 
   // ── Text & Formatting ─────────────────────────────────────
   {
@@ -482,6 +492,13 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       es: { title: "Generador de Favicon e Iconos App", description: "Genera paquetes de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." },
       zh: { title: "Favicon 与应用图标生成器", description: "上传单个 Logo 图像，一键生成 16x16、32x32、apple-touch-icon 和 favicon.ico 图标包。" },
       fr: { title: "Générateur de Favicon & Icônes d'App", description: "Générez un ensemble complet de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." },
+    },
+    "image-to-pdf": {
+      ko: { title: "이미지 PDF 변환기", description: "여러 장의 사진/이미지를 순서대로 묶어 하나의 고화질 PDF 문서로 즉시 변환합니다." },
+      ja: { title: "画像 PDF 変換ツール", description: "複数の写真や画像を順番通りに1つの高品質なPDFファイルに即座に変換・結合します。" },
+      es: { title: "Convertidor de Imagen a PDF", description: "Combina y convierte múltiples imágenes en un documento PDF profesional al instante." },
+      zh: { title: "图片转 PDF 转换器", description: "将多张照片与图像按指定顺序一键合并转换为高清 PDF 电子文档。" },
+      fr: { title: "Convertisseur Image en PDF", description: "Combinez et convertissez plusieurs photos et images en un seul document PDF de haute qualité." },
     },
   };
 

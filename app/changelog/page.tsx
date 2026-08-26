@@ -17,6 +17,56 @@ export default function ChangelogPage() {
 
   const releases: ReleaseItem[] = [
     {
+      version: "v1.6.0",
+      date: "August 27, 2026",
+      title: {
+        ko: "신규 유틸리티 출시: 이미지 PDF 변환기 (Image to PDF Converter)",
+        en: "New Utility Released: Image to PDF Converter",
+        ja: "新規ツールリリース: 画像 PDF 変換ツール (Image to PDF Converter)",
+        es: "Nueva Utilidad: Convertidor de Imagen a PDF (Image to PDF)",
+        zh: "全新实用工具上线: 图片转 PDF 转换器 (Image to PDF Converter)",
+        fr: "Nouvel utilitaire lancé: Convertisseur Image en PDF (Image to PDF)",
+      },
+      changes: {
+        ko: [
+          "🖼️ 이미지 PDF 변환기 (/tools/image-to-pdf) 신규 출시: 여러 장의 사진(JPG, PNG, WebP, GIF, BMP)을 묶어 하나의 고품질 PDF로 즉시 병합 변환.",
+          "📄 다양한 용지 규격(A4, Letter, 이미지 맞춤) 및 방향(자동/세로/가로), 여백, 화질 최적화 옵션 제공.",
+          "✨ 드래그 앤 드롭 파일 업로드, 화살표를 통한 직관적인 페이지 순서 정렬 기능 지원.",
+          "🔒 100% 브라우저 클라이언트 사이드 변환으로 민감한 서류 및 사진이 외부 서버로 전송되지 않는 완벽한 프라이버시 보장.",
+        ],
+        en: [
+          "🖼️ Released Image to PDF Converter (/tools/image-to-pdf): Combine and convert multiple photos (JPG, PNG, WebP, GIF, BMP) into a clean, unified PDF document.",
+          "📄 Multiple page size presets (A4, Letter, Fit to Image), orientation controls (Auto/Portrait/Landscape), margins, and quality compression levels.",
+          "✨ Drag & drop multi-file uploading and intuitive page reordering controls.",
+          "🔒 100% client-side browser rendering ensuring zero server uploads and complete privacy.",
+        ],
+        ja: [
+          "🖼️ 画像 PDF 変換ツール (/tools/image-to-pdf) 新規リリース: 複数の写真(JPG, PNG, WebP, GIF, BMP)を1つのPDFファイルに即座に結合変換。",
+          "📄 A4/Letter/画像サイズ合わせ、用紙の向き(自動/縦/横)、余白、画質圧縮オプションを完備。",
+          "✨ ドラッグ＆ドロップによる一括追加と、矢印ボタンによるページ順序の簡単な並び替えに対応。",
+          "🔒 100%ブラウザローカル処理により、写真や書類がサーバーに送信されることなく完全なプライバシーを保護。",
+        ],
+        es: [
+          "🖼️ Lanzamiento del Convertidor de Imagen a PDF (/tools/image-to-pdf): Combina y convierte múltiples fotos (JPG, PNG, WebP, GIF) en un solo documento PDF.",
+          "📄 Ajustes de tamaño de página (A4, Carta, Ajustar a imagen), orientación, márgenes y compresión de calidad.",
+          "✨ Subida por arrastrar y soltar y reordenación intuitiva de páginas.",
+          "🔒 Procesamiento 100% local en el navegador sin subida a servidores.",
+        ],
+        zh: [
+          "🖼️ 全新上线 图片转 PDF 转换器 (/tools/image-to-pdf): 将多张照片(JPG, PNG, WebP, GIF, BMP)按序一键合并生成高质量 PDF 电子文档。",
+          "📄 预设多种纸张规格(A4, Letter, 贴合原始尺寸)、纸张方向(自动/纵向/横向)、边距及画质压缩等级。",
+          "✨ 支持拖拽批量导入与便捷的页面排序调节。",
+          "🔒 100% 浏览器本地运算，文件不经由任何服务器传输，隐私绝对安全。",
+        ],
+        fr: [
+          "🖼️ Lancement du Convertisseur Image en PDF (/tools/image-to-pdf): Combinez et convertissez plusieurs photos (JPG, PNG, WebP, GIF) en un document PDF unique.",
+          "📄 Formats de page multiples (A4, Lettre, Ajuster à l'image), orientation, marges et niveaux de compression.",
+          "✨ Glisser-déposer par lots et réorganisation facile des pages.",
+          "🔒 Traitement 100% local dans le navigateur sans aucun envoi vers un serveur.",
+        ],
+      },
+    },
+    {
       version: "v1.5.0",
       date: "August 26, 2026",
       title: {

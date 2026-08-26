@@ -9,7 +9,7 @@ import {
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
   ChevronRight, TrendingUp, Hammer, Flame, Sparkles,
-  ShieldAlert, AppWindow, Star
+  ShieldAlert, AppWindow, Star, Images
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { TOOLS, groupToolsByCategory, getLocalizedTool } from "@/lib/tools";
@@ -35,6 +35,7 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "image-watermark":  { en: { title: "Image Watermark Adder", description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls." }, ko: { title: "이미지 워터마크 추가기", description: "이미지에 텍스트 및 로고 워터마크를 투명도, 회전, 격자 패턴으로 추가합니다." }, ja: { title: "画像ウォーターマーク追加", description: "画像にテキストやロゴの透かし（ウォーターマーク）を追加します。" }, es: { title: "Añadir Marca de Agua", description: "Añade marcas de agua de texto o logo a tus imágenes con control total." }, zh: { title: "图片水印添加器", description: "给图片添加自定义文本或 Logo 水印，支持透明度、旋转与平铺。" }, fr: { title: "Filigrane d'Image", description: "Ajoutez des filigranes de texte ou de logo à vos images en toute confidentialité." } },
   "exif-remover":     { en: { title: "Image EXIF Cleaner & Viewer", description: "Inspect GPS location, camera details, and date metadata from photos and strip all EXIF data in 1 click." }, ko: { title: "이미지 EXIF 메타데이터 제거기 / 보기", description: "사진에 담긴 GPS 위치 좌표, 촬영 기기, 날짜 등 개인정보 EXIF 데이터를 확인하고 1클릭 완벽 제거 후 다운로드." }, ja: { title: "画像EXIF情報削除・閲覧", description: "写真に含まれる位置情報（GPS）、撮影機器、日時などの個人情報EXIFを確認し1クリックで完全削除。" }, es: { title: "Visor y Eliminador de EXIF", description: "Inspecciona la ubicación GPS y datos EXIF de tus fotos y elimínalos en 1 clic." }, zh: { title: "图片 EXIF 元数据查看与清除", description: "查看照片中的 GPS 位置、拍摄设备与日期等隐私元数据，一键无损清除并下载。" }, fr: { title: "Nettoyeur & Visionneuse EXIF", description: "Inspectez la géolocalisation GPS et les métadonnées EXIF de vos photos et supprimez-les en 1 clic." } },
   "favicon-generator": { en: { title: "Favicon & App Icon Generator", description: "Generate complete 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico, and site.webmanifest packages in 1 click." }, ko: { title: "Favicon & 앱 아이콘 생성기", description: "하나의 로고 이미지를 올리면 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico 세트를 일괄 생성하여 다운로드." }, ja: { title: "ファビコン＆アプリアイコン作成", description: "1つのロゴ画像から16x16、32x32、apple-touch-icon、favicon.icoパッケージを1クリック生成。" }, es: { title: "Generador de Favicon e Iconos App", description: "Genera paquetes de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." }, zh: { title: "Favicon 与应用图标生成器", description: "上传单个 Logo 图像，一键生成 16x16、32x32、apple-touch-icon 和 favicon.ico 图标包。" }, fr: { title: "Générateur de Favicon & Icônes d'App", description: "Générez un ensemble complet de favicons (16x16, 32x32, 180x180, favicon.ico) en 1 clic." } },
+  "image-to-pdf": { en: { title: "Image to PDF Converter", description: "Combine multiple JPG, PNG, and WebP images into a single PDF document." }, ko: { title: "이미지 PDF 변환기", description: "여러 장의 사진/이미지를 순서대로 묶어 하나의 고화질 PDF 문서로 즉시 변환합니다." }, ja: { title: "画像 PDF 変換ツール", description: "複数の写真や画像を順番通りに1つの高品質なPDFファイルに即座に変換・結合します。" }, es: { title: "Convertidor de Imagen a PDF", description: "Combina y convierte múltiples imágenes en un documento PDF profesional al instante." }, zh: { title: "图片转 PDF 转换器", description: "将多张照片与图像按指定顺序一键合并转换为高清 PDF 电子文档。" }, fr: { title: "Convertisseur Image en PDF", description: "Combinez et convertissez plusieurs photos et images en un seul document PDF de haute qualité." } },
 
   // Text
   "word-count":       { en: { title: "Word Count", description: "Count words, characters, sentences, and reading time." }, ko: { title: "단어 수 세기", description: "단어, 글자, 문장 수 및 읽기 시간을 계산합니다." }, ja: { title: "文字数カウント", description: "単語数、文字数、文章数、読了時間を計測します。" }, es: { title: "Contador de Palabras", description: "Cuenta palabras, caracteres, oraciones y tiempo de lectura." }, zh: { title: "字数统计", description: "统计单词数、字符数、句子数及阅读时间。" }, fr: { title: "Compteur de Mots", description: "Comptez les mots, caracteres, phrases et temps de lecture." } },
@@ -88,6 +89,7 @@ const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strok
   "image-watermark": Stamp,
   "exif-remover": ShieldAlert,
   "favicon-generator": AppWindow,
+  "image-to-pdf": Images,
   "word-count": FileText,
   "text-case": Type,
   "markdown-preview": Eye,
