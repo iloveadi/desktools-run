@@ -67,6 +67,16 @@ export const TOOLS: Tool[] = [
     href: "/tools/pdf-compress",
     isDev: false,
   },
+  {
+    id: "image-to-pdf",
+    title: "Image to PDF Converter",
+    description: "Combine and convert multiple JPG, PNG, and WebP images into a single clean PDF document.",
+    category: "PDF Tools",
+    icon: "Images",
+    badge: "New",
+    href: "/tools/image-to-pdf",
+    isDev: false,
+  },
 
   // ── Image Tools ───────────────────────────────────────────
   {
@@ -135,16 +145,6 @@ export const TOOLS: Tool[] = [
     icon: "AppWindow",
     badge: "New",
     href: "/tools/favicon-generator",
-    isDev: false,
-  },
-  {
-    id: "image-to-pdf",
-    title: "Image to PDF Converter",
-    description: "Combine and convert multiple JPG, PNG, and WebP images into a single clean PDF document.",
-    category: "Image Tools",
-    icon: "Images",
-    badge: "New",
-    href: "/tools/image-to-pdf",
     isDev: false,
   },
 
