@@ -9,13 +9,14 @@ import {
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
   ChevronRight, TrendingUp, Hammer, Flame, Sparkles,
-  ShieldAlert, AppWindow
+  ShieldAlert, AppWindow, Star
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { TOOLS, groupToolsByCategory, getLocalizedTool } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
 import { useState, useEffect } from "react";
 import { getToolUsageCount, incrementToolUsage, formatCount } from "@/lib/stats";
+import { getFavorites, toggleFavorite } from "@/lib/favorites";
 
 type ToolLocale = { title: string; description: string };
 
@@ -139,8 +140,10 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
   const { locale } = useLocale();
 
   const [usageCounts, setUsageCounts] = useState<Record<string, number>>({});
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
+    setFavorites(getFavorites());
     const counts: Record<string, number> = {};
     grouped.forEach(({ tools: categoryTools }) => {
       categoryTools.forEach((tool) => {
@@ -153,6 +156,13 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
   const handleToolClick = (toolId: string) => {
     const newCount = incrementToolUsage(toolId);
     setUsageCounts((prev) => ({ ...prev, [toolId]: newCount }));
+  };
+
+  const handleToggleFav = (e: React.MouseEvent, toolId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const updated = toggleFavorite(toolId);
+    setFavorites([...updated]);
   };
 
   const getTitle = (tool: Tool) => {
@@ -179,65 +189,181 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
   return (
     <section id="tools" style={{ padding: "32px 0 80px" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-        
-        {/* Category Jump Bar */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "12px",
-            marginBottom: "40px",
-            scrollbarWidth: "none",
-          }}
-        >
-          <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", paddingRight: "4px", flexShrink: 0 }}>
-            JUMP TO:
-          </span>
-          {grouped.map(({ category }) => {
-            const shortKey = category.split(" ")[0];
-            const displayLabel = CAT_NAV_TRANSLATIONS[shortKey]?.[locale] ?? shortKey;
-            const meta = CATEGORY_META[category];
+        {favorites.length > 0 && (
+          <div style={{ marginBottom: "56px" }}>
+            {/* Favorites Header Bar */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div
+                  style={{
+                    width: "4px",
+                    height: "20px",
+                    borderRadius: "2px",
+                    background: "#eab308",
+                  }}
+                />
+                <h2
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 800,
+                    color: "var(--text-primary)",
+                    letterSpacing: "-0.3px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <Star size={18} style={{ color: "#eab308" }} fill="#facc15" />
+                  {locale === "ko" ? "즐겨찾는 도구 (Pinned Favorites)" : "Pinned Favorites"}
+                </h2>
+                <span
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#ca8a04",
+                    background: "rgba(250, 204, 21, 0.14)",
+                    border: "1px solid rgba(250, 204, 21, 0.35)",
+                    padding: "2px 8px",
+                    borderRadius: "100px",
+                  }}
+                >
+                  {favorites.length}{locale === "ko" ? "개 고정됨" : " pinned"}
+                </span>
+              </div>
 
-            return (
-              <a
-                key={category}
-                href={`#cat-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+              <span
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: "6px 14px",
-                  borderRadius: "100px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid var(--border-subtle)",
-                  color: "var(--text-secondary)",
-                  fontSize: "13px",
+                  fontSize: "12px",
+                  color: "var(--text-muted)",
                   fontWeight: 600,
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.2s",
+                  display: "none",
                 }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = meta.accent;
-                  el.style.color = meta.accent;
-                  el.style.background = `${meta.accent}12`;
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = "var(--border-subtle)";
-                  el.style.color = "var(--text-secondary)";
-                  el.style.background = "rgba(255,255,255,0.04)";
-                }}
+                className="sm-inline"
               >
-                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: meta.accent }} />
-                {displayLabel}
-              </a>
-            );
-          })}
-        </div>
+                ★ 아이콘을 눌러 언제든 추가/해제
+              </span>
+            </div>
+
+            {/* Favorites Grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
+                gap: "16px",
+              }}
+            >
+              {favorites.map((favId) => {
+                const tool = TOOLS.find((t) => t.id === favId);
+                if (!tool || tool.isDev) return null;
+                const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
+                const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
+                const meta = CATEGORY_META[tool.category] || CATEGORY_META["Dev Tools"];
+
+                return (
+                  <Link
+                    key={`fav-${tool.id}`}
+                    href={tool.href}
+                    onClick={() => handleToolClick(tool.id)}
+                    className="glass-card card-hover"
+                    style={{
+                      padding: "22px",
+                      textDecoration: "none",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      gap: "14px",
+                      position: "relative",
+                      border: "1.5px solid rgba(250, 204, 21, 0.4)",
+                      background: "var(--bg-card)",
+                      boxShadow: "0 6px 18px -4px rgba(250, 204, 21, 0.12)",
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                        <div
+                          className={meta.iconClass}
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <IconComponent size={20} strokeWidth={1.75} />
+                        </div>
+
+                        <button
+                          onClick={(e) => handleToggleFav(e, tool.id)}
+                          style={{
+                            background: "rgba(250, 204, 21, 0.12)",
+                            border: "1px solid rgba(250, 204, 21, 0.3)",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            padding: "5px 8px",
+                            color: "#eab308",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            fontSize: "11px",
+                            fontWeight: 700,
+                            transition: "all 0.15s",
+                          }}
+                          title="즐겨찾기 해제"
+                        >
+                          <Star size={14} fill="#facc15" />
+                          <span>고정됨</span>
+                        </button>
+                      </div>
+
+                      <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.2px" }}>
+                        {getTitle(tool)}
+                      </h3>
+
+                      <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55" }}>
+                        {getDesc(tool)}
+                      </p>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "6px" }}>
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          fontWeight: 700,
+                          color: "#ca8a04",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "2px",
+                        }}
+                      >
+                        {locale === "ko" ? "실행하기" : "Run"}
+                        <ChevronRight size={14} />
+                      </span>
+
+                      <span
+                        style={{
+                          fontSize: "11.5px",
+                          color: "var(--text-muted)",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "3px",
+                          background: "rgba(255,255,255,0.03)",
+                          padding: "2px 7px",
+                          borderRadius: "6px",
+                          border: "1px solid var(--border-subtle)",
+                        }}
+                      >
+                        <Flame size={11} style={{ color: "#f97316" }} />
+                        {formatCount(count)}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Categories Sections */}
         <div style={{ display: "flex", flexDirection: "column", gap: "56px" }}>
@@ -288,6 +414,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                   {categoryTools.map((tool) => {
                     const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
                     const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
+                    const isFav = favorites.includes(tool.id);
 
                     if (tool.isDev) {
                       return (
@@ -340,7 +467,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                               </span>
                             </div>
 
-                            <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
+                            <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
                               {getTitle(tool)}
                             </h3>
 
@@ -388,24 +515,42 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                               <IconComponent size={20} strokeWidth={1.75} />
                             </div>
 
-                            {tool.badge && (
-                              <span
-                                className={meta.badgeClass}
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              {tool.badge && (
+                                <span
+                                  className={meta.badgeClass}
+                                  style={{
+                                    fontSize: "11px",
+                                    fontWeight: 700,
+                                    padding: "2px 8px",
+                                    borderRadius: "100px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "3px",
+                                  }}
+                                >
+                                  {tool.badge === "Popular" && <TrendingUp size={10} />}
+                                  {tool.badge === "New" && <Sparkles size={10} />}
+                                  {getBadgeText(tool.badge)}
+                                </span>
+                              )}
+
+                              <button
+                                onClick={(e) => handleToggleFav(e, tool.id)}
                                 style={{
-                                  fontSize: "11px",
-                                  fontWeight: 700,
-                                  padding: "2px 8px",
-                                  borderRadius: "100px",
+                                  background: "transparent",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  padding: "2px",
+                                  color: isFav ? "#facc15" : "var(--text-muted)",
                                   display: "flex",
                                   alignItems: "center",
-                                  gap: "3px",
                                 }}
+                                title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                               >
-                                {tool.badge === "Popular" && <TrendingUp size={10} />}
-                                {tool.badge === "New" && <Sparkles size={10} />}
-                                {getBadgeText(tool.badge)}
-                              </span>
-                            )}
+                                <Star size={16} fill={isFav ? "#facc15" : "none"} />
+                              </button>
+                            </div>
                           </div>
 
                           <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.2px" }}>

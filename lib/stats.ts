@@ -6,31 +6,31 @@
  * and live visitor estimations.
  */
 
-const STORAGE_KEY = "desktools_stats_v1";
+const STORAGE_KEY = "desktools_stats_v2";
 
 // Base realistic usage counts for tools (Modest & Realistic numbers)
 const BASE_TOOL_COUNTS: Record<string, number> = {
-  "pdf-merger": 145,
-  "pdf-split": 82,
-  "pdf-compress": 110,
-  "pdf-to-word": 64,
-  "image-resizer": 135,
-  "image-converter": 128,
-  "image-compress": 152,
-  "background-remover": 94,
-  "word-count": 180,
-  "text-case": 62,
-  "markdown-preview": 58,
-  "text-diff": 74,
-  "json-formatter": 140,
-  "base64": 88,
-  "url-encoder": 72,
-  "regex-tester": 54,
-  "unit-converter": 86,
-  "color-converter": 95,
-  "csv-to-json": 48,
-  "password-generator": 160,
-  "hash-generator": 65,
+  "pdf-merger": 420,
+  "pdf-split": 280,
+  "pdf-compress": 310,
+  "pdf-to-word": 240,
+  "image-resizer": 360,
+  "image-converter": 348,
+  "image-compress": 380,
+  "background-remover": 294,
+  "word-count": 480,
+  "text-case": 210,
+  "markdown-preview": 190,
+  "text-diff": 220,
+  "json-formatter": 410,
+  "base64": 250,
+  "url-encoder": 210,
+  "regex-tester": 180,
+  "unit-converter": 260,
+  "color-converter": 275,
+  "csv-to-json": 190,
+  "password-generator": 390,
+  "hash-generator": 210,
 };
 
 export interface LocalStats {

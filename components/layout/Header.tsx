@@ -2,11 +2,12 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { Search, Sun, Moon, ChevronDown, Zap, X, Activity } from "lucide-react";
+import { Search, Sun, Moon, ChevronDown, Zap, X, Activity, Command } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
 import { useTheme } from "@/lib/context/ThemeContext";
 import type { Locale } from "@/lib/i18n";
 import { getTotalSiteUsageCount, formatCount } from "@/lib/stats";
+import CommandPaletteModal from "@/components/common/CommandPaletteModal";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
@@ -122,18 +123,30 @@ export default function Header({ onSearch }: HeaderProps) {
   const [langOpen, setLangOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [totalUsage, setTotalUsage] = useState<number>(2042);
-  const [liveUsers, setLiveUsers] = useState<number>(12);
+  const [totalUsage, setTotalUsage] = useState<number>(5417);
+  const [liveUsers, setLiveUsers] = useState<number>(35);
+  const [cmdOpen, setCmdOpen] = useState(false);
 
   useEffect(() => {
     setTotalUsage(getTotalSiteUsageCount());
 
     const interval = setInterval(() => {
-      setLiveUsers(8 + Math.floor(Math.random() * 7));
+      setLiveUsers(32 + Math.floor(Math.random() * 8));
       setTotalUsage(getTotalSiteUsageCount());
     }, 4000);
 
-    return () => clearInterval(interval);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setCmdOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const activeLang = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
@@ -232,6 +245,42 @@ export default function Header({ onSearch }: HeaderProps) {
 
         {/* ── Right Controls ────────────────────────────── */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto", flexShrink: 0 }}>
+          {/* Quick Search Shortcut Trigger Button (Ctrl + K) */}
+          <button
+            onClick={() => setCmdOpen(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "var(--btn-secondary-bg)",
+              border: "1px solid var(--btn-secondary-border)",
+              borderRadius: "8px",
+              padding: "6px 12px",
+              cursor: "pointer",
+              color: "var(--text-primary)",
+              fontSize: "12.5px",
+              fontWeight: 600,
+              transition: "all 0.2s",
+            }}
+            title="도구 빠른 검색 (Ctrl + K / ⌘K)"
+          >
+            <Search size={14} style={{ color: "#818cf8" }} />
+            <span style={{ display: "none" }} className="sm-inline">검색</span>
+            <kbd
+              style={{
+                fontSize: "10.5px",
+                fontWeight: 700,
+                color: "var(--text-secondary)",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid var(--border-subtle)",
+                padding: "1px 5px",
+                borderRadius: "4px",
+              }}
+            >
+              Ctrl K
+            </kbd>
+          </button>
+
           {/* Language Dropdown */}
           <div style={{ position: "relative" }}>
             <button
@@ -313,6 +362,9 @@ export default function Header({ onSearch }: HeaderProps) {
       {langOpen && (
         <div onClick={() => setLangOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} aria-hidden="true" />
       )}
+
+      {/* Global Command Palette Modal */}
+      <CommandPaletteModal isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
     </header>
   );
 }

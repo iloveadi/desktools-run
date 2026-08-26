@@ -3,7 +3,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { useLocale } from "@/lib/context/LocaleContext";
-import { History, CheckCircle2, Sparkles } from "lucide-react";
+import { History, CheckCircle2 } from "lucide-react";
 
 interface ReleaseItem {
   version: string;
@@ -16,6 +16,44 @@ export default function ChangelogPage() {
   const { t, locale } = useLocale();
 
   const releases: ReleaseItem[] = [
+    {
+      version: "v1.5.0",
+      date: "August 26, 2026",
+      title: {
+        ko: "서비스 UX 개편: 퀵 액세스 즐겨찾기 및 Ctrl+K 글로벌 커맨드 팔레트 출시",
+        en: "Major UX Upgrade: Quick Access Pinned Favorites and Ctrl+K Global Command Palette",
+        ja: "UX大幅改修: お気に入りクイックアクセス＆Ctrl+K コマンドパレット検索リリース",
+        es: "Gran actualización de UX: Favoritos de acceso rápido y paleta de comandos Ctrl+K",
+        zh: "服务 UX 重磅升级: 快捷 Pin 收藏夹与 Ctrl+K 全局命令行快捷搜索上线",
+        fr: "Mise à niveau majeure de l'UX: Favoris d'accès rapide et recherche rapide Ctrl+K",
+      },
+      changes: {
+        ko: [
+          "★ 즐겨찾기 / 퀵 액세스 (Pinned Favorites) 시스템 도입: 모든 도구 카드에서 1클릭 별표 고정 지원 및 메인 최상단 전용 핀 섹션 자동 배치 (로컬스토리지 연동).",
+          "⌨️ 글로벌 커맨드 팔레트 (Ctrl + K / Cmd + K) 팝업 검색 구현: 키보드 단축키로 어디서나 27+개 도구 즉시 검색, 방향키 선택 및 Enter키 빠른 실행.",
+        ],
+        en: [
+          "★ Pinned Favorites & Quick Access: 1-click star tool pinning with dedicated highlighted section at the top of homepage.",
+          "⌨️ Global Command Palette (Ctrl + K / Cmd + K): Fast modal search across all tools with keyboard arrow navigation and instant launch.",
+        ],
+        ja: [
+          "★ お気に入りクイックアクセス: 1クリックでツールをピン留め、トップページ最上部に専用お気に入り section を自動配置。",
+          "⌨️ グローバルコマンドパレット (Ctrl + K / Cmd + K): キーボードショートカットで全ツールを即座に検索＆矢印キー移動。",
+        ],
+        es: [
+          "★ Acceso Rápido y Favoritos: Fijación con 1 clic en todas las herramientas y sección destacada en la página principal.",
+          "⌨️ Paleta de Comandos Global (Ctrl + K / Cmd + K): Búsqueda rápida de herramientas con navegación por teclado.",
+        ],
+        zh: [
+          "★ 快捷 Pin 收藏夹系统: 所有工具卡片支持一键星标固定，并在首页顶部自动排布专属高亮收藏区。",
+          "⌨️ 全局命令行搜索弹窗 (Ctrl + K / Cmd + K): 支持快捷键唤起，键盘方向键选择与 Enter 键快速启动工具。",
+        ],
+        fr: [
+          "★ Favoris d'accès rapide: Épinglage en 1 clic sur tous les outils avec une section dédiée sur la page d'accueil.",
+          "⌨️ Palette de commandes globale (Ctrl + K / Cmd + K): Recherche rapide de plus de 27 outils avec navigation au clavier.",
+        ],
+      },
+    },
     {
       version: "v1.4.0",
       date: "August 25, 2026",

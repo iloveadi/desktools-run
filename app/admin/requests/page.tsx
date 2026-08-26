@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import VisitorCounter from "@/components/admin/VisitorCounter";
 import { getLocalRequests, saveLocalRequests, StoredRequest } from "@/app/request/page";
 import {
   ShieldCheck,
@@ -449,6 +450,9 @@ export default function AdminRequestsPage() {
                 })}
               </div>
             )}
+
+            {/* Real Visitor Counter & Analytics Section */}
+            <VisitorCounter />
           </div>
         )}
       </main>

@@ -21,7 +21,7 @@ const POPULAR_TAGS = [
 export default function HeroSection({ onSearch }: HeroSectionProps) {
   const { locale, t } = useLocale();
   const [query, setQuery] = useState("");
-  const [totalUsage, setTotalUsage] = useState<number>(2042);
+  const [totalUsage, setTotalUsage] = useState<number>(5417);
 
   useEffect(() => {
     setTotalUsage(getTotalSiteUsageCount());

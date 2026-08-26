@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { useLocale } from "@/lib/context/LocaleContext";
+import { recordVisit } from "@/lib/visitorTracker";
 import { Lightbulb, Send, CheckCircle2 } from "lucide-react";
 
 export const REQUESTS_STORAGE_KEY = "desktools_tool_requests_v1";
@@ -64,6 +65,10 @@ export function getLocalRequests(): StoredRequest[] {
 
 export default function RequestToolPage() {
   const { locale } = useLocale();
+
+  useEffect(() => {
+    recordVisit("/request");
+  }, []);
 
   const isKo = locale === "ko";
   const isJa = locale === "ja";
