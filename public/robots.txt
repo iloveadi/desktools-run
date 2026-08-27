@@ -7,3 +7,9 @@ Allow: /
 
 User-agent: Naverbot
 Allow: /
+
+User-agent: Daumoa
+Allow: /
+
+#DaumWebMasterTool:8ff416f8e9bd9ca26a424715fdb0aa1cafd23ff30517e89cde3cb4781ce80fb0:sYCT6zbLeZrNMkSSK5HBAQ==
+
