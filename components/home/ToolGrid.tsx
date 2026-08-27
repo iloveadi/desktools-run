@@ -189,8 +189,8 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
   };
 
   return (
-    <section id="tools" style={{ padding: "32px 0 80px" }}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+    <section id="tools" style={{ padding: "16px 0 60px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {favorites.length > 0 && (
           <div style={{ marginBottom: "56px" }}>
             {/* Favorites Header Bar */}
@@ -247,13 +247,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
             </div>
 
             {/* Favorites Grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
-                gap: "16px",
-              }}
-            >
+            <div className="tool-grid-container">
               {favorites.map((favId) => {
                 const tool = TOOLS.find((t) => t.id === favId);
                 if (!tool || tool.isDev) return null;
@@ -406,13 +400,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                 </div>
 
                 {/* Cards Grid */}
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
-                    gap: "16px",
-                  }}
-                >
+                <div className="tool-grid-container">
                   {categoryTools.map((tool) => {
                     const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
                     const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);

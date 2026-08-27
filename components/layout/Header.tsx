@@ -244,10 +244,11 @@ export default function Header({ onSearch }: HeaderProps) {
         </div>
 
         {/* ── Right Controls ────────────────────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto", flexShrink: 0 }}>
           {/* Quick Search Shortcut Trigger Button (Ctrl + K) */}
           <button
             onClick={() => setCmdOpen(true)}
+            className="header-search-btn"
             style={{
               display: "flex",
               alignItems: "center",
@@ -267,6 +268,7 @@ export default function Header({ onSearch }: HeaderProps) {
             <Search size={14} style={{ color: "#818cf8" }} />
             <span style={{ display: "none" }} className="sm-inline">검색</span>
             <kbd
+              className="header-search-kbd"
               style={{
                 fontSize: "10.5px",
                 fontWeight: 700,
@@ -285,9 +287,10 @@ export default function Header({ onSearch }: HeaderProps) {
           <div style={{ position: "relative" }}>
             <button
               id="lang-toggle"
+              className="header-lang-btn"
               onClick={() => setLangOpen((o) => !o)}
               style={{
-                display: "flex", alignItems: "center", gap: "7px",
+                display: "flex", alignItems: "center", gap: "6px",
                 background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
                 borderRadius: "8px", padding: "6px 10px", cursor: "pointer",
                 color: "var(--text-primary)", fontSize: "13px", fontWeight: 600, transition: "all 0.2s",
@@ -296,7 +299,7 @@ export default function Header({ onSearch }: HeaderProps) {
               aria-expanded={langOpen}
             >
               <ActiveFlag />
-              <span>{activeLang.label}</span>
+              <span className="hidden sm:inline">{activeLang.label}</span>
               <ChevronDown size={12} style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
             </button>
 

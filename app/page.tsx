@@ -26,7 +26,7 @@ export default function Home() {
       <main style={{ flex: 1 }}>
         <HeroSection onSearch={handleSearch} />
 
-        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px 80px" }} aria-label={t("grid.allTools")}>
+        <section className="main-tools-section" style={{ maxWidth: "1280px", margin: "0 auto" }} aria-label={t("grid.allTools")}>
           {/* Active search header */}
           {isSearching && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
