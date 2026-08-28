@@ -308,6 +308,16 @@ export const TOOLS: Tool[] = [
 
   // ── Security ──────────────────────────────────────────────
   {
+    id: "aes-encrypt",
+    title: "AES Text Encrypt / Decrypt",
+    description: "Encrypt and decrypt text, passwords, and sensitive keys with military-grade AES-256.",
+    category: "Security",
+    icon: "Lock",
+    badge: "New",
+    href: "/tools/aes-encrypt",
+    isDev: false,
+  },
+  {
     id: "password-generator",
     title: "Password Generator",
     description: "Generate strong, cryptographically secure random passwords.",
@@ -533,6 +543,13 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       es: { title: "Convertidor de Imagen a PDF", description: "Combina y convierte múltiples imágenes en un documento PDF profesional al instante." },
       zh: { title: "图片转 PDF 转换器", description: "将多张照片与图像按指定顺序一键合并转换为高清 PDF 电子文档。" },
       fr: { title: "Convertisseur Image en PDF", description: "Combinez et convertissez plusieurs photos et images en un seul document PDF de haute qualité." },
+    },
+    "aes-encrypt": {
+      ko: { title: "AES 텍스트 암호화 / 복호화기", description: "비밀번호를 설정하여 텍스트를 AES-256 군사급 암호문으로 안전하게 암호화하고 복호화합니다." },
+      ja: { title: "AES テキスト暗号化・復号化", description: "パスワードを設定して機密テキストをAES-256で安全に暗号化・復号化します。" },
+      es: { title: "Cifrado y Descifrado AES-256", description: "Cifra y descifra mensajes confidenciales con cifrado militar AES-256." },
+      zh: { title: "AES 文本加密与解密", description: "设置密码将文本加密为 AES-256 军工级密文并支持安全解密。" },
+      fr: { title: "Chiffrement de Texte AES-256", description: "Chiffrez et déchiffrez des textes avec le standard militaire AES-256." },
     },
   };
 
