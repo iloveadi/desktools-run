@@ -4,6 +4,7 @@ import "./globals.css";
 import { LocaleProvider } from "@/lib/context/LocaleContext";
 import { ThemeProvider } from "@/lib/context/ThemeContext";
 import AdSenseLoader from "@/components/common/AdSenseLoader";
+import GoogleAnalytics from "@/components/common/GoogleAnalytics";
 import AdminShortcut from "@/components/common/AdminShortcut";
 import FloatingScrollButtons from "@/components/common/FloatingScrollButtons";
 
@@ -154,6 +155,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen flex flex-col antialiased">
         <AdSenseLoader />
+        <GoogleAnalytics />
         <AdminShortcut />
         <FloatingScrollButtons />
         <ThemeProvider>
