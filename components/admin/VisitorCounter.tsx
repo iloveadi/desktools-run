@@ -18,12 +18,12 @@ import {
 } from "lucide-react";
 
 const GA_MEASUREMENT_ID = "G-VTHH5397MR";
-const STREAM_ID = "15518420037";
+const DEFAULT_EMBED_URL = "https://lookerstudio.google.com/embed/reporting/5dd58f03-bc63-4d0c-b4c6-c71f5c6eb8d1/page/wPc7F";
 
 export default function VisitorCounter() {
-  const [embedUrl, setEmbedUrl] = useState<string>("");
+  const [embedUrl, setEmbedUrl] = useState<string>(DEFAULT_EMBED_URL);
   const [isEditingEmbed, setIsEditingEmbed] = useState<boolean>(false);
-  const [inputUrl, setInputUrl] = useState<string>("");
+  const [inputUrl, setInputUrl] = useState<string>(DEFAULT_EMBED_URL);
 
   useEffect(() => {
     const saved = localStorage.getItem("desktools_ga_looker_embed_url");
@@ -33,9 +33,16 @@ export default function VisitorCounter() {
     }
   }, []);
 
+  const cleanUrl = (raw: string) => {
+    const trimmed = raw.trim();
+    const match = trimmed.match(/src=["']([^"']+)["']/);
+    return match ? match[1] : trimmed;
+  };
+
   const handleSaveEmbed = () => {
-    localStorage.setItem("desktools_ga_looker_embed_url", inputUrl.trim());
-    setEmbedUrl(inputUrl.trim());
+    const cleaned = cleanUrl(inputUrl);
+    localStorage.setItem("desktools_ga_looker_embed_url", cleaned);
+    setEmbedUrl(cleaned);
     setIsEditingEmbed(false);
   };
 
