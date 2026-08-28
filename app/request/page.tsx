@@ -332,15 +332,48 @@ export default function RequestToolPage() {
       status: "Pending",
     };
 
-    // Save locally
+    // 1. Save locally for current session
     const existing = getLocalRequests();
     existing.unshift(newReq);
     saveLocalRequests(existing);
 
-    setTimeout(() => {
+    // 2. Trigger GA4 event
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      try {
+        (window as any).gtag("event", "tool_request", {
+          tool_name: toolTitle.trim(),
+          tool_category: category || categories[0],
+        });
+      } catch (e) {
+        console.error("GA4 event error", e);
+      }
+    }
+
+    // 3. Send real email directly to iloveadi@gmail.com via FormSubmit
+    try {
+      await fetch("https://formsubmit.co/ajax/iloveadi@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          _subject: `[desktools.run] 🚀 새로운 도구 추가 요청: ${toolTitle.trim()} (${category || categories[0]})`,
+          _template: "table",
+          _captcha: "false",
+          "도구 이름": toolTitle.trim(),
+          "카테고리": category || categories[0],
+          "상세 설명": description.trim(),
+          "요청 일시": new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" }),
+          "페이지 URL": typeof window !== "undefined" ? window.location.href : "https://desktools.run/request",
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to send request email", err);
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
-    }, 300);
+    }
   };
 
   return (
