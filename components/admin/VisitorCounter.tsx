@@ -39,8 +39,8 @@ export default function VisitorCounter() {
     setIsEditingEmbed(false);
   };
 
-  const ga4RealtimeUrl = `https://analytics.google.com/analytics/web/#/p${STREAM_ID}/reports/dashboard?params=_u..nav%3Ddefault`;
-  const ga4AcquisitionUrl = `https://analytics.google.com/analytics/web/#/p${STREAM_ID}/reports/reportinghub?params=_u..nav%3Ddefault`;
+  const ga4RealtimeUrl = "https://analytics.google.com/analytics/web/";
+  const ga4AcquisitionUrl = "https://analytics.google.com/analytics/web/";
 
   return (
     <section style={{ marginTop: "48px", width: "100%" }}>
