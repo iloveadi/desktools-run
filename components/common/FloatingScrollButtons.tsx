@@ -13,11 +13,11 @@ export default function FloatingScrollButtons() {
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = window.innerHeight;
 
-      // Show top button if scrolled down more than 200px
-      setShowTop(scrollY > 200);
+      // Show top button if scrolled down more than 180px
+      setShowTop(scrollY > 180);
 
-      // Show bottom button if there is more than 300px to scroll down
-      setShowBottom(scrollHeight - (scrollY + clientHeight) > 250);
+      // Show bottom button if there is more than 200px remaining
+      setShowBottom(scrollHeight - (scrollY + clientHeight) > 200);
     };
 
     handleScroll();
@@ -41,11 +41,10 @@ export default function FloatingScrollButtons() {
     });
   };
 
-  // If page is too short to scroll at all, don't render
   if (!showTop && !showBottom) return null;
 
   return (
-    <aside
+    <div
       aria-label="페이지 스크롤 제어"
       style={{
         position: "fixed",
@@ -54,87 +53,107 @@ export default function FloatingScrollButtons() {
         zIndex: 999,
         display: "flex",
         flexDirection: "column",
-        gap: "8px",
-        pointerEvents: "none", // Let container be click-through, buttons clickable
+        alignItems: "center",
+        borderRadius: "9999px",
+        background: "rgba(14, 15, 23, 0.88)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: "1px solid rgba(99, 102, 241, 0.25)",
+        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(99, 102, 241, 0.2)",
+        padding: "4px",
+        gap: "2px",
+        transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
-      {/* Scroll to Top */}
+      {/* Scroll to Top Button */}
       <button
         type="button"
         onClick={scrollToTop}
+        disabled={!showTop}
         aria-label="맨 위로 이동 (Scroll to Top)"
         title="맨 위로 이동"
         style={{
-          pointerEvents: showTop ? "auto" : "none",
-          opacity: showTop ? 1 : 0,
-          transform: showTop ? "scale(1) translateY(0)" : "scale(0.8) translateY(10px)",
-          transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-          width: "42px",
-          height: "42px",
+          width: "38px",
+          height: "38px",
           borderRadius: "50%",
-          background: "var(--bg-glass-card, rgba(30, 41, 59, 0.85))",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid var(--border-hover, rgba(255, 255, 255, 0.15))",
-          color: "var(--text-primary, #ffffff)",
+          border: "none",
+          background: "transparent",
+          color: showTop ? "#f8fafc" : "rgba(255, 255, 255, 0.2)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          cursor: "pointer",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.25)",
+          cursor: showTop ? "pointer" : "default",
+          opacity: showTop ? 1 : 0.25,
+          transition: "all 0.2s ease",
+          outline: "none",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "var(--brand-mid, #6366f1)";
-          e.currentTarget.style.color = "var(--brand-mid, #6366f1)";
-          e.currentTarget.style.transform = "scale(1.08) translateY(-2px)";
+          if (showTop) {
+            e.currentTarget.style.background = "linear-gradient(135deg, #4f46e5, #6366f1)";
+            e.currentTarget.style.color = "#ffffff";
+            e.currentTarget.style.boxShadow = "0 0 14px rgba(99, 102, 241, 0.6)";
+            e.currentTarget.style.transform = "translateY(-1px)";
+          }
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = "var(--border-hover, rgba(255, 255, 255, 0.15))";
-          e.currentTarget.style.color = "var(--text-primary, #ffffff)";
-          e.currentTarget.style.transform = "scale(1) translateY(0)";
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = showTop ? "#f8fafc" : "rgba(255, 255, 255, 0.2)";
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.transform = "translateY(0)";
         }}
       >
-        <ChevronUp size={22} strokeWidth={2.5} />
+        <ChevronUp size={20} strokeWidth={2.4} />
       </button>
 
-      {/* Scroll to Bottom */}
+      {/* Subtle Divider */}
+      <div
+        style={{
+          width: "20px",
+          height: "1px",
+          background: "rgba(255, 255, 255, 0.1)",
+          margin: "1px 0",
+        }}
+      />
+
+      {/* Scroll to Bottom Button */}
       <button
         type="button"
         onClick={scrollToBottom}
+        disabled={!showBottom}
         aria-label="맨 아래로 이동 (Scroll to Bottom)"
         title="맨 아래로 이동"
         style={{
-          pointerEvents: showBottom ? "auto" : "none",
-          opacity: showBottom ? 1 : 0,
-          transform: showBottom ? "scale(1) translateY(0)" : "scale(0.8) translateY(-10px)",
-          transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-          width: "42px",
-          height: "42px",
+          width: "38px",
+          height: "38px",
           borderRadius: "50%",
-          background: "var(--bg-glass-card, rgba(30, 41, 59, 0.85))",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid var(--border-hover, rgba(255, 255, 255, 0.15))",
-          color: "var(--text-primary, #ffffff)",
+          border: "none",
+          background: "transparent",
+          color: showBottom ? "#f8fafc" : "rgba(255, 255, 255, 0.2)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          cursor: "pointer",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.25)",
+          cursor: showBottom ? "pointer" : "default",
+          opacity: showBottom ? 1 : 0.25,
+          transition: "all 0.2s ease",
+          outline: "none",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "var(--brand-mid, #6366f1)";
-          e.currentTarget.style.color = "var(--brand-mid, #6366f1)";
-          e.currentTarget.style.transform = "scale(1.08) translateY(2px)";
+          if (showBottom) {
+            e.currentTarget.style.background = "linear-gradient(135deg, #4f46e5, #6366f1)";
+            e.currentTarget.style.color = "#ffffff";
+            e.currentTarget.style.boxShadow = "0 0 14px rgba(99, 102, 241, 0.6)";
+            e.currentTarget.style.transform = "translateY(1px)";
+          }
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.borderColor = "var(--border-hover, rgba(255, 255, 255, 0.15))";
-          e.currentTarget.style.color = "var(--text-primary, #ffffff)";
-          e.currentTarget.style.transform = "scale(1) translateY(0)";
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = showBottom ? "#f8fafc" : "rgba(255, 255, 255, 0.2)";
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.transform = "translateY(0)";
         }}
       >
-        <ChevronDown size={22} strokeWidth={2.5} />
+        <ChevronDown size={20} strokeWidth={2.4} />
       </button>
-    </aside>
+    </div>
   );
 }
