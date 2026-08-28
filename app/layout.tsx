@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/context/LocaleContext";
 import { ThemeProvider } from "@/lib/context/ThemeContext";
+import AdSenseLoader from "@/components/common/AdSenseLoader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -151,11 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3724667631368235"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
+        <AdSenseLoader />
         <ThemeProvider>
           <LocaleProvider>
             {children}
