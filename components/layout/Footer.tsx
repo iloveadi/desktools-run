@@ -50,7 +50,7 @@ export default function Footer() {
           </p>
 
           {/* Social / Contact icon links */}
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "10px" }}>
             {[
               { icon: Code2, href: "https://github.com", label: "GitHub", external: true },
               { icon: X,     href: "https://x.com",      label: "X",      external: true },
@@ -59,8 +59,8 @@ export default function Footer() {
               const content = (
                 <div
                   style={{
-                    width: "34px",
-                    height: "34px",
+                    width: "38px",
+                    height: "38px",
                     borderRadius: "8px",
                     background: "rgba(255,255,255,0.05)",
                     border: "1px solid rgba(255,255,255,0.07)",
@@ -83,7 +83,7 @@ export default function Footer() {
                     el.style.borderColor = "rgba(255,255,255,0.07)";
                   }}
                 >
-                  <Icon size={14} />
+                  <Icon size={16} />
                 </div>
               );
 
@@ -113,12 +113,12 @@ export default function Footer() {
             <h3 style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: "14px" }}>
               {title}
             </h3>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "9px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "6px" }}>
               {links.map(({ label, href }) => (
                 <li key={label}>
                   <Link
                     href={href}
-                    style={{ fontSize: "13.5px", color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s", display: "flex", alignItems: "center", gap: "4px" }}
+                    style={{ fontSize: "13.5px", color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.15s", display: "inline-flex", alignItems: "center", gap: "4px", padding: "4px 0" }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#a5b4fc"; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-secondary)"; }}
                   >

@@ -244,7 +244,7 @@ export default function Header({ onSearch }: HeaderProps) {
         </div>
 
         {/* ── Right Controls ────────────────────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto", flexShrink: 0 }}>
           {/* Quick Search Shortcut Trigger Button (Ctrl + K) */}
           <button
             onClick={() => setCmdOpen(true)}
@@ -256,7 +256,8 @@ export default function Header({ onSearch }: HeaderProps) {
               background: "var(--btn-secondary-bg)",
               border: "1px solid var(--btn-secondary-border)",
               borderRadius: "8px",
-              padding: "6px 12px",
+              padding: "7px 12px",
+              minHeight: "38px",
               cursor: "pointer",
               color: "var(--text-primary)",
               fontSize: "12.5px",
@@ -264,8 +265,9 @@ export default function Header({ onSearch }: HeaderProps) {
               transition: "all 0.2s",
             }}
             title="도구 빠른 검색 (Ctrl + K / ⌘K)"
+            aria-label="도구 빠른 검색"
           >
-            <Search size={14} style={{ color: "#818cf8" }} />
+            <Search size={15} style={{ color: "#818cf8" }} />
             <span style={{ display: "none" }} className="sm-inline">검색</span>
             <kbd
               className="header-search-kbd"
@@ -292,7 +294,7 @@ export default function Header({ onSearch }: HeaderProps) {
               style={{
                 display: "flex", alignItems: "center", gap: "6px",
                 background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
-                borderRadius: "8px", padding: "6px 10px", cursor: "pointer",
+                borderRadius: "8px", padding: "7px 10px", minHeight: "38px", cursor: "pointer",
                 color: "var(--text-primary)", fontSize: "13px", fontWeight: 600, transition: "all 0.2s",
               }}
               aria-label="Select language"
@@ -326,7 +328,7 @@ export default function Header({ onSearch }: HeaderProps) {
                       }}
                       style={{
                         width: "100%", display: "flex", alignItems: "center", gap: "10px",
-                        padding: "8px 12px", borderRadius: "8px",
+                        padding: "10px 12px", borderRadius: "8px", minHeight: "40px",
                         background: isSelected ? "rgba(99,102,241,0.15)" : "transparent",
                         border: "none", cursor: "pointer",
                         color: isSelected ? "var(--brand-mid)" : "var(--text-primary)",
@@ -350,14 +352,14 @@ export default function Header({ onSearch }: HeaderProps) {
             id="theme-toggle"
             onClick={toggleTheme}
             style={{
-              width: "36px", height: "36px", borderRadius: "8px",
+              width: "38px", height: "38px", borderRadius: "8px",
               background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)",
               cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
               color: isDark ? "#fbbf24" : "#4f46e5", transition: "all 0.2s",
             }}
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
         </div>
       </div>

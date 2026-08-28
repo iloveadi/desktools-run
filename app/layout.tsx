@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/context/LocaleContext";
 import { ThemeProvider } from "@/lib/context/ThemeContext";
@@ -99,11 +100,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="naver-site-verification" content="78cc45882494368515599712d3cbe77cb0321e65" />
         <meta name="google-site-verification" content="h6rIrI3xMIgonXn1PDKk5T5FHzgHbXtiOpgut4AtuZM" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3724667631368235"
-          crossOrigin="anonymous"
-        />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -154,10 +150,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         {/* Anti-flash theme & locale script — must run before any CSS paints */}
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3724667631368235"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
         <ThemeProvider>
           <LocaleProvider>
             {children}

@@ -122,8 +122,8 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
         </div>
 
         {/* Popular Tags */}
-        <div className="animate-fade-in-up animation-delay-300" style={{ display: "flex", flexWrap: "wrap", gap: "6px", justifyContent: "center", marginBottom: "48px" }}>
-          <span style={{ fontSize: "12px", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
+        <div className="animate-fade-in-up animation-delay-300" style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", alignItems: "center", marginBottom: "48px" }}>
+          <span style={{ fontSize: "12.5px", color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 600 }}>
             {t("hero.popular")}
           </span>
           {POPULAR_TAGS.map((tag) => {
@@ -133,12 +133,19 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 key={tag.query}
                 onClick={() => handleTagClick(tag.query)}
                 style={{
-                  padding: "4px 11px", borderRadius: "100px",
+                  padding: "6px 13px",
+                  minHeight: "32px",
+                  borderRadius: "100px",
                   background: query === tag.query ? "rgba(79, 70, 229, 0.2)" : "var(--tag-bg)",
                   border: query === tag.query ? "1px solid rgba(79, 70, 229, 0.4)" : "1px solid var(--tag-border)",
                   color: query === tag.query ? "#a5b4fc" : "var(--text-secondary)",
-                  fontSize: "12px", cursor: "pointer", transition: "all 0.15s",
-                  fontFamily: "Inter, sans-serif", fontWeight: 500,
+                  fontSize: "12.5px",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  fontFamily: "var(--font-inter), sans-serif",
+                  fontWeight: 500,
+                  display: "inline-flex",
+                  alignItems: "center",
                 }}
                 onMouseEnter={(e) => {
                   if (query !== tag.query) {

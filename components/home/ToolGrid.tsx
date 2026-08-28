@@ -297,16 +297,18 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                             border: "1px solid rgba(250, 204, 21, 0.3)",
                             borderRadius: "8px",
                             cursor: "pointer",
-                            padding: "5px 8px",
+                            padding: "6px 10px",
+                            minHeight: "34px",
                             color: "#eab308",
                             display: "flex",
                             alignItems: "center",
                             gap: "4px",
-                            fontSize: "11px",
+                            fontSize: "11.5px",
                             fontWeight: 700,
                             transition: "all 0.15s",
                           }}
                           title="즐겨찾기 해제"
+                          aria-label="즐겨찾기 해제"
                         >
                           <Star size={14} fill="#facc15" />
                           <span>고정됨</span>
@@ -531,12 +533,18 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                                   background: "transparent",
                                   border: "none",
                                   cursor: "pointer",
-                                  padding: "2px",
+                                  padding: "8px",
+                                  margin: "-4px",
+                                  minWidth: "36px",
+                                  minHeight: "36px",
+                                  borderRadius: "6px",
                                   color: isFav ? "#facc15" : "var(--text-muted)",
                                   display: "flex",
                                   alignItems: "center",
+                                  justifyContent: "center",
                                 }}
                                 title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+                                aria-label={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                               >
                                 <Star size={16} fill={isFav ? "#facc15" : "none"} />
                               </button>
