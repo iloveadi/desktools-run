@@ -5,6 +5,7 @@ import { LocaleProvider } from "@/lib/context/LocaleContext";
 import { ThemeProvider } from "@/lib/context/ThemeContext";
 import AdSenseLoader from "@/components/common/AdSenseLoader";
 import AdminShortcut from "@/components/common/AdminShortcut";
+import FloatingScrollButtons from "@/components/common/FloatingScrollButtons";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -154,6 +155,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen flex flex-col antialiased">
         <AdSenseLoader />
         <AdminShortcut />
+        <FloatingScrollButtons />
         <ThemeProvider>
           <LocaleProvider>
             {children}
