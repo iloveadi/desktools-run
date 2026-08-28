@@ -132,18 +132,10 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Copyright bar with subtle secret admin entrance dot */}
+      {/* Copyright bar */}
       <div style={{ borderTop: "1px solid var(--border-subtle)", maxWidth: "1280px", margin: "0 auto", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
         <p style={{ fontSize: "12.5px", color: "var(--text-muted)" }}>
           © {year} desktools.run — {t("footer.copyright")}
-          {/* Secret discreet link on period '.' */}
-          <Link
-            href="/admin/requests"
-            style={{ color: "inherit", textDecoration: "none", cursor: "default" }}
-            title="desktools admin"
-          >
-            .
-          </Link>
         </p>
         <p style={{ fontSize: "12.5px", color: "var(--text-muted)" }}>
           {t("footer.privacy")}
