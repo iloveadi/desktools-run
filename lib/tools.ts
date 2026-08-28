@@ -77,6 +77,16 @@ export const TOOLS: Tool[] = [
     href: "/tools/image-to-pdf",
     isDev: false,
   },
+  {
+    id: "pdf-protect",
+    title: "PDF Protect & Encrypt",
+    description: "Protect sensitive PDF documents with secure password encryption.",
+    category: "PDF Tools",
+    icon: "Lock",
+    badge: "New",
+    href: "/tools/pdf-protect",
+    isDev: false,
+  },
 
   // ── Image Tools ───────────────────────────────────────────
   {
@@ -331,6 +341,13 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       es: { title: "Compresión PDF", description: "Reduce el tamaño del PDF sin perder calidad visual." },
       zh: { title: "PDF 压缩", description: "无损画质缩小 PDF 文件体积。" },
       fr: { title: "Compression PDF", description: "Réduisez la taille du fichier PDF sans sacrifier la qualité." },
+    },
+    "pdf-protect": {
+      ko: { title: "PDF 비밀번호 설정 / 암호화", description: "중요한 PDF 문서에 비밀번호를 설정하여 안전하게 잠급니다." },
+      ja: { title: "PDF パスワード設定・暗号化", description: "重要なPDFにパスワードを設定して安全に保護・暗号化します。" },
+      es: { title: "Proteger PDF con Contraseña", description: "Protege y cifra documentos PDF con contraseña de forma segura." },
+      zh: { title: "PDF 密码保护与加密", description: "为机密 PDF 文件设置安全密码并加密锁定。" },
+      fr: { title: "Protéger et Chiffrer un PDF", description: "Protégez vos documents PDF sensibles avec un mot de passe sécurisé." },
     },
     "image-resizer": {
       ko: { title: "이미지 리사이즈", description: "비율 유지 및 원하는 크기로 이미지 해상도를 조절합니다." },
