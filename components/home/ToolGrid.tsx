@@ -9,7 +9,7 @@ import {
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
   ChevronRight, TrendingUp, Hammer, Flame, Sparkles,
-  ShieldAlert, AppWindow, Star, Images, Lock
+  ShieldAlert, AppWindow, Star, Images, Lock, Unlock
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { TOOLS, groupToolsByCategory, getLocalizedTool } from "@/lib/tools";
@@ -27,6 +27,7 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "pdf-compress":  { en: { title: "PDF Compress", description: "Reduce PDF file size while maintaining visual quality." }, ko: { title: "PDF 압축", description: "눈에 띄는 품질 저하 없이 PDF 파일 크기를 줄입니다." }, ja: { title: "PDF圧縮", description: "品質を保ちつつPDFファイルサイズを圧縮します。" }, es: { title: "Comprimir PDF", description: "Reduce el tamano del archivo PDF manteniendo la calidad." }, zh: { title: "PDF 压缩", description: "在保持清晰度的同时降低 PDF 文件大小。" }, fr: { title: "Compresser PDF", description: "Reduisez la taille du fichier PDF tout en conservant la qualite." } },
   "image-to-pdf":  { en: { title: "Image to PDF Converter", description: "Combine multiple JPG, PNG, and WebP images into a single PDF document." }, ko: { title: "이미지 PDF 변환기", description: "여러 장의 사진/이미지를 순서대로 묶어 하나의 고화질 PDF 문서로 즉시 변환합니다." }, ja: { title: "画像 PDF 変換ツール", description: "複数の写真や画像を順番通りに1つの高品質なPDFファイルに即座に変換・結合します。" }, es: { title: "Convertidor de Imagen a PDF", description: "Combina y convierte múltiples imágenes en un documento PDF profesional al instante." }, zh: { title: "图片转 PDF 转换器", description: "将多张照片与图像按指定顺序一键合并转换为高清 PDF 电子文档。" }, fr: { title: "Convertisseur Image en PDF", description: "Combinez et convertissez plusieurs photos et images en un seul document PDF de haute qualité." } },
   "pdf-protect":   { en: { title: "PDF Protect & Encrypt", description: "Protect sensitive PDF documents with secure password encryption." }, ko: { title: "PDF 비밀번호 설정 / 암호화", description: "중요한 계약서, 급여명세서 등 PDF 문서에 비밀번호를 설정하여 안전하게 잠급니다." }, ja: { title: "PDF パスワード設定・暗号化", description: "重要なPDFファイルにパスワードを設定して安全に保護・暗号化します。" }, es: { title: "Proteger PDF con Contraseña", description: "Protege y cifra documentos PDF confidenciales con contraseña." }, zh: { title: "PDF 密码保护与加密", description: "为机密 PDF 文件设置安全密码并加密锁定。" }, fr: { title: "Protéger et Chiffrer un PDF", description: "Protégez vos documents PDF sensibles avec un mot de passe sécurisé." } },
+  "pdf-unlock":    { en: { title: "PDF Unlock & Decrypt", description: "Remove password protection and permanently unlock encrypted PDF documents." }, ko: { title: "PDF 비밀번호 해제 / 잠금 풀기", description: "비밀번호를 입력하여 PDF 문서의 암호를 영구적으로 해제하고 저장합니다." }, ja: { title: "PDF パスワード解除・ロック解除", description: "パスワードを入力してPDFの保護を完全に解除します。" }, es: { title: "Desbloquear PDF y Quitar Contraseña", description: "Introduce la contraseña para desbloquear tu PDF permanentemente." }, zh: { title: "PDF 解除密码与解锁", description: "输入密码永久解除 PDF 保护锁定并另存为普通 PDF。" }, fr: { title: "Déverrouiller et Supprimer Mot de Passe PDF", description: "Entrez le mot de passe pour déverrouiller définitivement votre PDF." } },
   "pdf-to-word":   { en: { title: "PDF to Word", description: "Convert PDF documents to editable .docx format." }, ko: { title: "PDF → Word", description: "PDF 문서를 편집 가능한 .docx 형식으로 변환합니다." }, ja: { title: "PDF→Word", description: "PDFを 編集可能な.docx形式に変換します。" }, es: { title: "PDF a Word", description: "Convierte documentos PDF a formato .docx editable." }, zh: { title: "PDF 转 Word", description: "将 PDF 文档转换为可编辑的 .docx 格式。" }, fr: { title: "PDF en Word", description: "Convertissez des documents PDF au format .docx modifiable." } },
 
   // Image
@@ -84,6 +85,7 @@ const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strok
   "pdf-split": Scissors,
   "pdf-compress": FolderArchive,
   "pdf-protect": Lock,
+  "pdf-unlock": Unlock,
   "image-resizer": Maximize2,
   "image-converter": RefreshCw,
   "image-compress": Minimize2,

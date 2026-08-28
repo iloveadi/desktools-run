@@ -87,6 +87,16 @@ export const TOOLS: Tool[] = [
     href: "/tools/pdf-protect",
     isDev: false,
   },
+  {
+    id: "pdf-unlock",
+    title: "PDF Unlock & Decrypt",
+    description: "Remove password protection and permanently unlock encrypted PDF documents.",
+    category: "PDF Tools",
+    icon: "Unlock",
+    badge: "New",
+    href: "/tools/pdf-unlock",
+    isDev: false,
+  },
 
   // ── Image Tools ───────────────────────────────────────────
   {
@@ -344,10 +354,17 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
     },
     "pdf-protect": {
       ko: { title: "PDF 비밀번호 설정 / 암호화", description: "중요한 PDF 문서에 비밀번호를 설정하여 안전하게 잠급니다." },
-      ja: { title: "PDF パスワード設定・暗号化", description: "重要なPDFにパスワードを設定して安全に保護・暗号化します。" },
+      ja: { title: "PDF パスワード設定・暗号化", description: "重要なPDFにパスワードを設定して安全に保護・暗호化します。" },
       es: { title: "Proteger PDF con Contraseña", description: "Protege y cifra documentos PDF con contraseña de forma segura." },
       zh: { title: "PDF 密码保护与加密", description: "为机密 PDF 文件设置安全密码并加密锁定。" },
       fr: { title: "Protéger et Chiffrer un PDF", description: "Protégez vos documents PDF sensibles avec un mot de passe sécurisé." },
+    },
+    "pdf-unlock": {
+      ko: { title: "PDF 비밀번호 해제 / 잠금 풀기", description: "비밀번호를 입력하여 PDF 문서의 암호를 영구적으로 해제합니다." },
+      ja: { title: "PDF パスワード解除・ロック解除", description: "パスワードを入力してPDFの保護を完全に解除します。" },
+      es: { title: "Desbloquear PDF y Quitar Contraseña", description: "Introduce la contraseña para desbloquear tu PDF permanentemente." },
+      zh: { title: "PDF 解除密码与解锁", description: "输入密码永久解除 PDF 保护锁定并另存为普通 PDF。" },
+      fr: { title: "Déverrouiller et Supprimer Mot de Passe PDF", description: "Entrez le mot de passe pour déverrouiller définitivement votre PDF." },
     },
     "image-resizer": {
       ko: { title: "이미지 리사이즈", description: "비율 유지 및 원하는 크기로 이미지 해상도를 조절합니다." },
