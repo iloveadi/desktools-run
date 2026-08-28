@@ -10,17 +10,15 @@ import {
   Check,
   Download,
   Trash2,
-  RotateCcw,
   Sparkles,
   ShieldCheck,
   Eye,
   EyeOff,
   AlertCircle,
   ArrowLeft,
-  FileText,
   Sliders,
-  FileCode2,
-  RefreshCw
+  RefreshCw,
+  ArrowRight
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -50,6 +48,7 @@ const I18N = {
     outputLabelDec: "복호화된 원본 텍스트 (Plaintext)",
     btnEncrypt: "AES-256 암호화 실행",
     btnDecrypt: "AES-256 복호화 실행",
+    testDecryptBtn: "🔓 이 암호문 복호화 테스트하기",
     copied: "복사 완료!",
     copyBtn: "암호문 복사",
     copyPlainBtn: "원문 복사",
@@ -97,6 +96,7 @@ const I18N = {
     outputLabelDec: "Decrypted Plaintext",
     btnEncrypt: "Encrypt with AES-256",
     btnDecrypt: "Decrypt with AES-256",
+    testDecryptBtn: "🔓 Test Decrypt this Ciphertext",
     copied: "Copied!",
     copyBtn: "Copy Ciphertext",
     copyPlainBtn: "Copy Plaintext",
@@ -144,6 +144,7 @@ const I18N = {
     outputLabelDec: "復号化されたテキスト",
     btnEncrypt: "AES-256で暗号化",
     btnDecrypt: "AES-256で復号化",
+    testDecryptBtn: "🔓 この暗号文を復号テスト",
     copied: "コピー完了!",
     copyBtn: "暗号文をコピー",
     copyPlainBtn: "テキストをコピー",
@@ -191,6 +192,7 @@ const I18N = {
     outputLabelDec: "Texto Original Descifrado",
     btnEncrypt: "Cifrar con AES-256",
     btnDecrypt: "Descifrar con AES-256",
+    testDecryptBtn: "🔓 Probar Descifrado",
     copied: "¡Copiado!",
     copyBtn: "Copiar Cifrado",
     copyPlainBtn: "Copiar Texto",
@@ -238,6 +240,7 @@ const I18N = {
     outputLabelDec: "解密还原的明文 (Plaintext)",
     btnEncrypt: "立即进行 AES-256 加密",
     btnDecrypt: "立即进行 AES-256 解密",
+    testDecryptBtn: "🔓 测试解密此密文",
     copied: "已复制！",
     copyBtn: "复制密文",
     copyPlainBtn: "复制明文",
@@ -285,6 +288,7 @@ const I18N = {
     outputLabelDec: "Texte Original Déchiffré",
     btnEncrypt: "Chiffrer avec AES-256",
     btnDecrypt: "Déchiffrer avec AES-256",
+    testDecryptBtn: "🔓 Tester le Déchiffrement",
     copied: "Copié !",
     copyBtn: "Copier le Chiffre",
     copyPlainBtn: "Copier le Texte",
@@ -321,17 +325,35 @@ export default function AesEncryptPage() {
   const t = I18N[locale as keyof typeof I18N] || I18N.ko;
 
   const [mode, setMode] = useState<Mode>("encrypt");
-  const [inputText, setInputText] = useState<string>("");
+
+  // Separate states for Encrypt and Decrypt so inputs never mix up
+  const [encryptPlaintext, setEncryptPlaintext] = useState<string>("");
+  const [decryptCiphertext, setDecryptCiphertext] = useState<string>("");
   const [passphrase, setPassphrase] = useState<string>("");
   const [showPassphrase, setShowPassphrase] = useState<boolean>(false);
   const [algorithm, setAlgorithm] = useState<Algorithm>("AES-GCM");
   const [format, setFormat] = useState<Format>("base64");
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  const [outputText, setOutputText] = useState<string>("");
+  const [encryptResult, setEncryptResult] = useState<string>("");
+  const [decryptResult, setDecryptResult] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  // Switch tabs safely
+  const handleTabSwitch = (newMode: Mode) => {
+    setMode(newMode);
+    setErrorMessage("");
+  };
+
+  // Fast shortcut to test decrypt newly generated ciphertext
+  const handleTransferToDecrypt = () => {
+    if (!encryptResult) return;
+    setDecryptCiphertext(encryptResult);
+    setMode("decrypt");
+    setErrorMessage("");
+  };
 
   // Random password generator helper
   const handleGenerateKey = () => {
@@ -345,26 +367,29 @@ export default function AesEncryptPage() {
 
   // Sample Text
   const handleLoadSample = () => {
-    if (mode === "encrypt") {
-      setInputText(
-        "비밀 메모:\n- 국민은행 123-4567-89012\n- 개인 금고 비밀번호: 7890#\n- API Token: sk_live_9837198273918273"
-      );
-      if (!passphrase) {
-        setPassphrase("desktools2026!Secret");
-      }
+    setEncryptPlaintext(
+      "비밀 메모:\n- 국민은행 123-4567-89012\n- 개인 금고 비밀번호: 7890#\n- API Token: sk_live_9837198273918273"
+    );
+    if (!passphrase) {
+      setPassphrase("desktools2026!Secret");
     }
   };
 
   // Clear inputs
   const handleClear = () => {
-    setInputText("");
-    setOutputText("");
+    if (mode === "encrypt") {
+      setEncryptPlaintext("");
+      setEncryptResult("");
+    } else {
+      setDecryptCiphertext("");
+      setDecryptResult("");
+    }
     setErrorMessage("");
   };
 
   // WebCrypto Encrypt
   const executeEncrypt = useCallback(async () => {
-    if (!inputText.trim() || !passphrase.trim()) {
+    if (!encryptPlaintext.trim() || !passphrase.trim()) {
       setErrorMessage(t.errEmpty);
       return;
     }
@@ -400,7 +425,7 @@ export default function AesEncryptPage() {
       const cipherBuffer = await window.crypto.subtle.encrypt(
         algorithm === "AES-GCM" ? { name: "AES-GCM", iv } : { name: "AES-CBC", iv },
         key,
-        enc.encode(inputText)
+        enc.encode(encryptPlaintext)
       );
 
       const cipherArray = new Uint8Array(cipherBuffer);
@@ -411,14 +436,14 @@ export default function AesEncryptPage() {
 
       if (format === "hex") {
         const hex = Array.from(combined).map(b => b.toString(16).padStart(2, "0")).join("");
-        setOutputText(hex);
+        setEncryptResult(hex);
       } else {
         let binary = "";
         const len = combined.byteLength;
         for (let i = 0; i < len; i++) {
           binary += String.fromCharCode(combined[i]);
         }
-        setOutputText(btoa(binary));
+        setEncryptResult(btoa(binary));
       }
     } catch (err) {
       console.error("Encrypt error:", err);
@@ -426,11 +451,11 @@ export default function AesEncryptPage() {
     } finally {
       setIsProcessing(false);
     }
-  }, [inputText, passphrase, algorithm, format, t.errEmpty]);
+  }, [encryptPlaintext, passphrase, algorithm, format, t.errEmpty]);
 
   // WebCrypto Decrypt
   const executeDecrypt = useCallback(async () => {
-    if (!inputText.trim() || !passphrase.trim()) {
+    if (!decryptCiphertext.trim() || !passphrase.trim()) {
       setErrorMessage(t.errEmpty);
       return;
     }
@@ -439,7 +464,7 @@ export default function AesEncryptPage() {
 
     try {
       let combined: Uint8Array;
-      const raw = inputText.trim();
+      const raw = decryptCiphertext.trim();
 
       // Check if hex or base64
       const isHex = /^[0-9a-fA-F]+$/.test(raw) && raw.length % 2 === 0 && !raw.includes("+") && !raw.includes("/");
@@ -495,28 +520,28 @@ export default function AesEncryptPage() {
       );
 
       const dec = new TextDecoder();
-      setOutputText(dec.decode(decryptedBuffer));
+      setDecryptResult(dec.decode(decryptedBuffer));
     } catch (err) {
       console.error("Decrypt error:", err);
       setErrorMessage(t.errDecrypt);
-      setOutputText("");
+      setDecryptResult("");
     } finally {
       setIsProcessing(false);
     }
-  }, [inputText, passphrase, algorithm, format, t.errEmpty, t.errDecrypt]);
+  }, [decryptCiphertext, passphrase, algorithm, format, t.errEmpty, t.errDecrypt]);
 
   // Copy to clipboard
-  const handleCopy = () => {
-    if (!outputText) return;
-    navigator.clipboard.writeText(outputText);
+  const handleCopy = (text: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   // Download .txt
-  const handleDownload = () => {
-    if (!outputText) return;
-    const blob = new Blob([outputText], { type: "text/plain;charset=utf-8" });
+  const handleDownload = (text: string) => {
+    if (!text) return;
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -582,11 +607,8 @@ export default function AesEncryptPage() {
             }}
           >
             <button
-              onClick={() => {
-                setMode("encrypt");
-                setOutputText("");
-                setErrorMessage("");
-              }}
+              type="button"
+              onClick={() => handleTabSwitch("encrypt")}
               style={{
                 flex: 1,
                 padding: "10px 16px",
@@ -604,11 +626,8 @@ export default function AesEncryptPage() {
               {t.tabEncrypt}
             </button>
             <button
-              onClick={() => {
-                setMode("decrypt");
-                setOutputText("");
-                setErrorMessage("");
-              }}
+              type="button"
+              onClick={() => handleTabSwitch("decrypt")}
               style={{
                 flex: 1,
                 padding: "10px 16px",
@@ -656,7 +675,7 @@ export default function AesEncryptPage() {
                       {t.sampleBtn}
                     </button>
                   )}
-                  {inputText && (
+                  {((mode === "encrypt" && encryptPlaintext) || (mode === "decrypt" && decryptCiphertext)) && (
                     <button
                       type="button"
                       onClick={handleClear}
@@ -680,28 +699,52 @@ export default function AesEncryptPage() {
                 </div>
               </div>
 
-              <textarea
-                value={inputText}
-                onChange={(e) => {
-                  setInputText(e.target.value);
-                  setErrorMessage("");
-                }}
-                placeholder={mode === "encrypt" ? t.inputPlaceholderEnc : t.inputPlaceholderDec}
-                rows={5}
-                style={{
-                  width: "100%",
-                  padding: "14px",
-                  borderRadius: "12px",
-                  background: "var(--input-bg)",
-                  border: "1px solid var(--input-border)",
-                  color: "var(--text-primary)",
-                  fontSize: "14px",
-                  lineHeight: 1.6,
-                  resize: "vertical",
-                  outline: "none",
-                  fontFamily: mode === "decrypt" ? "monospace" : "inherit",
-                }}
-              />
+              {mode === "encrypt" ? (
+                <textarea
+                  value={encryptPlaintext}
+                  onChange={(e) => {
+                    setEncryptPlaintext(e.target.value);
+                    setErrorMessage("");
+                  }}
+                  placeholder={t.inputPlaceholderEnc}
+                  rows={5}
+                  style={{
+                    width: "100%",
+                    padding: "14px",
+                    borderRadius: "12px",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--input-border)",
+                    color: "var(--text-primary)",
+                    fontSize: "14px",
+                    lineHeight: 1.6,
+                    resize: "vertical",
+                    outline: "none",
+                  }}
+                />
+              ) : (
+                <textarea
+                  value={decryptCiphertext}
+                  onChange={(e) => {
+                    setDecryptCiphertext(e.target.value);
+                    setErrorMessage("");
+                  }}
+                  placeholder={t.inputPlaceholderDec}
+                  rows={5}
+                  style={{
+                    width: "100%",
+                    padding: "14px",
+                    borderRadius: "12px",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--input-border)",
+                    color: "var(--text-primary)",
+                    fontSize: "14px",
+                    lineHeight: 1.6,
+                    resize: "vertical",
+                    outline: "none",
+                    fontFamily: "monospace",
+                  }}
+                />
+              )}
             </div>
 
             {/* Secret Key Input Section */}
@@ -928,7 +971,7 @@ export default function AesEncryptPage() {
             </button>
 
             {/* Output Result Section */}
-            {outputText && (
+            {((mode === "encrypt" && encryptResult) || (mode === "decrypt" && decryptResult)) && (
               <div
                 style={{
                   marginTop: "32px",
@@ -940,10 +983,32 @@ export default function AesEncryptPage() {
                   <label style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
                     {mode === "encrypt" ? t.outputLabelEnc : t.outputLabelDec}
                   </label>
-                  <div style={{ display: "flex", gap: "8px" }}>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    {mode === "encrypt" && encryptResult && (
+                      <button
+                        type="button"
+                        onClick={handleTransferToDecrypt}
+                        style={{
+                          background: "rgba(16, 185, 129, 0.12)",
+                          border: "1px solid rgba(16, 185, 129, 0.3)",
+                          color: "#34d399",
+                          padding: "6px 12px",
+                          borderRadius: "8px",
+                          fontSize: "12.5px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <ArrowRight size={14} />
+                        {t.testDecryptBtn}
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={handleCopy}
+                      onClick={() => handleCopy(mode === "encrypt" ? encryptResult : decryptResult)}
                       style={{
                         background: "rgba(255, 255, 255, 0.05)",
                         border: "1px solid var(--border-subtle)",
@@ -963,7 +1028,7 @@ export default function AesEncryptPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={handleDownload}
+                      onClick={() => handleDownload(mode === "encrypt" ? encryptResult : decryptResult)}
                       style={{
                         background: "rgba(255, 255, 255, 0.05)",
                         border: "1px solid var(--border-subtle)",
@@ -992,7 +1057,7 @@ export default function AesEncryptPage() {
                     border: "1px solid rgba(99, 102, 241, 0.2)",
                     color: mode === "encrypt" ? "#818cf8" : "#34d399",
                     fontSize: "13.5px",
-                    fontFamily: "monospace",
+                    fontFamily: mode === "encrypt" ? "monospace" : "inherit",
                     wordBreak: "break-all",
                     whiteSpace: "pre-wrap",
                     maxHeight: "300px",
@@ -1000,7 +1065,7 @@ export default function AesEncryptPage() {
                     lineHeight: 1.6,
                   }}
                 >
-                  {outputText}
+                  {mode === "encrypt" ? encryptResult : decryptResult}
                 </div>
               </div>
             )}
