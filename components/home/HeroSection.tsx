@@ -74,7 +74,6 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
 
         {/* Headline */}
         <h1
-          className="animate-fade-in-up animation-delay-100"
           style={{ fontSize: "clamp(30px, 6vw, 64px)", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-1.5px", marginBottom: "16px" }}
         >
           <span style={{ color: "var(--text-primary)" }}>{t("hero.title1")}</span>
@@ -84,7 +83,6 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
 
         {/* Subtitle */}
         <p
-          className="animate-fade-in-up animation-delay-200"
           style={{ fontSize: "clamp(14px, 2vw, 17px)", color: "var(--text-secondary)", lineHeight: 1.65, marginBottom: "32px", maxWidth: "540px", margin: "0 auto 32px" }}
         >
           {t("hero.subtitle")}
