@@ -22,6 +22,9 @@ import {
   Square,
   Layers,
   Check,
+  ShieldCheck,
+  Eye,
+  Zap,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -681,7 +684,7 @@ export default function PdfSplitPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────── */}
         <ToolGuide
-          badgeText={t("pdfSplit.badge")}
+          badgeText={t("pdfSplit.guide.badge") || t("pdfSplit.badge")}
           aboutTitle={t("pdfSplit.guide.aboutTitle")}
           aboutDesc={t("pdfSplit.guide.aboutDesc")}
           howTitle={t("pdfSplit.guide.howTitle")}
@@ -690,10 +693,67 @@ export default function PdfSplitPage() {
             t("pdfSplit.guide.step2"),
             t("pdfSplit.guide.step3"),
           ]}
+          featuresTitle={t("pdfSplit.guide.featuresTitle")}
+          features={[
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("pdfSplit.guide.feat1Title"),
+              desc: t("pdfSplit.guide.feat1Desc"),
+            },
+            {
+              icon: <Eye size={16} />,
+              title: t("pdfSplit.guide.feat2Title"),
+              desc: t("pdfSplit.guide.feat2Desc"),
+            },
+            {
+              icon: <Scissors size={16} />,
+              title: t("pdfSplit.guide.feat3Title"),
+              desc: t("pdfSplit.guide.feat3Desc"),
+            },
+            {
+              icon: <Zap size={16} />,
+              title: t("pdfSplit.guide.feat4Title"),
+              desc: t("pdfSplit.guide.feat4Desc"),
+            },
+          ]}
+          useCasesTitle={t("pdfSplit.guide.useCasesTitle")}
+          useCases={[
+            {
+              icon: "📄",
+              title: t("pdfSplit.guide.uc1Title"),
+              desc: t("pdfSplit.guide.uc1Desc"),
+            },
+            {
+              icon: "🎓",
+              title: t("pdfSplit.guide.uc2Title"),
+              desc: t("pdfSplit.guide.uc2Desc"),
+            },
+            {
+              icon: "💼",
+              title: t("pdfSplit.guide.uc3Title"),
+              desc: t("pdfSplit.guide.uc3Desc"),
+            },
+            {
+              icon: "🗂️",
+              title: t("pdfSplit.guide.uc4Title"),
+              desc: t("pdfSplit.guide.uc4Desc"),
+            },
+          ]}
+          proTips={{
+            title: t("pdfSplit.guide.tipsTitle"),
+            tips: [
+              t("pdfSplit.guide.tip1"),
+              t("pdfSplit.guide.tip2"),
+              t("pdfSplit.guide.tip3"),
+            ],
+          }}
           faqs={[
             { q: t("pdfSplit.guide.faq1Q"), a: t("pdfSplit.guide.faq1A") },
             { q: t("pdfSplit.guide.faq2Q"), a: t("pdfSplit.guide.faq2A") },
             { q: t("pdfSplit.guide.faq3Q"), a: t("pdfSplit.guide.faq3A") },
+            { q: t("pdfSplit.guide.faq4Q"), a: t("pdfSplit.guide.faq4A") },
+            { q: t("pdfSplit.guide.faq5Q"), a: t("pdfSplit.guide.faq5A") },
+            { q: t("pdfSplit.guide.faq6Q"), a: t("pdfSplit.guide.faq6A") },
           ]}
         />
       </main>

@@ -20,6 +20,10 @@ import {
   Plus,
   RotateCcw,
   Sparkles,
+  ShieldCheck,
+  Zap,
+  Infinity as InfinityIcon,
+  MonitorSmartphone,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -552,19 +556,94 @@ export default function PdfMergerPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────────── */}
         <ToolGuide
-          badgeText="100% Free & Local Processing"
+          badgeText={t("pdfMerger.guide.badge") || "100% Free & Local Processing"}
           aboutTitle={t("pdfMerger.guide.aboutTitle") || "PDF 합치기 도구란 무엇인가요?"}
-          aboutDesc={t("pdfMerger.guide.aboutDesc") || "서버 업로드 걱정 없이 웹 브라우저 메모리 내에서 여러 PDF 파일을 원하는 순서대로 안전하게 하나로 합쳐주는 로컬 무료 유틸리티입니다."}
-          howTitle={t("pdfMerger.guide.howTitle") || "사용 방법"}
+          aboutDesc={t("pdfMerger.guide.aboutDesc") || "서버 업로드 걱정 없이 사용자의 웹 브라우저 메모리 내에서 여러 PDF 파일을 원하는 순서대로 안전하게 하나로 합쳐주는 100% 로컬 무료 유틸리티입니다."}
+          howTitle={t("pdfMerger.guide.howTitle") || "PDF 병합 방법"}
           steps={[
-            t("pdfMerger.guide.step1") || "합치고자 하는 여러 개의 PDF 파일을 드래그하여 업로드합니다.",
-            t("pdfMerger.guide.step2") || "목록에서 위(▲) 및 아래(▼) 버튼을 눌러 PDF 결합 순서를 정렬합니다.",
-            t("pdfMerger.guide.step3") || "저장할 파일명을 입력한 후 'PDF 병합하기' 버튼을 눌러 다운로드합니다.",
+            t("pdfMerger.guide.step1") || "합치고자 하는 여러 개의 PDF 파일을 드래그하거나 파일 선택을 통해 업로드합니다.",
+            t("pdfMerger.guide.step2") || "목록에서 위(▲) 및 아래(▼) 버튼을 눌러 원하는 PDF 결합 순서로 정렬합니다.",
+            t("pdfMerger.guide.step3") || "저장할 파일명을 입력한 후 'PDF 병합하기' 버튼을 눌러 즉시 다운로드합니다.",
           ]}
+          featuresTitle={t("pdfMerger.guide.featuresTitle") || "PDF 합치기 핵심 강점 & 특징"}
+          features={[
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("pdfMerger.guide.feat1Title") || "100% 프라이빗 로컬 연산",
+              desc: t("pdfMerger.guide.feat1Desc") || "파일이 외부 서버로 전송되지 않고 브라우저(pdf-lib) 메모리에서 즉시 처리되어 회사 대외비 문서나 개인정보도 안전합니다.",
+            },
+            {
+              icon: <Zap size={16} />,
+              title: t("pdfMerger.guide.feat2Title") || "무손실(Lossless) 벡터 & 텍스트 보존",
+              desc: t("pdfMerger.guide.feat2Desc") || "단순 이미지 캡처가 아닌 순수 PDF 객체 구조를 병합하여 텍스트 검색, 폰트, 벡터 그래픽 및 하이퍼링크가 원본 그대로 유지됩니다.",
+            },
+            {
+              icon: <InfinityIcon size={16} />,
+              title: t("pdfMerger.guide.feat3Title") || "용량 & 파일 개수 무제한",
+              desc: t("pdfMerger.guide.feat3Desc") || "일일 변환 횟수 제한이나 유료 결제 유도 없이, 기기 메모리가 허용하는 한 수십 개의 파일도 무제한 무료로 병합 가능합니다.",
+            },
+            {
+              icon: <MonitorSmartphone size={16} />,
+              title: t("pdfMerger.guide.feat4Title") || "모든 기기 & 브라우저 호환",
+              desc: t("pdfMerger.guide.feat4Desc") || "별도 프로그램 설치 없이 Windows, Mac, Linux, iPad는 물론 모바일 스마트폰 브라우저에서도 즉시 이용할 수 있습니다.",
+            },
+          ]}
+          useCasesTitle={t("pdfMerger.guide.useCasesTitle") || "대표적인 실무 & 일상 활용 사례"}
+          useCases={[
+            {
+              icon: "💼",
+              title: t("pdfMerger.guide.uc1Title") || "비즈니스 제안서 & 보고서 취합",
+              desc: t("pdfMerger.guide.uc1Desc") || "부서별로 분할 작성된 기획서, 회의록, 견적서, 계약서 부속 문서를 하나의 완성된 보고서로 깔끔하게 정리.",
+            },
+            {
+              icon: "🎓",
+              title: t("pdfMerger.guide.uc2Title") || "이력서 · 포트폴리오 · 자격증 제출",
+              desc: t("pdfMerger.guide.uc2Desc") || "취업/이직 또는 공공기관 제출 시 이력서, 자기소개서, 증명서 스캔본, 포트폴리오를 단일 제출용 PDF로 묶음.",
+            },
+            {
+              icon: "📚",
+              title: t("pdfMerger.guide.uc3Title") || "강의 자료 · 논문 · E-Book 통합",
+              desc: t("pdfMerger.guide.uc3Desc") || "주차별로 나뉜 강의 슬라이드, 학술 논문, 전자책 챕터 PDF들을 한 권의 파일로 편리하게 정리하여 보관.",
+            },
+            {
+              icon: "🧾",
+              title: t("pdfMerger.guide.uc4Title") || "전자세금계산서 & 영수증 증빙",
+              desc: t("pdfMerger.guide.uc4Desc") || "월별/분기별 발급된 전자 세금계산서와 비용 지출 결의용 증빙 PDF들을 일자순으로 정렬하여 회계 제출용 문서 생성.",
+            },
+          ]}
+          proTips={{
+            title: t("pdfMerger.guide.tipsTitle") || "PDF 병합 시 유용한 전문가 꿀팁",
+            tips: [
+              t("pdfMerger.guide.tip1") || "암호화(보안) 걸린 PDF는 사전에 'PDF 잠금 해제' 도구에서 암호를 해제한 후 업로드하시면 안전하게 병합됩니다.",
+              t("pdfMerger.guide.tip2") || "A4, Letter, A3 등 서로 다른 용지 규격이나 가로/세로 방향이 섞여 있어도 각 페이지 고유의 형태를 유지한 채 합쳐집니다.",
+              t("pdfMerger.guide.tip3") || "파일 카드 오른쪽의 위(▲)/아래(▼) 화살표를 통해 표지, 목차, 본문 순서를 꼼꼼히 확인한 후 병합 버튼을 누르세요.",
+            ],
+          }}
           faqs={[
-            { q: t("pdfMerger.guide.faq1Q") || "업로드한 PDF 문서가 외부 서버로 전송되나요?", a: t("pdfMerger.guide.faq1A") || "아닙니다. desktools.run의 모든 PDF 처리는 사용자 브라우저 내에서 100% 로컬로 안전하게 진행됩니다." },
-            { q: t("pdfMerger.guide.faq2Q") || "합칠 수 있는 PDF 파일 수에 제한이 있나요?", a: t("pdfMerger.guide.faq2A") || "별도의 개수 제한은 없습니다. 컴퓨터 메모리가 허용하는 한 수십 개의 파일도 병합할 수 있습니다." },
-            { q: t("pdfMerger.guide.faq3Q") || "파일 병합 전 순서를 바꿀 수 있나요?", a: t("pdfMerger.guide.faq3A") || "네, 각 파일 카드의 위/아래 이동 버튼을 통해 원하는 결합 순서로 자유롭게 재배치할 수 있습니다." },
+            {
+              q: t("pdfMerger.guide.faq1Q") || "업로드한 PDF 문서가 외부 서버로 전송되거나 저장되나요?",
+              a: t("pdfMerger.guide.faq1A") || "아닙니다. desktools.run의 모든 PDF 처리는 WebAssembly 및 pdf-lib 엔진을 통해 사용자의 웹 브라우저 메모리 내에서 100% 로컬로 안전하게 진행되며 탭을 닫으면 즉시 삭제됩니다.",
+            },
+            {
+              q: t("pdfMerger.guide.faq2Q") || "합쳐진 PDF에서도 텍스트 검색(OCR) 및 복사가 유지되나요?",
+              a: t("pdfMerger.guide.faq2A") || "네, 이미지를 캡처하는 방식이 아닌 PDF 내부 객체 트리를 손실 없이 복사하므로 텍스트 선택, 검색, 폰트, 하이퍼링크가 원본 그대로 유지됩니다.",
+            },
+            {
+              q: t("pdfMerger.guide.faq3Q") || "합칠 수 있는 PDF 파일 수나 페이지 수에 제한이 있나요?",
+              a: t("pdfMerger.guide.faq3A") || "인위적인 개수나 용량 제한은 전혀 없습니다. 사용 중인 PC나 스마트폰 기기의 브라우저 RAM 메모리가 허용하는 한 수십 개의 파일도 병합 가능합니다.",
+            },
+            {
+              q: t("pdfMerger.guide.faq4Q") || "서로 다른 크기(A4, Letter)나 가로/세로 방향이 섞여 있어도 되나요?",
+              a: t("pdfMerger.guide.faq4A") || "네, 가능합니다. 각 PDF 페이지의 고유 해상도와 회전 각도(Orientation)를 손상 없이 그대로 유지하여 하나의 문서로 자연스럽게 결합됩니다.",
+            },
+            {
+              q: t("pdfMerger.guide.faq5Q") || "파일 병합 전 순서를 어떻게 바꿀 수 있나요?",
+              a: t("pdfMerger.guide.faq5A") || "파일을 추가한 뒤 목록에 표시된 각 파일 카드의 위(▲) 및 아래(▼) 이동 버튼을 누르면 원하는 결합 순서로 자유롭게 재배치할 수 있습니다.",
+            },
+            {
+              q: t("pdfMerger.guide.faq6Q") || "모바일 스마트폰이나 태블릿에서도 사용 가능한가요?",
+              a: t("pdfMerger.guide.faq6A") || "네! 별도 앱 설치 없이 Chrome, Safari, Samsung Internet 등 모든 모바일 브라우저에서 동일한 속도로 안전하게 작동합니다.",
+            },
           ]}
         />
       </main>
