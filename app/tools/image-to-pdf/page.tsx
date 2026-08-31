@@ -19,7 +19,10 @@ import {
   CheckCircle2,
   FileCheck,
   Image as ImageIcon,
-  FileSpreadsheet
+  FileSpreadsheet,
+  ShieldCheck,
+  MoveVertical,
+  Zap,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -339,7 +342,7 @@ const I18N = {
 };
 
 export default function ImageToPdfPage() {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const txt = I18N[locale as keyof typeof I18N] || I18N.ko;
 
   const [images, setImages] = useState<ImageItem[]>([]);
@@ -583,74 +586,78 @@ export default function ImageToPdfPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--bg-primary)" }}>
+    <>
       <Header />
 
-      <main style={{ flex: 1, padding: "40px 0 80px" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
-          {/* Breadcrumb Navigation */}
-          <div style={{ marginBottom: "24px" }}>
-            <Link
-              href="/#tools"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                transition: "color 0.2s",
-              }}
-            >
-              <ArrowLeft size={16} />
-              {txt.back}
-            </Link>
-          </div>
+      <main style={{ flex: 1, paddingBottom: "80px" }}>
+        {/* ── Breadcrumb & Title ──────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 16px" }}>
+          <Link
+            href="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "13px",
+              color: "var(--text-secondary)",
+              textDecoration: "none",
+              marginBottom: "16px",
+              fontWeight: 500,
+            }}
+          >
+            <ArrowLeft size={14} />
+            {txt.back}
+          </Link>
 
-          {/* Title Header */}
-          <div style={{ marginBottom: "36px", textAlign: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "10px",
+                    background: "rgba(239, 68, 68, 0.15)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#f87171",
+                  }}
+                >
+                  <ImageIcon size={20} />
+                </div>
+                <h1 style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--text-primary)" }}>
+                  {txt.title}
+                </h1>
+              </div>
+              <p style={{ color: "var(--text-secondary)", fontSize: "14px", maxWidth: "600px" }}>
+                {txt.subtitle}
+              </p>
+            </div>
+
             <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "8px",
-                padding: "6px 14px",
+                gap: "6px",
+                padding: "6px 12px",
                 borderRadius: "100px",
-                background: "rgba(52, 211, 153, 0.12)",
-                border: "1px solid rgba(52, 211, 153, 0.3)",
-                color: "#10b981",
-                fontSize: "13px",
-                fontWeight: 700,
-                marginBottom: "16px",
+                background: "rgba(239, 68, 68, 0.1)",
+                border: "1px solid rgba(239, 68, 68, 0.2)",
+                color: "#f87171",
+                fontSize: "12px",
+                fontWeight: 600,
               }}
             >
-              <FileCheck size={16} />
+              <Sparkles size={12} />
               {txt.badge}
             </div>
-            <h1
-              style={{
-                fontSize: "clamp(26px, 4vw, 38px)",
-                fontWeight: 900,
-                color: "var(--text-primary)",
-                letterSpacing: "-0.6px",
-                marginBottom: "12px",
-              }}
-            >
-              {txt.title}
-            </h1>
-            <p
-              style={{
-                fontSize: "16px",
-                color: "var(--text-secondary)",
-                maxWidth: "680px",
-                margin: "0 auto",
-                lineHeight: "1.6",
-              }}
-            >
-              {txt.subtitle}
-            </p>
           </div>
+        </section>
+
+        {/* ── Main Workspace ───────────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
 
           {/* Upload Dropzone */}
           <div
@@ -658,16 +665,19 @@ export default function ImageToPdfPage() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
+            className="glass-card"
             style={{
-              borderRadius: "20px",
-              border: `2px dashed ${isDragging ? "var(--accent-primary)" : "var(--border-strong)"}`,
-              background: isDragging ? "rgba(59, 130, 246, 0.08)" : "var(--bg-card)",
-              padding: "48px 24px",
+              padding: "64px 32px",
               textAlign: "center",
               cursor: "pointer",
-              transition: "all 0.2s ease",
-              marginBottom: "32px",
-              boxShadow: "0 10px 30px -10px var(--shadow-color)",
+              border: isDragging ? "2px dashed #f87171" : "2px dashed var(--border-subtle)",
+              background: isDragging ? "rgba(239, 68, 68, 0.08)" : "var(--glass-bg)",
+              transition: "all 0.2s",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
+              marginBottom: images.length > 0 ? "32px" : "0",
             }}
           >
             <input
@@ -686,37 +696,24 @@ export default function ImageToPdfPage() {
               style={{
                 width: "64px",
                 height: "64px",
-                borderRadius: "18px",
-                background: "linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.1))",
-                border: "1px solid rgba(52, 211, 153, 0.4)",
+                borderRadius: "16px",
+                background: "rgba(239, 68, 68, 0.15)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "0 auto 16px",
-                color: "#10b981",
+                color: "#f87171",
               }}
             >
-              <Upload size={30} />
+              <Upload size={32} />
             </div>
-            <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
-              {txt.dropzoneTitle}
-            </h3>
-            <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "20px" }}>
-              {txt.dropzoneHint}
-            </p>
-            <button
-              type="button"
-              className="btn btn-primary"
-              style={{
-                padding: "10px 24px",
-                fontSize: "14px",
-                fontWeight: 700,
-                borderRadius: "10px",
-                pointerEvents: "none",
-              }}
-            >
-              {txt.dropzoneBtn}
-            </button>
+            <div>
+              <p style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
+                {txt.dropzoneTitle}
+              </p>
+              <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                {txt.dropzoneHint}
+              </p>
+            </div>
           </div>
 
           {/* If Images Selected */}
@@ -1224,28 +1221,85 @@ export default function ImageToPdfPage() {
             </div>
           )}
 
-          {/* Guide & FAQs */}
-          <div style={{ marginTop: "60px" }}>
-            <ToolGuide
-              badgeText="100% Free & Local Processing"
-              aboutTitle={txt.guideTitle}
-              aboutDesc={txt.subtitle}
-              howTitle={txt.title}
-              steps={[
-                `${txt.step1Title}: ${txt.step1Desc}`,
-                `${txt.step2Title}: ${txt.step2Desc}`,
-                `${txt.step3Title}: ${txt.step3Desc}`,
-              ]}
-              faqs={[
-                { q: txt.faq1Q, a: txt.faq1A },
-                { q: txt.faq2Q, a: txt.faq2A },
-              ]}
-            />
-          </div>
-        </div>
+        </section>
+
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText={t("imageToPdf.guide.badge")}
+          aboutTitle={t("imageToPdf.guide.aboutTitle")}
+          aboutDesc={t("imageToPdf.guide.aboutDesc")}
+          howTitle={t("imageToPdf.guide.howTitle")}
+          steps={[
+            t("imageToPdf.guide.step1"),
+            t("imageToPdf.guide.step2"),
+            t("imageToPdf.guide.step3"),
+          ]}
+          featuresTitle={t("imageToPdf.guide.featuresTitle")}
+          features={[
+            {
+              icon: <Layers size={16} />,
+              title: t("imageToPdf.guide.feat1Title"),
+              desc: t("imageToPdf.guide.feat1Desc"),
+            },
+            {
+              icon: <Sliders size={16} />,
+              title: t("imageToPdf.guide.feat2Title"),
+              desc: t("imageToPdf.guide.feat2Desc"),
+            },
+            {
+              icon: <MoveVertical size={16} />,
+              title: t("imageToPdf.guide.feat3Title"),
+              desc: t("imageToPdf.guide.feat3Desc"),
+            },
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("imageToPdf.guide.feat4Title"),
+              desc: t("imageToPdf.guide.feat4Desc"),
+            },
+          ]}
+          useCasesTitle={t("imageToPdf.guide.useCasesTitle")}
+          useCases={[
+            {
+              icon: "🧾",
+              title: t("imageToPdf.guide.uc1Title"),
+              desc: t("imageToPdf.guide.uc1Desc"),
+            },
+            {
+              icon: "🪪",
+              title: t("imageToPdf.guide.uc2Title"),
+              desc: t("imageToPdf.guide.uc2Desc"),
+            },
+            {
+              icon: "🎨",
+              title: t("imageToPdf.guide.uc3Title"),
+              desc: t("imageToPdf.guide.uc3Desc"),
+            },
+            {
+              icon: "📚",
+              title: t("imageToPdf.guide.uc4Title"),
+              desc: t("imageToPdf.guide.uc4Desc"),
+            },
+          ]}
+          proTips={{
+            title: t("imageToPdf.guide.tipsTitle"),
+            tips: [
+              t("imageToPdf.guide.tip1"),
+              t("imageToPdf.guide.tip2"),
+              t("imageToPdf.guide.tip3"),
+            ],
+          }}
+          faqs={[
+            { q: t("imageToPdf.guide.faq1Q"), a: t("imageToPdf.guide.faq1A") },
+            { q: t("imageToPdf.guide.faq2Q"), a: t("imageToPdf.guide.faq2A") },
+            { q: t("imageToPdf.guide.faq3Q"), a: t("imageToPdf.guide.faq3A") },
+            { q: t("imageToPdf.guide.faq4Q"), a: t("imageToPdf.guide.faq4A") },
+            { q: t("imageToPdf.guide.faq5Q"), a: t("imageToPdf.guide.faq5A") },
+            { q: t("imageToPdf.guide.faq6Q"), a: t("imageToPdf.guide.faq6A") },
+          ]}
+        />
       </main>
 
       <Footer />
-    </div>
+    </>
   );
 }

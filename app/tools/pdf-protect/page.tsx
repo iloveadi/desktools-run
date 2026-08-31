@@ -278,8 +278,8 @@ const I18N = {
 };
 
 export default function PdfProtectPage() {
-  const { locale } = useLocale();
-  const t = I18N[locale as keyof typeof I18N] || I18N.ko;
+  const { locale, t } = useLocale();
+  const txt = I18N[locale as keyof typeof I18N] || I18N.ko;
 
   const [pdfFile, setPdfFile] = useState<LoadedPdf | null>(null);
   const [password, setPassword] = useState<string>("");
@@ -403,116 +403,143 @@ export default function PdfProtectPage() {
     <>
       <Header />
 
-      <main style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
-        <div style={{ maxWidth: "860px", margin: "0 auto" }}>
-          {/* Breadcrumb Back */}
+      <main style={{ flex: 1, paddingBottom: "80px" }}>
+        {/* ── Breadcrumb & Title ──────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link
-            href="/#tools"
+            href="/"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              color: "var(--text-muted)",
-              fontSize: "13.5px",
-              fontWeight: 500,
+              fontSize: "13px",
+              color: "var(--text-secondary)",
               textDecoration: "none",
-              marginBottom: "24px",
-              transition: "color 0.15s",
+              marginBottom: "16px",
+              fontWeight: 500,
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--brand-mid)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)"; }}
           >
-            <ArrowLeft size={16} />
-            {t.back}
+            <ArrowLeft size={14} />
+            {t("pdfProtect.back") || txt.back}
           </Link>
 
-          {/* Header */}
-          <div style={{ marginBottom: "32px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px", flexWrap: "wrap" }}>
-              <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>
-                {t.title}
-              </h1>
-              <span className="badge-pill">
-                <ShieldCheck size={13} />
-                {t.badge}
-              </span>
-            </div>
-            <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-              {t.subtitle}
-            </p>
-          </div>
-
-          {/* Main Card */}
-          <div className="glass-card" style={{ padding: "32px", borderRadius: "16px", marginBottom: "48px" }}>
-            {!pdfFile ? (
-              /* Dropzone */
-              <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                style={{
-                  border: isDragging ? "2px dashed var(--brand-mid)" : "2px dashed var(--border-hover)",
-                  background: isDragging ? "rgba(99, 102, 241, 0.08)" : "rgba(255, 255, 255, 0.02)",
-                  borderRadius: "14px",
-                  padding: "48px 24px",
-                  textAlign: "center",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="application/pdf"
-                  style={{ display: "none" }}
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) {
-                      handleFiles(e.target.files);
-                    }
-                  }}
-                />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
                 <div
                   style={{
-                    width: "56px",
-                    height: "56px",
-                    borderRadius: "14px",
-                    background: "rgba(99, 102, 241, 0.12)",
-                    color: "var(--brand-mid)",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "10px",
+                    background: "rgba(239,68,68,0.15)",
+                    border: "1px solid rgba(239,68,68,0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 16px",
+                    color: "#f87171",
                   }}
                 >
-                  <Lock size={26} />
+                  <Lock size={20} />
                 </div>
-                <h2 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                  {t.dropzoneTitle}
-                </h2>
-                <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "20px" }}>
-                  {t.dropzoneHint}
-                </p>
-                <button
-                  type="button"
-                  className="btn-glow"
-                  style={{ padding: "10px 22px", fontSize: "13.5px", pointerEvents: "none" }}
-                >
-                  <Upload size={15} style={{ marginRight: "6px" }} />
-                  {t.dropzoneBtn}
-                </button>
+                <h1 style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--text-primary)" }}>
+                  {t("pdfProtect.title") || txt.title}
+                </h1>
               </div>
-            ) : !encryptedResult ? (
-              /* Config & Password Setting Form */
-              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                {/* File Selected Badge */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "16px 20px",
-                    borderRadius: "12px",
+              <p style={{ color: "var(--text-secondary)", fontSize: "14px", maxWidth: "600px" }}>
+                {t("pdfProtect.subtitle") || txt.subtitle}
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                borderRadius: "100px",
+                background: "rgba(239,68,68,0.1)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                color: "#f87171",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              <ShieldCheck size={12} />
+              {t("pdfProtect.badge") || txt.badge}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Main Workspace ───────────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+          {!pdfFile ? (
+            /* Upload Dropzone */
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className="glass-card"
+              style={{
+                padding: "64px 32px",
+                textAlign: "center",
+                cursor: "pointer",
+                border: isDragging ? "2px dashed #f87171" : "2px dashed var(--border-subtle)",
+                background: isDragging ? "rgba(239,68,68,0.08)" : "var(--glass-bg)",
+                transition: "all 0.2s",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/pdf, .pdf"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    handleFiles(e.target.files);
+                  }
+                }}
+              />
+              <div
+                style={{
+                  width: "64px",
+                  height: "64px",
+                  borderRadius: "16px",
+                  background: "rgba(239,68,68,0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#f87171",
+                }}
+              >
+                <Upload size={32} />
+              </div>
+              <div>
+                <p style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
+                  {t("pdfProtect.dropPrompt") || txt.dropzoneTitle}
+                </p>
+                <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                  {t("pdfProtect.dropHint") || txt.dropzoneHint}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="glass-card" style={{ padding: "32px", borderRadius: "16px", marginBottom: "48px" }}>
+              {!encryptedResult ? (
+                /* Config & Password Setting Form */
+                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  {/* File Selected Badge */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "16px 20px",
+                      borderRadius: "12px",
                     background: "rgba(99, 102, 241, 0.08)",
                     border: "1px solid rgba(99, 102, 241, 0.22)",
                     flexWrap: "wrap",
@@ -540,7 +567,7 @@ export default function PdfProtectPage() {
                         {pdfFile.name}
                       </div>
                       <div style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "2px" }}>
-                        {pdfFile.pageCount} {t.pageCount} • {formatBytes(pdfFile.originalSize)}
+                        {pdfFile.pageCount} {txt.pageCount} • {formatBytes(pdfFile.originalSize)}
                       </div>
                     </div>
                   </div>
@@ -574,14 +601,14 @@ export default function PdfProtectPage() {
                   <div>
                     <label style={{ display: "block", fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
                       <KeyRound size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "var(--brand-mid)" }} />
-                      {t.passwordLabel}
+                      {txt.passwordLabel}
                     </label>
                     <div style={{ position: "relative" }}>
                       <input
                         type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder={t.passwordPlaceholder}
+                        placeholder={txt.passwordPlaceholder}
                         style={{
                           width: "100%",
                           padding: "12px 42px 12px 14px",
@@ -640,7 +667,7 @@ export default function PdfProtectPage() {
                           ))}
                         </div>
                         <span style={{ fontSize: "11.5px", color: strength <= 1 ? "#ef4444" : strength <= 2 ? "#f59e0b" : "#10b981", fontWeight: 600 }}>
-                          {strength <= 1 ? t.strengthWeak : strength <= 2 ? t.strengthMedium : t.strengthStrong}
+                          {strength <= 1 ? txt.strengthWeak : strength <= 2 ? txt.strengthMedium : txt.strengthStrong}
                         </span>
                       </div>
                     )}
@@ -650,13 +677,13 @@ export default function PdfProtectPage() {
                   <div>
                     <label style={{ display: "block", fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
                       <CheckCircle2 size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "var(--brand-mid)" }} />
-                      {t.confirmLabel}
+                      {txt.confirmLabel}
                     </label>
                     <input
                       type={showPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder={t.confirmPlaceholder}
+                      placeholder={txt.confirmPlaceholder}
                       style={{
                         width: "100%",
                         padding: "12px 14px",
@@ -687,7 +714,7 @@ export default function PdfProtectPage() {
                         }}
                       >
                         {isPasswordValid ? <CheckCircle2 size={13} /> : <AlertCircle size={13} />}
-                        {isPasswordValid ? t.passwordMatched : t.passwordMismatch}
+                        {isPasswordValid ? txt.passwordMatched : txt.passwordMismatch}
                       </div>
                     )}
                   </div>
@@ -715,12 +742,12 @@ export default function PdfProtectPage() {
                   {isEncrypting ? (
                     <>
                       <div className="spinner" style={{ width: "16px", height: "16px" }} />
-                      {t.encrypting}
+                      {txt.encrypting}
                     </>
                   ) : (
                     <>
                       <Lock size={16} />
-                      {t.btnEncrypt}
+                      {txt.btnEncrypt}
                     </>
                   )}
                 </button>
@@ -744,10 +771,10 @@ export default function PdfProtectPage() {
                   <ShieldCheck size={32} />
                 </div>
                 <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
-                  {t.successTitle}
+                  {txt.successTitle}
                 </h2>
                 <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "24px", maxWidth: "480px", margin: "0 auto 24px" }}>
-                  {t.successDesc}
+                  {txt.successDesc}
                 </p>
 
                 <div
@@ -773,7 +800,7 @@ export default function PdfProtectPage() {
                     }}
                   >
                     <Download size={16} />
-                    {t.downloadBtn}
+                    {txt.downloadBtn}
                   </a>
 
                   <button
@@ -794,29 +821,89 @@ export default function PdfProtectPage() {
                     }}
                   >
                     <RotateCcw size={15} />
-                    {t.resetBtn}
+                    {txt.resetBtn}
                   </button>
                 </div>
               </div>
             )}
           </div>
+          )}
+        </section>
 
-          {/* Comprehensive Tool Guide */}
-          <ToolGuide
-            aboutTitle={t.guideTitle}
-            aboutDesc={t.subtitle}
-            steps={[
-              `${t.step1Title}: ${t.step1Desc}`,
-              `${t.step2Title}: ${t.step2Desc}`,
-              `${t.step3Title}: ${t.step3Desc}`,
-            ]}
-            faqs={[
-              { q: t.faq1Q, a: t.faq1A },
-              { q: t.faq2Q, a: t.faq2A },
-              { q: t.faq3Q, a: t.faq3A },
-            ]}
-          />
-        </div>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText={t("pdfProtect.guide.badge")}
+          aboutTitle={t("pdfProtect.guide.aboutTitle")}
+          aboutDesc={t("pdfProtect.guide.aboutDesc")}
+          howTitle={t("pdfProtect.guide.howTitle")}
+          steps={[
+            t("pdfProtect.guide.step1"),
+            t("pdfProtect.guide.step2"),
+            t("pdfProtect.guide.step3"),
+          ]}
+          featuresTitle={t("pdfProtect.guide.featuresTitle")}
+          features={[
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("pdfProtect.guide.feat1Title"),
+              desc: t("pdfProtect.guide.feat1Desc"),
+            },
+            {
+              icon: <Lock size={16} />,
+              title: t("pdfProtect.guide.feat2Title"),
+              desc: t("pdfProtect.guide.feat2Desc"),
+            },
+            {
+              icon: <KeyRound size={16} />,
+              title: t("pdfProtect.guide.feat3Title"),
+              desc: t("pdfProtect.guide.feat3Desc"),
+            },
+            {
+              icon: <FileText size={16} />,
+              title: t("pdfProtect.guide.feat4Title"),
+              desc: t("pdfProtect.guide.feat4Desc"),
+            },
+          ]}
+          useCasesTitle={t("pdfProtect.guide.useCasesTitle")}
+          useCases={[
+            {
+              icon: "💼",
+              title: t("pdfProtect.guide.uc1Title"),
+              desc: t("pdfProtect.guide.uc1Desc"),
+            },
+            {
+              icon: "📊",
+              title: t("pdfProtect.guide.uc2Title"),
+              desc: t("pdfProtect.guide.uc2Desc"),
+            },
+            {
+              icon: "🤝",
+              title: t("pdfProtect.guide.uc3Title"),
+              desc: t("pdfProtect.guide.uc3Desc"),
+            },
+            {
+              icon: "🪪",
+              title: t("pdfProtect.guide.uc4Title"),
+              desc: t("pdfProtect.guide.uc4Desc"),
+            },
+          ]}
+          proTips={{
+            title: t("pdfProtect.guide.tipsTitle"),
+            tips: [
+              t("pdfProtect.guide.tip1"),
+              t("pdfProtect.guide.tip2"),
+              t("pdfProtect.guide.tip3"),
+            ],
+          }}
+          faqs={[
+            { q: t("pdfProtect.guide.faq1Q"), a: t("pdfProtect.guide.faq1A") },
+            { q: t("pdfProtect.guide.faq2Q"), a: t("pdfProtect.guide.faq2A") },
+            { q: t("pdfProtect.guide.faq3Q"), a: t("pdfProtect.guide.faq3A") },
+            { q: t("pdfProtect.guide.faq4Q"), a: t("pdfProtect.guide.faq4A") },
+            { q: t("pdfProtect.guide.faq5Q"), a: t("pdfProtect.guide.faq5A") },
+            { q: t("pdfProtect.guide.faq6Q"), a: t("pdfProtect.guide.faq6A") },
+          ]}
+        />
       </main>
 
       <Footer />

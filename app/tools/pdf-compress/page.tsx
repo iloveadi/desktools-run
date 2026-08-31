@@ -20,6 +20,9 @@ import {
   CheckCircle2,
   Gauge,
   FileText,
+  ShieldCheck,
+  Sliders,
+  Zap,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -645,19 +648,76 @@ export default function PdfCompressPage() {
 
         {/* ── Unified Tool Guide & FAQ Section ───────────── */}
         <ToolGuide
-          badgeText="100% Free & Browser-Native"
-          aboutTitle={t("pdfCompress.guide.aboutTitle") || "PDF 용량 줄이기 도구란 무엇인가요?"}
-          aboutDesc={t("pdfCompress.guide.aboutDesc") || "서버로 데이터 전송 없이 웹 브라우저 메모리 내에서 PDF 내부 개체 및 스트림 구조를 최적화하여 용량을 줄여주는 100% 로컬 무료 유틸리티입니다."}
-          howTitle={t("pdfCompress.guide.howTitle") || "사용 방법"}
+          badgeText={t("pdfCompress.guide.badge")}
+          aboutTitle={t("pdfCompress.guide.aboutTitle")}
+          aboutDesc={t("pdfCompress.guide.aboutDesc")}
+          howTitle={t("pdfCompress.guide.howTitle")}
           steps={[
-            t("pdfCompress.guide.step1") || "용량을 줄이고자 하는 PDF 파일을 드래그하여 업로드합니다.",
-            t("pdfCompress.guide.step2") || "원하는 압축 레벨(권장, 고압축, 저압축)을 선택합니다.",
-            t("pdfCompress.guide.step3") || "'PDF 압축하기' 버튼을 눌러 최적화된 파일로 즉시 다운로드합니다.",
+            t("pdfCompress.guide.step1"),
+            t("pdfCompress.guide.step2"),
+            t("pdfCompress.guide.step3"),
           ]}
+          featuresTitle={t("pdfCompress.guide.featuresTitle")}
+          features={[
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("pdfCompress.guide.feat1Title"),
+              desc: t("pdfCompress.guide.feat1Desc"),
+            },
+            {
+              icon: <Sliders size={16} />,
+              title: t("pdfCompress.guide.feat2Title"),
+              desc: t("pdfCompress.guide.feat2Desc"),
+            },
+            {
+              icon: <Gauge size={16} />,
+              title: t("pdfCompress.guide.feat3Title"),
+              desc: t("pdfCompress.guide.feat3Desc"),
+            },
+            {
+              icon: <Zap size={16} />,
+              title: t("pdfCompress.guide.feat4Title"),
+              desc: t("pdfCompress.guide.feat4Desc"),
+            },
+          ]}
+          useCasesTitle={t("pdfCompress.guide.useCasesTitle")}
+          useCases={[
+            {
+              icon: "✉️",
+              title: t("pdfCompress.guide.uc1Title"),
+              desc: t("pdfCompress.guide.uc1Desc"),
+            },
+            {
+              icon: "🏛️",
+              title: t("pdfCompress.guide.uc2Title"),
+              desc: t("pdfCompress.guide.uc2Desc"),
+            },
+            {
+              icon: "💾",
+              title: t("pdfCompress.guide.uc3Title"),
+              desc: t("pdfCompress.guide.uc3Desc"),
+            },
+            {
+              icon: "📱",
+              title: t("pdfCompress.guide.uc4Title"),
+              desc: t("pdfCompress.guide.uc4Desc"),
+            },
+          ]}
+          proTips={{
+            title: t("pdfCompress.guide.tipsTitle"),
+            tips: [
+              t("pdfCompress.guide.tip1"),
+              t("pdfCompress.guide.tip2"),
+              t("pdfCompress.guide.tip3"),
+            ],
+          }}
           faqs={[
-            { q: t("pdfCompress.guide.faq1Q") || "업로드한 PDF 문서가 서버로 전송되나요?", a: t("pdfCompress.guide.faq1A") || "아닙니다. 모든 계산 및 처리 과정은 100% 사용자의 브라우저 로컬 환경에서만 일어납니다." },
-            { q: t("pdfCompress.guide.faq2Q") || "압축 시 문서 화질이 저하되나요?", a: t("pdfCompress.guide.faq2A") || "추천 레벨을 사용하면 텍스트 선명도 및 가독성을 유지하면서 불필요한 메타데이터와 개체 스트림을 최적화합니다." },
-            { q: t("pdfCompress.guide.faq3Q") || "파일 용량 제한이 있나요?", a: t("pdfCompress.guide.faq3A") || "서버 제한은 없으며, 사용자의 컴퓨터 메모리 범위 내에서 대용량 파일도 빠르게 처리됩니다." },
+            { q: t("pdfCompress.guide.faq1Q"), a: t("pdfCompress.guide.faq1A") },
+            { q: t("pdfCompress.guide.faq2Q"), a: t("pdfCompress.guide.faq2A") },
+            { q: t("pdfCompress.guide.faq3Q"), a: t("pdfCompress.guide.faq3A") },
+            { q: t("pdfCompress.guide.faq4Q"), a: t("pdfCompress.guide.faq4A") },
+            { q: t("pdfCompress.guide.faq5Q"), a: t("pdfCompress.guide.faq5A") },
+            { q: t("pdfCompress.guide.faq6Q"), a: t("pdfCompress.guide.faq6A") },
           ]}
         />
       </main>

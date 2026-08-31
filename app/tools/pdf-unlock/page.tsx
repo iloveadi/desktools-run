@@ -220,8 +220,8 @@ const I18N = {
 };
 
 export default function PdfUnlockPage() {
-  const { locale } = useLocale();
-  const t = I18N[locale as keyof typeof I18N] || I18N.ko;
+  const { locale, t } = useLocale();
+  const txt = I18N[locale as keyof typeof I18N] || I18N.ko;
 
   const [pdfFile, setPdfFile] = useState<LoadedPdf | null>(null);
   const [password, setPassword] = useState<string>("");
@@ -351,9 +351,9 @@ export default function PdfUnlockPage() {
       console.error("Unlock error:", err);
       const errStr = String(err);
       if (errStr.includes("Password") || errStr.includes("Incorrect") || errStr.includes("bad password")) {
-        setErrorMessage(t.wrongPassword);
+        setErrorMessage(txt.wrongPassword);
       } else {
-        setErrorMessage(t.wrongPassword);
+        setErrorMessage(txt.wrongPassword);
       }
     } finally {
       setIsUnlocking(false);
@@ -364,118 +364,145 @@ export default function PdfUnlockPage() {
     <>
       <Header />
 
-      <main style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
-        <div style={{ maxWidth: "860px", margin: "0 auto" }}>
-          {/* Breadcrumb Back */}
+      <main style={{ flex: 1, paddingBottom: "80px" }}>
+        {/* ── Breadcrumb & Title ──────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 24px 16px" }}>
           <Link
-            href="/#tools"
+            href="/"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              color: "var(--text-muted)",
-              fontSize: "13.5px",
-              fontWeight: 500,
+              fontSize: "13px",
+              color: "var(--text-secondary)",
               textDecoration: "none",
-              marginBottom: "24px",
-              transition: "color 0.15s",
+              marginBottom: "16px",
+              fontWeight: 500,
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--brand-mid)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)"; }}
           >
-            <ArrowLeft size={16} />
-            {t.back}
+            <ArrowLeft size={14} />
+            {t("pdfUnlock.back") || txt.back}
           </Link>
 
-          {/* Header */}
-          <div style={{ marginBottom: "32px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px", flexWrap: "wrap" }}>
-              <h1 style={{ fontSize: "28px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px" }}>
-                {t.title}
-              </h1>
-              <span className="badge-pill">
-                <ShieldCheck size={13} />
-                {t.badge}
-              </span>
-            </div>
-            <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-              {t.subtitle}
-            </p>
-          </div>
-
-          {/* Main Card */}
-          <div className="glass-card" style={{ padding: "32px", borderRadius: "16px", marginBottom: "48px" }}>
-            {!pdfFile ? (
-              /* Dropzone */
-              <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                style={{
-                  border: isDragging ? "2px dashed var(--brand-mid)" : "2px dashed var(--border-hover)",
-                  background: isDragging ? "rgba(99, 102, 241, 0.08)" : "rgba(255, 255, 255, 0.02)",
-                  borderRadius: "14px",
-                  padding: "48px 24px",
-                  textAlign: "center",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="application/pdf"
-                  style={{ display: "none" }}
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files.length > 0) {
-                      handleFiles(e.target.files);
-                    }
-                  }}
-                />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
                 <div
                   style={{
-                    width: "56px",
-                    height: "56px",
-                    borderRadius: "14px",
-                    background: "rgba(16, 185, 129, 0.12)",
-                    color: "#10b981",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "10px",
+                    background: "rgba(239, 68, 68, 0.15)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 16px",
+                    color: "#f87171",
                   }}
                 >
-                  <Unlock size={26} />
+                  <Unlock size={20} />
                 </div>
-                <h2 style={{ fontSize: "17px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                  {t.dropzoneTitle}
-                </h2>
-                <p style={{ fontSize: "13px", color: "var(--text-muted)", marginBottom: "20px" }}>
-                  {t.dropzoneHint}
-                </p>
-                <button
-                  type="button"
-                  className="btn-glow"
-                  style={{ padding: "10px 22px", fontSize: "13.5px", pointerEvents: "none" }}
-                >
-                  <Upload size={15} style={{ marginRight: "6px" }} />
-                  {t.dropzoneBtn}
-                </button>
+                <h1 style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", color: "var(--text-primary)" }}>
+                  {t("pdfUnlock.title") || txt.title}
+                </h1>
               </div>
-            ) : !unlockedResult ? (
-              /* Password Input & Unlock Action */
-              <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                {/* File Selected Badge */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "16px 20px",
-                    borderRadius: "12px",
-                    background: "rgba(16, 185, 129, 0.08)",
-                    border: "1px solid rgba(16, 185, 129, 0.22)",
+              <p style={{ color: "var(--text-secondary)", fontSize: "14px", maxWidth: "600px" }}>
+                {t("pdfUnlock.subtitle") || txt.subtitle}
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                borderRadius: "100px",
+                background: "rgba(239, 68, 68, 0.1)",
+                border: "1px solid rgba(239, 68, 68, 0.2)",
+                color: "#f87171",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              <ShieldCheck size={12} />
+              {t("pdfUnlock.badge") || txt.badge}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Main Workspace ───────────────────────────── */}
+        <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+          {!pdfFile ? (
+            /* Upload Dropzone */
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className="glass-card"
+              style={{
+                padding: "64px 32px",
+                textAlign: "center",
+                cursor: "pointer",
+                border: isDragging ? "2px dashed #f87171" : "2px dashed var(--border-subtle)",
+                background: isDragging ? "rgba(239, 68, 68, 0.08)" : "var(--glass-bg)",
+                transition: "all 0.2s",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/pdf, .pdf"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    handleFiles(e.target.files);
+                  }
+                }}
+              />
+              <div
+                style={{
+                  width: "64px",
+                  height: "64px",
+                  borderRadius: "16px",
+                  background: "rgba(239, 68, 68, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#f87171",
+                }}
+              >
+                <Upload size={32} />
+              </div>
+              <div>
+                <p style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
+                  {t("pdfUnlock.dropPrompt") || txt.dropzoneTitle}
+                </p>
+                <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                  {t("pdfUnlock.dropHint") || txt.dropzoneHint}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="glass-card" style={{ padding: "32px", borderRadius: "16px", marginBottom: "48px" }}>
+              {!unlockedResult ? (
+                /* Password Input & Unlock Action */
+                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  {/* File Selected Badge */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "16px 20px",
+                      borderRadius: "12px",
+                    background: "rgba(239, 68, 68, 0.08)",
+                    border: "1px solid rgba(239, 68, 68, 0.22)",
                     flexWrap: "wrap",
                     gap: "12px",
                   }}
@@ -486,8 +513,8 @@ export default function PdfUnlockPage() {
                         width: "40px",
                         height: "40px",
                         borderRadius: "10px",
-                        background: "rgba(16, 185, 129, 0.15)",
-                        color: "#10b981",
+                        background: "rgba(239, 68, 68, 0.15)",
+                        color: "#ef4444",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -532,8 +559,8 @@ export default function PdfUnlockPage() {
                 {/* Password Input Section */}
                 <div>
                   <label style={{ display: "block", fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                    <KeyRound size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "#10b981" }} />
-                    {t.passwordPrompt}
+                    <KeyRound size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "#f87171" }} />
+                    {txt.passwordPrompt}
                   </label>
                   <div style={{ position: "relative" }}>
                     <input
@@ -546,7 +573,7 @@ export default function PdfUnlockPage() {
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && password) handleUnlock();
                       }}
-                      placeholder={t.passwordPlaceholder}
+                      placeholder={txt.passwordPlaceholder}
                       style={{
                         width: "100%",
                         padding: "12px 42px 12px 14px",
@@ -616,19 +643,19 @@ export default function PdfUnlockPage() {
                     opacity: !password || isUnlocking ? 0.5 : 1,
                     cursor: !password || isUnlocking ? "not-allowed" : "pointer",
                     marginTop: "8px",
-                    background: "linear-gradient(135deg, #10b981, #059669)",
-                    boxShadow: "0 4px 20px rgba(16, 185, 129, 0.3)",
+                    background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                    boxShadow: "0 4px 20px rgba(239, 68, 68, 0.3)",
                   }}
                 >
                   {isUnlocking ? (
                     <>
                       <div className="spinner" style={{ width: "16px", height: "16px" }} />
-                      {t.unlocking}
+                      {txt.unlocking}
                     </>
                   ) : (
                     <>
                       <Unlock size={16} />
-                      {t.btnUnlock}
+                      {txt.btnUnlock}
                     </>
                   )}
                 </button>
@@ -652,10 +679,10 @@ export default function PdfUnlockPage() {
                   <CheckCircle2 size={32} />
                 </div>
                 <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
-                  {t.successTitle}
+                  {txt.successTitle}
                 </h2>
                 <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "24px", maxWidth: "480px", margin: "0 auto 24px" }}>
-                  {t.successDesc}
+                  {txt.successDesc}
                 </p>
 
                 <div
@@ -682,7 +709,7 @@ export default function PdfUnlockPage() {
                     }}
                   >
                     <Download size={16} />
-                    {t.downloadBtn}
+                    {txt.downloadBtn}
                   </a>
 
                   <button
@@ -703,29 +730,89 @@ export default function PdfUnlockPage() {
                     }}
                   >
                     <RotateCcw size={15} />
-                    {t.resetBtn}
+                    {txt.resetBtn}
                   </button>
                 </div>
               </div>
             )}
           </div>
+          )}
+        </section>
 
-          {/* Comprehensive Tool Guide */}
-          <ToolGuide
-            aboutTitle={t.guideTitle}
-            aboutDesc={t.subtitle}
-            steps={[
-              `${t.step1Title}: ${t.step1Desc}`,
-              `${t.step2Title}: ${t.step2Desc}`,
-              `${t.step3Title}: ${t.step3Desc}`,
-            ]}
-            faqs={[
-              { q: t.faq1Q, a: t.faq1A },
-              { q: t.faq2Q, a: t.faq2A },
-              { q: t.faq3Q, a: t.faq3A },
-            ]}
-          />
-        </div>
+        {/* ── Unified Tool Guide & FAQ Section ───────────── */}
+        <ToolGuide
+          badgeText={t("pdfUnlock.guide.badge")}
+          aboutTitle={t("pdfUnlock.guide.aboutTitle")}
+          aboutDesc={t("pdfUnlock.guide.aboutDesc")}
+          howTitle={t("pdfUnlock.guide.howTitle")}
+          steps={[
+            t("pdfUnlock.guide.step1"),
+            t("pdfUnlock.guide.step2"),
+            t("pdfUnlock.guide.step3"),
+          ]}
+          featuresTitle={t("pdfUnlock.guide.featuresTitle")}
+          features={[
+            {
+              icon: <ShieldCheck size={16} />,
+              title: t("pdfUnlock.guide.feat1Title"),
+              desc: t("pdfUnlock.guide.feat1Desc"),
+            },
+            {
+              icon: <Unlock size={16} />,
+              title: t("pdfUnlock.guide.feat2Title"),
+              desc: t("pdfUnlock.guide.feat2Desc"),
+            },
+            {
+              icon: <Eye size={16} />,
+              title: t("pdfUnlock.guide.feat3Title"),
+              desc: t("pdfUnlock.guide.feat3Desc"),
+            },
+            {
+              icon: <FileText size={16} />,
+              title: t("pdfUnlock.guide.feat4Title"),
+              desc: t("pdfUnlock.guide.feat4Desc"),
+            },
+          ]}
+          useCasesTitle={t("pdfUnlock.guide.useCasesTitle")}
+          useCases={[
+            {
+              icon: "💳",
+              title: t("pdfUnlock.guide.uc1Title"),
+              desc: t("pdfUnlock.guide.uc1Desc"),
+            },
+            {
+              icon: "📑",
+              title: t("pdfUnlock.guide.uc2Title"),
+              desc: t("pdfUnlock.guide.uc2Desc"),
+            },
+            {
+              icon: "🖨️",
+              title: t("pdfUnlock.guide.uc3Title"),
+              desc: t("pdfUnlock.guide.uc3Desc"),
+            },
+            {
+              icon: "🏛️",
+              title: t("pdfUnlock.guide.uc4Title"),
+              desc: t("pdfUnlock.guide.uc4Desc"),
+            },
+          ]}
+          proTips={{
+            title: t("pdfUnlock.guide.tipsTitle"),
+            tips: [
+              t("pdfUnlock.guide.tip1"),
+              t("pdfUnlock.guide.tip2"),
+              t("pdfUnlock.guide.tip3"),
+            ],
+          }}
+          faqs={[
+            { q: t("pdfUnlock.guide.faq1Q"), a: t("pdfUnlock.guide.faq1A") },
+            { q: t("pdfUnlock.guide.faq2Q"), a: t("pdfUnlock.guide.faq2A") },
+            { q: t("pdfUnlock.guide.faq3Q"), a: t("pdfUnlock.guide.faq3A") },
+            { q: t("pdfUnlock.guide.faq4Q"), a: t("pdfUnlock.guide.faq4A") },
+            { q: t("pdfUnlock.guide.faq5Q"), a: t("pdfUnlock.guide.faq5A") },
+            { q: t("pdfUnlock.guide.faq6Q"), a: t("pdfUnlock.guide.faq6A") },
+          ]}
+        />
       </main>
 
       <Footer />

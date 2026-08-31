@@ -412,11 +412,11 @@ export function getLocalizedTool(tool: Tool, locale: string): Tool {
       fr: { title: "Filigrane d'Image", description: "Ajoutez des filigranes de texte ou de logo à vos images en toute confidentialité." },
     },
     "word-count": {
-      ko: { title: "글자 수 & 단어 세기", description: "단어, 글자 수, 문장 수, 예상 읽기 시간을 실시간 분석합니다." },
-      ja: { title: "文字数＆単語数カウント", description: "単語数、文字数、文章数、読了時間をリアルタイム計測します。" },
-      es: { title: "Contador de Palabras", description: "Cuenta palabras, caracteres, oraciones y tiempo de lectura en tiempo real." },
-      zh: { title: "字数与文本分析", description: "实时统计单词、字符、句子数及预估阅读时长。" },
-      fr: { title: "Compteur de Mots", description: "Comptez les mots, caractères, phrases et temps de lecture en temps réel." },
+      ko: { title: "단어 및 글자 수 세기", description: "단어, 글자, 문장 수 및 읽기 시간을 실시간으로 계산합니다." },
+      ja: { title: "単語・文字数カウント", description: "単語数、文字数、文章数、読了時間をリアルタイム計測します。" },
+      es: { title: "Contador de Palabras y Caracteres", description: "Cuenta palabras, caracteres, oraciones y tiempo de lectura en tiempo real." },
+      zh: { title: "字数与字符统计", description: "实时统计单词、字符、句子数及预估阅读时长。" },
+      fr: { title: "Compteur de Mots et Caractères", description: "Comptez les mots, caractères, phrases et temps de lecture en temps réel." },
     },
     "text-case": {
       ko: { title: "대소문자 / 표기법 변환", description: "대문자, 소문자, Title, camelCase, snake_case 변환." },

@@ -220,7 +220,7 @@ export default function WordCountPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("wordCount.back") || "Back to All Tools"}
           </Link>
 
           <div
@@ -278,7 +278,7 @@ export default function WordCountPage() {
               }}
             >
               <Sparkles size={12} style={{ color: "#6366f1" }} />
-              100% Client-side Processing
+              {t("wordCount.badge") || "100% Client-side Processing"}
             </div>
           </div>
         </section>
