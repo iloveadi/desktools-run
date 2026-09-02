@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   ShieldCheck,
   BookOpen,
@@ -10,6 +11,9 @@ import {
   Lightbulb,
   Briefcase,
   Zap,
+  ArrowRight,
+  Layers,
+  Lock,
 } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
 
@@ -30,6 +34,13 @@ export interface ToolProTips {
   tips: string[];
 }
 
+export interface RelatedToolItem {
+  title: string;
+  desc: string;
+  href: string;
+  badge?: string;
+}
+
 export interface ToolGuideProps {
   badgeText?: string;
   aboutTitle: string;
@@ -42,6 +53,7 @@ export interface ToolGuideProps {
   useCasesTitle?: string;
   proTips?: ToolProTips;
   faqs: { q: string; a: string }[];
+  relatedTools?: RelatedToolItem[];
 }
 
 export default function ToolGuide({
@@ -56,8 +68,9 @@ export default function ToolGuide({
   useCasesTitle,
   proTips,
   faqs,
+  relatedTools,
 }: ToolGuideProps) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   // Strip accidental leading numbering e.g. "1. ", "1) " from step text
   const cleanSteps = steps.map((s) => s.replace(/^\d+[\.\)]\s*/, ""));
@@ -101,7 +114,7 @@ export default function ToolGuide({
         }}
       >
         {/* Top Header & Badge */}
-        <div style={{ marginBottom: "36px", textAlign: "center" }}>
+        <div style={{ marginBottom: "32px", textAlign: "center" }}>
           <div className="badge-pill" style={{ marginBottom: "14px" }}>
             <BookOpen size={13} />
             {t("wordCount.guide.title") || "도구 소개 및 사용 가이드"}
@@ -112,10 +125,44 @@ export default function ToolGuide({
               fontWeight: 800,
               color: "var(--text-primary)",
               letterSpacing: "-0.4px",
+              marginBottom: "16px",
             }}
           >
             {aboutTitle}
           </h2>
+
+          {/* Trust & Local Processing Indicator Chip */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "6px 16px",
+              borderRadius: "100px",
+              background: "rgba(16, 185, 129, 0.08)",
+              border: "1px solid rgba(16, 185, 129, 0.28)",
+              color: "#34d399",
+              fontSize: "12.5px",
+              fontWeight: 700,
+              boxShadow: "0 2px 10px rgba(16, 185, 129, 0.08)",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: "#10b981",
+                boxShadow: "0 0 8px #10b981",
+              }}
+            />
+            <span>
+              {locale === "ko"
+                ? "100% 브라우저 로컬 안전 처리 (Zero Server Upload) · 파일이 외부로 전송되지 않습니다"
+                : "100% Client-Side Local Processing (Zero Server Upload) · Files never leave your device"}
+            </span>
+          </div>
         </div>
 
         {/* ── 1. About Overview & How to Use Grid ── */}
@@ -138,93 +185,80 @@ export default function ToolGuide({
               gap: "12px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div
-                style={{
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "10px",
-                  background: "rgba(99,102,241,0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--brand-mid)",
-                }}
-              >
-                <ShieldCheck size={20} />
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <ShieldCheck size={18} style={{ color: "#34d399" }} />
               <h3
                 style={{
                   fontSize: "16px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
+                  margin: 0,
                 }}
               >
-                {badgeText}
+                {t("wordCount.guide.overviewTitle") || "도구 개요 & 개인정보 보호"}
               </h3>
             </div>
             <p
               style={{
-                fontSize: "14px",
+                fontSize: "13.5px",
                 color: "var(--text-secondary)",
                 lineHeight: 1.7,
+                margin: 0,
               }}
             >
               {aboutDesc}
             </p>
           </div>
 
-          {/* Right: How to Use Steps Card */}
+          {/* Right: Step-by-Step How to Use Card */}
           <div
             className="glass-card"
             style={{
               padding: "26px",
               display: "flex",
               flexDirection: "column",
-              gap: "14px",
+              gap: "12px",
             }}
           >
-            <h3
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Sparkles size={18} style={{ color: "#818cf8" }} />
+              <h3
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 700,
+                  color: "var(--text-primary)",
+                  margin: 0,
+                }}
+              >
+                {howTitle}
+              </h3>
+            </div>
+            <ol
               style={{
-                fontSize: "16px",
-                fontWeight: 700,
-                color: "var(--text-primary)",
-                marginBottom: "4px",
+                margin: 0,
+                paddingLeft: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
               }}
             >
-              {howTitle}
-            </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {cleanSteps.map((stepText, idx) => (
-                <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "50%",
-                      background: "rgba(79,70,229,0.18)",
-                      color: "var(--brand-mid)",
-                      fontSize: "12px",
-                      fontWeight: 700,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      marginTop: "2px",
-                    }}
-                  >
-                    {idx + 1}
-                  </div>
-                  <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                    {stepText}
-                  </p>
-                </div>
+              {cleanSteps.map((step, idx) => (
+                <li
+                  key={idx}
+                  style={{
+                    fontSize: "13.5px",
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {step}
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </div>
 
-        {/* ── 2. Key Features & Highlights (Optional) ── */}
+        {/* ── 2. Key Features Grid (Optional) ── */}
         {features && features.length > 0 && (
           <div style={{ marginBottom: "28px" }}>
             <div
@@ -235,15 +269,16 @@ export default function ToolGuide({
                 marginBottom: "16px",
               }}
             >
-              <Zap size={18} style={{ color: "var(--brand-mid)" }} />
+              <Zap size={18} style={{ color: "#f59e0b" }} />
               <h3
                 style={{
                   fontSize: "17px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
+                  margin: 0,
                 }}
               >
-                {featuresTitle || "주요 특징 및 강점"}
+                {featuresTitle || "주요 핵심 기능"}
               </h3>
             </div>
 
@@ -254,35 +289,23 @@ export default function ToolGuide({
                 gap: "16px",
               }}
             >
-              {features.map((feat, idx) => (
+              {features.map((feat, i) => (
                 <div
-                  key={idx}
+                  key={i}
                   className="glass-card"
                   style={{
                     padding: "20px",
                     display: "flex",
                     flexDirection: "column",
                     gap: "8px",
-                    border: "1px solid var(--border-subtle)",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <div
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "8px",
-                        background: "rgba(99,102,241,0.12)",
-                        color: "var(--brand-mid)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "15px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {feat.icon || <Sparkles size={16} />}
-                    </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    {feat.icon && (
+                      <span style={{ color: "#818cf8", display: "flex" }}>
+                        {feat.icon}
+                      </span>
+                    )}
                     <h4
                       style={{
                         fontSize: "14.5px",
@@ -298,7 +321,7 @@ export default function ToolGuide({
                     style={{
                       fontSize: "13px",
                       color: "var(--text-secondary)",
-                      lineHeight: 1.6,
+                      lineHeight: 1.55,
                       margin: 0,
                     }}
                   >
@@ -310,9 +333,16 @@ export default function ToolGuide({
           </div>
         )}
 
-        {/* ── 3. Practical Use Cases (Optional) ── */}
+        {/* ── 3. Real-world Use Cases (Optional) ── */}
         {useCases && useCases.length > 0 && (
-          <div style={{ marginBottom: "28px" }}>
+          <div
+            className="glass-card"
+            style={{
+              padding: "24px",
+              marginBottom: "28px",
+              background: "var(--bg-card)",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -327,25 +357,26 @@ export default function ToolGuide({
                   fontSize: "17px",
                   fontWeight: 700,
                   color: "var(--text-primary)",
+                  margin: 0,
                 }}
               >
-                {useCasesTitle || "실무 및 일상 활용 시나리오"}
+                {useCasesTitle || "이런 상황에서 활용해보세요"}
               </h3>
             </div>
 
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: "16px",
+                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gap: "14px",
               }}
             >
-              {useCases.map((uc, idx) => (
+              {useCases.map((uc, i) => (
                 <div
-                  key={idx}
+                  key={i}
                   style={{
-                    padding: "18px 20px",
-                    borderRadius: "12px",
+                    padding: "16px",
+                    borderRadius: "10px",
                     background: "var(--btn-secondary-bg)",
                     border: "1px solid var(--btn-secondary-border)",
                     display: "flex",
@@ -448,6 +479,7 @@ export default function ToolGuide({
             className="glass-card"
             style={{
               padding: "28px",
+              marginBottom: "28px",
             }}
           >
             <div
@@ -522,6 +554,92 @@ export default function ToolGuide({
             </div>
           </div>
         )}
+
+        {/* ── 6. Next Action: Related Tools Flow (Optional) ── */}
+        {relatedTools && relatedTools.length > 0 && (
+          <div
+            className="glass-card"
+            style={{
+              padding: "24px 28px",
+              background: "linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.03))",
+              border: "1px solid rgba(99, 102, 241, 0.25)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "16px",
+                flexWrap: "wrap",
+                gap: "8px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <Layers size={18} style={{ color: "#818cf8" }} />
+                <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>
+                  {locale === "ko" ? "함께 쓰면 좋은 연관 도구" : "Related Utilities"}
+                </h3>
+              </div>
+              <Link
+                href="/tools/"
+                style={{
+                  fontSize: "12.5px",
+                  color: "#818cf8",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "3px",
+                }}
+              >
+                {locale === "ko" ? "전체 도구 보기" : "View all tools"}
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                gap: "14px",
+              }}
+            >
+              {relatedTools.map((rt, i) => (
+                <Link
+                  key={i}
+                  href={rt.href}
+                  className="glass-card card-hover"
+                  style={{
+                    padding: "16px",
+                    textDecoration: "none",
+                    borderRadius: "10px",
+                    background: "var(--bg-card)",
+                    border: "1px solid var(--border-subtle)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: "8px",
+                  }}
+                >
+                  <div>
+                    <h4 style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
+                      {rt.title}
+                    </h4>
+                    <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+                      {rt.desc}
+                    </p>
+                  </div>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: "3px", fontSize: "12px", color: "#818cf8", fontWeight: 700, paddingTop: "4px" }}>
+                    <span>{locale === "ko" ? "도구 실행하기" : "Run tool"}</span>
+                    <ArrowRight size={12} />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
 
       <style>{`

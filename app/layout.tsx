@@ -7,6 +7,7 @@ import AdSenseLoader from "@/components/common/AdSenseLoader";
 import GoogleAnalytics from "@/components/common/GoogleAnalytics";
 import AdminShortcut from "@/components/common/AdminShortcut";
 import FloatingScrollButtons from "@/components/common/FloatingScrollButtons";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -161,6 +162,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <LocaleProvider>
             {children}
+            <MobileBottomNav />
           </LocaleProvider>
         </ThemeProvider>
       </body>

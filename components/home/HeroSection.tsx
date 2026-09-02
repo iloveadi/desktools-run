@@ -45,7 +45,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
 
   const STATS_ITEMS = [
     { value: `${formatCount(totalUsage, locale)}+`, label: locale === "ko" ? "누적 도구 이용" : "Total Uses" },
-    { value: "21+",   label: t("hero.stats.tools") },
+    { value: "30+",   label: t("hero.stats.tools") },
     { value: "100%",  label: t("hero.stats.browser") },
     { value: "0",     label: t("hero.stats.signup") },
   ];

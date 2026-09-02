@@ -141,11 +141,15 @@ export default function Header({ onSearch }: HeaderProps) {
         setCmdOpen((prev) => !prev);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
+    const handleOpenSearch = () => {
+      setCmdOpen(true);
+    };
+    window.addEventListener("desktools-open-search", handleOpenSearch);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("desktools-open-search", handleOpenSearch);
     };
   }, []);
 

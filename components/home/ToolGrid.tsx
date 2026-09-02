@@ -9,14 +9,15 @@ import {
   ArrowLeftRight, Palette, Table,
   KeyRound, ShieldCheck, QrCode, Clock,
   ChevronRight, TrendingUp, Hammer, Flame, Sparkles,
-  ShieldAlert, AppWindow, Star, Images, Lock, Unlock
+  ShieldAlert, AppWindow, Star, Images, Lock, Unlock,
+  History, Bookmark, Layers, ArrowUpRight
 } from "lucide-react";
 import type { Tool, ToolCategory } from "@/lib/tools";
 import { TOOLS, groupToolsByCategory, getLocalizedTool } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getToolUsageCount, incrementToolUsage, formatCount } from "@/lib/stats";
-import { getFavorites, toggleFavorite } from "@/lib/favorites";
+import { getFavorites, toggleFavorite, getRecentTools } from "@/lib/favorites";
 
 type ToolLocale = { title: string; description: string };
 
@@ -28,7 +29,6 @@ const TOOL_TRANSLATIONS: Record<string, Record<string, ToolLocale>> = {
   "image-to-pdf":  { en: { title: "Image to PDF Converter", description: "Combine multiple JPG, PNG, and WebP images into a single PDF document." }, ko: { title: "이미지 PDF 변환기", description: "여러 장의 사진/이미지를 순서대로 묶어 하나의 고화질 PDF 문서로 즉시 변환합니다." }, ja: { title: "画像 PDF 変換ツール", description: "複数の写真や画像を順番通りに1つの高品質なPDFファイルに即座に変換・結合します。" }, es: { title: "Convertidor de Imagen a PDF", description: "Combina y convierte múltiples imágenes en un documento PDF profesional al instante." }, zh: { title: "图片转 PDF 转换器", description: "将多张照片与图像按指定顺序一键合并转换为高清 PDF 电子文档。" }, fr: { title: "Convertisseur Image en PDF", description: "Combinez et convertissez plusieurs photos et images en un seul document PDF de haute qualité." } },
   "pdf-protect":   { en: { title: "PDF Protect & Encrypt", description: "Protect sensitive PDF documents with secure password encryption." }, ko: { title: "PDF 비밀번호 설정 / 암호화", description: "중요한 계약서, 급여명세서 등 PDF 문서에 비밀번호를 설정하여 안전하게 잠급니다." }, ja: { title: "PDF パスワード設定・暗号化", description: "重要なPDFファイルにパスワードを設定して安全に保護・暗号化します。" }, es: { title: "Proteger PDF con Contraseña", description: "Protege y cifra documentos PDF confidenciales con contraseña." }, zh: { title: "PDF 密码保护与加密", description: "为机密 PDF 文件设置安全密码并加密锁定。" }, fr: { title: "Protéger et Chiffrer un PDF", description: "Protégez vos documents PDF sensibles avec un mot de passe sécurisé." } },
   "pdf-unlock":    { en: { title: "PDF Unlock & Decrypt", description: "Remove password protection and permanently unlock encrypted PDF documents." }, ko: { title: "PDF 비밀번호 해제 / 잠금 풀기", description: "비밀번호를 입력하여 PDF 문서의 암호를 영구적으로 해제하고 저장합니다." }, ja: { title: "PDF パスワード解除・ロック解除", description: "パスワードを入力してPDFの保護を完全に解除します。" }, es: { title: "Desbloquear PDF y Quitar Contraseña", description: "Introduce la contraseña para desbloquear tu PDF permanentemente." }, zh: { title: "PDF 解除密码与解锁", description: "输入密码永久解除 PDF 保护锁定并另存为普通 PDF。" }, fr: { title: "Déverrouiller et Supprimer Mot de Passe PDF", description: "Entrez le mot de passe pour déverrouiller définitivement votre PDF." } },
-  "pdf-to-word":   { en: { title: "PDF to Word", description: "Convert PDF documents to editable .docx format." }, ko: { title: "PDF → Word", description: "PDF 문서를 편집 가능한 .docx 형식으로 변환합니다." }, ja: { title: "PDF→Word", description: "PDFを 編集可能な.docx形式に変換します。" }, es: { title: "PDF a Word", description: "Convierte documentos PDF a formato .docx editable." }, zh: { title: "PDF 转 Word", description: "将 PDF 文档转换为可编辑的 .docx 格式。" }, fr: { title: "PDF en Word", description: "Convertissez des documents PDF au format .docx modifiable." } },
 
   // Image
   "image-resizer":    { en: { title: "Image Resizer", description: "Resize images to any dimension while preserving aspect ratio." }, ko: { title: "이미지 리사이즈", description: "비율을 유지하면서 이미지를 원하는 크기로 조절합니다." }, ja: { title: "画像リサイズ", description: "アスペクト比を保ちながら画像をリサイズします。" }, es: { title: "Redimensionar Imagen", description: "Cambia el tamano manteniendo la relacion de aspecto." }, zh: { title: "图片调整尺寸", description: "在保持宽高比的同时调整图片尺寸。" }, fr: { title: "Redimensionner Image", description: "Redimensionnez les images tout en conservant le ratio." } },
@@ -72,13 +72,37 @@ const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
   "Security":          { ko: "보안",             ja: "セキュリティ",   es: "Seguridad",           zh: "安全",         fr: "Sécurité" },
 };
 
-const CAT_NAV_TRANSLATIONS: Record<string, Record<string, string>> = {
-  "PDF":       { ko: "PDF",    ja: "PDF",    es: "PDF",       zh: "PDF",   fr: "PDF" },
-  "Image":     { ko: "이미지", ja: "画像",   es: "Imagen",    zh: "图像",  fr: "Image" },
-  "Text":      { ko: "텍스트", ja: "テキスト", es: "Texto",   zh: "文本",  fr: "Texte" },
-  "Dev":       { ko: "개발",   ja: "開発",   es: "Dev",       zh: "开发",  fr: "Dev" },
-  "Converter": { ko: "변환기", ja: "変換",   es: "Conversor", zh: "转换器", fr: "Conv." },
-  "Security":  { ko: "보안",   ja: "セキュリティ", es: "Seguridad", zh: "安全", fr: "Sécu." },
+const TOOL_FEATURE_TAGS: Record<string, { ko: string; en: string }> = {
+  "pdf-merger":         { ko: "100% 로컬 · 무제한", en: "100% Local · No Limit" },
+  "pdf-split":          { ko: "범위 지정 · 즉시 추출", en: "Custom Range · Instant" },
+  "pdf-compress":       { ko: "무손실 고압축", en: "Lossless Compression" },
+  "pdf-protect":        { ko: "AES-256 암호화", en: "AES-256 Encrypt" },
+  "pdf-unlock":         { ko: "암호 완전 해제", en: "Permanent Decrypt" },
+  "image-to-pdf":       { ko: "고화질 일괄 변환", en: "HD Batch Conversion" },
+  "image-resizer":      { ko: "비율 유지 · 일괄", en: "Aspect Ratio · Batch" },
+  "image-converter":    { ko: "WebP/AVIF 지원", en: "WebP / AVIF Ready" },
+  "image-compress":     { ko: "실시간 미리보기", en: "Real-time Preview" },
+  "background-remover": { ko: "Web AI 누끼따기", en: "On-device Web AI" },
+  "image-watermark":    { ko: "텍스트/로고 패턴", en: "Text & Logo Pattern" },
+  "exif-remover":       { ko: "GPS/개인정보 삭제", en: "Strip GPS & Date" },
+  "favicon-generator":  { ko: "PWA/아이콘 패키지", en: "Full Icon Package" },
+  "word-count":         { ko: "실시간 글자수/바이트", en: "Live Characters/Bytes" },
+  "text-case":          { ko: "camelCase/대소문자", en: "camelCase / Title" },
+  "markdown-preview":   { ko: "실시간 분할 미리보기", en: "Split Live Preview" },
+  "text-diff":          { ko: "줄단위 차이점 비교", en: "Line-by-line Diff" },
+  "json-formatter":     { ko: "구문 강조 · 유효성", en: "Highlight & Validate" },
+  "base64":             { ko: "텍스트/파일 변환", en: "Text & File Convert" },
+  "url-encoder":        { ko: "쿼리 파라미터 처리", en: "Query URI Decode" },
+  "regex-tester":       { ko: "실시간 캡처 그룹", en: "Capture Groups" },
+  "jwt-decoder":        { ko: "만료시간(exp) 분석", en: "Token Expiry Claims" },
+  "qr-generator":       { ko: "PNG/SVG · Wi-Fi QR", en: "PNG/SVG · Wi-Fi" },
+  "cron-parser":        { ko: "자연어 번역 · 다음실행", en: "Next Runs Schedule" },
+  "aes-encrypt":        { ko: "군사급 AES-256", en: "Military-grade 256" },
+  "unit-converter":     { ko: "다차원 단위 환산", en: "Multi-dimension Unit" },
+  "color-converter":    { ko: "HEX/RGB/HSL 피커", en: "HEX / RGB / HSL" },
+  "csv-to-json":        { ko: "테이블 미리보기", en: "Table Live Preview" },
+  "password-generator": { ko: "암호학적 난수 생성", en: "Crypto Secure RNG" },
+  "hash-generator":     { ko: "MD5 / SHA-256", en: "MD5 / SHA-256" },
 };
 
 const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
@@ -128,30 +152,29 @@ const BADGE_TRANSLATIONS: Record<string, Record<string, string>> = {
   New:     { ko: "신규",   ja: "新着",     es: "Nuevo",    zh: "新品",  fr: "Nouveau" },
 };
 
-const DEV_LABEL: Record<string, string> = {
-  ko: "개발 중",
-  ja: "開発中",
-  es: "En desarrollo",
-  zh: "开发中",
-  fr: "En développement",
-  en: "In Dev",
-};
-
 interface ToolGridProps {
   tools?: Tool[];
   isSearching?: boolean;
   onCategorySearch?: (query: string) => void;
 }
 
-export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
+export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategorySearch }: ToolGridProps) {
   const grouped = groupToolsByCategory(tools);
   const { locale } = useLocale();
 
   const [usageCounts, setUsageCounts] = useState<Record<string, number>>({});
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [recentTools, setRecentTools] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("all");
+  const [trayView, setTrayView] = useState<"favorites" | "recents">("favorites");
+
+  const syncStorage = () => {
+    setFavorites(getFavorites());
+    setRecentTools(getRecentTools());
+  };
 
   useEffect(() => {
-    setFavorites(getFavorites());
+    syncStorage();
     const counts: Record<string, number> = {};
     grouped.forEach(({ tools: categoryTools }) => {
       categoryTools.forEach((tool) => {
@@ -159,6 +182,17 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
       });
     });
     setUsageCounts(counts);
+
+    const onFavChanged = () => setFavorites(getFavorites());
+    const onRecentsChanged = () => setRecentTools(getRecentTools());
+
+    window.addEventListener("desktools-favorites-changed", onFavChanged);
+    window.addEventListener("desktools-recents-changed", onRecentsChanged);
+
+    return () => {
+      window.removeEventListener("desktools-favorites-changed", onFavChanged);
+      window.removeEventListener("desktools-recents-changed", onRecentsChanged);
+    };
   }, []);
 
   const handleToolClick = (toolId: string) => {
@@ -194,174 +228,246 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
     return BADGE_TRANSLATIONS[badge]?.[locale] ?? badge;
   };
 
+  const CATEGORY_TABS = [
+    { id: "all", label: locale === "ko" ? "전체 도구" : "All Tools", count: tools.length },
+    { id: "PDF Tools", label: CATEGORY_TRANSLATIONS["PDF Tools"]?.[locale] ?? "PDF", count: grouped.find(g => g.category === "PDF Tools")?.tools.length ?? 0 },
+    { id: "Image Tools", label: CATEGORY_TRANSLATIONS["Image Tools"]?.[locale] ?? "Image", count: grouped.find(g => g.category === "Image Tools")?.tools.length ?? 0 },
+    { id: "Text & Formatting", label: CATEGORY_TRANSLATIONS["Text & Formatting"]?.[locale] ?? "Text", count: grouped.find(g => g.category === "Text & Formatting")?.tools.length ?? 0 },
+    { id: "Dev Tools", label: CATEGORY_TRANSLATIONS["Dev Tools"]?.[locale] ?? "Dev", count: grouped.find(g => g.category === "Dev Tools")?.tools.length ?? 0 },
+    { id: "Converter", label: CATEGORY_TRANSLATIONS["Converter"]?.[locale] ?? "Converter", count: grouped.find(g => g.category === "Converter")?.tools.length ?? 0 },
+    { id: "Security", label: CATEGORY_TRANSLATIONS["Security"]?.[locale] ?? "Security", count: grouped.find(g => g.category === "Security")?.tools.length ?? 0 },
+  ];
+
+  const displayedGroups = activeTab === "all" 
+    ? grouped 
+    : grouped.filter(g => g.category === activeTab);
+
+  const displayedTrayList = trayView === "favorites" ? favorites : recentTools;
+
   return (
-    <section id="tools" style={{ padding: "16px 0 60px" }}>
+    <section id="tools" style={{ padding: "0 0 60px" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-        {favorites.length > 0 && (
-          <div style={{ marginBottom: "56px" }}>
-            {/* Favorites Header Bar */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div
+        
+        {/* ── 1. Sticky Interactive Category Navigation Bar ── */}
+        {!isSearching && (
+          <div
+            className="sticky-category-bar"
+            style={{
+              position: "sticky",
+              top: "64px",
+              zIndex: 35,
+              background: "var(--header-bg)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              borderBottom: "1px solid var(--border-subtle)",
+              padding: "10px 0",
+              marginBottom: "32px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "0 4px", minWidth: "max-content" }}>
+              {CATEGORY_TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      padding: "8px 14px",
+                      borderRadius: "100px",
+                      fontSize: "13px",
+                      fontWeight: isActive ? 700 : 500,
+                      cursor: "pointer",
+                      border: isActive ? "1px solid #6366f1" : "1px solid var(--border-subtle)",
+                      background: isActive ? "linear-gradient(135deg, rgba(99,102,241,0.22), rgba(168,85,247,0.18))" : "var(--btn-secondary-bg)",
+                      color: isActive ? "#818cf8" : "var(--text-secondary)",
+                      transition: "all 0.15s ease",
+                      boxShadow: isActive ? "0 2px 10px rgba(99,102,241,0.2)" : "none",
+                    }}
+                  >
+                    <span>{tab.label}</span>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "1px 6px",
+                        borderRadius: "100px",
+                        background: isActive ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.06)",
+                        color: isActive ? "#ffffff" : "var(--text-muted)",
+                      }}
+                    >
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── 2. Favorites & Recent Tools Tray ── */}
+        {!isSearching && (favorites.length > 0 || recentTools.length > 0) && (
+          <div
+            className="glass-card"
+            style={{
+              padding: "20px 24px",
+              marginBottom: "40px",
+              borderRadius: "16px",
+              border: "1px solid rgba(250, 204, 21, 0.25)",
+              background: "linear-gradient(135deg, rgba(250, 204, 21, 0.04), rgba(99, 102, 241, 0.03))",
+            }}
+          >
+            {/* Tray Header & View Switcher */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "16px",
+                flexWrap: "wrap",
+                gap: "12px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <button
+                  onClick={() => setTrayView("favorites")}
                   style={{
-                    width: "4px",
-                    height: "20px",
-                    borderRadius: "2px",
-                    background: "#eab308",
-                  }}
-                />
-                <h2
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: 800,
-                    color: "var(--text-primary)",
-                    letterSpacing: "-0.3px",
-                    display: "flex",
+                    display: "inline-flex",
                     alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <Star size={18} style={{ color: "#eab308" }} fill="#facc15" />
-                  {locale === "ko" ? "즐겨찾는 도구 (Pinned Favorites)" : "Pinned Favorites"}
-                </h2>
-                <span
-                  style={{
-                    fontSize: "12px",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    fontSize: "13px",
                     fontWeight: 700,
-                    color: "#ca8a04",
-                    background: "rgba(250, 204, 21, 0.14)",
-                    border: "1px solid rgba(250, 204, 21, 0.35)",
-                    padding: "2px 8px",
-                    borderRadius: "100px",
+                    cursor: "pointer",
+                    border: trayView === "favorites" ? "1px solid rgba(250, 204, 21, 0.4)" : "1px solid transparent",
+                    background: trayView === "favorites" ? "rgba(250, 204, 21, 0.15)" : "transparent",
+                    color: trayView === "favorites" ? "#eab308" : "var(--text-muted)",
+                    transition: "all 0.15s",
                   }}
                 >
-                  {favorites.length}{locale === "ko" ? "개 고정됨" : " pinned"}
-                </span>
+                  <Star size={15} fill={trayView === "favorites" ? "#facc15" : "none"} />
+                  <span>{locale === "ko" ? "즐겨찾는 도구" : "Pinned Favorites"} ({favorites.length})</span>
+                </button>
+
+                <button
+                  onClick={() => setTrayView("recents")}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    border: trayView === "recents" ? "1px solid rgba(99, 102, 241, 0.4)" : "1px solid transparent",
+                    background: trayView === "recents" ? "rgba(99, 102, 241, 0.15)" : "transparent",
+                    color: trayView === "recents" ? "#818cf8" : "var(--text-muted)",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <History size={15} />
+                  <span>{locale === "ko" ? "최근 사용" : "Recently Used"} ({recentTools.length})</span>
+                </button>
               </div>
 
-              <span
-                style={{
-                  fontSize: "12px",
-                  color: "var(--text-muted)",
-                  fontWeight: 600,
-                  display: "none",
-                }}
-                className="sm-inline"
-              >
-                ★ 아이콘을 눌러 언제든 추가/해제
+              <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                {trayView === "favorites"
+                  ? (locale === "ko" ? "★ 아이콘으로 원하는 도구를 상단에 고정하세요" : "Pin your most-used tools with the star icon")
+                  : (locale === "ko" ? "최근 실행한 도구가 자동으로 기록됩니다" : "Tools you run are saved locally")}
               </span>
             </div>
 
-            {/* Favorites Grid */}
-            <div className="tool-grid-container">
-              {favorites.map((favId) => {
-                const tool = TOOLS.find((t) => t.id === favId);
-                if (!tool || tool.isDev) return null;
+            {/* Tray Items Grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                gap: "12px",
+              }}
+            >
+              {displayedTrayList.slice(0, 6).map((toolId) => {
+                const tool = TOOLS.find((t) => t.id === toolId);
+                if (!tool) return null;
                 const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
-                const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
-                const meta = CATEGORY_META[tool.category] || CATEGORY_META["Dev Tools"];
+                const isFav = favorites.includes(tool.id);
 
                 return (
                   <Link
-                    key={`fav-${tool.id}`}
+                    key={`tray-${trayView}-${tool.id}`}
                     href={tool.href}
                     onClick={() => handleToolClick(tool.id)}
                     className="glass-card card-hover"
                     style={{
-                      padding: "22px",
+                      padding: "12px 14px",
                       textDecoration: "none",
                       display: "flex",
-                      flexDirection: "column",
+                      alignItems: "center",
                       justifyContent: "space-between",
-                      gap: "14px",
-                      position: "relative",
-                      border: "1.5px solid rgba(250, 204, 21, 0.4)",
+                      gap: "10px",
+                      borderRadius: "10px",
                       background: "var(--bg-card)",
-                      boxShadow: "0 6px 18px -4px rgba(250, 204, 21, 0.12)",
+                      border: isFav ? "1px solid rgba(250, 204, 21, 0.3)" : "1px solid var(--border-subtle)",
                     }}
                   >
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-                        <div
-                          className={meta.iconClass}
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "10px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <IconComponent size={20} strokeWidth={1.75} />
-                        </div>
-
-                        <button
-                          onClick={(e) => handleToggleFav(e, tool.id)}
-                          style={{
-                            background: "rgba(250, 204, 21, 0.12)",
-                            border: "1px solid rgba(250, 204, 21, 0.3)",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            padding: "6px 10px",
-                            minHeight: "34px",
-                            color: "#eab308",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontSize: "11.5px",
-                            fontWeight: 700,
-                            transition: "all 0.15s",
-                          }}
-                          title="즐겨찾기 해제"
-                          aria-label="즐겨찾기 해제"
-                        >
-                          <Star size={14} fill="#facc15" />
-                          <span>고정됨</span>
-                        </button>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+                      <div
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "8px",
+                          background: "rgba(99, 102, 241, 0.12)",
+                          color: "#818cf8",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <IconComponent size={16} />
                       </div>
-
-                      <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.2px" }}>
-                        {getTitle(tool)}
-                      </h3>
-
-                      <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55" }}>
-                        {getDesc(tool)}
-                      </p>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "6px" }}>
                       <span
                         style={{
-                          fontSize: "13px",
+                          fontSize: "13.5px",
                           fontWeight: 700,
-                          color: "#ca8a04",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "2px",
+                          color: "var(--text-primary)",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
-                        {locale === "ko" ? "실행하기" : "Run"}
-                        <ChevronRight size={14} />
-                      </span>
-
-                      <span
-                        style={{
-                          fontSize: "11.5px",
-                          color: "var(--text-muted)",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "3px",
-                          background: "rgba(255,255,255,0.03)",
-                          padding: "2px 7px",
-                          borderRadius: "6px",
-                          border: "1px solid var(--border-subtle)",
-                        }}
-                      >
-                        <Flame size={11} style={{ color: "#f97316" }} />
-                        {formatCount(count)}
+                        {getTitle(tool)}
                       </span>
                     </div>
+
+                    <button
+                      onClick={(e) => handleToggleFav(e, tool.id)}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: "4px",
+                        borderRadius: "4px",
+                        color: isFav ? "#eab308" : "var(--text-muted)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}
+                      title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+                      aria-label={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+                    >
+                      <Star size={15} fill={isFav ? "#facc15" : "none"} />
+                    </button>
                   </Link>
                 );
               })}
@@ -369,18 +475,18 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
           </div>
         )}
 
-        {/* Categories Sections */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "56px" }}>
-          {grouped.map(({ category, tools: categoryTools }) => {
-            const meta = CATEGORY_META[category];
+        {/* ── 3. Categorized Tools Grid ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
+          {displayedGroups.map(({ category, tools: categoryTools }) => {
+            const meta = CATEGORY_META[category] || CATEGORY_META["Dev Tools"];
             const sectionId = `cat-${category.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
 
             if (categoryTools.length === 0) return null;
 
             return (
-              <div key={category} id={sectionId} style={{ scrollMarginTop: "90px" }}>
-                {/* Category Title */}
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+              <div key={category} id={sectionId} style={{ scrollMarginTop: "130px" }}>
+                {/* Category Header */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
                   <div
                     style={{
                       width: "4px",
@@ -413,73 +519,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                     const IconComponent = TOOL_ICON_BY_ID[tool.id] || Sparkles;
                     const count = usageCounts[tool.id] ?? getToolUsageCount(tool.id);
                     const isFav = favorites.includes(tool.id);
-
-                    if (tool.isDev) {
-                      return (
-                        <div
-                          key={tool.id}
-                          className="glass-card"
-                          style={{
-                            padding: "22px",
-                            opacity: 0.6,
-                            cursor: "not-allowed",
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            gap: "14px",
-                          }}
-                        >
-                          <div>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-                              <div
-                                className={meta.iconClass}
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  borderRadius: "10px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <IconComponent size={20} strokeWidth={1.75} />
-                              </div>
-
-                              <span
-                                style={{
-                                  fontSize: "11px",
-                                  fontWeight: 700,
-                                  color: "var(--text-muted)",
-                                  background: "rgba(255,255,255,0.06)",
-                                  padding: "2px 8px",
-                                  borderRadius: "100px",
-                                  border: "1px solid var(--border-subtle)",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "4px",
-                                }}
-                              >
-                                <Hammer size={10} />
-                                {DEV_LABEL[locale] ?? "In Dev"}
-                              </span>
-                            </div>
-
-                            <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
-                              {getTitle(tool)}
-                            </h3>
-
-                            <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
-                              {getDesc(tool)}
-                            </p>
-                          </div>
-
-                          <div style={{ fontSize: "12.5px", color: "var(--text-muted)", fontWeight: 600 }}>
-                            {locale === "ko" ? "곧 출시 예정" : "Coming Soon"}
-                          </div>
-                        </div>
-                      );
-                    }
+                    const featureTag = TOOL_FEATURE_TAGS[tool.id]?.[locale === "ko" ? "ko" : "en"];
 
                     return (
                       <Link
@@ -495,22 +535,24 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                           justifyContent: "space-between",
                           gap: "14px",
                           position: "relative",
+                          border: isFav ? "1px solid rgba(250, 204, 21, 0.35)" : "1px solid var(--border-subtle)",
                         }}
                       >
                         <div>
+                          {/* Top row: Icon, Tags, Star Toggle */}
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
                             <div
                               className={meta.iconClass}
                               style={{
-                                width: "40px",
-                                height: "40px",
+                                width: "42px",
+                                height: "42px",
                                 borderRadius: "10px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                               }}
                             >
-                              <IconComponent size={20} strokeWidth={1.75} />
+                              <IconComponent size={20} strokeWidth={1.8} />
                             </div>
 
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -548,11 +590,12 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
+                                  transition: "transform 0.15s",
                                 }}
                                 title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                                 aria-label={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                               >
-                                <Star size={16} fill={isFav ? "#facc15" : "none"} />
+                                <Star size={17} fill={isFav ? "#facc15" : "none"} />
                               </button>
                             </div>
                           </div>
@@ -561,24 +604,46 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                             {getTitle(tool)}
                           </h3>
 
-                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55" }}>
+                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55", marginBottom: "10px" }}>
                             {getDesc(tool)}
                           </p>
+
+                          {/* Micro Spec / Capability Tag */}
+                          {featureTag && (
+                            <div
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                padding: "3px 8px",
+                                borderRadius: "6px",
+                                background: "rgba(255, 255, 255, 0.04)",
+                                border: "1px solid var(--border-subtle)",
+                                fontSize: "11px",
+                                color: "var(--text-muted)",
+                                fontWeight: 600,
+                              }}
+                            >
+                              <span>✨</span>
+                              <span>{featureTag}</span>
+                            </div>
+                          )}
                         </div>
 
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "6px" }}>
+                        {/* Bottom Action Footer */}
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
                           <span
                             style={{
                               fontSize: "13px",
-                              fontWeight: 600,
+                              fontWeight: 700,
                               color: meta.accent,
                               display: "flex",
                               alignItems: "center",
-                              gap: "2px",
+                              gap: "3px",
                             }}
                           >
-                            {locale === "ko" ? "실행하기" : "Run"}
-                            <ChevronRight size={14} />
+                            {locale === "ko" ? "실행하기" : "Open Tool"}
+                            <ArrowUpRight size={14} />
                           </span>
 
                           <span
@@ -593,7 +658,7 @@ export default function ToolGrid({ tools = TOOLS }: ToolGridProps) {
                               borderRadius: "6px",
                               border: "1px solid var(--border-subtle)",
                             }}
-                            title="사용 횟수"
+                            title="이용 횟수"
                           >
                             <Flame size={11} style={{ color: "#f97316" }} />
                             {formatCount(count)}

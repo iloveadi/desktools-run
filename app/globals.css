@@ -463,4 +463,25 @@ html, body {
   }
 }
 
+/* Sticky Category Bar */
+.sticky-category-bar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sticky-category-bar {
+    top: 60px !important;
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  /* Ensure page content has clearance above mobile bottom nav */
+  body {
+    padding-bottom: 72px !important;
+  }
+}
+
+
 
