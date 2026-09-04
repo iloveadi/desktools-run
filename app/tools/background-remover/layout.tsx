@@ -1,3 +1,4 @@
+import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,14 +10,31 @@ export const metadata: Metadata = {
     "이미지 누끼", "사진 배경 지우기", "크로마키 제거", "무료 누끼 따기"
   ],
   openGraph: {
+    url: "https://desktools.run/tools/background-remover/",
     title: "이미지 배경 제거기 — 누끼 따기·투명 PNG 무료 제작 | desktools.run",
     description: "클릭 한 번으로 이미지 배경을 즉시 투명하게 제거하고 누끼를 따세요.",
     type: "website",
     siteName: "desktools.run",
   },
+  alternates: {
+    canonical: "https://desktools.run/tools/background-remover/",
+  },
   robots: { index: true, follow: true },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <ToolJsonLd
+        title="Background Remover"
+        description="Remove image backgrounds automatically with client-side Web AI."
+        toolUrl="https://desktools.run/tools/background-remover/"
+      />
+      {children}
+    </>
+  );
 }

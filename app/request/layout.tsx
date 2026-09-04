@@ -4,6 +4,14 @@ export const metadata: Metadata = {
   title: "Request a New Tool — Feature Feedback | desktools.run",
   description:
     "Suggest a new browser utility tool or feature improvement for the desktools.run development team.",
+  alternates: {
+    canonical: "https://desktools.run/request/",
+  },
+  openGraph: {
+    title: "Request a New Tool | desktools.run",
+    description: "Suggest a new browser utility tool or feature improvement.",
+    url: "https://desktools.run/request/",
+  },
 };
 
 export default function RequestLayout({ children }: { children: React.ReactNode }) {

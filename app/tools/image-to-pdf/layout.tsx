@@ -1,3 +1,4 @@
+import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,10 +27,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ImageToPdfLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <ToolJsonLd
+        title="Image to PDF Converter"
+        description="Combine and convert multiple JPG, PNG, and WebP images into a single clean PDF document."
+        toolUrl="https://desktools.run/tools/image-to-pdf/"
+      />
+      {children}
+    </>
+  );
 }

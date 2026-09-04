@@ -1,3 +1,4 @@
+import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,14 +10,31 @@ export const metadata: Metadata = {
     "웹사이트 아이콘", "PWA 아이콘 생성", "무료 파비콘", "파비콘 만드는 법"
   ],
   openGraph: {
+    url: "https://desktools.run/tools/favicon-generator/",
     title: "Favicon & 앱 아이콘 생성기 — 1클릭 일괄 압축 생성 | desktools.run",
     description: "하나의 로고 이미지로 16x16, 32x32, apple-touch-icon, favicon.ico, site.webmanifest 세트를 1클릭 생성하세요.",
     type: "website",
     siteName: "desktools.run",
   },
+  alternates: {
+    canonical: "https://desktools.run/tools/favicon-generator/",
+  },
   robots: { index: true, follow: true },
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+export default function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <ToolJsonLd
+        title="Favicon & App Icon Generator"
+        description="Generate complete 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico, and site.webmanifest packages in 1 click."
+        toolUrl="https://desktools.run/tools/favicon-generator/"
+      />
+      {children}
+    </>
+  );
 }

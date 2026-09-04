@@ -1,3 +1,4 @@
+import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -22,12 +23,24 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://desktools.run/tools/pdf-split/",
   },
+  alternates: {
+    canonical: "https://desktools.run/tools/pdf-split/",
+  },
 };
 
-export default function PdfSplitLayout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <ToolJsonLd
+        title="PDF Split"
+        description="Extract specific pages or split a PDF into separate files."
+        toolUrl="https://desktools.run/tools/pdf-split/"
+      />
+      {children}
+    </>
+  );
 }

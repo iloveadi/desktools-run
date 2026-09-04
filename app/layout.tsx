@@ -55,6 +55,9 @@ export const metadata: Metadata = {
     ],
   },
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://desktools.run/",
+  },
   verification: {
     other: {
       "naver-site-verification": "78cc45882494368515599712d3cbe77cb0321e65",
