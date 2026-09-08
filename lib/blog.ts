@@ -701,6 +701,378 @@ Un document PDF est un graphe d'objets comprenant des dictionnaires de polices, 
 
 Lors de la fusion de plusieurs PDF, le moteur élimine les sous-ensembles de polices en double pour minimiser la taille du fichier final.`,
   },
+  {
+    id: "browser-image-compression-canvas-webp",
+    date: "August 28, 2026",
+    category: "Engineering",
+
+    // Titles
+    titleEn: "Browser-Native Image Compression: How HTML5 Canvas and WebP Reduce File Sizes 80% Without Server Uploads",
+    titleKo: "HTML5 Canvas와 WebP를 이용한 브라우저 네이티브 고효율 이미지 압축 원리",
+    titleJa: "HTML5 CanvasとWebPによるブラウザネイティブ画像圧縮の技術的仕組み",
+    titleEs: "Compresión de imágenes nativa en el navegador con HTML5 Canvas y WebP sin subir datos",
+    titleZh: "利用 HTML5 Canvas 与 WebP 在浏览器端实现高效无服务端图像压缩技术解析",
+    titleFr: "Compression d'image native dans le navigateur avec HTML5 Canvas et WebP sans upload",
+
+    // Snippets
+    snippetEn: "Learn how client-side HTML5 Canvas API and modern WebP compression algorithms shrink image files up to 80% directly in your browser memory without cloud processing.",
+    snippetKo: "서버로 사진을 전송하지 않고 브라우저 HTML5 Canvas API와 WebP 손실 압축 알고리즘을 활용해 이미지 용량을 최대 80% 줄이는 브라우저 단 압축 아키텍처를 소개합니다.",
+    snippetJa: "サーバー送信なしでHTML5 Canvas APIとWebP圧縮を活用し、ブラウザメモリ内で画像サイズを最大80%軽量化する仕組みを解説します。",
+    snippetEs: "Aprende cómo la API HTML5 Canvas y los algoritmos WebP reducen el peso de las imágenes hasta un 80% directamente en tu navegador.",
+    snippetZh: "深入解析无需上传服务器，直接在浏览器内存中使用 HTML5 Canvas 与 WebP 压缩算法降低高达 80% 体积的技术实现。",
+    snippetFr: "Découvrez comment l'API HTML5 Canvas et l'encodage WebP réduisent la taille des images jusqu'à 80% directement dans le navigateur.",
+
+    // Korean Content
+    contentKo: `# HTML5 Canvas와 WebP를 이용한 브라우저 네이티브 고효율 이미지 압축 원리
+
+스마트폰 카메라와 고해상도 모니터의 발전으로 일상적인 사진 파일 크기는 장당 5MB~20MB를 쉽게 넘어섭니다. 하지만 웹사이트 업로드, 이메일 첨부, 메신저 전송 시에는 파일 용량 제한으로 인해 이미지 리사이즈 및 압축이 필수적입니다.
+
+기존의 수많은 압축 도구들은 사용자의 사진을 원격 서버로 업로드하도록 요구했습니다. 하지만 가족 사진, 신분증, 업무용 스크린샷과 같은 민감한 이미지를 클라우드 서버에 올리는 것은 언제나 개인정보 유출 위험을 수반합니다.
+
+desktools.run의 **Image Compressor**는 **100% 브라우저 메모리 안에서 실행되는 네이티브 압축 파이프라인**을 제공합니다.
+
+---
+
+## 🖼️ 1. 클라이언트 측 디코딩과 HTML5 Canvas 2D 컨텍스트
+
+사용자가 이미지 파일을 브라우저로 드래그 앤 드롭하면, 다음과 같은 순서로 클라이언트 메모리에서 처리가 이루어집니다:
+
+1. **FileReader & Object URL 생성**: 로컬 파일 시스템에서 브라우저 메모리 버퍼(Blob)를 직접 참조하는 가상 URL을 생성합니다. 네트워크 트래픽은 전혀 발생하지 않습니다.
+2. **HTMLImageElement 비동기 디코딩**: 브라우저의 하드웨어 가속 이미지 디코더를 활용하여 PNG, JPG, WebP 등의 압축 비트맵을 RGBA 픽셀 배열로 디코딩합니다.
+3. **오프스크린 캔버스(OffscreenCanvas) 렌더링**: 화면에 렌더링하지 않는 가상 캔버스에 이미지를 그리고, 사용자가 지정한 가로/세로 해상도에 맞춰 바이큐빅(Bicubic) 안티에일리어싱 다운샘플링을 적용합니다.
+
+---
+
+## ⚡ 2. WebP 인코딩과 품질 제어 알고리즘
+
+HTML5 Canvas는 \`toBlob(callback, 'image/webp', quality)\` 메서드를 통해 네이티브 WebP 인코더를 지원합니다:
+
+- **WebP 손실 압축 (Lossy Compression)**: VP8 비디오 코덱의 인트라 프레임 압축 기술을 차용하여, JPEG 대비 동일 화질에서 약 25%~35% 더 작은 파일 크기를 달성합니다.
+- **예측 코딩(Predictive Coding)**: 주변 픽셀 블록의 색상 변화를 예측하고 차이값(Residual)만을 압축하여 미세한 그라데이션과 텍스트 윤곽을 선명하게 유지합니다.
+- **적응형 품질 튜닝**: desktools.run은 0.5~0.9 범위의 최적 품질 계수를 자동으로 추천하여 사람이 육안으로 열화를 인지하기 어려운 수준에서 파일 용량을 70%~85% 절감합니다.
+
+---
+
+## 🔒 3. 메모리 누수 방지 및 보안상 이점
+
+브라우저 내에서 대용량 이미지(50MB 이상)를 연속으로 압축할 때 중요한 것은 가비지 컬렉션(Garbage Collection)과 메모리 해제입니다.
+
+desktools.run은 압축이 완료되는 즉시 \`URL.revokeObjectURL()\`을 호출하고 Canvas 컨텍스트 크기를 0으로 재설정하여 브라우저 탭의 메모리 점유를 즉시 반환합니다.
+
+모든 데이터는 여러분의 기기 램(RAM)에서만 처리되므로, 기업 기밀 문서나 개인 일상 사진도 안심하고 초고속으로 압축해 보세요!`,
+
+    // English Content
+    contentEn: `# Browser-Native Image Compression: How HTML5 Canvas and WebP Reduce File Sizes 80% Without Server Uploads
+
+Modern digital cameras and mobile phones capture photos at resolutions that easily produce file sizes between 5MB and 25MB. However, online forms, email attachments, and web publishing workflows demand fast-loading, lightweight images.
+
+Traditional image optimization sites force users to upload raw photos to remote servers. This pattern incurs latency, server bandwidth costs, and severe privacy risks when dealing with personal photos or confidential documents.
+
+The **Image Compressor** on desktools.run introduces a **100% browser-native image processing pipeline** that eliminates cloud dependencies entirely.
+
+---
+
+## 🖼️ 1. Client-Side Image Decoding and Canvas 2D Pipeline
+
+When a user drops an image file into desktools.run, the entire workflow executes in local memory:
+
+1. **FileReader and Object URLs**: Creates a localized pointer to the file in device RAM without transmitting raw bytes across the internet.
+2. **Hardware-Accelerated Decoding**: Utilizes the browser's native decoder to unpack JPG, PNG, and WebP payloads into raw RGBA pixel arrays.
+3. **OffscreenCanvas Resampling**: Draws the pixel data onto a virtual canvas and applies bicubic anti-aliasing interpolation for smooth dimension scaling.
+
+---
+
+## ⚡ 2. WebP Encoding and Predictive Lossy Compression
+
+HTML5 Canvas natively exposes \`canvas.toBlob(callback, 'image/webp', quality)\`:
+
+- **Intra-Frame Prediction**: Based on the VP8 video compression standard, WebP predicts pixel values from neighboring blocks and encodes only the residual delta.
+- **25-35% Better Compression than JPEG**: Delivers identical perceptual quality at substantially lower byte counts.
+- **Chroma Subsampling Optimization**: Fine-tunes high-frequency color transitions to preserve text sharpness and fine textures.
+
+---
+
+## 🔒 3. Memory Safety and Total Data Isolation
+
+Handling multiple 50MB images inside a single browser tab requires rigorous resource lifecycle management.
+
+desktools.run automatically invokes \`URL.revokeObjectURL()\` upon task completion and truncates canvas buffers to trigger immediate garbage collection. Your confidential graphics never leave your local machine.`,
+
+    // Japanese Content
+    contentJa: `# HTML5 CanvasとWebPによるブラウザネイティブ画像圧縮の技術的仕組み
+
+現代のスマートフォンで撮影された写真のファイルサイズは、1枚あたり5MB〜20MBを超えることが一般的です。しかし、Webアップロードやメール送信には軽量化が不可欠です。
+
+desktools.runの **Image Compressor** は、サーバーに画像をアップロードすることなく、ブラウザのメモリ内で直接WebPエンコードを行う100%ローカルな画像圧縮ツールです。
+
+Canvas APIとWebPの高度な予測符号化アルゴリズムを組み合わせることで、視覚的な画質劣化を抑えつつ最大80%の容量削減を実現します。個人情報や業務上の機密画像も安全に処理できます。`,
+
+    // Spanish Content
+    contentEs: `# Compresión de imágenes nativa en el navegador con HTML5 Canvas y WebP sin subir datos
+
+desktools.run comprime imágenes directamente en la memoria de tu navegador utilizando la API HTML5 Canvas y el formato WebP, reduciendo el tamaño hasta un 80% sin enviar tus fotos a servidores externos.`,
+
+    // Chinese Content
+    contentZh: `# 利用 HTML5 Canvas 与 WebP 在浏览器端实现高效无服务端图像压缩技术解析
+
+desktools.run 的图像压缩工具采用 100% 浏览器内存处理架构，借助 HTML5 Canvas 2D 上下文与 WebP 有损预测压缩算法，在完全不上传服务器的前提下实现高达 80% 的图片体积缩减。`,
+
+    // French Content
+    contentFr: `# Compression d'image native dans le navigateur avec HTML5 Canvas et WebP sans upload
+
+Grâce à l'API HTML5 Canvas et à l'encodage WebP, desktools.run compresse vos images directement dans la mémoire de votre navigateur sans aucun envoi vers des serveurs externes.`,
+  },
+  {
+    id: "client-side-jwt-security-best-practices",
+    date: "September 01, 2026",
+    category: "Security",
+
+    // Titles
+    titleEn: "Understanding JSON Web Tokens (JWT) and Why Client-Side Local Decoding Protects Production Secrets",
+    titleKo: "JWT 토큰의 구조 분석과 안전한 클라이언트 사이드 디코딩 가이드",
+    titleJa: "JWT（JSON Web Token）の構造解説と安全なクライアントサイドデコード手法",
+    titleEs: "Estructura de JSON Web Tokens (JWT) y por qué la decodificación local protege tus credenciales",
+    titleZh: "深度解析 JSON Web Token (JWT) 结构：为什么客户端本地解码能保障凭证安全",
+    titleFr: "Comprendre les JWT et pourquoi le décodage 100% local protège vos identifiants de production",
+
+    // Snippets
+    snippetEn: "Discover the security risks of pasting production JWT tokens into remote websites and how client-side Base64Url decoding and signature verification keep your API credentials safe.",
+    snippetKo: "외부 웹사이트에 운영 서버 JWT를 복사해 붙여넣을 때 발생하는 토큰 탈취 위험과, 100% 로컬 브라우저에서 Base64Url 디코딩 및 만료 시간을 안전하게 검증하는 원리를 살펴봅니다.",
+    snippetJa: "本番環境のJWTをサードパーティ製Webサイトに入力する危険性と、ブラウザ内部でBase64Urlデコードを行い安全に検証する仕組みを解説します。",
+    snippetEs: "Conoce los riesgos de seguridad de pegar tokens JWT de producción en la nube y cómo la decodificación local en el navegador garantiza total seguridad.",
+    snippetZh: "揭示将生产环境 JWT 粘贴到在线工具的泄露风险，并介绍如何在本地浏览器中安全完成 Base64Url 解析与有效期验证。",
+    snippetFr: "Découvrez les risques de sécurité liés au collage de JWT de production sur des sites tiers et comment le décodage local protège vos secrets.",
+
+    // Korean Content
+    contentKo: `# JWT 토큰의 구조 분석과 안전한 클라이언트 사이드 디코딩 가이드
+
+현대 웹 애플리케이션과 마이크로서비스 아키텍처에서 **JSON Web Token (JWT)**은 사용자 인증(Authentication) 및 인가(Authorization)의 표준으로 확고히 자리 잡았습니다.
+
+개발자들은 디버깅 과정에서 토큰의 만료 시간(\`exp\`), 발급자(\`iss\`), 사용자 권한(\`roles\`, \`scope\`) 등의 페이로드를 확인하기 위해 온라인 JWT 디코더 도구를 자주 사용합니다.
+
+그러나 **운영 환경(Production)의 실제 인증 토큰을 외부 서버로 전송하는 온라인 웹사이트에 붙여넣는 것은 심각한 보안 사고를 초래할 수 있습니다.**
+
+---
+
+## 🔍 1. JWT의 내부 구조 (RFC 7519)
+
+JWT는 마침표(\`.\`)로 구분된 세 가지 Base64Url 인코딩 문자열로 구성됩니다:
+
+1. **헤더 (Header)**: 토큰의 타입(\`"typ": "JWT"\`)과 서명 알고리즘(\`"alg": "HS256"\` 또는 \`"RS256"\`)을 정의합니다.
+2. **페이로드 (Payload)**: 실제 클레임(Claim) 데이터가 포함된 JSON 객체입니다. 사용자 식별자(\`sub\`), 만료 시간(\`exp\`), 발급 시각(\`iat\`) 등이 저장됩니다.
+3. **디지털 서명 (Signature)**: 헤더와 페이로드를 합친 후 비밀 키(Secret) 또는 개인 키(Private Key)로 암호화 해시를 생성한 값입니다. 데이터의 위변조 여부를 증명합니다.
+
+> ⚠️ **주의**: JWT 페이로드는 **'암호화(Encryption)'된 것이 아니라 단순히 '인코딩(Encoding)'된 것**입니다. 따라서 Base64Url 디코딩만으로 누구나 페이로드 내부 내용을 읽을 수 있습니다.
+
+---
+
+## 🚨 2. 온라인 디코더 사이트 이용 시의 보안 위협
+
+많은 개발자가 인지하지 못하는 치명적인 취약점은 다음과 같습니다:
+
+- **서버 로그 기록**: 온라인 디코더 사이트가 사용자가 입력한 토큰을 웹 서버 액세스 로그(Access Log)나 분석 툴로 전송할 경우, 활성화된 세션 토큰이 제3자에게 그대로 노출됩니다.
+- **세션 하이재킹(Session Hijacking)**: 관리자 권한이 부여된 만료 전 JWT가 유출되면, 공격자는 인증 우회 및 무단 데이터베이스 접근이 가능해집니다.
+- **중간자 공격(MITM)**: 안전하지 않은 네트워크 환경에서 토큰을 전송할 경우 중간 패킷 스니핑 위험이 발생합니다.
+
+---
+
+## 🛡️ 3. desktools.run의 로컬 디코딩 아키텍처
+
+desktools.run의 **JWT Decoder** 도구는 네트워크 통신을 단 1회도 발생시키지 않습니다:
+
+- **브라우저 네이티브 Base64Url 파싱**: \`window.atob()\`와 정규식 치환을 통해 사용자의 브라우저 JavaScript 엔진에서 즉시 JSON 객체로 복원합니다.
+- **실시간 만료 시간(\`exp\`) 카운트다운**: 로컬 시스템 시계와 비교하여 만료 여부를 1초 단위로 실시간 표시합니다.
+- **Zero-Storage 원칙**: 로컬스토리지, 세션스토리지, 쿠키 등 브라우저 저장소에도 토큰을 기록하지 않고 메모리 상에서만 일회성으로 처리합니다.
+
+중요한 시스템의 인증 토큰을 검증할 때는 반드시 desktools.run과 같은 100% 클라이언트 사이드 도구를 사용하세요!`,
+
+    // English Content
+    contentEn: `# Understanding JSON Web Tokens (JWT) and Why Client-Side Local Decoding Protects Production Secrets
+
+In modern cloud computing and OAuth 2.0 / OpenID Connect architectures, **JSON Web Tokens (JWT, RFC 7519)** serve as the industry standard for stateless API authorization.
+
+Developers frequently inspect token claims such as expiration timestamps (\`exp\`), issued-at dates (\`iat\`), and user roles (\`roles\`) during daily testing.
+
+However, **pasting live production tokens into cloud-based online decoders represents a critical enterprise vulnerability.**
+
+---
+
+## 🔍 1. Anatomical Breakdown of a JWT
+
+A standard JWT consists of three parts separated by periods (\`.\`):
+
+1. **Header**: Declares the token type (\`JWT\`) and the cryptographic signing algorithm (e.g. \`HS256\`, \`RS256\`, \`ES256\`).
+2. **Payload**: A JSON dictionary storing public and private claims about the subject (\`sub\`, \`scope\`, permissions).
+3. **Signature**: A cryptographic hash computed over the encoded header and payload, guaranteeing tamper-evidence.
+
+> ⚠️ **Key Security Reminder**: Standard JWTs are **encoded, not encrypted**. Anyone with access to the raw string can unpack the claims instantly using standard Base64Url decoders.
+
+---
+
+## 🚨 2. The Risks of Third-Party Server-Based Decoders
+
+- **HTTP Request Logging**: When a site sends your token to its backend for parsing, the raw string enters access logs, error monitoring tools (e.g. Sentry), and cloud analytics.
+- **Account Takeover & Replay Attacks**: A stolen JWT with valid expiry allows attackers to impersonate authenticated users directly against your production APIs.
+- **Compliance Violations**: Exposing tokens containing user PII to unauthorized endpoints violates GDPR, HIPAA, and SOC 2 guidelines.
+
+---
+
+## 🛡️ 3. Zero-Network Decoding on desktools.run
+
+The **JWT Decoder** on desktools.run provides absolute isolation:
+
+- **Pure Client Execution**: Uses native JavaScript Base64Url parsing entirely in the user's browser sandbox.
+- **Live Expiration Monitoring**: Computes remaining TTL against your local machine clock with zero server pings.
+- **Ephemeral State**: Discards the token from memory when the tab closes, leaving zero traces in storage or browser caches.`,
+
+    // Japanese Content
+    contentJa: `# JWT（JSON Web Token）の構造解説と安全なクライアントサイドデコード手法
+
+JWTはマイクロサービスやWebアプリにおける認証のデファクトスタンダードです。しかし、本番環境のJWTを外部サーバーに送信するオンラインデコーダーに貼り付けると、セッショントークン漏洩やアカウント乗っ取りの重大なリスクが生じます。
+
+desktools.runの **JWT Decoder** は、1バイトも外部に送信することなくブラウザ内部で100%ローカルにデコードと検証を行います。安全な開発とデバッグをサポートします。`,
+
+    // Spanish Content
+    contentEs: `# Estructura de JSON Web Tokens (JWT) y por qué la decodificación local protege tus credenciales
+
+desktools.run te permite inspeccionar y verificar tokens JWT al 100% en tu navegador, sin enviar credenciales sensibles de producción a servidores externos.`,
+
+    // Chinese Content
+    contentZh: `# 深度解析 JSON Web Token (JWT) 结构：为什么客户端本地解码能保障凭证安全
+
+解析生产环境 JWT 时，若上传至第三方服务器将面临严重的会话劫持风险。desktools.run 的 JWT 解码工具 100% 在本地浏览器中完成解析，不发起任何网络请求，全面守护您的企业凭证。`,
+
+    // French Content
+    contentFr: `# Comprendre les JWT et pourquoi le décodage 100% local protège vos identifiants de production
+
+Le décodeur JWT de desktools.run fonctionne à 100% dans la mémoire de votre navigateur, évitant ainsi toute fuite de vos jetons de production vers des serveurs tiers.`,
+  },
+  {
+    id: "zero-server-architecture-web-privacy",
+    date: "September 04, 2026",
+    category: "Web Privacy",
+
+    // Titles
+    titleEn: "Zero-Server Web Utilities: How Client-Side Execution Guarantees 100% Privacy by Design",
+    titleKo: "개인정보 유출 없는 웹 도구의 조건: 제로 서버(Zero-Server) 아키텍처",
+    titleJa: "個人情報を漏洩させないWebツールの条件：ゼロサーバー（Zero-Server）アーキテクチャ",
+    titleEs: "Utilidades web sin servidor: Cómo la ejecución en el cliente garantiza privacidad total por diseño",
+    titleZh: "无服务端 Web 工具设计思想：客户端架构如何从根本上杜绝数据隐私泄露",
+    titleFr: "Utilitaires web sans serveur : Comment l'architecture côté client garantit une confidentialité totale",
+
+    // Snippets
+    snippetEn: "Analyze the data privacy risks of traditional cloud file converters and learn how client-side WebAssembly sandbox architecture provides verifiable GDPR-compliant zero-knowledge processing.",
+    snippetKo: "기존 온라인 파일 변환 사이트의 개인정보 유출 위험을 분석하고, WebAssembly와 브라우저 샌드박스를 통해 데이터가 기기 밖으로 나가지 않는 제로 서버 아키텍처의 필요성을 설명합니다.",
+    snippetJa: "従来のオンライン変換サイトにおけるデータ流出リスクを考察し、WebAssemblyを活用したゼロサーバーアーキテクチャの優位性を解説します。",
+    snippetEs: "Analiza los riesgos de privacidad de los conversores en la nube y descubre por qué la arquitectura local en el navegador es el futuro.",
+    snippetZh: "分析传统在线转换工具的数据安全隐患，详解基于 WebAssembly 与本地沙箱的 Zero-Server 隐私保护架构。",
+    snippetFr: "Analysez les risques des convertisseurs de fichiers en ligne et découvrez pourquoi l'exécution locale est la norme d'avenir pour la vie privée.",
+
+    // Korean Content
+    contentKo: `# 개인정보 유출 없는 웹 도구의 조건: 제로 서버(Zero-Server) 아키텍처
+
+인터넷에서 "PDF 합치기", "이미지 변환", "단어 수 세기" 등을 검색하면 수많은 무료 온라인 도구들이 검색됩니다. 하지만 이러한 웹사이트들 중 상당수는 사용자가 업로드한 파일을 원격 서버의 임시 폴더에 저장한 뒤 연산을 수행합니다.
+
+사용자는 *"처리가 끝난 파일은 1시간 후 자동 삭제됩니다"*라는 문구를 믿을 수밖에 없지만, 실제 서버 인프라에서 로그가 남는지, 백업 서버에 복제되는지, 인공지능 학습 데이터로 수집되는지 검증할 방법은 전혀 없습니다.
+
+**desktools.run**은 이러한 근본적인 불신을 해소하기 위해 **제로 서버(Zero-Server) 클라이언트 사이드 아키텍처**를 채택했습니다.
+
+---
+
+## ☁️ 1. 전통적인 클라우드 변환 방식의 구조적 한계
+
+기존 온라인 도구의 일반적인 데이터 흐름은 다음과 같습니다:
+
+1. **네트워크 업로드**: 기가바이트 단위의 파일 바이트가 원격 클라우드 서버(AWS, GCP 등)로 전송됩니다.
+2. **원격 호스트 연산**: 서버의 Python/Node.js 백엔드가 파일을 디스크에 임시 저장하고 변환 라이브러리를 실행합니다.
+3. **네트워크 다운로드**: 변환된 결과물을 다시 사용자 PC로 다운로드합니다.
+
+이 방식은 필연적으로 **통신 지연 시간(Latency)**, **서버 호스팅 비용 증가**, 그리고 **데이터 침해(Data Breach) 위험**을 야기합니다.
+
+---
+
+## ⚡ 2. 제로 서버(Zero-Server) 아키텍처란?
+
+desktools.run의 모든 유틸리티는 브라우저가 제공하는 표준 웹 기술과 하드웨어 가속을 기반으로 구축되었습니다:
+
+- **WebAssembly (Wasm)**: C/C++, Rust 등으로 작성된 고성능 알고리즘(pdf-lib, 세그멘테이션 신경망)을 브라우저 샌드박스 내부에서 네이티브에 준하는 속도로 직접 실행합니다.
+- **Web Workers 병렬 처리**: 대용량 파일 압축이나 암호화 해시 계산 시 브라우저 메인 UI 스레드가 멈추지 않도록 백그라운드 워커 스레드에서 멀티스레드로 연산합니다.
+- **HTML5 File API & Canvas API**: 디스크 입출력 없이 기기의 RAM 메모리 버퍼에서 직접 픽셀과 바이너리 스트림을 다룹니다.
+
+---
+
+## 🛡️ 3. 기술적으로 검증 가능한 개인정보 보호 (Privacy by Design)
+
+제로 서버 아키텍처의 가장 큰 특징은 **사용자가 브라우저 개발자 도구(F12)의 네트워크 탭을 열어 직접 검증할 수 있다는 점**입니다:
+
+- 파일을 업로드하고 변환할 때 외부 도메인으로 나가는 POST/PUT 요청이 단 1건도 존재하지 않습니다.
+- 사이트가 오프라인 상태(비행기 탑승 모드 또는 인터넷 연결 해제)에서도 완전히 동일하게 작동합니다.
+- GDPR, CCPA, 개인정보보호법 등 글로벌 데이터 규제를 '규정 준수(Compliance)' 차원을 넘어 **'데이터 수집 원천 배제(Data Minimization by Architecture)'**로 완벽히 해결합니다.
+
+desktools.run은 앞으로도 모든 사용자가 데이터 유출 걱정 없이 업무와 일상에 집중할 수 있는 가장 신뢰할 수 있는 도구 생태계를 만들어 가겠습니다.`,
+
+    // English Content
+    contentEn: `# Zero-Server Web Utilities: How Client-Side Execution Guarantees 100% Privacy by Design
+
+When searching for "merge PDF", "compress image", or "format JSON", millions of users rely on free web converters. Yet, almost all traditional services upload user files to remote cloud storage buffers to execute server-side processing scripts.
+
+While services often promise that *"files are automatically deleted within 60 minutes"*, end users have no verifiable proof that their sensitive financial records, private contracts, or personal photos are truly wiped from access logs and backup volumes.
+
+**desktools.run** eliminates this fundamental trust deficit by implementing a **Zero-Server Client-Side Architecture**.
+
+---
+
+## ☁️ 1. The Vulnerabilities of Cloud-Based Utility Portals
+
+Traditional architectures rely on a 3-stage round-trip:
+1. **Inbound Network Transfer**: User documents are piped across public networks to remote data centers.
+2. **Disk Staging & Execution**: Backend servers persist files to disk before executing command-line converters.
+3. **Outbound Download & Cleanup**: The processed file is returned, leaving lingering residue in server caches and logging sinks.
+
+This architecture introduces high cloud maintenance costs, bandwidth bottlenecks, and enterprise data leak exposures.
+
+---
+
+## ⚡ 2. What Is Zero-Server Architecture?
+
+desktools.run leverages modern open web platform capabilities:
+
+- **WebAssembly (Wasm)**: Compiles high-performance native engines (such as pdf-lib and neural net inference runtimes) directly into secure browser execution bytecode.
+- **Web Workers Multi-Threading**: Offloads intensive cryptographic calculations and image scaling to secondary threads without locking the 60fps UI.
+- **TypedArrays & Memory Buffers**: Manipulates binary streams exclusively inside ephemeral client RAM.
+
+---
+
+## 🛡️ 3. Verifiable Privacy by Design
+
+Unlike marketing promises, Zero-Server privacy is **transparently verifiable in your browser DevTools (F12)**:
+
+- Inspect the Network tab: Zero outbound POST/PUT requests containing file bytes occur during processing.
+- Works Completely Offline: Disconnect your Wi-Fi or enable Airplane Mode, and desktools.run continues to run with identical performance.
+- True GDPR & CCPA Compliance: Achieves perfect privacy compliance through architectural impossibility of data retention.`,
+
+    // Japanese Content
+    contentJa: `# 個人情報を漏洩させないWebツールの条件：ゼロサーバー（Zero-Server）アーキテクチャ
+
+オンラインファイル変換サービスにおいて、ユーザーのデータをサーバーに一切送信しない「ゼロサーバー（Zero-Server）」アーキテクチャの重要性と技術的背景を解説します。
+
+WebAssemblyとWeb Workersを活用することで、100%ブラウザのメモリ内で高速かつ安全に処理を完結させ、完全なプライバシー保護を実現しています。`,
+
+    // Spanish Content
+    contentEs: `# Utilidades web sin servidor: Cómo la ejecución en el cliente garantiza privacidad total por diseño
+
+Descubre cómo desktools.run procesa archivos al 100% en la memoria de tu dispositivo mediante WebAssembly, eliminando por completo las subidas a servidores en la nube.`,
+
+    // Chinese Content
+    contentZh: `# 无服务端 Web 工具设计思想：客户端架构如何从根本上杜绝数据隐私泄露
+
+深入探讨传统云端转换工具的安全漏洞，以及 desktools.run 如何利用 WebAssembly 与 Web Workers 在本地浏览器沙箱中实现 100% 零服务器上传的极致数据隐私保护。`,
+
+    // French Content
+    contentFr: `# Utilitaires web sans serveur : Comment l'architecture côté client garantit une confidentialité totale
+
+Découvrez comment desktools.run assure une confidentialité absolue grâce à une exécution 100% locale en WebAssembly, sans aucun transfert de données vers des serveurs distants.`,
+  },
 ];
 
 export function getLocalizedPost(post: BlogPost, locale: string) {

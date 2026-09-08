@@ -199,7 +199,7 @@ export default function PrivacyPolicyPage() {
               </p>
             </div>
 
-            {/* Section 4: Cookies & Analytics */}
+            {/* Section 4: Cookies, Analytics & Google AdSense */}
             <div className="glass-card" style={{ padding: "28px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <div
@@ -220,9 +220,59 @@ export default function PrivacyPolicyPage() {
                   {t("privacy.sec4Title")}
                 </h2>
               </div>
-              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.8, paddingLeft: "42px" }}>
-                {t("privacy.sec4Desc")}
-              </p>
+              <div style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: 1.8, paddingLeft: "42px" }}>
+                <p style={{ marginBottom: "12px" }}>
+                  {t("privacy.sec4Desc")}
+                </p>
+                <div
+                  style={{
+                    background: "rgba(99,102,241,0.06)",
+                    border: "1px solid rgba(99,102,241,0.2)",
+                    borderRadius: "8px",
+                    padding: "16px",
+                    marginTop: "12px",
+                  }}
+                >
+                  <p style={{ fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>
+                    {t("privacy.adsenseOptOutTitle")}
+                  </p>
+                  <p style={{ fontSize: "13.5px", marginBottom: "10px", color: "var(--text-secondary)" }}>
+                    {t("privacy.adsenseOptOutDesc")}
+                  </p>
+                  <ul style={{ paddingLeft: "20px", margin: 0, display: "flex", flexDirection: "column", gap: "6px", fontSize: "13.5px" }}>
+                    <li>
+                      <a
+                        href="https://www.google.com/settings/ads"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--accent-primary, #6366f1)", textDecoration: "underline" }}
+                      >
+                        Google Ads Settings (https://www.google.com/settings/ads)
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.aboutads.info/choices/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--accent-primary, #6366f1)", textDecoration: "underline" }}
+                      >
+                        AboutAds.info (https://www.aboutads.info/choices/)
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://policies.google.com/technologies/partner-sites"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--accent-primary, #6366f1)", textDecoration: "underline" }}
+                      >
+                        How Google uses information from sites or apps that use its services
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             {/* Section 5: Your Data Rights & Contact */}
