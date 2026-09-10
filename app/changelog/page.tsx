@@ -31,32 +31,26 @@ export default function ChangelogPage() {
         ko: [
           "🌌 히어로 섹션 전면 개편: 듀얼 오로라 앰비언트 글로우, 라이브 펄스 뱃지 및 프로스트 글래스 커맨드 바(Search Bar) 도입.",
           "💎 도구 카드 스펙큘러 하이라이트 & 카테고리별 네온 글로우: PDF(로즈), 이미지(에메랄드), 텍스트(스카이블루), 개발자(인디고), 변환(앰버), 보안(시안) 고유 앰비언트 호버 효과 및 부드러운 화살표 마이크로 인터랙션 구현.",
-          "📊 플로팅 통계 독 (Stats Dock): 누적 이용 통계 위젯을 프리미엄 플로팅 글래스 컨테이너와 모던 아이콘으로 업그레이드.",
         ],
         en: [
           "🌌 Hero Section Redesign: Added ambient dual aurora glow, live pulse status indicator, and frosted glass command search bar.",
           "💎 Specular Glass Cards & Category Neon Glows: Implemented category-specific glowing hover states (Rose, Emerald, Sky Blue, Electric Indigo, Amber, Cyan) with smooth arrow micro-interactions.",
-          "📊 Floating Glass Stats Dock: Upgraded the statistics strip into a sleek floating glass container with modern lucide icons.",
         ],
         ja: [
           "🌌 ヒーローセクション全面改修: デュアルオーロラアンビエントグロー、ライブパルスバッジ、フロストガラス製コマンドバー（検索バー）を導入。",
           "💎 ツールカードのスペキュラーハイライト＆カテゴリ別ネオングロー: PDF(ローズ)、画像(エメラルド)、テキスト(スカイブルー)、開発者(インディゴ)、変換(アンバー)、セキュリティ(シアン)の専用ホバー効果を実装。",
-          "📊 フローティング統計ドック: 累計利用統計ウィジェットをプレミアムなガラスコンテナとアイコンでアップグレード。",
         ],
         es: [
           "🌌 Rediseño de la Sección Hero: Resplandor de aurora dual, indicador de estado de pulso en vivo y barra de comandos de vidrio esmerilado.",
           "💎 Tarjetas de Vidrio Especulares y Brillos de Neón: Efectos hover por categoría (Rosa, Esmeralda, Azul cielo, Índigo, Ámbar, Cian) con microinteracciones.",
-          "📊 Panel de Estadísticas Flotante: Contenedor de vidrio flotante mejorado con iconos modernos.",
         ],
         zh: [
           "🌌 首页 Hero 区域全面重构: 引入双重极光渐变氛围光、实时呼吸状态指示灯与极简毛玻璃命令行搜索框。",
           "💎 工具卡片镜面高光与分类霓虹悬浮辉光: 实现 PDF(玫瑰红)、图像(翡翠绿)、文本(天蓝)、开发(靛紫)、转换(琥珀金)、安全(青蓝)专属发光交互与箭头微动效。",
-          "📊 悬浮毛玻璃统计 Dock 栏: 将累计使用数据升级为质感通透的浮岛组件与现代矢量图标。",
         ],
         fr: [
           "🌌 Redéfinition de la Section Hero: Effet d'aurore ambiante, badge pulsé en direct et barre de recherche en verre dépoli.",
           "💎 Cartes en Verre Spéculaires & Néons par Catégorie: États de survol lumineux spécifiques par catégorie avec micro-animations.",
-          "📊 Dock de Statistiques Flottant: Strip de statistiques réinventé sous forme de dock flottant avec icônes modernes.",
         ],
       },
     },
