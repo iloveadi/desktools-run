@@ -138,13 +138,13 @@ const TOOL_ICON_BY_ID: Record<string, React.ComponentType<{ size?: number; strok
   "hash-generator": Binary,
 };
 
-const CATEGORY_META: Record<ToolCategory, { iconClass: string; badgeClass: string; accent: string }> = {
-  "PDF Tools":         { iconClass: "icon-pdf",       badgeClass: "badge-pdf",       accent: "#f87171" },
-  "Image Tools":       { iconClass: "icon-image",     badgeClass: "badge-image",     accent: "#34d399" },
-  "Text & Formatting": { iconClass: "icon-text",      badgeClass: "badge-text",      accent: "#60a5fa" },
-  "Dev Tools":         { iconClass: "icon-dev",       badgeClass: "badge-dev",       accent: "#818cf8" },
-  "Converter":         { iconClass: "icon-converter", badgeClass: "badge-converter", accent: "#fbbf24" },
-  "Security":          { iconClass: "icon-security",  badgeClass: "badge-security",  accent: "#38bdf8" },
+const CATEGORY_META: Record<ToolCategory, { iconClass: string; badgeClass: string; accent: string; cardHoverClass: string }> = {
+  "PDF Tools":         { iconClass: "icon-pdf",       badgeClass: "badge-pdf",       accent: "#f87171", cardHoverClass: "card-hover-pdf" },
+  "Image Tools":       { iconClass: "icon-image",     badgeClass: "badge-image",     accent: "#34d399", cardHoverClass: "card-hover-image" },
+  "Text & Formatting": { iconClass: "icon-text",      badgeClass: "badge-text",      accent: "#60a5fa", cardHoverClass: "card-hover-text" },
+  "Dev Tools":         { iconClass: "icon-dev",       badgeClass: "badge-dev",       accent: "#818cf8", cardHoverClass: "card-hover-dev" },
+  "Converter":         { iconClass: "icon-converter", badgeClass: "badge-converter", accent: "#fbbf24", cardHoverClass: "card-hover-converter" },
+  "Security":          { iconClass: "icon-security",  badgeClass: "badge-security",  accent: "#38bdf8", cardHoverClass: "card-hover-security" },
 };
 
 const BADGE_TRANSLATIONS: Record<string, Record<string, string>> = {
@@ -526,33 +526,34 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                         key={tool.id}
                         href={tool.href}
                         onClick={() => handleToolClick(tool.id)}
-                        className="glass-card card-hover"
+                        className={`glass-card tool-card ${meta.cardHoverClass} group`}
                         style={{
-                          padding: "22px",
+                          padding: "24px 22px",
                           textDecoration: "none",
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "space-between",
-                          gap: "14px",
+                          gap: "16px",
                           position: "relative",
-                          border: isFav ? "1px solid rgba(250, 204, 21, 0.35)" : "1px solid var(--border-subtle)",
+                          border: isFav ? "1px solid rgba(250, 204, 21, 0.4)" : "1px solid var(--border-subtle)",
                         }}
                       >
                         <div>
                           {/* Top row: Icon, Tags, Star Toggle */}
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                             <div
                               className={meta.iconClass}
                               style={{
-                                width: "42px",
-                                height: "42px",
-                                borderRadius: "10px",
+                                width: "44px",
+                                height: "44px",
+                                borderRadius: "12px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
+                                boxShadow: "inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.15)",
                               }}
                             >
-                              <IconComponent size={20} strokeWidth={1.8} />
+                              <IconComponent size={21} strokeWidth={1.9} />
                             </div>
 
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -562,15 +563,16 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                                   style={{
                                     fontSize: "11px",
                                     fontWeight: 700,
-                                    padding: "2px 8px",
+                                    padding: "3px 9px",
                                     borderRadius: "100px",
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "3px",
+                                    boxShadow: "0 0 10px rgba(99, 102, 241, 0.12)",
                                   }}
                                 >
-                                  {tool.badge === "Popular" && <TrendingUp size={10} />}
-                                  {tool.badge === "New" && <Sparkles size={10} />}
+                                  {tool.badge === "Popular" && <TrendingUp size={11} />}
+                                  {tool.badge === "New" && <Sparkles size={11} />}
                                   {getBadgeText(tool.badge)}
                                 </span>
                               )}
@@ -590,7 +592,7 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  transition: "transform 0.15s",
+                                  transition: "transform 0.2s ease",
                                 }}
                                 title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                                 aria-label={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
@@ -600,11 +602,11 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                             </div>
                           </div>
 
-                          <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.2px" }}>
+                          <h3 style={{ fontSize: "16.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px", letterSpacing: "-0.02em" }}>
                             {getTitle(tool)}
                           </h3>
 
-                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55", marginBottom: "10px" }}>
+                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.55", marginBottom: "12px" }}>
                             {getDesc(tool)}
                           </p>
 
@@ -614,9 +616,9 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                               style={{
                                 display: "inline-flex",
                                 alignItems: "center",
-                                gap: "4px",
-                                padding: "3px 8px",
-                                borderRadius: "6px",
+                                gap: "5px",
+                                padding: "3px 9px",
+                                borderRadius: "7px",
                                 background: "rgba(255, 255, 255, 0.04)",
                                 border: "1px solid var(--border-subtle)",
                                 fontSize: "11px",
@@ -624,14 +626,14 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                                 fontWeight: 600,
                               }}
                             >
-                              <span>✨</span>
+                              <span style={{ color: meta.accent }}>✨</span>
                               <span>{featureTag}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Bottom Action Footer */}
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid rgba(255, 255, 255, 0.05)" }}>
                           <span
                             style={{
                               fontSize: "13px",
@@ -639,11 +641,11 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                               color: meta.accent,
                               display: "flex",
                               alignItems: "center",
-                              gap: "3px",
+                              gap: "4px",
                             }}
                           >
                             {locale === "ko" ? "실행하기" : "Open Tool"}
-                            <ArrowUpRight size={14} />
+                            <ArrowUpRight size={15} className="arrow-action-icon" />
                           </span>
 
                           <span
@@ -652,15 +654,15 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                               color: "var(--text-muted)",
                               display: "flex",
                               alignItems: "center",
-                              gap: "3px",
-                              background: "rgba(255,255,255,0.03)",
-                              padding: "2px 7px",
+                              gap: "4px",
+                              background: "rgba(255, 255, 255, 0.03)",
+                              padding: "2px 8px",
                               borderRadius: "6px",
                               border: "1px solid var(--border-subtle)",
                             }}
                             title="이용 횟수"
                           >
-                            <Flame size={11} style={{ color: "#f97316" }} />
+                            <Flame size={12} style={{ color: "#f97316" }} />
                             {formatCount(count)}
                           </span>
                         </div>
