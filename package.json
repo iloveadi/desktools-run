@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "next build && npx wrangler pages deploy ./dist"
+    "deploy": "next build && npx wrangler pages deploy ./dist --project-name=desktools-run --branch=main"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",
