@@ -47,12 +47,18 @@ export const metadata: Metadata = {
     siteName: "desktools.run",
     images: [
       {
-        url: "/icon-512.png",
-        width: 512,
-        height: 512,
-        alt: "desktools.run logo",
+        url: "/og-image.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — 빠르고 안전한 무료 웹 유틸리티",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "desktools.run — 무료 웹 유틸리티",
+    description: "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하세요.",
+    images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
   alternates: {
