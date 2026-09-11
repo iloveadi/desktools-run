@@ -11,6 +11,20 @@ export const metadata: Metadata = {
     title: "Developer Blog & Guides | desktools.run",
     description: "Articles and technical guides on WebAssembly, PDF processing, and modern web tools.",
     url: "https://desktools.run/blog/",
+    type: "website",
+    siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
 };
 

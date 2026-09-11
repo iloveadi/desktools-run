@@ -12,6 +12,18 @@ export const metadata: Metadata = {
     description: "고해상도 QR 코드를 자유롭게 맞춤 디자인하고 다운로드하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/qr-generator/",

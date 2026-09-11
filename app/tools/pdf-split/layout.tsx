@@ -2,7 +2,7 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "PDF Splitter — Extract Pages & Split PDF Online Free | desktools.run",
+  title: "PDF Splitter — Extract Pages Online Free | desktools.run",
   description:
     "Split PDF documents or extract specific pages instantly in your browser. 100% free, no registration, no file size limits, zero server uploads.",
   keywords: [
@@ -22,6 +22,19 @@ export const metadata: Metadata = {
     description: "Split PDF files or extract specific pages 100% locally in your browser memory.",
     type: "website",
     url: "https://desktools.run/tools/pdf-split/",
+    siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-split/",

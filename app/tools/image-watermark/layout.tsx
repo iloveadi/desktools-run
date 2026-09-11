@@ -2,7 +2,7 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Image Watermark Adder | Free Online Photo Copyright Protection - desktools.run",
+  title: "Image Watermark Adder — Free Online Protection | desktools.run",
   description:
     "Add custom text or logo watermarks to images with full opacity, rotation angle, font styling, and tiled pattern controls. 100% private client-side browser processing with zero server uploads.",
   keywords: [
@@ -24,6 +24,20 @@ export const metadata: Metadata = {
     url: "https://desktools.run/tools/image-watermark/",
     title: "Image Watermark Adder | desktools.run",
     description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls.",
+    type: "website",
+    siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
 };
 

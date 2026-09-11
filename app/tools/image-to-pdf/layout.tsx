@@ -2,7 +2,7 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "이미지 PDF 변환기 (Image to PDF) - 여러 장의 사진을 1클릭 PDF로 병합 | desktools.run",
+  title: "이미지 PDF 변환기 (Image to PDF) — 사진 병합 | desktools.run",
   description:
     "JPG, PNG, WebP 등 여러 장의 이미지를 순서대로 1개의 고화질 PDF 문서로 즉시 변환합니다. A4/Letter 용지 설정, 여백 및 방향 조절, 100% 브라우저 로컬 안전 변환.",
   keywords: [
@@ -24,6 +24,19 @@ export const metadata: Metadata = {
       "여러 장의 사진/이미지를 순서대로 하나의 PDF 문서로 즉시 변환하고 다운로드하세요. 서버 전송 없는 100% 안전한 브라우저 변환.",
     url: "https://desktools.run/tools/image-to-pdf/",
     type: "website",
+    siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
 };
 

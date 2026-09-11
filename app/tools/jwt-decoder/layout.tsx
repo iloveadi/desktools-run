@@ -12,6 +12,18 @@ export const metadata: Metadata = {
     description: "JWT 토큰을 브라우저에서 안전하고 빠르게 디코딩하고 분석하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/jwt-decoder/",

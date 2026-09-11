@@ -2,7 +2,7 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Text Case Converter — UPPERCASE, lowercase, camelCase | desktools.run",
+  title: "Text Case Converter — UPPERCASE, camelCase | desktools.run",
   description:
     "Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, PascalCase, and kebab-case instantly.",
   alternates: {
@@ -12,6 +12,20 @@ export const metadata: Metadata = {
     url: "https://desktools.run/tools/text-case/",
     title: "Text Case Converter | desktools.run",
     description: "Convert UPPERCASE, lowercase, Title Case, camelCase, and snake_case.",
+    type: "website",
+    siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
 };
 

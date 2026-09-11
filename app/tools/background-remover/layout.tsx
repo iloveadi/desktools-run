@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     description: "클릭 한 번으로 이미지 배경을 즉시 투명하게 제거하고 누끼를 따세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/background-remover/",

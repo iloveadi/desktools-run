@@ -20,6 +20,18 @@ export const metadata: Metadata = {
     description: "암호가 걸린 PDF 문서의 비밀번호를 입력하여 브라우저에서 100% 무료로 즉시 잠금을 해제하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-unlock/",

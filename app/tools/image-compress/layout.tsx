@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     description: "PNG, JPG, WEBP 이미지 용량을 브라우저에서 손실 없이 획기적으로 줄이세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-compress/",

@@ -188,18 +188,18 @@ export default function BlogDetailClient({ post }: { post: BlogPost }) {
 
               if (trimmed.startsWith("# ")) {
                 return (
-                  <h1
+                  <h2
                     key={index}
                     style={{
                       fontSize: "24px",
                       fontWeight: 800,
                       color: "var(--text-primary)",
-                      marginTop: "12px",
-                      marginBottom: "4px",
+                      marginTop: "16px",
+                      marginBottom: "6px",
                     }}
                   >
                     {parseInlineMarkdown(trimmed.replace("# ", ""))}
-                  </h1>
+                  </h2>
                 );
               }
 

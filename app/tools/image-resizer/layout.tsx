@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "이미지 크기 변환 — JPG·PNG·WebP 무료 리사이즈 | desktools.run",
   description:
-    "이미지 크기(픽셀·%)를 브라우저에서 즉시 변환하세요. JPG, PNG, WebP, GIF 모두 지원. 서버 업로드 없이 100% 로컬 처리, 완전 무료.",
+    "이미지 크기(픽셀·%)를 브라우저에서 즉시 변경하세요. JPG, PNG, WEBP 일괄 리사이즈 지원. 서버 업로드 없이 100% 안전한 로컬 처리.",
   keywords: ["이미지 리사이즈", "image resizer", "이미지 크기 변환", "사진 크기 줄이기", "이미지 압축", "무료 이미지 도구"],
   openGraph: {
     url: "https://desktools.run/tools/image-resizer/",
@@ -12,6 +12,18 @@ export const metadata: Metadata = {
     description: "이미지 크기(픽셀·%)를 브라우저에서 즉시 변환하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-resizer/",

@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     description: "하나의 로고 이미지로 16x16, 32x32, apple-touch-icon, favicon.ico, site.webmanifest 세트를 1클릭 생성하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/favicon-generator/",

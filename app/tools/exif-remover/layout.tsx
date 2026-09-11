@@ -2,7 +2,7 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "이미지 EXIF 메타데이터 제거기 / 보기 — 100% 브라우저 무료 연산 | desktools.run",
+  title: "사진 EXIF 메타데이터 제거기 및 보기 — 무료 | desktools.run",
   description:
     "사진에 숨겨진 GPS 위치 정보, 카메라 기기 정보, 촬영 일시 EXIF 메타데이터를 확인하고 1클릭 완벽 제거 후 다운로드하세요. 서버 전송 없이 100% 로컬 개인정보 보호.",
   keywords: [
@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     description: "사진에 숨겨진 GPS 위치 정보, 카메라 기기 정보 EXIF 메타데이터를 확인하고 1클릭 완벽 제거 후 다운로드하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/exif-remover/",

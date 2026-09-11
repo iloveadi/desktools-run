@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     description: "PNG, JPG, WEBP, BMP, ICO 이미지 포맷을 브라우저에서 즉시 상호 변환하세요.",
     type: "website",
     siteName: "desktools.run",
+    images: [
+      {
+        url: "/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-converter/",
