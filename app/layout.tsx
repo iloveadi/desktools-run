@@ -17,12 +17,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://desktools.run"),
-  title: "desktools.run — 무료 웹 유틸리티",
+  title: "desktools.run — Fast & Free Web Utilities",
   description:
-    "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하는 웹 유틸리티 모음.",
+    "Fast, free, and 100% private browser utilities for PDF, image, text, and developer workflows. Zero server uploads, run directly in your browser.",
   keywords: [
-    "웹 유틸리티", "온라인 도구", "PDF 합치기", "이미지 리사이즈",
-    "글자수 세기", "개발자 도구", "desktools", "무료 유틸리티",
+    "web utilities", "online tools", "free browser tools", "pdf tools",
+    "image compressor", "developer tools", "desktools", "무료 웹 유틸리티", "온라인 도구",
   ],
   authors: [{ name: "desktools.run" }],
   icons: {
@@ -40,25 +40,25 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "desktools.run — 무료 웹 유틸리티",
-    description: "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하세요.",
+    title: "desktools.run — Fast & Free Web Utilities",
+    description: "Fast, free, and 100% private browser utilities for PDF, image, text, and developer workflows. Zero server uploads.",
     url: "https://desktools.run",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-banner.jpg",
+        url: "/og-global.jpg",
         width: 1376,
         height: 768,
-        alt: "desktools.run — 빠르고 안전한 무료 웹 유틸리티",
+        alt: "desktools.run — Fast & Free Web Utilities",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "desktools.run — 무료 웹 유틸리티",
-    description: "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하세요.",
-    images: ["/og-banner.jpg"],
+    title: "desktools.run — Fast & Free Web Utilities",
+    description: "Fast, free, and 100% private browser utilities for PDF, image, text, and developer workflows. Zero server uploads.",
+    images: ["/og-global.jpg"],
   },
   robots: { index: true, follow: true },
   alternates: {
