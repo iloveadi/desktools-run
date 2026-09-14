@@ -2,28 +2,29 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Image Watermark Adder — Free Online Protection | desktools.run",
+  title: "이미지 워터마크 추가기 — 텍스트·로고 투명도 & 격자 패턴 무료 합성 | desktools.run",
   description:
-    "Add custom text or logo watermarks to images with full opacity, rotation angle, font styling, and tiled pattern controls. 100% private client-side browser processing with zero server uploads.",
+    "사진 위에 텍스트 서명이나 브랜드 로고 워터마크를 투명도, 회전 각도, 격자 패턴(타일 반복)과 함께 실시간으로 합성하세요. 사진 도용 방지 및 저작권 보호. 서버 업로드 없는 100% 로컬 처리.",
   keywords: [
+    "이미지 워터마크",
     "image watermark",
+    "사진 워터마크 추가",
+    "사진 로고 삽입",
+    "워터마크 만들기",
+    "사진 도용 방지",
+    "무료 워터마크",
+    "watermark generator",
     "photo watermark online",
     "add logo to picture",
-    "watermark generator",
-    "bulk watermark photo",
-    "copyright watermark",
-    "이미지 워터마크 추가",
-    "사진 워터마크 합성",
-    "이미지 로고 삽입",
-    "desktools",
+    "tile watermark"
   ],
   alternates: {
     canonical: "https://desktools.run/tools/image-watermark/",
   },
   openGraph: {
     url: "https://desktools.run/tools/image-watermark/",
-    title: "Image Watermark Adder | desktools.run",
-    description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls.",
+    title: "이미지 워터마크 추가기 — 텍스트·로고 투명도 & 격자 패턴 무료 합성 | desktools.run",
+    description: "사진 위에 텍스트 서명이나 브랜드 로고 워터마크를 투명도, 회전 각도, 격자 패턴과 함께 합성하세요.",
     type: "website",
     siteName: "desktools.run",
     images: [
@@ -39,6 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/og-global.jpg"],
   },
+  robots: { index: true, follow: true },
 };
 
 export default function Layout({
@@ -50,7 +52,7 @@ export default function Layout({
     <>
       <ToolJsonLd
         title="Image Watermark Adder"
-        description="Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls."
+        description="Add custom text or logo watermarks to images with full opacity, rotation, and tile pattern controls."
         toolUrl="https://desktools.run/tools/image-watermark/"
       />
       {children}
