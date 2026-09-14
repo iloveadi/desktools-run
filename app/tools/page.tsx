@@ -236,6 +236,91 @@ export default function ToolsCatalogPage() {
             </div>
           )}
         </section>
+
+        {/* ── SEO & Platform Deep-Dive Content for AdSense & Search Engines ── */}
+        <section style={{ maxWidth: "1280px", margin: "48px auto 0", padding: "0 24px" }}>
+          <div className="glass-card" style={{ padding: "36px", display: "flex", flexDirection: "column", gap: "28px" }}>
+            <div>
+              <div className="badge-pill" style={{ marginBottom: "12px" }}>
+                100% Client-Side Privacy Guarantee
+              </div>
+              <h2 style={{ fontSize: "24px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "12px" }}>
+                {locale === "ko"
+                  ? "설치 및 회원가입 없이 브라우저에서 즉시 실행되는 30+ 무료 웹 유틸리티"
+                  : "30+ Free Browser Utilities Running 100% Inside Your Local Memory"}
+              </h2>
+              <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+                {locale === "ko"
+                  ? "desktools.run은 PDF 편집, 이미지 최적화, 개발자 디버깅, 암호화 및 텍스트 변환에 필요한 필수 도구들을 100% 웹 브라우저 메모리 안에서 실행할 수 있도록 설계된 차세대 웹 유틸리티 플랫폼입니다. 사용자의 파일과 텍스트 데이터를 원격 서버로 단 1바이트도 전송하지 않으므로, 기업 기밀 문서나 개인 일상 사진도 안심하고 안전하게 처리할 수 있습니다."
+                  : "desktools.run provides high-performance browser utilities for PDF processing, image compression, developer workflows, and cryptographic utilities. Powered by WebAssembly and client-side APIs, zero file bytes are uploaded to remote servers."}
+              </p>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+              <div style={{ padding: "20px", borderRadius: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+                  📄 {locale === "ko" ? "PDF 유틸리티 (PDF Tools)" : "PDF Utilities"}
+                </h3>
+                <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+                  {locale === "ko"
+                    ? "pdf-lib 및 WebAssembly 기반으로 대용량 PDF 병합, 특정 페이지 분할, FlateDecode 스트림 재압축을 통한 무손실 용량 최적화, 비밀번호 암호화/해제를 지원합니다."
+                    : "Merge, split, compress, and password-protect PDF documents directly inside your browser memory using WebAssembly."}
+                </p>
+              </div>
+
+              <div style={{ padding: "20px", borderRadius: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+                  🖼️ {locale === "ko" ? "이미지 처리 도구 (Image Tools)" : "Image Processing"}
+                </h3>
+                <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+                  {locale === "ko"
+                    ? "ONNX Web AI 인공지능 기반 배경 제거(누끼 따기), HTML5 Canvas 고효율 WebP/PNG/JPG 상호 변환, 리사이징, 워터마크 합성 및 EXIF 개인정보 메타데이터 제거를 제공합니다."
+                    : "Client-side AI background removal, WebP/PNG/JPG cross-conversion, image resizing, watermarking, and EXIF metadata scrubbing."}
+                </p>
+              </div>
+
+              <div style={{ padding: "20px", borderRadius: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+                  🛠️ {locale === "ko" ? "개발자 및 보안 도구 (Dev & Security)" : "Developer & Security"}
+                </h3>
+                <p style={{ fontSize: "13.5px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+                  {locale === "ko"
+                    ? "JWT 토큰 안전 검증, 정규식(Regex) 실시간 테스터, Cron 5자리 표현식 파서, JSON 포맷터, SHA-256/MD5 암호화 해시 계산 및 AES-GCM 대칭키 암호화를 완벽히 지원합니다."
+                    : "Zero-network JWT decoding, real-time Regex tester, Cron expression parser, JSON formatter, and cryptographic hash generators."}
+                </p>
+              </div>
+            </div>
+
+            {/* Platform FAQ */}
+            <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "24px" }}>
+              <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "16px" }}>
+                {locale === "ko" ? "자주 묻는 질문 (FAQ)" : "Frequently Asked Questions"}
+              </h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+                <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)" }}>
+                  <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "6px" }}>
+                    Q. {locale === "ko" ? "모든 기능이 정말 100% 무료인가요?" : "Are all tools truly 100% free?"}
+                  </strong>
+                  <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+                    {locale === "ko"
+                      ? "네! desktools.run의 모든 유틸리티는 회원가입, 신용카드 등록, 파일 개수 제한 없이 누구나 영구적으로 완전 무료로 이용할 수 있습니다."
+                      : "Yes! All tools on desktools.run are 100% free forever without registrations, credit cards, or daily usage caps."}
+                  </p>
+                </div>
+                <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)" }}>
+                  <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "6px" }}>
+                    Q. {locale === "ko" ? "내 파일이 서버에 저장되거나 유출될 위험은 없나요?" : "Is my data safe from server storage?"}
+                  </strong>
+                  <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+                    {locale === "ko"
+                      ? "전혀 없습니다. 모든 연산은 사용자의 웹 브라우저(JavaScript/WebAssembly) 내부에서만 수행되며 파일이 외부 서버로 업로드되지 않습니다."
+                      : "Zero risk. All computation runs purely in client browser memory (Wasm/Canvas). Files are never transferred across networks."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>
