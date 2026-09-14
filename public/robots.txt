@@ -3,6 +3,11 @@ Disallow: /cdn-cgi/
 Allow: /
 Sitemap: https://desktools.run/sitemap.xml
 
+# Google AdSense Crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+
 User-agent: Yeti
 Allow: /
 

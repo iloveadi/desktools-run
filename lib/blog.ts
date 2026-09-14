@@ -1073,6 +1073,584 @@ Descubre cómo desktools.run procesa archivos al 100% en la memoria de tu dispos
 
 Découvrez comment desktools.run assure une confidentialité absolue grâce à une exécution 100% locale en WebAssembly, sans aucun transfert de données vers des serveurs distants.`,
   },
+  {
+    id: "webp-vs-png-jpg-image-formats-comparison",
+    date: "September 08, 2026",
+    category: "Web Optimization",
+
+    // Titles
+    titleEn: "WebP vs PNG vs JPG: The Ultimate Image Format Comparison for Modern Web Performance",
+    titleKo: "WebP vs PNG vs JPG: 웹 성능 최적화와 이미지 포맷 완벽 비교 가이드",
+    titleJa: "WebP vs PNG vs JPG: Webパフォーマンス最適化のための画像フォーマット完全比較",
+    titleEs: "WebP vs PNG vs JPG: Comparativa definitiva de formatos de imagen para optimización web",
+    titleZh: "WebP vs PNG vs JPG：现代 Web 性能优化与图像格式深度对比指南",
+    titleFr: "WebP vs PNG vs JPG : Le comparatif ultime des formats d'image pour le Web",
+
+    // Snippets
+    snippetEn: "Understand compression algorithms, transparency support, browser compatibility, and visual quality differences among WebP, PNG, and JPG to maximize web loading speed.",
+    snippetKo: "손실/무손실 압축 원리, 알파 채널 투명도 지원, 브라우저 호환성 및 파일 용량 절감 효과를 분석하여 실무에 최적화된 이미지 포맷 선택 기준을 제시합니다.",
+    snippetJa: "非可逆・可逆圧縮アルゴリズム、透過対応、ブラウザ互換性、ファイルサイズ削減効果を比較し、最適な画像形式の選定基準を解説します。",
+    snippetEs: "Compara algoritmos de compresión, transparencia y rendimiento web entre WebP, PNG y JPG para acelerar la carga de tu sitio.",
+    snippetZh: "深入对比 WebP、PNG 与 JPG 的压缩算法、透明度支持、浏览器兼容性及加载性能，为网站选择最优图像格式。",
+    snippetFr: "Comparez les algorithmes de compression, la transparence et les performances web entre WebP, PNG et JPG pour optimiser vos pages.",
+
+    // Korean Content
+    contentKo: `# WebP vs PNG vs JPG: 웹 성능 최적화와 이미지 포맷 완벽 비교 가이드
+
+웹 페이지의 전체 다운로드 용량 중 **이미지 파일이 차지하는 비중은 평균 50%~70%**에 달합니다. 웹사이트의 로딩 속도는 검색엔진 최적화(SEO) 순위와 사용자 이탈률에 직결되기 때문에, 올바른 이미지 포맷을 선택하고 압축하는 것은 프론트엔드 최적화의 필수 과정입니다.
+
+오늘은 가장 널리 쓰이는 세 가지 대표 포맷인 **JPG(JPEG), PNG, WebP**의 기술적 차이점과 실무 선택 기준을 상세히 비교해 드립니다.
+
+---
+
+## 📸 1. JPG / JPEG (Joint Photographic Experts Group)
+
+JPG는 1992년에 표준화된 가장 대중적인 사진 전용 손실 압축(Lossy Compression) 포맷입니다.
+
+- **작동 원리 (DCT 압축)**: 인간의 눈이 미세한 색상 변화보다 밝기 변화(Luminance)에 더 민감하다는 시각적 특성을 이용하여, 고주파 색상 정보를 제거하는 이산 여현 변환(Discrete Cosine Transform)을 사용합니다.
+- **장점**: 수백만 가지 색상이 포함된 풍경, 인물 등 복잡한 사진에서 매우 높은 압축률을 발휘합니다.
+- **단점**: 투명 배경(Alpha Transparency)을 지원하지 않으며, 텍스트나 날카로운 선이 포함된 그래픽에서는 가장자리에 모기 노이즈(Mosquito Noise)와 아티팩트가 발생합니다.
+
+---
+
+## 🎨 2. PNG (Portable Network Graphics)
+
+PNG는 1996년 특허 문제로 묶여 있던 GIF를 대체하기 위해 탄생한 무손실 압축(Lossless Compression) 포맷입니다.
+
+- **작동 원리 (Deflate 압축)**: LZ77 알고리즘과 허프만 코딩(Huffman Coding)을 결합한 Deflate 알고리즘을 사용하여 원본 픽셀 데이터를 100% 손실 없이 보존합니다.
+- **장점**: 8비트/24비트 알파 채널 투명도를 완벽 지원하며, 로고, 아이콘, 스크린샷, 텍스트 등 단색 영역과 날카로운 경계선에서 가장 선명한 화질을 보여줍니다.
+- **단점**: 색상이 풍부한 고해상도 사진을 PNG로 저장할 경우 파일 용량이 JPG 대비 3~5배 이상 커질 수 있습니다.
+
+---
+
+## ⚡ 3. WebP (Google 차세대 웹 이미지 포맷)
+
+WebP는 구글이 웹 환경의 데이터 전송량을 줄이기 위해 2010년에 개발한 차세대 이미지 포맷입니다.
+
+- **작동 원리 (VP8 기반)**: 비디오 코덱 VP8의 키프레임 인코딩 방식을 채택하여, 인접 픽셀 블록의 색상 예측(Predictive Coding)을 통해 잔차(Residual) 데이터만을 효율적으로 압축합니다.
+- **장점**:
+  - **압축률 혁신**: 동일 화질 기준 JPEG 대비 약 **25%~35% 더 작은 파일 크기**를 달성합니다.
+  - **무손실 및 투명도 동시 지원**: PNG처럼 투명 배경을 지원하면서도 PNG 대비 **약 26% 더 작은 용량**을 가집니다.
+  - **애니메이션 지원**: GIF를 대체할 수 있는 고화질 애니메이션 기능도 갖추고 있습니다.
+- **브라우저 호환성**: Chrome, Safari, Firefox, Edge 등 현대 주요 웹 브라우저의 97% 이상이 기본 지원합니다.
+
+---
+
+## 📊 핵심 스펙 및 특징 요약 비교표
+
+| 항목 | JPG / JPEG | PNG | WebP |
+| :--- | :--- | :--- | :--- |
+| **압축 방식** | 손실 압축 (Lossy) | 무손실 압축 (Lossless) | 손실 & 무손실 모두 지원 |
+| **알파 투명도** | 지원 안 함 (불가) | 완벽 지원 (8/24bit) | 완벽 지원 |
+| **애니메이션** | 지원 안 함 | 지원 안 함 (APNG 별도) | 지원 |
+| **최적 사용처** | 고해상도 풍경/인물 사진 | 로고, UI 아이콘, 스크린샷 | 모든 웹 이미지 (권장) |
+| **평균 파일 용량** | 보통 (기준점) | 큼 (사진 기준) | **가장 작음 (JPEG 대비 -30%)** |
+
+---
+
+## 💡 실무 상황별 포맷 선택 가이드
+
+1. **웹사이트의 히어로 배너, 상품 사진, 블로그 썸네일**:
+   👉 **WebP**를 기본 포맷으로 적용하세요. 로딩 속도가 획기적으로 빨라집니다.
+2. **투명 배경이 필요한 로고, 심볼, 앱 아이콘**:
+   👉 **WebP (Lossless)** 또는 **SVG**를 우선 검토하고, 호환성이 필수적일 때는 **PNG**를 사용하세요.
+3. **인쇄용 원본 사진 보관 및 구형 기기 전송**:
+   👉 **JPG (최고 품질)** 또는 원본 RAW 포맷을 유지하는 것이 유리합니다.
+
+desktools.run의 **[Image Converter](file:///tools/image-converter)**와 **[Image Compressor](file:///tools/image-compress)** 도구를 사용하면 브라우저 안에서 서버 전송 없이 안전하게 원하는 포맷으로 초고속 변환 및 용량 최적화를 수행할 수 있습니다!`,
+
+    // English Content
+    contentEn: `# WebP vs PNG vs JPG: The Ultimate Image Format Comparison for Modern Web Performance
+
+Images account for **over 50% to 70% of total web page payload size**. Since page speed directly impacts search engine ranking (SEO) and user conversion rates, choosing the optimal image format is one of the highest-impact frontend engineering tasks.
+
+This guide provides a comprehensive technical comparison among the three industry-standard formats: **JPG (JPEG), PNG, and WebP**.
+
+---
+
+## 📸 1. JPG / JPEG (Discrete Cosine Transform)
+- **Mechanism**: Utilizes lossy DCT compression, taking advantage of the human eye's higher sensitivity to luminance over chrominance.
+- **Best For**: Complex photography, scenery, and continuous-tone photos with rich color palettes.
+- **Limitations**: No alpha transparency support; produces compression artifacts and halos around sharp text edges.
+
+---
+
+## 🎨 2. PNG (Deflate Lossless Compression)
+- **Mechanism**: Combines LZ77 and Huffman coding to preserve 100% of pixel fidelity without quality degradation.
+- **Best For**: Logos, transparent UI assets, screenshots, and graphics requiring razor-sharp vector-like edges.
+- **Limitations**: Inefficient for continuous photographic data, leading to bloated file sizes.
+
+---
+
+## ⚡ 3. WebP (Google Modern Web Standard)
+- **Mechanism**: Adapts VP8 intra-frame predictive coding to compress residual pixel deltas.
+- **Advantages**:
+  - **25%–35% Smaller than JPEG** at equivalent perceptual visual quality (SSIM).
+  - **26% Smaller than PNG** while preserving full 8-bit alpha transparency.
+  - Native support in over 97% of modern web browsers worldwide.
+
+---
+
+## 📊 Summary Comparison Matrix
+
+| Feature | JPG / JPEG | PNG | WebP |
+| :--- | :--- | :--- | :--- |
+| **Compression Mode** | Lossy | Lossless | Lossy & Lossless |
+| **Alpha Transparency** | ❌ No | ✅ Full | ✅ Full |
+| **Animation Support** | ❌ No | ❌ No (APNG separate) | ✅ Yes |
+| **Optimal Use Case** | Photographs, scenic images | Logos, UI icons, diagrams | Web performance standard |
+| **Relative File Size** | Baseline (100%) | Heavy (150%–300%) | **Ultra-light (65%–75%)** |
+
+---
+
+Convert and compress your assets directly in your browser with desktools.run's **Image Converter** and **Image Compressor** tools!`,
+
+    // Japanese Content
+    contentJa: `# WebP vs PNG vs JPG: Webパフォーマンス最適化のための画像フォーマット完全比較
+
+Webサイトの表示速度とSEO向上に直結する3大画像フォーマット（JPG、PNG、WebP）の特徴と選び方を徹底解説します。
+
+WebPはJPEG比で約30%のファイルサイズ削減を実現し、透過背景もサポートする現代のWeb標準フォーマットです。`,
+
+    // Spanish Content
+    contentEs: `# WebP vs PNG vs JPG: Comparativa definitiva de formatos de imagen para optimización web
+
+Descubre las diferencias entre WebP, PNG y JPG. WebP ofrece hasta un 35% más de compresión manteniendo transparencia alfa, siendo la mejor opción para rendimiento web.`,
+
+    // Chinese Content
+    contentZh: `# WebP vs PNG vs JPG：现代 Web 性能优化与图像格式深度对比指南
+
+全面对比 JPG、PNG 与 WebP 格式的压缩机制、透明通道支持及加载性能表现。WebP 在同等画质下比 JPEG 体积小 30%，是现代 Web 性能优化的首选格式。`,
+
+    // French Content
+    contentFr: `# WebP vs PNG vs JPG : Le comparatif ultime des formats d'image pour le Web
+
+Comprenez les différences entre WebP, PNG et JPG. WebP réduit la taille des fichiers de 30% tout en conservant la transparence, idéal pour optimiser la vitesse de chargement web.`,
+  },
+  {
+    id: "understanding-cron-expressions-syntax-guide",
+    date: "September 10, 2026",
+    category: "DevOps & Backend",
+
+    // Titles
+    titleEn: "Mastering Cron Expressions: Syntax Breakdown, Special Characters, and Real-World Scheduling Patterns",
+    titleKo: "Cron 표현식 완벽 가이드: 5자리 문법 구조와 실무 스케줄링 예제 모음",
+    titleJa: "Cron表現式完全ガイド：5つのフィールド構文と実務で使えるスケジュール設定例",
+    titleEs: "Guía completa de expresiones Cron: Sintaxis, caracteres especiales y patrones comunes",
+    titleZh: "Cron 表达式完全指南：5 位语法结构、特殊字符与实战调度规则全解析",
+    titleFr: "Maîtriser les expressions Cron : Syntaxe, caractères spéciaux et exemples pratiques",
+
+    // Snippets
+    snippetEn: "Learn how to write and debug 5-field UNIX cron schedule expressions with detailed syntax rules, special characters (*, /, -, ,), and 10 practical production examples.",
+    snippetKo: "리눅스 및 클라우드 환경에서 사용되는 5자리 표준 Cron 표현식의 분/시/일/월/요일 문법 체계와 실무에서 자주 쓰이는 대표 스케줄링 패턴 10선을 소개합니다.",
+    snippetJa: "UNIXやクラウドで用いられるCron構文の基本と、実務で頻出する10パターンのスケジュール設定例をわかりやすく解説します。",
+    snippetEs: "Aprende a estructurar expresiones cron de 5 campos con reglas detalladas y 10 ejemplos prácticos para automatizar tareas.",
+    snippetZh: "详解 5 位 UNIX Cron 语法规则、特殊字符含义及 10 个高频实战调度表达式，助您轻松搞定定时任务配置。",
+    snippetFr: "Apprenez à configurer vos expressions cron avec des explications claires sur les 5 champs et 10 exemples concrets pour la production.",
+
+    // Korean Content
+    contentKo: `# Cron 표현식 완벽 가이드: 5자리 문법 구조와 실무 스케줄링 예제 모음
+
+서버 백엔드 엔지니어링, 클라우드 자동화(AWS Lambda, Cloudflare Cron Triggers, GitHub Actions), 데이터베이스 정기 백업 등 주기적인 반복 작업(Scheduled Batch Jobs)을 정의할 때 가장 널리 쓰이는 표준 문법이 바로 **Cron 표현식(Cron Expression)**입니다.
+
+간단해 보이지만 특수문자(\`*\`, \`/\`, \`-\`, \`,\`)의 조합 방식에 따라 의도치 않은 시간에 스크립트가 실행되는 실수가 잦습니다. 이번 가이드에서는 표준 5자리 Cron 표현식의 문법과 실무 필수 패턴을 완벽히 정리해 드립니다.
+
+---
+
+## ⏰ 1. 표준 5자리 Cron 표현식의 구조
+
+표준 UNIX 및 Linux cron 표현식은 공백으로 구분된 **5개의 필드**로 구성됩니다:
+
+\`\`\`text
+┌───────────── 분 (0 - 59)
+│ ┌─────────── 시 (0 - 23)
+│ │ ┌───────── 일 (1 - 31)
+│ │ │ ┌─────── 월 (1 - 12 또는 JAN-DEC)
+│ │ │ │ ┌───── 요일 (0 - 6 또는 SUN-SAT, 0과 7은 일요일)
+│ │ │ │ │
+* * * * *
+\`\`\`
+
+| 필드 번호 | 필드명 | 허용 범위 | 설명 |
+| :---: | :--- | :--- | :--- |
+| **1** | **Minute (분)** | 0 ~ 59 | 매 시 몇 분에 실행할지 지정 |
+| **2** | **Hour (시)** | 0 ~ 23 | 24시간 표기법 기준 시(Hour) 지정 |
+| **3** | **Day of Month (일)** | 1 ~ 31 | 해당 월의 며칠에 실행할지 지정 |
+| **4** | **Month (월)** | 1 ~ 12 | 실행할 월(Month) 지정 |
+| **5** | **Day of Week (요일)**| 0 ~ 6 | 0=일, 1=월, 2=화, 3=수, 4=목, 5=금, 6=토 |
+
+---
+
+## 🔣 2. 핵심 특수문자 완벽 정리
+
+1. **별표 (\`*\`) - Any Value**: 모든 가능한 값을 의미합니다. (예: 분 자리에 \`*\` = 매 분마다)
+2. **슬래시 (\`/\`) - Step Values**: 증분 간격을 설정합니다. (예: \`*/15\` = 15분마다, \`10-30/5\` = 10분부터 30분까지 5분마다)
+3. **하이픈 (\`-\`) - Range**: 연속된 값의 범위를 지정합니다. (예: \`1-5\` 요일 = 월요일부터 금요일까지)
+4. **쉼표 (\`,\`) - Value List**: 개별적인 특정 값들을 나열합니다. (예: \`1,15,30\` 분 = 1분, 15분, 30분에 각각 실행)
+
+---
+
+## 🚀 3. 실무에서 가장 자주 쓰는 Cron 패턴 10선
+
+실제 운영 환경에서 즉시 복사하여 사용할 수 있는 대표 예제 모음입니다:
+
+1. **매 5분마다 실행**:
+   \`*/5 * * * *\`
+2. **매 시간 정각에 실행**:
+   \`0 * * * *\`
+3. **매일 새벽 3시 정각 (일일 배치 작업 / 백업)**:
+   \`0 3 * * *\`
+4. **평일(월~금) 오전 9시 정각 (업무 시작 알림)**:
+   \`0 9 * * 1-5\`
+5. **매주 월요일 자정 00:00 (주간 리포트 생성)**:
+   \`0 0 * * 1\`
+6. **매월 1일 자정 00:00 (월간 정산 배치)**:
+   \`0 0 1 * *\`
+7. **매일 오전 9시부터 오후 6시까지 매시 30분마다 (업무 시간 주기적 동기화)**:
+   \`30 9-18 * * 1-5\`
+8. **주말(토, 일) 자정 00:00 (주말 데이터베이스 인덱스 재정렬)**:
+   \`0 0 * * 6,0\`
+9. **매 6시간마다 정각 (0시, 6시, 12시, 18시)**:
+   \`0 */6 * * *\`
+10. **분기별 첫날 자정 (1월 1일, 4월 1일, 7월 1일, 10월 1일)**:
+    \`0 0 1 1,4,7,10 *\`
+
+---
+
+## 🔍 Cron 설정 시 주의해야 할 점 (주의사항)
+
+- **서버 타임존(Timezone) 확인**: 클라우드 서버는 기본적으로 UTC 기준인 경우가 많습니다. 한국 시간(KST = UTC+9) 오전 9시에 맞추려면 서버 시간 기준 0시(\`0 0 * * *\`)로 설정해야 합니다.
+- **작업 수행 시간 고려**: 이전 배치가 아직 끝나지 않았는데 다음 주기의 cron이 실행되어 충돌하지 않도록 락(Locking) 메커니즘을 적용하세요.
+
+복잡한 Cron 문법을 사람이 읽기 쉬운 언어와 다음 실행 일시로 확인하고 싶다면 desktools.run의 **[Cron Expression Parser](file:///tools/cron-parser)**를 활용해 보세요!`,
+
+    // English Content
+    contentEn: `# Mastering Cron Expressions: Syntax Breakdown, Special Characters, and Real-World Scheduling Patterns
+
+Cron is the universal standard for scheduling recurring background jobs across Linux servers, cloud workloads (AWS EventBridge, GitHub Actions), and database maintenance scripts.
+
+Understanding the 5-field syntax and special operator rules prevents critical production scheduling bugs.
+
+---
+
+## ⏰ 1. The 5-Field Standard Syntax
+\`\`\`text
+* * * * *
+│ │ │ │ └── Day of Week (0-6, Sun-Sat)
+│ │ │ └──── Month (1-12)
+│ │ └────── Day of Month (1-31)
+│ └──────── Hour (0-23)
+└────────── Minute (0-59)
+\`\`\`
+
+---
+
+## 🔣 2. Special Characters
+- \`*\` (Wildcard): Matches any value.
+- \`/\` (Step Intervals): \`*/10\` runs every 10 units.
+- \`-\` (Range): \`9-17\` matches hours 9 through 17.
+- \`,\` (Enumeration): \`1,15,30\` triggers at values 1, 15, and 30.
+
+---
+
+## 🚀 3. Top 5 Essential Production Patterns
+1. **Every 15 Minutes**: \`*/15 * * * *\`
+2. **Every Night at 03:00 UTC**: \`0 3 * * *\`
+3. **Every Weekday at 09:00 (Mon–Fri)**: \`0 9 * * 1-5\`
+4. **First Day of Every Month at Midnight**: \`0 0 1 * *\`
+5. **Every 6 Hours**: \`0 */6 * * *\`
+
+Test and validate your cron strings instantly with desktools.run's **Cron Expression Parser**!`,
+
+    // Japanese Content
+    contentJa: `# Cron表現式完全ガイド：5つのフィールド構文と実務で使えるスケジュール設定例
+
+UNIX・Linuxおよびクラウドサービスで必須となるCron表現式の5つのフィールド構造、特殊文字（* / - ,）、実務でよく使われるスケジュール例を徹底解説します。`,
+
+    // Spanish Content
+    contentEs: `# Guía completa de expresiones Cron: Sintaxis, caracteres especiales y patrones comunes
+
+Aprende la sintaxis de 5 campos de cron y descubre los patrones de programación más utilizados en entornos de producción.`,
+
+    // Chinese Content
+    contentZh: `# Cron 表达式完全指南：5 位语法结构、特殊字符与实战调度规则全解析
+
+详细解析标准 5 位 Cron 表达式的分钟、小时、日期、月份与星期语法，以及实战中常用的定时任务调度模版。`,
+
+    // French Content
+    contentFr: `# Maîtriser les expressions Cron : Syntaxe, caractères spéciaux et exemples pratiques
+
+Découvrez la syntaxe des expressions cron UNIX à 5 champs et les modèles de planification les plus utilisés en production.`,
+  },
+  {
+    id: "regular-expressions-regex-practical-cheatsheet",
+    date: "September 12, 2026",
+    category: "Developer Guide",
+
+    // Titles
+    titleEn: "Practical Regular Expressions (Regex): Syntax Cheatsheet and Essential Validation Patterns",
+    titleKo: "정규표현식(Regex) 핵심 문법과 실무 검증 패턴 치트시트",
+    titleJa: "正規表現（Regex）チートシート：基礎構文と実務で使えるバリデーションパターン",
+    titleEs: "Expresiones Regulares (Regex): Guía rápida y patrones de validación esenciales",
+    titleZh: "正则表达式 (Regex) 核心语法速查与实战数据校验正则大全",
+    titleFr: "Expressions régulières (Regex) : Antisèche et modèles de validation indispensables",
+
+    // Snippets
+    snippetEn: "A complete reference guide to regular expressions covering meta-characters, quantifiers, lookahead assertions, and production-tested patterns for emails, phone numbers, and passwords.",
+    snippetKo: "메타문자, 수량자, 그룹 캡처, 전후방 탐색(Lookaround) 문법부터 이메일, 전화번호, 비밀번호 복잡도 검증 등 실무에서 바로 복사해 쓰는 정규식 패턴 모음을 제공합니다.",
+    snippetJa: "メタ文字、量指定子、グループ化から、メール・電話番号・パスワード検証用の実務パターンまで網羅したチートシートです。",
+    snippetEs: "Domina las expresiones regulares con sintaxis clara, explicaciones detalladas y patrones listos para validar correos, teléfonos y contraseñas.",
+    snippetZh: "全面整理正则表达式元字符、量词、前后查找断言以及邮箱、手机号、强密码校验等高频生产级正则表达式。",
+    snippetFr: "Un guide complet sur les regex avec métacaractères, quantificateurs et modèles prêts à l'emploi pour valider emails et mots de passe.",
+
+    // Korean Content
+    contentKo: `# 정규표현식(Regex) 핵심 문법과 실무 검증 패턴 치트시트
+
+**정규표현식(Regular Expressions, Regex)**은 텍스트에서 특정한 규칙이나 패턴을 검색, 추출, 치환 및 검증(Validation)하기 위한 가장 강력한 도구입니다.
+
+JavaScript, Python, Java, Go 등 거의 모든 프로그래밍 언어에서 기본으로 지원하지만, 특수문자와 수량자가 얽힌 복잡한 문법 때문에 매번 검색에 의존하기 쉽습니다.
+
+본 치트시트에서는 정규식의 기본 메타문자부터 실무에서 즉시 활용 가능한 실전 검증 패턴까지 알기 쉽게 정리해 드립니다.
+
+---
+
+## 🔠 1. 기본 메타문자 & 문자 클래스
+
+| 기호 | 설명 | 예시 및 매칭 결과 |
+| :---: | :--- | :--- |
+| **\`.\`** | 줄바꿈을 제외한 임의의 한 문자 | \`a.c\` ➔ \`abc\`, \`a1c\` 매칭 |
+| **\`^\`** | 문자열의 시작 지점 | \`^Hello\` ➔ "Hello World" 시작 부분 매칭 |
+| **\`$\`** | 문자열의 끝 지점 | \`world$\` ➔ "Hello world" 끝 부분 매칭 |
+| **\`\\d\`** | 모든 숫자 (\`[0-9]\`와 동일) | \`\\d{3}\` ➔ "123" 매칭 |
+| **\`\\D\`** | 숫자가 아닌 모든 문자 (\`[^0-9]\`) | \`\\D\` ➔ "A", "!" 매칭 |
+| **\`\\w\`** | 알파벳, 숫자, 밑줄 \`_\` (\`[a-zA-Z0-9_]\`) | 단어 구성 문자 매칭 |
+| **\`\\s\`** | 공백 문자 (스페이스, 탭, 줄바꿈) | \`\\s+\` ➔ 연속된 공백 매칭 |
+| **\`[abc]\`**| 나열된 문자 중 하나 | \`[aeiou]\` ➔ 모음 한 글자 매칭 |
+| **\`[^abc]\`**| 나열된 문자를 제외한 모든 문자 | \`[^0-9]\` ➔ 숫자가 아닌 문자 |
+
+---
+
+## 🔢 2. 수량자 (Quantifiers)
+
+- **\`*\`** : 0회 이상 반복 (없거나 무한대) ➔ \`ab*c\` (ac, abc, abbbc)
+- **\`+\`** : 1회 이상 반복 (최소 1개 이상) ➔ \`ab+c\` (abc, abbbc / ac는 불일치)
+- **\`?\`** : 0회 또는 1회 (있을 수도 있고 없을 수도 있음) ➔ \`https?\` (http, https)
+- **\`{n}\`** : 정확히 n회 반복 ➔ \`\\d{4}\` (2026)
+- **\`{n,}\`** : 최소 n회 이상 반복 ➔ \`\\w{8,}\` (8글자 이상)
+- **\`{n,m}\`** : 최소 n회부터 최대 m회까지 반복 ➔ \`\\d{2,4}\` (2~4자리 숫자)
+
+---
+
+## 📋 3. 실무 필수 검증 정규식 패턴 모음
+
+프로젝트 프론트엔드/백엔드 폼 유효성 검사에 즉시 복사하여 쓸 수 있는 정규식입니다:
+
+### 1) 이메일 주소 유효성 검사 (RFC 5322 간소화)
+\`\`\`regex
+^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
+\`\`\`
+
+### 2) 한국 휴대폰 번호 (010-XXXX-XXXX 또는 하이픈 없는 형태)
+\`\`\`regex
+^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$
+\`\`\`
+
+### 3) 강력한 비밀번호 규칙 (영문 대소문자 + 숫자 + 특수문자 포함 8자 이상)
+\`\`\`regex
+^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$
+\`\`\`
+> **해설**: 전방 탐색(\`(?=...)\`)을 사용하여 대문자, 소문자, 숫자, 특수문자가 각각 최소 1개 이상 포함되었는지 검증합니다.
+
+### 4) 웹 URL 주소 (HTTP/HTTPS 포함)
+\`\`\`regex
+^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$
+\`\`\`
+
+### 5) 주민등록번호 / 주민번호 앞자리 생년월일 (YYMMDD)
+\`\`\`regex
+^\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])$
+\`\`\`
+
+---
+
+실시간으로 정규식 패턴을 테스트하고 캡처 그룹을 시각화하려면 desktools.run의 **[Regex Tester](file:///tools/regex-tester)**를 이용해 보세요!`,
+
+    // English Content
+    contentEn: `# Practical Regular Expressions (Regex): Syntax Cheatsheet and Essential Validation Patterns
+
+Regular expressions provide universal pattern-matching capabilities for validation, parsing, and text extraction across all programming stacks.
+
+---
+
+## 🔠 1. Meta-Characters & Character Classes
+- \`.\`: Any character except newline.
+- \`\\d\` / \`\\D\`: Digits [0-9] vs Non-digits.
+- \`\\w\` / \`\\W\`: Word characters vs Non-word symbols.
+- \`\\s\` / \`\\S\`: Whitespace vs Non-whitespace.
+
+---
+
+## 📋 2. Essential Production Patterns
+
+### Email Address Validation
+\`\`\`regex
+^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
+\`\`\`
+
+### Strong Password (Min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 symbol)
+\`\`\`regex
+^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$
+\`\`\`
+
+### Secure URL Validation
+\`\`\`regex
+^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_\\+.~#?&//=]*$
+\`\`\`
+
+Test and debug your regex patterns in real time with desktools.run's **Regex Tester**!`,
+
+    // Japanese Content
+    contentJa: `# 正規表現（Regex）チートシート：基礎構文と実務で使えるバリデーションパターン
+
+正規表現の基本メタ文字、量指定子から、メールアドレス、電話番号、パスワードなどの実務バリデーションパターンまでを網羅した実践ガイドです。`,
+
+    // Spanish Content
+    contentEs: `# Expresiones Regulares (Regex): Guía rápida y patrones de validación esenciales
+
+Guía de referencia rápida con metacaracteres y patrones regex listos para validar correos, contraseñas y direcciones URL.`,
+
+    // Chinese Content
+    contentZh: `# 正则表达式 (Regex) 核心语法速查与实战数据校验正则大全
+
+全面整理正则表达式语法规则、特殊元字符与邮箱、手机号、密码复杂度等常用校验正则模版。`,
+
+    // French Content
+    contentFr: `# Expressions régulières (Regex) : Antisèche et modèles de validation indispensables
+
+Guide complet et modèles d'expressions régulières prêts à l'emploi pour valider vos formulaires web.`,
+  },
+  {
+    id: "cryptographic-hashing-md5-sha256-differences",
+    date: "September 14, 2026",
+    category: "Cybersecurity",
+
+    // Titles
+    titleEn: "Understanding Cryptographic Hash Functions: Why MD5 is Broken and How SHA-256 Protects Integrity",
+    titleKo: "해시 함수의 모든 것: MD5, SHA-1의 취약점과 SHA-256의 보안성 비교",
+    titleJa: "暗号学的ハッシュ関数の仕組み：MD5/SHA-1の脆弱性とSHA-256の安全性を徹底解説",
+    titleEs: "Funciones hash criptográficas: Por qué MD5 es vulnerable y cómo SHA-256 protege tus datos",
+    titleZh: "深入理解密码学哈希函数：MD5 碰撞漏洞解析与 SHA-256 数据完整性防护",
+    titleFr: "Comprendre les fonctions de hachage : Vulnérabilités de MD5 et robustesse de SHA-256",
+
+    // Snippets
+    snippetEn: "Explore the core properties of cryptographic hash algorithms (Avalanche effect, preimage resistance), the history of collision attacks on MD5, and why SHA-256 remains the global security benchmark.",
+    snippetKo: "단방향 암호화 해시의 핵심 특성(눈사태 효과, 역상 저항성, 충돌 저항성)과 MD5·SHA-1의 충돌 취약점 역사, SHA-256이 데이터 무결성과 블록체인의 표준이 된 이유를 알기 쉽게 설명합니다.",
+    snippetJa: "一方向暗号化ハッシュ関数の基礎原理（雪崩効果・衝突耐性）と、なぜMD5やSHA-1が非推奨となりSHA-256が標準となったのかを解説します。",
+    snippetEs: "Comprende cómo funcionan los algoritmos hash criptográficos y por qué SHA-256 es el estándar de oro en seguridad y blockchain.",
+    snippetZh: "解析单向哈希函数的核心原理（雪崩效应、抗碰撞性），揭示 MD5 碰撞破解历史以及 SHA-256 成为安全标准的深层原因。",
+    snippetFr: "Découvrez les propriétés des fonctions de hachage cryptographiques et pourquoi SHA-256 reste la référence incontournable en sécurité.",
+
+    // Korean Content
+    contentKo: `# 해시 함수의 모든 것: MD5, SHA-1의 취약점과 SHA-256의 보안성 비교
+
+우리가 인터넷에서 파일을 다운로드할 때 체크섬(Checksum)을 확인하거나, 비밀번호를 데이터베이스에 안전하게 저장할 때 가장 핵심적인 역할을 담당하는 기술이 바로 **암호학적 해시 함수(Cryptographic Hash Function)**입니다.
+
+과거 널리 사용되던 MD5와 SHA-1은 오늘날 왜 보안 알고리즘으로서 공식 폐기(Deprecated)되었을까요? 그리고 **SHA-256**은 어떻게 현대 인터넷 보안과 블록체인의 절대적인 표준으로 자리 잡았을까요?
+
+---
+
+## 🔒 1. 암호학적 해시 함수의 3대 필수 속성
+
+해시 함수는 임의의 길이의 입력 데이터를 **고정된 길이의 해시 문자열(Digest)**로 변환하는 단방향(One-way) 수학 함수입니다.
+
+1. **역상 저항성 (Pre-image Resistance - 단방향성)**:
+   - 결과 해시값 \`h\`가 주어졌을 때, 원래 입력값 \`x\`를 역산해 내는 것이 계산적으로 불가능해야 합니다.
+2. **제2 역상 저항성 (Second Pre-image Resistance - 약한 충돌 저항성)**:
+   - 특정 입력값 \`x\`가 있을 때, 동일한 해시값을 갖는 또 다른 입력값 \`x'\`를 찾는 것이 불가능해야 합니다.
+3. **충돌 저항성 (Collision Resistance - 강한 충돌 저항성)**:
+   - 서로 다른 두 입력값 \`x\`와 \`y\`가 동일한 해시값을 출력하는 경우(\`H(x) = H(y)\`)를 찾아내는 것이 극도로 어려워야 합니다.
+4. **눈사태 효과 (Avalanche Effect)**:
+   - 입력 데이터의 단 1비트만 바뀌어도 결과 해시값의 50% 이상이 완전히 다른 무작위 값으로 변경되는 현상입니다.
+
+---
+
+## ⚠️ 2. MD5와 SHA-1이 무너진 이유: 충돌 공격 (Collision Attack)
+
+- **MD5 (Message Digest 5 - 128비트 출력)**:
+  - 1991년 개발된 MD5는 속도가 빨라 널리 쓰였으나, 2004년 중국 산둥대 왕샤오윈 교수 연구팀에 의해 **수 분 만에 의도적으로 동일한 해시값을 갖는 서로 다른 두 파일을 생성하는 충돌 공격**이 증명되었습니다.
+  - 현재는 일반 파일의 단순 전송 오류 체크용으로만 제한적으로 사용되며, 비밀번호 저장이나 디지털 서명 용도로는 절대 사용해서는 안 됩니다.
+- **SHA-1 (Secure Hash Algorithm 1 - 160비트 출력)**:
+  - 2017년 Google 연구팀과 CWI 암스테르담이 세계 최초로 실제 충돌하는 두 개의 PDF 파일(SHAttered 공격)을 생성하는 데 성공하면서 보안 인증서(SSL/TLS) 발급에서 전면 퇴출되었습니다.
+
+---
+
+## 🛡️ 3. SHA-256 (SHA-2 제품군)의 강력한 보안성
+
+SHA-256은 미국 국립표준기술연구소(NIST)에 의해 제정된 암호화 표준으로, **256비트(64자리 16진수)**의 해시값을 생성합니다:
+
+- **천문학적인 경우의 수**: 2의 256승($2^{256} \\approx 1.15 \\times 10^{77}$)가지의 고유한 결과값을 가집니다. 이는 관측 가능한 전 우주의 원자 개수($10^{80}$)에 필적하는 수치입니다.
+- **무결성 검증의 표준**: 리눅스 배포판 패키지 검증, Git 커밋 무결성, TLS 인증서, 비트코인(Bitcoin) 작업 증명(PoW) 합의 알고리즘에 핵심으로 사용됩니다.
+
+---
+
+## 📊 해시 알고리즘 비교 요약표
+
+| 알고리즘 | 다이제스트 크기 | 충돌 저항성 상태 | 권장 용도 |
+| :--- | :--- | :--- | :--- |
+| **MD5** | 128 bit (32자) | ❌ **취약 (충돌 발견됨)** | 단순 파일 무결성 체크용 (비보안) |
+| **SHA-1** | 160 bit (40자) | ❌ **취약 (2017년 깨짐)** | 레거시 호환용 외 사용 금지 |
+| **SHA-256** | 256 bit (64자) | ✅ **매우 안전 (표준)** | 비밀번호 해싱, API 서명, 블록체인 |
+| **SHA-512** | 512 bit (128자)| ✅ **매우 안전 (최고 등급)** | 고보안 암호화 통신 및 금융 시스템 |
+
+---
+
+서버 전송 없이 브라우저 메모리 상에서 안전하게 문자열 및 파일의 해시값을 계산하려면 desktools.run의 **[Hash Generator](file:///tools/hash-generator)** 도구를 활용해 보세요!`,
+
+    // English Content
+    contentEn: `# Understanding Cryptographic Hash Functions: Why MD5 is Broken and How SHA-256 Protects Integrity
+
+Cryptographic hash functions form the cryptographic foundation of data integrity verification, password security, digital certificates, and distributed ledgers.
+
+---
+
+## 🔒 1. Core Properties of Cryptographic Hashes
+- **Pre-image Resistance (One-Way Property)**: Infeasible to reverse an input from its digest.
+- **Collision Resistance**: Infeasible to discover two distinct messages yielding identical hashes.
+- **Avalanche Effect**: Modifying a single input bit flips approximately 50% of output bits completely.
+
+---
+
+## ⚠️ 2. Why MD5 and SHA-1 Are Deprecated
+- **MD5 (128-bit)**: Broken via practical collision attacks in 2004.
+- **SHA-1 (160-bit)**: Officially broken by Google in 2017 (SHAttered attack). Both are strictly forbidden in modern security protocols.
+
+---
+
+## 🛡️ 3. SHA-256: The Modern Security Standard
+With $2^{256}$ potential state permutations, SHA-256 remains mathematically impenetrable against modern computing attacks, powering Git, TLS 1.3, and Bitcoin.
+
+Compute SHA-256, MD5, and SHA-512 hashes locally with desktools.run's **Hash Generator**!`,
+
+    // Japanese Content
+    contentJa: `# 暗号学的ハッシュ関数の仕組み：MD5/SHA-1の脆弱性とSHA-256の安全性を徹底解説
+
+暗号学的ハッシュ関数（MD5、SHA-1、SHA-256）の基礎原理と、なぜ古いアルゴリズムが破られSHA-256が現代のWebセキュリティ標準となったのかを解説します。`,
+
+    // Spanish Content
+    contentEs: `# Funciones hash criptográficas: Por qué MD5 es vulnerable y cómo SHA-256 protege tus datos
+
+Comprende las funciones hash, la historia de las colisiones en MD5 y SHA-1, y por qué SHA-256 sigue siendo el estándar más seguro.`,
+
+    // Chinese Content
+    contentZh: `# 深入理解密码学哈希函数：MD5 碰撞漏洞解析与 SHA-256 数据完整性防护
+
+深入剖析哈希单向性与抗碰撞性，回顾 MD5/SHA-1 被攻破的历程，详解 SHA-256 为何能够守护现代网络通信与区块链安全。`,
+
+    // French Content
+    contentFr: `# Comprendre les fonctions de hachage : Vulnérabilités de MD5 et robustesse de SHA-256
+
+Découvrez les principes des fonctions de hachage cryptographiques et pourquoi SHA-256 est devenu le standard incontournable de la sécurité web.`,
+  },
 ];
 
 export function getLocalizedPost(post: BlogPost, locale: string) {

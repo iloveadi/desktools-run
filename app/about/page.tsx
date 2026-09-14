@@ -42,7 +42,7 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <div className="glass-card" style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div className="glass-card" style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "16px", marginBottom: "30px" }}>
             <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
               {t("pages.about.why.title")}
             </h2>
@@ -52,6 +52,56 @@ export default function AboutPage() {
             <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
               {t("pages.about.why.p2")}
             </p>
+          </div>
+
+          {/* Technology Architecture Section */}
+          <div className="glass-card" style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "18px", marginBottom: "30px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(99,102,241,0.15)", color: "#818cf8", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Cpu size={20} />
+              </div>
+              <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
+                Core Technology & Architecture
+              </h2>
+            </div>
+            <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+              desktools.run leverages modern browser-native capabilities including <strong>WebAssembly (Wasm)</strong>, <strong>HTML5 Canvas API</strong>, <strong>Web Workers</strong>, and <strong>Web Crypto API</strong>. By offloading heavy computing tasks directly to the user's CPU and GPU, we eliminate server latencies while guaranteeing that sensitive files, tokens, and documents never leave your device.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px", marginTop: "8px" }}>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>⚡ Zero-Server Latency</strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Files process instantly in client memory with zero upload/download waits.</span>
+              </div>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>🛡️ Absolute Data Isolation</strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Your files and inputs are never sent to or logged on remote databases.</span>
+              </div>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>🌐 Multi-Language Ready</strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Full native localization across English, Korean, Japanese, Spanish, Chinese, and French.</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Team & Contact Information */}
+          <div className="glass-card" style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "14px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(34,211,168,0.15)", color: "#34d399", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Globe2 size={20} />
+              </div>
+              <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
+                Editorial Integrity & Contact
+              </h2>
+            </div>
+            <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+              desktools.run is actively maintained and updated to provide safe, reliable, and cutting-edge web utility software. We welcome bug reports, tool suggestions, and security inquiries.
+            </p>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "6px", fontSize: "14px", color: "var(--text-secondary)" }}>
+              <span>Official Inquiries:</span>
+              <a href="mailto:iloveadi@gmail.com" style={{ color: "#818cf8", fontWeight: 700, textDecoration: "underline" }}>
+                iloveadi@gmail.com
+              </a>
+            </div>
           </div>
         </section>
       </main>
