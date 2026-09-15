@@ -52,6 +52,7 @@ export interface ToolGuideProps {
   useCases?: ToolUseCase[];
   useCasesTitle?: string;
   proTips?: ToolProTips;
+  faqTitle?: string;
   faqs: { q: string; a: string }[];
   relatedTools?: RelatedToolItem[];
 }
@@ -67,6 +68,7 @@ export default function ToolGuide({
   useCases,
   useCasesTitle,
   proTips,
+  faqTitle,
   faqs,
   relatedTools,
 }: ToolGuideProps) {
@@ -498,7 +500,7 @@ export default function ToolGuide({
                   color: "var(--text-primary)",
                 }}
               >
-                {t("wordCount.guide.faqTitle") || "자주 묻는 질문 (FAQ)"}
+                {faqTitle || t("wordCount.guide.faqTitle") || "자주 묻는 질문 (FAQ)"}
               </h3>
             </div>
 
