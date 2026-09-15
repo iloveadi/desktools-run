@@ -2,33 +2,46 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "단위 변환기 — 길이·무게·온도·속도 무료 변환 | desktools.run",
+  title: "Unit Converter Online — Length, Weight, Temperature, Area, Volume & Speed | desktools.run",
   description:
-    "길이, 무게, 온도, 속도, 넓이, 부피 등 다양한 단위(평수, m², 온스, 파운드 등)를 브라우저에서 즉시 변환하세요. 모바일 친화적 실시간 계산기.",
-  keywords: ["단위 변환기", "unit converter", "길이 변환", "무게 변환", "온도 변환", "km to mile", "무료 단위 변환"],
+    "Convert length, weight, temperature, area, volume, speed, time, and data storage units instantly in your browser. Real-time multi-unit comparison table with 100% precision.",
+  keywords: [
+    "unit converter",
+    "length converter",
+    "weight converter",
+    "temperature converter",
+    "area converter",
+    "speed converter",
+    "단위 변환기",
+    "평수 계산기",
+    "単位変換",
+    "conversor de unidades",
+    "单位换算器"
+  ],
+  alternates: {
+    canonical: "https://desktools.run/tools/unit-converter/",
+  },
   openGraph: {
     url: "https://desktools.run/tools/unit-converter/",
-    title: "단위 변환기 — 길이·무게·온도·속도 무료 변환 | desktools.run",
-    description: "길이, 무게, 온도, 속도 등 다양한 단위를 브라우저에서 즉시 변환하세요.",
+    title: "Unit Converter — Multi-Dimension Unit Calculator | desktools.run",
+    description: "Convert length, weight, temperature, area, volume, and speed units in real-time.",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
+        url: "/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Unit Converter — desktools.run",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    title: "Unit Converter — Multi-Dimension Unit Calculator | desktools.run",
+    description: "Convert length, weight, temperature, area, volume, and speed units in real-time.",
+    images: ["/og-banner.jpg"],
   },
-  alternates: {
-    canonical: "https://desktools.run/tools/unit-converter/",
-  },
-  robots: { index: true, follow: true },
 };
 
 export default function Layout({
@@ -40,7 +53,7 @@ export default function Layout({
     <>
       <ToolJsonLd
         title="Unit Converter"
-        description="Convert length, weight, temperature, area, volume, and speed."
+        description="Convert length, weight, temperature, area, volume, speed, time, and digital storage units instantly."
         toolUrl="https://desktools.run/tools/unit-converter/"
       />
       {children}

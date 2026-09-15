@@ -2,33 +2,47 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "색상 변환기 — HEX · RGB · HSL 무료 변환 | desktools.run",
+  title: "Color Converter & Palette Generator Online — HEX, RGB, HSL, HSV & CMYK | desktools.run",
   description:
-    "HEX, RGB, HSL 색상 코드를 브라우저에서 즉시 상호 변환하세요. 실시간 색상 미리보기 팔레트와 CSS 코드 복사 기능을 100% 무료로 지원합니다.",
-  keywords: ["색상 변환기", "color converter", "HEX to RGB", "RGB to HEX", "HSL converter", "color palette", "무료 색상 도구"],
+    "Convert between HEX, RGB, HSL, HSV, and CMYK color codes in real-time. Generate harmonic palettes, tints & shades, and inspect WCAG contrast ratios. 100% free and browser-native.",
+  keywords: [
+    "color converter",
+    "hex to rgb",
+    "rgb to hex",
+    "hsl converter",
+    "cmyk converter",
+    "color picker online",
+    "wcag contrast checker",
+    "색상 변환기",
+    "컬러 피커",
+    "カラーコード変換",
+    "conversor de color",
+    "颜色代码转换器"
+  ],
+  alternates: {
+    canonical: "https://desktools.run/tools/color-converter/",
+  },
   openGraph: {
     url: "https://desktools.run/tools/color-converter/",
-    title: "색상 변환기 — HEX · RGB · HSL 무료 변환 | desktools.run",
-    description: "HEX, RGB, HSL 색상 코드를 브라우저에서 즉시 상호 변환하세요.",
+    title: "Color Converter & Palette Generator | desktools.run",
+    description: "Convert HEX, RGB, HSL, and CMYK colors with harmonic palettes and WCAG contrast analysis.",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
+        url: "/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Color Converter & Palette Generator — desktools.run",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    title: "Color Converter & Palette Generator | desktools.run",
+    description: "Convert HEX, RGB, HSL, and CMYK colors with harmonic palettes and WCAG contrast analysis.",
+    images: ["/og-banner.jpg"],
   },
-  alternates: {
-    canonical: "https://desktools.run/tools/color-converter/",
-  },
-  robots: { index: true, follow: true },
 };
 
 export default function Layout({
@@ -39,8 +53,8 @@ export default function Layout({
   return (
     <>
       <ToolJsonLd
-        title="Color Converter & Picker"
-        description="Convert between HEX, RGB, HSL, HSV, and CMYK color codes."
+        title="Color Converter & Palette Generator"
+        description="Convert between HEX, RGB, HSL, HSV, and CMYK color codes with harmonic palettes and WCAG contrast ratios."
         toolUrl="https://desktools.run/tools/color-converter/"
       />
       {children}

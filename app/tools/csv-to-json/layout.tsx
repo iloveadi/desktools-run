@@ -2,33 +2,45 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CSV → JSON 변환기 — 브라우저에서 즉시 무료 변환 | desktools.run",
+  title: "CSV to JSON Converter Online — Fast, Private & Table Preview | desktools.run",
   description:
-    "CSV 파일을 JSON 형식으로 즉시 변환하세요. 드래그앤드롭 업로드, 배열/객체 출력 선택, 테이블 미리보기 지원. 서버 전송 없이 100% 로컬 처리, 완전 무료.",
-  keywords: ["CSV to JSON", "CSV 변환기", "JSON 변환", "csv json 변환", "엑셀 JSON 변환", "무료 CSV 변환", "온라인 CSV"],
+    "Convert CSV files or text to structured JSON data instantly in your browser. Supports custom delimiters, array/object output formats, and interactive table preview. 100% client-side with zero data uploads.",
+  keywords: [
+    "csv to json",
+    "csv to json converter",
+    "convert csv to json online",
+    "csv parser",
+    "excel to json",
+    "CSV JSON 변환",
+    "CSV 변환기",
+    "CSV から JSON 変換",
+    "convertidor csv a json",
+    "CSV 转 JSON"
+  ],
+  alternates: {
+    canonical: "https://desktools.run/tools/csv-to-json/",
+  },
   openGraph: {
     url: "https://desktools.run/tools/csv-to-json/",
-    title: "CSV → JSON 변환기 — 브라우저에서 즉시 무료 변환 | desktools.run",
-    description: "CSV 파일을 JSON 형식으로 즉시 변환하세요. 서버 전송 없이 100% 로컬 처리.",
+    title: "CSV to JSON Converter | desktools.run",
+    description: "Convert CSV data to structured JSON with table preview and custom delimiter support.",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
+        url: "/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CSV to JSON Converter — desktools.run",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    title: "CSV to JSON Converter | desktools.run",
+    description: "Convert CSV data to structured JSON with table preview and custom delimiter support.",
+    images: ["/og-banner.jpg"],
   },
-  alternates: {
-    canonical: "https://desktools.run/tools/csv-to-json/",
-  },
-  robots: { index: true, follow: true },
 };
 
 export default function Layout({
@@ -39,8 +51,8 @@ export default function Layout({
   return (
     <>
       <ToolJsonLd
-        title="CSV to JSON"
-        description="Upload a CSV file and convert it to structured JSON data."
+        title="CSV to JSON Converter"
+        description="Convert CSV files or raw text into structured JSON data with interactive table preview."
         toolUrl="https://desktools.run/tools/csv-to-json/"
       />
       {children}
