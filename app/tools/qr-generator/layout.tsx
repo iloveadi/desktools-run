@@ -2,33 +2,45 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "QR 코드 생성기 — URL, 텍스트 QR 무료 생성 & 다운로드 | desktools.run",
+  title: "Free QR Code Generator Online — Custom Colors, PNG & SVG Download | desktools.run",
   description:
-    "웹주소(URL), 텍스트, Wi-Fi 정보를 고해상도 QR 코드로 자유롭게 생성하세요. 커스텀 색상, 크기 설정, PNG/SVG 다운로드 지원. 100% 브라우저 무료 생성.",
-  keywords: ["QR 코드 생성기", "qr code generator", "qr 만들기", "qr code maker", "무료 QR 코드", "svg qr code"],
+    "Generate high-resolution QR codes for URLs, text, Wi-Fi networks, and contact info. Customize colors, sizing, and export in crisp PNG or vector SVG format. 100% free and client-side.",
+  keywords: [
+    "qr code generator",
+    "free qr maker",
+    "create qr code online",
+    "wifi qr code generator",
+    "svg qr code",
+    "QR 코드 생성기",
+    "QR 만들기",
+    "QRコード 作成",
+    "generador codigo qr",
+    "二维码生成器"
+  ],
+  alternates: {
+    canonical: "https://desktools.run/tools/qr-generator/",
+  },
   openGraph: {
     url: "https://desktools.run/tools/qr-generator/",
-    title: "QR 코드 생성기 — URL, 텍스트 QR 무료 생성 & 다운로드 | desktools.run",
-    description: "고해상도 QR 코드를 자유롭게 맞춤 디자인하고 다운로드하세요.",
+    title: "Free Custom QR Code Generator | desktools.run",
+    description: "Create customizable high-resolution QR codes with PNG & SVG vector download.",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
+        url: "/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Free QR Code Generator — desktools.run",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    title: "Free Custom QR Code Generator | desktools.run",
+    description: "Create customizable high-resolution QR codes with PNG & SVG vector download.",
+    images: ["/og-banner.jpg"],
   },
-  alternates: {
-    canonical: "https://desktools.run/tools/qr-generator/",
-  },
-  robots: { index: true, follow: true },
 };
 
 export default function Layout({
@@ -40,7 +52,7 @@ export default function Layout({
     <>
       <ToolJsonLd
         title="QR Code Generator"
-        description="Generate high-res QR codes for URLs, text, and Wi-Fi credentials."
+        description="Generate customizable high-resolution QR codes for URLs, text, and Wi-Fi networks with PNG and SVG export."
         toolUrl="https://desktools.run/tools/qr-generator/"
       />
       {children}

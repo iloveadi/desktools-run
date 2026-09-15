@@ -2,30 +2,45 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "JSON Formatter, Prettify & Validator | desktools.run",
+  title: "JSON Formatter, Validator & Prettifier Online | desktools.run",
   description:
-    "Prettify, minify, and validate JSON data with syntax highlighting 100% locally in your browser. Fast, secure, and developer-friendly with zero server tracking.",
+    "Format, prettify, minify, and validate JSON data instantly with syntax highlighting 100% locally in your browser. Fast, secure, zero data sent to servers.",
+  keywords: [
+    "json formatter",
+    "json validator",
+    "json prettifier",
+    "minify json",
+    "format json online",
+    "json parser",
+    "JSON 정렬",
+    "JSON 유효성 검사",
+    "JSON 整形",
+    "formateador json",
+    "JSON 格式化"
+  ],
   alternates: {
     canonical: "https://desktools.run/tools/json-formatter/",
   },
   openGraph: {
     url: "https://desktools.run/tools/json-formatter/",
-    title: "JSON Formatter & Validator | desktools.run",
-    description: "Format, minified, validate, and syntax highlight JSON data.",
+    title: "JSON Formatter, Prettifier & Validator | desktools.run",
+    description: "Format, minify, and validate JSON data in real time without uploading to any server.",
     type: "website",
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
+        url: "/og-banner.jpg",
+        width: 1200,
+        height: 630,
+        alt: "JSON Formatter & Validator — desktools.run",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    title: "JSON Formatter & Validator | desktools.run",
+    description: "Format, minify, and validate JSON data locally in your browser.",
+    images: ["/og-banner.jpg"],
   },
 };
 
@@ -38,7 +53,7 @@ export default function Layout({
     <>
       <ToolJsonLd
         title="JSON Formatter & Validator"
-        description="Format, minified, validate, and syntax highlight JSON data."
+        description="Format, prettify, minify, and validate JSON data with syntax check locally in your browser."
         toolUrl="https://desktools.run/tools/json-formatter/"
       />
       {children}
