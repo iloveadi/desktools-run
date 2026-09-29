@@ -32,7 +32,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "Free Tools",
     "hero.stats.categories": "Categories",
     "hero.stats.browser": "Browser-based",
-    "hero.stats.signup": "Sign-up Required",
+    "hero.stats.signup": "No Sign-up",
 
     "grid.allTools": "All Tools",
     "grid.subtitle": "21 utilities · 6 categories · all free",
@@ -1172,7 +1172,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "무료 도구",
     "hero.stats.categories": "카테고리",
     "hero.stats.browser": "브라우저 기반",
-    "hero.stats.signup": "회원가입 필요",
+    "hero.stats.signup": "회원가입 불필요",
 
     "grid.allTools": "전체 도구",
     "grid.subtitle": "21개 유틸리티 · 6개 카테고리 · 전부 무료",
@@ -2311,7 +2311,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "無料ツール",
     "hero.stats.categories": "カテゴリ",
     "hero.stats.browser": "ブラウザベース",
-    "hero.stats.signup": "登録が必要",
+    "hero.stats.signup": "会員登録不要",
 
     "grid.allTools": "全ツール",
     "grid.subtitle": "21のユーティリティ · 6カテゴリ · すべて無料",
@@ -3356,7 +3356,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "Herramientas Gratis",
     "hero.stats.categories": "Categorías",
     "hero.stats.browser": "Basado en Navegador",
-    "hero.stats.signup": "Registro Requerido",
+    "hero.stats.signup": "Sin Registro",
 
     "grid.allTools": "Todas las Herramientas",
     "grid.subtitle": "21 utilidades · 6 categorías · todas gratis",
@@ -4422,7 +4422,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "免费工具",
     "hero.stats.categories": "分类",
     "hero.stats.browser": "基于浏览器",
-    "hero.stats.signup": "需要注册",
+    "hero.stats.signup": "无需注册",
 
     "grid.allTools": "所有工具",
     "grid.subtitle": "21个工具 · 6个分类 · 全部免费",
@@ -5466,7 +5466,7 @@ export const translations: Record<Locale, Translations> = {
     "hero.stats.tools": "Outils Gratuits",
     "hero.stats.categories": "Catégories",
     "hero.stats.browser": "Basé Navigateur",
-    "hero.stats.signup": "Inscription Requise",
+    "hero.stats.signup": "Sans Inscription",
 
     "grid.allTools": "Tous les Outils",
     "grid.subtitle": "21 utilitaires · 6 catégories · tous gratuits",

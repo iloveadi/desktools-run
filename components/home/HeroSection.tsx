@@ -47,7 +47,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
     { icon: Zap,          value: `${formatCount(totalUsage, locale)}+`, label: locale === "ko" ? "누적 도구 실행" : "Total Uses" },
     { icon: Boxes,        value: "30+",   label: t("hero.stats.tools") },
     { icon: ShieldCheck,  value: "100%",  label: t("hero.stats.browser") },
-    { icon: CheckCircle2, value: "0",     label: t("hero.stats.signup") },
+    { icon: CheckCircle2, value: "FREE", label: t("hero.stats.signup") },
   ];
 
   return (
