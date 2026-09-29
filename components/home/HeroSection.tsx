@@ -193,7 +193,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                     style={{
                       fontSize: "20px",
                       fontWeight: 700,
-                      color: "#ffffff",
+                      color: "var(--colors-ink-strong)",
                       letterSpacing: "-0.5px",
                     }}
                   >

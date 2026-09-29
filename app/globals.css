@@ -9,10 +9,7 @@
    =========================================================== */
 
 :root,
-html,
-body,
-html.dark,
-html.light {
+html.dark {
   color-scheme: dark;
 
   /* Brand Accents */
@@ -58,6 +55,57 @@ html.light {
   /* Glass Elevation */
   --glass-blur: blur(16px);
   --card-glow: 0 12px 32px -8px rgba(0, 217, 146, 0.16), inset 0 1px 0 rgba(0, 217, 146, 0.25);
+}
+
+/* ===========================================================
+   LIGHT MODE DESIGN TOKENS
+   =========================================================== */
+html.light {
+  color-scheme: light;
+
+  /* Brand Accents */
+  --colors-primary:      #059669; /* Emerald Green */
+  --colors-primary-soft: #10b981;
+  --colors-primary-glow: rgba(5, 150, 105, 0.2);
+  --colors-cyan-glow:    rgba(14, 165, 233, 0.15);
+  --colors-on-primary:   #ffffff;
+
+  /* Surfaces */
+  --colors-canvas:       #f8fafc; /* Crisp Slate 50 */
+  --colors-canvas-soft:  #ffffff; /* Pure White */
+  --colors-card-surface: #ffffff;
+  --colors-card-border:  rgba(0, 0, 0, 0.08);
+
+  --bg-primary:         #f8fafc;
+  --bg-secondary:       #ffffff;
+  --bg-card:            #ffffff;
+  --bg-card-hover:      #f1f5f9;
+
+  /* Hairlines & Borders */
+  --colors-hairline:      rgba(0, 0, 0, 0.08);
+  --colors-hairline-soft: rgba(0, 0, 0, 0.14);
+  --border-subtle:        rgba(0, 0, 0, 0.08);
+  --border-hover:         #059669;
+  --border-dashed:        rgba(0, 0, 0, 0.12);
+
+  /* Typography / Ink */
+  --colors-ink:              #0f172a; /* Slate 900 */
+  --colors-ink-strong:       #020617; /* Slate 950 */
+  --colors-body:             #475569; /* Slate 600 */
+  --colors-mute:             #94a3b8; /* Slate 400 */
+  --colors-canvas-text-soft: #1e293b;
+
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+
+  /* Header & Navigation */
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --footer-bg: #f1f5f9;
+
+  /* Glass Elevation */
+  --glass-blur: blur(16px);
+  --card-glow: 0 12px 32px -8px rgba(5, 150, 105, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 /* Base Body Setup with Ambient Radial Mesh & Fine Technical Grid */
@@ -498,4 +546,160 @@ html, body {
     letter-spacing: -0.4px;
   }
 }
+
+/* ===========================================================
+   LIGHT MODE COMPONENT OVERRIDES
+   =========================================================== */
+html.light body {
+  background-color: #f8fafc !important;
+  background-image: 
+    radial-gradient(1000px 520px at 50% -80px, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.05) 45%, transparent 100%),
+    radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+  color: #0f172a !important;
+}
+
+html.light .hero-gradient-title {
+  background: linear-gradient(180deg, #0f172a 30%, #475569 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+html.light .hero-neon-accent {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #0284c7 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 16px rgba(5, 150, 105, 0.2)) !important;
+}
+
+html.light .eyebrow-pill {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.25) !important;
+  color: #059669 !important;
+  box-shadow: 0 0 12px rgba(5, 150, 105, 0.1) !important;
+}
+
+html.light .raycast-search-bar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+html.light .raycast-search-bar:focus-within {
+  border-color: #059669 !important;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15), 0 16px 36px -8px rgba(5, 150, 105, 0.1) !important;
+}
+html.light .text-input {
+  color: #0f172a !important;
+}
+html.light .text-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light .card-feature {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+html.light .card-feature:hover {
+  border-color: rgba(5, 150, 105, 0.45) !important;
+  box-shadow: 0 14px 32px -6px rgba(5, 150, 105, 0.12) !important;
+}
+html.light .card-feature h3 {
+  color: #0f172a !important;
+}
+html.light .card-feature p {
+  color: #475569 !important;
+}
+html.light .tool-icon-box {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.22) !important;
+  color: #059669 !important;
+  box-shadow: 0 0 10px rgba(5, 150, 105, 0.08) !important;
+}
+html.light .card-feature:hover .tool-icon-box {
+  background: rgba(5, 150, 105, 0.16) !important;
+  border-color: rgba(5, 150, 105, 0.45) !important;
+}
+
+html.light .metric-card-neo {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+html.light .metric-card-neo span.font-mono {
+  color: #0f172a !important;
+}
+
+html.light .button-outline-on-dark {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+html.light .button-outline-on-dark:hover {
+  background: #f8fafc !important;
+  color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+html.light .button-pill-tag {
+  background: #ffffff !important;
+  color: #475569 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+html.light .button-pill-tag:hover {
+  color: #0f172a !important;
+  border-color: #059669 !important;
+}
+html.light .button-pill-tag.active {
+  background: rgba(5, 150, 105, 0.1) !important;
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+html.light .code-inline-chip {
+  background: #f1f5f9 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #475569 !important;
+}
+
+html.light .dashed-divider {
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light header {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+html.light header a {
+  color: #0f172a !important;
+}
+html.light footer {
+  background-color: #f1f5f9 !important;
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+  color: #475569 !important;
+}
+html.light footer span,
+html.light footer p {
+  color: #475569 !important;
+}
+
+html.light .mobile-bottom-nav {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+html.light .mobile-bottom-nav a,
+html.light .mobile-bottom-nav button {
+  color: #64748b !important;
+}
+
+html.light .floating-scroll-widget {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(5, 150, 105, 0.3) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 18px rgba(5, 150, 105, 0.15) !important;
+}
+html.light .floating-scroll-widget button {
+  color: #0f172a !important;
+}
+
 

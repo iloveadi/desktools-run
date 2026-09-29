@@ -497,7 +497,7 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                       style={{
                         fontSize: "21px",
                         fontWeight: 700,
-                        color: "#ffffff",
+                        color: "var(--colors-ink-strong)",
                         letterSpacing: "-0.4px",
                       }}
                     >
@@ -511,9 +511,9 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                       fontSize: "12px",
                       color: "var(--colors-mute)",
                       padding: "3px 10px",
-                      background: "rgba(255, 255, 255, 0.04)",
+                      background: "var(--colors-canvas-soft)",
                       borderRadius: "6px",
-                      border: "1px solid rgba(255, 255, 255, 0.07)",
+                      border: "1px solid var(--colors-hairline)",
                     }}
                   >
                     {categoryTools.length} {locale === "ko" ? "개 유틸리티" : "utilities"}

@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { Search, ChevronDown, Zap, Terminal, Activity } from "lucide-react";
+import { Search, ChevronDown, Zap, Terminal, Activity, Sun, Moon } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
+import { useTheme } from "@/lib/context/ThemeContext";
 import type { Locale } from "@/lib/i18n";
 import { getTotalSiteUsageCount, formatCount } from "@/lib/stats";
 import CommandPaletteModal from "@/components/common/CommandPaletteModal";
@@ -102,6 +103,8 @@ const LANGUAGES: { code: Locale; label: string; Flag: () => React.JSX.Element }[
 
 export default function Header({ onSearch }: HeaderProps) {
   const { locale, setLocale, t } = useLocale();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
   const [langOpen, setLangOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [liveUsers, setLiveUsers] = useState(38);
@@ -154,7 +157,7 @@ export default function Header({ onSearch }: HeaderProps) {
               alignItems: "center",
               gap: "10px",
               textDecoration: "none",
-              color: "#ffffff",
+              color: "var(--colors-ink-strong)",
               fontWeight: 700,
               fontSize: "17.5px",
               letterSpacing: "-0.4px",
@@ -308,6 +311,17 @@ export default function Header({ onSearch }: HeaderProps) {
                 </div>
               )}
             </div>
+
+            {/* Light / Dark Mode Toggle (Desktop & Tablet) */}
+            <button
+              onClick={toggleTheme}
+              className="button-outline-on-dark hidden md:inline-flex"
+              style={{ padding: "6px 8px" }}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
+            >
+              {isDark ? <Sun size={14} color="#fbbf24" /> : <Moon size={14} color="var(--colors-primary)" />}
+            </button>
 
             {/* Primary Action Button (Compact on mobile) */}
             <Link
