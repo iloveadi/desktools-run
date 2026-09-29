@@ -398,4 +398,19 @@ html, body {
     font-size: 26px;
     line-height: 32px;
   }
+  .card-feature {
+    padding: 16px;
+    min-height: 175px;
+  }
+  body {
+    padding-bottom: 72px;
+  }
+}
+
+@media (max-width: 480px) {
+  .display-xl {
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: -0.3px;
+  }
 }

@@ -204,10 +204,10 @@ export default function Header({ onSearch }: HeaderProps) {
           </nav>
 
           {/* Right Utility Cluster */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {/* Live Indicator Status Pill */}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            {/* Live Indicator Status Pill (Hidden on mobile) */}
             <div
-              className="button-pill-tag hidden sm:inline-flex"
+              className="button-pill-tag hidden md:inline-flex"
               style={{ cursor: "default", padding: "4px 10px", fontSize: "12px" }}
               title={`Total ${totalUsage.toLocaleString()} executions`}
             >
@@ -228,12 +228,12 @@ export default function Header({ onSearch }: HeaderProps) {
             <button
               onClick={() => setCmdOpen(true)}
               className="button-outline-on-dark"
-              style={{ padding: "6px 12px", fontSize: "13px" }}
+              style={{ padding: "6px 10px", fontSize: "13px" }}
               aria-label="Search tools"
             >
-              <Search size={13} color="var(--colors-primary)" />
+              <Search size={14} color="var(--colors-primary)" />
               <span className="hidden sm:inline">Search</span>
-              <span className="code-text" style={{ fontSize: "11px", color: "var(--colors-mute)", marginLeft: "4px" }}>⌘K</span>
+              <span className="code-text hidden sm:inline" style={{ fontSize: "11px", color: "var(--colors-mute)", marginLeft: "4px" }}>⌘K</span>
             </button>
 
             {/* Language Selector Dropdown */}
@@ -242,7 +242,7 @@ export default function Header({ onSearch }: HeaderProps) {
                 id="lang-toggle"
                 onClick={() => setLangOpen((o) => !o)}
                 className="button-outline-on-dark"
-                style={{ padding: "6px 10px" }}
+                style={{ padding: "6px 8px" }}
                 aria-label="Select language"
                 aria-expanded={langOpen}
               >
@@ -306,13 +306,14 @@ export default function Header({ onSearch }: HeaderProps) {
               )}
             </div>
 
-            {/* Primary Action Button */}
+            {/* Primary Action Button (Compact on mobile) */}
             <Link
               href="/request"
               className="button-primary"
-              style={{ padding: "6px 14px", fontSize: "13px" }}
+              style={{ padding: "6px 12px", fontSize: "12.5px" }}
             >
-              Request Tool
+              <span className="hidden sm:inline">Request Tool</span>
+              <span className="sm:hidden">Request</span>
             </Link>
           </div>
         </div>

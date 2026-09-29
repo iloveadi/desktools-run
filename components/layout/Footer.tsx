@@ -182,19 +182,20 @@ export default function Footer() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "20px 24px",
+          padding: "16px 20px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: "12px",
+          gap: "10px",
         }}
+        className="footer-bottom-row"
       >
-        <span className="caption font-mono" style={{ color: "var(--colors-mute)" }}>
-          &copy; {year} desktools.run &middot; Zero server upload, 100% in-browser processing.
+        <span className="caption font-mono" style={{ color: "var(--colors-mute)", lineHeight: "18px", wordBreak: "break-word" }}>
+          &copy; {year} desktools.run &middot; Zero server upload, 100% in-browser.
         </span>
 
-        <span className="caption font-mono" style={{ color: "var(--colors-mute)", display: "flex", alignItems: "center", gap: "6px" }}>
+        <span className="caption font-mono" style={{ color: "var(--colors-mute)", display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
           <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--colors-primary)" }} />
           ALL SYSTEMS OPERATIONAL
         </span>
@@ -205,6 +206,11 @@ export default function Footer() {
           .footer-grid {
             grid-template-columns: 1fr 1fr !important;
             gap: 32px !important;
+          }
+          .footer-bottom-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding-bottom: 76px !important;
           }
         }
         @media (max-width: 480px) {

@@ -102,22 +102,23 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
               transition: "border-color 0.15s ease",
             }}
           >
-            <div style={{ padding: "0 12px", display: "flex", alignItems: "center", color: "var(--colors-primary)" }}>
-              <Search size={18} />
+            <div style={{ padding: "0 10px", display: "flex", alignItems: "center", color: "var(--colors-primary)", flexShrink: 0 }}>
+              <Search size={16} />
             </div>
             <input
               id="hero-search"
               type="search"
               value={query}
               onChange={(e) => handleChange(e.target.value)}
-              placeholder={t("hero.search.placeholder")}
+              placeholder={locale === "ko" ? "도구 검색 — PDF, 리사이즈, JSON..." : "Search tools — PDF, Resize, JSON..."}
               className="text-input"
               style={{
                 border: "none",
                 background: "transparent",
-                padding: "10px 8px",
-                fontSize: "15px",
+                padding: "8px 6px",
+                fontSize: "14px",
                 color: "var(--colors-ink-strong)",
+                minWidth: 0,
               }}
               aria-label={t("hero.search.placeholder")}
             />
@@ -125,14 +126,14 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
               onClick={() => onSearch(query)}
               className="button-primary"
               style={{
-                padding: "9px 18px",
-                fontSize: "14px",
+                padding: "8px 14px",
+                fontSize: "13.5px",
                 flexShrink: 0,
               }}
               aria-label={t("hero.search.button")}
             >
               <span>{t("hero.search.button")}</span>
-              <ArrowRight size={14} />
+              <ArrowRight size={13} />
             </button>
           </div>
         </div>
@@ -145,7 +146,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
             gap: "8px",
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: "48px",
+            marginBottom: "40px",
           }}
         >
           <span className="caption font-mono" style={{ color: "var(--colors-mute)", marginRight: "4px" }}>
@@ -159,6 +160,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 key={tag.query}
                 onClick={() => handleTagClick(tag.query)}
                 className={`button-pill-tag ${isSelected ? "active" : ""}`}
+                style={{ fontSize: "12px", padding: "3px 10px" }}
               >
                 {label}
               </button>
@@ -166,15 +168,16 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
           })}
         </div>
 
-        {/* 4-Item Engineering Metric Counters (8px radius hairline cards) */}
+        {/* 4-Item Engineering Metric Counters (2x2 on mobile, 4-col on desktop) */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "12px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+            gap: "10px",
             maxWidth: "880px",
             margin: "0 auto",
           }}
+          className="hero-stats-grid-mobile"
         >
           {STATS_ITEMS.map((item, idx) => {
             const Icon = item.icon;
@@ -183,18 +186,19 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 key={idx}
                 className="card-feature"
                 style={{
-                  padding: "16px 20px",
+                  padding: "12px 14px",
                   alignItems: "center",
                   justifyContent: "center",
                   textAlign: "center",
+                  minHeight: "auto",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                  <Icon size={16} color="var(--colors-primary)" />
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                  <Icon size={14} color="var(--colors-primary)" />
                   <span
                     className="font-mono"
                     style={{
-                      fontSize: "24px",
+                      fontSize: "20px",
                       fontWeight: 700,
                       color: "var(--colors-ink-strong)",
                       letterSpacing: "-0.5px",
@@ -203,7 +207,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                     {item.value}
                   </span>
                 </div>
-                <span className="caption font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <span className="caption font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>
                   {item.label}
                 </span>
               </div>
