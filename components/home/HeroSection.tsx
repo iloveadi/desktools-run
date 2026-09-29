@@ -51,197 +51,111 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
   ];
 
   return (
-    <section className="hero-section-container" style={{ position: "relative", overflow: "hidden", textAlign: "center" }}>
-      {/* Background grid */}
-      <div className="bg-grid" style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.4 }} aria-hidden="true" />
-
-      {/* Modern Linear / Vercel Aurora Glow */}
-      <div
-        className="orb"
-        style={{
-          width: "720px",
-          height: "450px",
-          background: "radial-gradient(ellipse at center, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0.12) 45%, transparent 70%)",
-          top: "-160px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 0,
-          filter: "blur(60px)",
-        }}
-        aria-hidden="true"
-      />
-      <div
-        className="orb"
-        style={{
-          width: "360px",
-          height: "360px",
-          background: "radial-gradient(circle, rgba(79, 70, 229, 0.14) 0%, transparent 70%)",
-          top: "60px",
-          left: "8%",
-          zIndex: 0,
-        }}
-        aria-hidden="true"
-      />
-      <div
-        className="orb"
-        style={{
-          width: "360px",
-          height: "360px",
-          background: "radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%)",
-          top: "40px",
-          right: "8%",
-          zIndex: 0,
-        }}
-        aria-hidden="true"
-      />
-
-      <div style={{ position: "relative", zIndex: 1, maxWidth: "800px", margin: "0 auto" }}>
-        {/* Glowing Badge */}
+    <section
+      className="product-tile-parchment"
+      style={{
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ maxWidth: "980px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Apple Pill Tag */}
         <div
-          className="animate-fade-in-up"
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
             padding: "6px 16px",
-            borderRadius: "100px",
-            background: "rgba(99, 102, 241, 0.12)",
-            border: "1px solid rgba(99, 102, 241, 0.28)",
-            boxShadow: "0 0 20px rgba(99, 102, 241, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)",
-            color: "var(--text-primary)",
-            fontSize: "13px",
+            borderRadius: "9999px",
+            backgroundColor: "var(--colors-surface-pearl)",
+            border: "1px solid var(--colors-hairline)",
+            color: "var(--colors-primary)",
+            fontSize: "14px",
             fontWeight: 600,
             marginBottom: "24px",
           }}
         >
-          <span style={{ position: "relative", display: "flex", width: "8px", height: "8px" }}>
-            <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "#10b981", opacity: 0.75, animation: "ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite" }} />
-            <span style={{ position: "relative", borderRadius: "50%", width: "8px", height: "8px", background: "#10b981" }} />
-          </span>
-          <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <Sparkles size={12} className="text-indigo-400" />
-            {t("hero.badge")}
-          </span>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#34c759", display: "inline-block" }} />
+          <span>{t("hero.badge")}</span>
         </div>
 
-        {/* Headline */}
+        {/* Hero Headline ("Apple tight" tracking) */}
         <h1
+          className="apple-hero-display"
           style={{
-            fontSize: "clamp(32px, 5.8vw, 62px)",
-            fontWeight: 900,
-            lineHeight: 1.12,
-            letterSpacing: "-0.04em",
-            marginBottom: "18px",
+            color: "var(--colors-ink)",
+            marginBottom: "16px",
           }}
         >
-          <span style={{ color: "var(--text-primary)" }}>{t("hero.title1")}</span>
+          <span>{t("hero.title1")}</span>
           <br />
-          <span className="gradient-text">{t("hero.title2")}</span>
+          <span style={{ color: "var(--colors-primary)" }}>{t("hero.title2")}</span>
         </h1>
 
-        {/* Subtitle */}
+        {/* One-Line Tagline */}
         <p
+          className="apple-lead"
           style={{
-            fontSize: "clamp(15px, 2vw, 17.5px)",
-            color: "var(--text-secondary)",
-            lineHeight: 1.65,
-            maxWidth: "580px",
+            color: "var(--colors-ink-muted-80)",
+            maxWidth: "680px",
             margin: "0 auto 36px",
-            fontWeight: 400,
           }}
         >
           {t("hero.subtitle")}
         </p>
 
-        {/* Command-Bar Search Input */}
-        <div style={{ position: "relative", maxWidth: "600px", margin: "0 auto 22px" }}>
-          <div
-            style={{
-              position: "relative",
-              display: "flex",
-              alignItems: "center",
-              background: "var(--glass-bg)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              border: "1px solid rgba(99, 102, 241, 0.35)",
-              borderRadius: "16px",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(99, 102, 241, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)",
-              transition: "all 0.25s ease",
-            }}
-          >
-            <div style={{ padding: "0 4px 0 16px", display: "flex", alignItems: "center", color: "#818cf8", flexShrink: 0 }}>
-              <Search size={20} strokeWidth={2.2} />
-            </div>
+        {/* Full-Pill Search Input */}
+        <div style={{ position: "relative", maxWidth: "600px", margin: "0 auto 24px" }}>
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+            <Search
+              size={18}
+              style={{
+                position: "absolute",
+                left: "18px",
+                color: "var(--colors-ink-muted-48)",
+                pointerEvents: "none",
+              }}
+            />
             <input
               id="hero-search"
               type="search"
+              className="apple-search-input"
               placeholder={t("hero.search.placeholder")}
               value={query}
               onChange={(e) => handleChange(e.target.value)}
-              style={{
-                flex: 1,
-                minWidth: 0,
-                padding: "16px 12px",
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                color: "var(--text-primary)",
-                fontSize: "15px",
-                fontFamily: "var(--font-inter), sans-serif",
-                fontWeight: 500,
-              }}
               aria-label={t("hero.search.placeholder")}
             />
-            {/* Keyboard shortcut hint */}
-            <div
-              className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-md"
-              style={{
-                background: "rgba(255, 255, 255, 0.06)",
-                border: "1px solid var(--border-subtle)",
-                color: "var(--text-muted)",
-                fontSize: "11px",
-                fontWeight: 600,
-                marginRight: "8px",
-              }}
-            >
-              <Command size={11} />
-              <span>K</span>
-            </div>
             <button
-              className="btn-glow"
+              className="button-primary"
+              onClick={() => onSearch(query)}
               style={{
-                margin: "6px",
-                padding: "10px 18px",
-                fontSize: "13.5px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                flexShrink: 0,
-                borderRadius: "11px",
+                position: "absolute",
+                right: "5px",
+                padding: "8px 18px",
+                fontSize: "14px",
               }}
               aria-label={t("hero.search.button")}
             >
-              <span className="hidden sm:inline">{t("hero.search.button")}</span>
-              <ArrowRight size={15} />
+              <span>{t("hero.search.button")}</span>
+              <ArrowRight size={14} />
             </button>
           </div>
         </div>
 
         {/* Popular Tags */}
         <div
-          className="animate-fade-in-up animation-delay-300"
           style={{
             display: "flex",
             flexWrap: "wrap",
             gap: "8px",
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: "52px",
+            marginBottom: "56px",
           }}
         >
-          <span style={{ fontSize: "12.5px", color: "var(--text-muted)", display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 600 }}>
-            <Sparkles size={13} className="text-indigo-400" />
-            {t("hero.popular")}
+          <span style={{ fontSize: "13px", color: "var(--colors-ink-muted-48)", fontWeight: 600, marginRight: "4px" }}>
+            {t("hero.popular")}:
           </span>
           {POPULAR_TAGS.map((tag) => {
             const label = (tag as Record<string, string>)[locale] ?? tag.en;
@@ -252,19 +166,14 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 onClick={() => handleTagClick(tag.query)}
                 style={{
                   padding: "6px 14px",
-                  minHeight: "32px",
-                  borderRadius: "100px",
-                  background: isSelected ? "rgba(99, 102, 241, 0.22)" : "var(--tag-bg)",
-                  border: isSelected ? "1px solid rgba(99, 102, 241, 0.5)" : "1px solid var(--tag-border)",
-                  boxShadow: isSelected ? "0 0 12px rgba(99, 102, 241, 0.25)" : "none",
-                  color: isSelected ? "#a5b4fc" : "var(--text-secondary)",
-                  fontSize: "12.5px",
+                  borderRadius: "9999px",
+                  backgroundColor: isSelected ? "var(--colors-primary)" : "var(--colors-canvas)",
+                  border: isSelected ? "1px solid var(--colors-primary)" : "1px solid var(--colors-hairline)",
+                  color: isSelected ? "#ffffff" : "var(--colors-ink)",
+                  fontSize: "13px",
                   cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  fontFamily: "var(--font-inter), sans-serif",
-                  fontWeight: isSelected ? 700 : 500,
-                  display: "inline-flex",
-                  alignItems: "center",
+                  transition: "all 0.15s ease",
+                  fontWeight: isSelected ? 600 : 400,
                 }}
               >
                 {label}
@@ -273,13 +182,16 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
           })}
         </div>
 
-        {/* Floating Glass Stats Dock */}
+        {/* Clean Apple Utility Grid Dock */}
         <div
-          className="hero-stats-grid"
           style={{
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.08)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "16px",
+            backgroundColor: "var(--colors-canvas)",
+            border: "1px solid var(--colors-hairline)",
+            borderRadius: "18px",
+            padding: "24px",
           }}
         >
           {STATS_ITEMS.map((stat) => {
@@ -287,7 +199,6 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
             return (
               <div
                 key={stat.label}
-                className="hero-stats-item"
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -297,15 +208,12 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <StatIcon size={16} className="text-indigo-400 opacity-85" />
-                  <span
-                    style={{ fontSize: "25px", fontWeight: 900, letterSpacing: "-0.5px" }}
-                    className="gradient-text"
-                  >
+                  <StatIcon size={18} color="#0066cc" />
+                  <span style={{ fontSize: "28px", fontWeight: 600, color: "var(--colors-ink)", letterSpacing: "-0.02em" }}>
                     {stat.value}
                   </span>
                 </div>
-                <div style={{ fontSize: "11.5px", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <div className="apple-caption" style={{ color: "var(--colors-ink-muted-48)" }}>
                   {stat.label}
                 </div>
               </div>
@@ -316,3 +224,4 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
     </section>
   );
 }
+

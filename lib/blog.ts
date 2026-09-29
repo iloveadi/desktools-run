@@ -1651,6 +1651,422 @@ Comprende las funciones hash, la historia de las colisiones en MD5 y SHA-1, y po
 
 Découvrez les principes des fonctions de hachage cryptographiques et pourquoi SHA-256 est devenu le standard incontournable de la sécurité web.`,
   },
+  {
+    id: "pdf-merge-split-compression-ultimate-guide",
+    date: "September 15, 2026",
+    category: "PDF Guides",
+    titleEn: "Complete Guide to PDF Merging, Splitting, and Compression Without Data Leakage",
+    titleKo: "PDF 문서 병합, 분할, 용량 압축 완전 가이드: 개인정보 유출 없이 브라우저에서 안전하게 처리하기",
+    titleJa: "PDF結合・分割・軽量化の完全ガイド：個人情報漏洩なしでブラウザ内で safe に処理する方法",
+    titleEs: "Guía completa para combinar, dividir y comprimir archivos PDF sin fugas de datos",
+    titleZh: "PDF 合并、拆分与无损压缩完全指南：无需上传服务器，零数据泄露风险",
+    titleFr: "Guide complet de fusion, découpage et compression de PDF sans fuite de données",
+    snippetEn: "Learn how to manage sensitive PDF documents safely in your browser using client-side JavaScript, WebAssembly, and zero-server architecture.",
+    snippetKo: "대기업 및 공공기관 서류 처리 시 민감한 개인정보가 담긴 PDF를 외부 서버 업로드 없이 브라우저 로컬 메모리에서 100% 안전하게 편집하는 방법을 알아봅니다.",
+    snippetJa: "社外秘の契約書や個人情報が含まれるPDFを外部サーバーにアップロードせず、ブラウザのローカルメモリで安全に編集・結合・圧縮する手法を解説します。",
+    snippetEs: "Aprende a gestionar documentos PDF confidenciales de forma segura en tu navegador utilizando JavaScript del cliente y arquitectura sin servidor.",
+    snippetZh: "详解如何在浏览器本地通过 JavaScript 与 WebAssembly 技术编辑 PDF 文档，杜绝文件泄露与云端落盘隐患。",
+    snippetFr: "Apprenez à gérer en toute sécurité des documents PDF sensibles directement dans votre navigateur grâce à une architecture locale.",
+
+    contentKo: `# PDF 문서 병합, 분할, 용량 압축 완전 가이드: 서버 업로드 없는 100% 브라우저 처리
+
+업무를 하다 보면 **계약서 PDF 병합**, **필요한 페이지 분할 추출**, **이메일 첨부용 PDF 용량 줄이기** 작업을 매일 접하게 됩니다.
+
+하지만 구글이나 네이버에서 'PDF 합치기'를 검색해 상위에 뜨는 무작위 웹사이트를 이용할 때, **여러분의 주민등록번호, 회사 비밀 계약서, 개인 통장 사본이 해외 원격 서버로 전송되고 있다는 사실**을 알고 계셨나요?
+
+---
+
+## 🔒 1. 기존 온라인 PDF 변환 사이트의 개인정보 유출 위험성
+
+일반적인 PDF 편집 웹사이트는 다음과 같은 메커니즘으로 동작합니다:
+
+1. 사용자가 PC/모바일에서 PDF 파일을 선택하여 **업로드**
+2. 해당 웹사이트의 **중앙 클라우드 서버(AWS, GCP 등)로 파일이 전송**
+3. 서버의 Python/Node.js 백엔드에서 파일 변환 및 편집 처리
+4. 변환 완료 후 생성된 결과 파일을 클라이언트 PC로 **다운로드**
+
+이 과정에서 사용자의 파일은 최소 수 분에서 수 일간 원격 서버 저장소(S3 Bucket 등)에 보관됩니다. 만약 해당 서버가 힐끔 해킹당하거나 관리자의 실수로 누출될 경우, 중대한 개인정보 및 기업 기밀 유출로 이어질 수 있습니다.
+
+---
+
+## 🛠️ 2. desktools.run의 100% 로컬 PDF 편집 원리
+
+**desktools.run**은 이러한 보안 위협을 원천 차단하기 위해 **WebAssembly (Wasm)** 및 최신 **HTML5 Canvas & pdf-lib** 엔진을 기반으로 구축되었습니다.
+
+### 주요 이점:
+- **Zero Server Traffic**: 업로드 버튼을 눌러도 외부 서버 통신이 전혀 발생하지 않습니다.
+- **무제한 대용량 처리**: 서버 전송 속도 제약이 없어 100MB 이상의 대용량 PDF 문서도 수 초 내에 즉시 병합 및 분할됩니다.
+- **완전 무료 & 무제한 사용**: 일일 횟수 제한이나 결제 요구가 전혀 없습니다.
+
+---
+
+## 📋 3. 작업별 효율적인 PDF 처리 방법
+
+### ① PDF 병합 (PDF Merge)
+- 여러 개로 분산된 보고서, 영수증, 계약서를 순서대로 정렬한 뒤 하나의 단일 PDF 파일로 결합합니다.
+- 드래그 앤 드롭으로 페이지 순서를 손쉽게 변경할 수 있습니다.
+
+### ② PDF 분할 (PDF Split)
+- 100페이지가 넘는 매뉴얼에서 필요한 특정 페이지(예: 3, 5-12페이지)만 골라내어 새로운 PDF로 저장합니다.
+- Visual Mode를 이용하면 미리보기 썸네일을 보며 클릭만으로 추출할 페이지를 직관적으로 선택할 수 있습니다.
+
+### ③ PDF 용량 압축 (PDF Compress)
+- 고해상도 이미지가 포함된 PDF의 폰트 및 이미지를 재인코딩하여 문서 화질 저하 없이 파일 크기를 최대 70% 이상 줄입니다.
+- 이메일 첨부 용량 제한(보통 25MB)을 초과할 때 유용하게 활용할 수 있습니다.
+
+안전하고 빠른 PDF 편집이 필요하시다면 지금 바로 desktools.run의 **PDF Tools**를 이용해 보세요!`,
+
+    contentEn: `# Complete Guide to PDF Merging, Splitting, and Compression Without Data Leakage
+
+Managing PDF documents is a daily task for business professionals, developers, and students. However, uploading confidential agreements or financial records to third-party servers presents severe data privacy risks.
+
+---
+
+## 🔒 1. The Security Hazards of Cloud-Based PDF Converter Tools
+
+Traditional online PDF utility sites mandate uploading your documents to remote cloud storage buckets. If those servers experience data breaches or keep cached files indefinitely, your confidential information is exposed.
+
+---
+
+## 🛠️ 2. How Client-Side WebAssembly Protects Your Documents
+
+**desktools.run** executes all PDF manipulations inside your browser memory using 'pdf-lib' and WebAssembly.
+
+- **Zero Data Ingestion**: No byte of your PDF file ever traverses the internet.
+- **Instant Processing**: Bypasses network upload/download bandwidth bottlenecks.
+- **Unlimited File Sizes**: Process large documents limited only by your local RAM.
+
+Try desktools.run PDF utilities today for absolute privacy!`,
+    contentJa: `# PDF結合・分割・軽量化の完全ガイド：個人情報漏洩なしでブラウザ内で safe に処理する方法`,
+    contentEs: `# Guía completa para combinar, dividir y comprimir archivos PDF sin fugas de datos`,
+    contentZh: `# PDF 合并、拆分与无损压缩完全指南：无需上传服务器，零数据泄露风险`,
+    contentFr: `# Guide complet de fusion, découpage et compression de PDF sans fuite de données`,
+  },
+  {
+    id: "image-optimization-webp-png-jpg-comparison",
+    date: "September 18, 2026",
+    category: "Web Performance",
+    titleEn: "Web Image Optimization: Comparing WebP, PNG, and JPEG for Maximum Speed",
+    titleKo: "웹 성능 최적화를 위한 이미지 포맷 완전 비교: WebP vs PNG vs JPEG와 압축 노하우",
+    titleJa: "Webパフォーマンス最適化のための画像フォーマット比較：WebP vs PNG vs JPEG",
+    titleEs: "Optimización de imágenes web: Comparación de WebP, PNG y JPEG para máxima velocidad",
+    titleZh: "Web 图像性能优化指南：WebP、PNG 与 JPEG 格式深度对比与压缩技巧",
+    titleFr: "Optimisation des images web : Comparatif WebP, PNG et JPEG pour des performances maximales",
+    snippetEn: "Discover how converting images to WebP and compressing PNGs locally improves Google Lighthouse Core Web Vitals score.",
+    snippetKo: "웹사이트 로딩 속도와 구글 라이트하우스(Lighthouse) 점수를 극대화하기 위한 최신 이미지 포맷(WebP, AVIF) 특징과 손실/무손실 압축 알고리즘을 분석합니다.",
+    snippetJa: "Webサイトの読み込み速度とGoogle Lighthouseスコアを劇的に改善する最新画像フォーマット（WebP、AVIF）のメリットと圧縮手法を徹底解説します。",
+    snippetEs: "Descubre cómo la conversión de imágenes a WebP mejora la velocidad de tu sitio web y las puntuaciones de Core Web Vitals.",
+    snippetZh: "深入对比 WebP、PNG 与 JPEG 的压缩率与画质表现，解析如何通过本地图像优化提升 Web 页面加载速度。",
+    snippetFr: "Découvrez comment la conversion d'images au format WebP améliore la vitesse de chargement et le score Google Lighthouse.",
+
+    contentKo: `# 웹 성능 최적화를 위한 이미지 포맷 완전 비교: WebP vs PNG vs JPEG
+
+인터넷 웹페이지 용량의 **60% 이상**을 차지하는 요소가 무엇인지 아시나요? 바로 **이미지 파일**입니다.
+
+구글의 Core Web Vitals(주요 웹 지표) 평가에서 **LCP(가장 큰 콘텐츠 도출 시간)** 점수를 높이고 검색 엔진 노출(SEO) 순위를 끌어올리려면, 이미지 포맷 선택과 압축이 필수적입니다.
+
+---
+
+## 🎨 1. 주요 이미지 포맷(Format) 특성 비교
+
+### ① JPEG / JPG (Joint Photographic Experts Group)
+- **특징**: 손실 압축(Lossy Compression) 방식을 사용하는 가장 보편적인 이미지 포맷입니다.
+- **장점**: 복잡한 색상의 사진이나 풍경 이미지의 용량을 매우 작게 줄일 수 있습니다.
+- **단점**: 투명 배경(Alpha Channel)을 지원하지 않으며, 압축률을 높이면 노이즈(Artifacts)가 발생합니다.
+
+### ② PNG (Portable Network Graphics)
+- **특징**: 무손실 압축(Lossless Compression) 포맷입니다.
+- **장점**: 투명 배경(Alpha Channel)을 완벽하게 지원하며, 그래픽, 아이콘, 텍스트가 포함된 이미지에서 깨끗한 화질을 유지합니다.
+- **단점**: 고해상도 사진의 경우 파일 용량이 JPEG 대비 3~5배 이상 커질 수 있습니다.
+
+### ③ WebP (웹피 - 차세대 웹 포맷)
+- **특징**: 구글이 개발한 차세대 웹 전용 이미지 포맷입니다.
+- **장점**: 손실/무손실 압축과 투명 배경을 모두 지원합니다. 동일 화질 기준 **JPEG 대비 약 25~35%, PNG 대비 26% 이상** 용량이 작습니다.
+- **호환성**: 현대 모든 스마트폰 및 브라우저(Chrome, Safari, Edge, Firefox)에서 100% 호환됩니다.
+
+---
+
+## 📊 이미지 포맷별 요약 비교표
+
+| 포맷 | 압축 방식 | 투명 배경 지원 | 추천 용도 | 평균 용도 |
+| :--- | :--- | :--- | :--- | :--- |
+| **JPEG** | 손실 압축 | ❌ 불가능 | 일반 고화질 사진, 배경 이미지 | 중간 |
+| **PNG** | 무손실 압축 | ✅ 가능 | 로고, 아이콘, 캡처 화면, 투명 배경 | 큼 |
+| **WebP** | 손실 + 무손실 | ✅ 가능 | 웹사이트 메인 비주얼, 쇼핑몰 상품 컷 | **매우 작음** |
+
+---
+
+## 🚀 2. 웹 브라우저에서 이미지 1초 만에 최적화하기
+
+이미지 압축이나 포맷 변환을 위해 Photoshop이나 포토스케이프 같은 무거운 프로그램을 실행할 필요가 없습니다.
+
+desktools.run의 **[Image Compress](file:///tools/image-compress)** 및 **[Image Converter](file:///tools/image-converter)** 도구를 활용하면:
+- **100% 브라우저 캔버스 처리**: 서버 업로드 없이 원본 화질을 유지하면서 이미지 용량을 80% 이상 줄일 수 있습니다.
+- **WebP 즉시 변환**: JPG, PNG 파일을 클릭 한 번으로 초경량 WebP 포맷으로 일괄 변환할 수 있습니다.
+
+지금 바로 여러분의 웹사이트 이미지를 최적화하여 쾌적한 로딩 속도를 만들어 보세요!`,
+
+    contentEn: `# Web Image Optimization: Comparing WebP, PNG, and JPEG for Maximum Speed
+
+Images consume over 60% of total webpage payload sizes. Selecting the correct image format directly dictates your website load times and Google Core Web Vitals (LCP) performance scores.
+
+---
+
+## 🎨 1. Format Breakdown: WebP vs. PNG vs. JPEG
+
+- **JPEG**: Ideal for rich photographs. Supports lossy compression but lacks alpha channel transparency.
+- **PNG**: Excellent for graphic assets, logos, and UI screenshots needing pixel-perfect lossless transparency.
+- **WebP**: Modern default web format by Google offering lossy/lossless compression with alpha channel, delivering up to 35% size reductions over JPEG and PNG.
+
+Optimize your web images directly in browser memory using desktools.run **Image Tools**!`,
+    contentJa: `# Webパフォーマンス最適化のための画像フォーマット比較：WebP vs PNG vs JPEG`,
+    contentEs: `# Optimización de imágenes web: Comparación de WebP, PNG y JPEG para máxima velocidad`,
+    contentZh: `# Web 图像性能优化指南：WebP、PNG 与 JPEG 格式深度对比与压缩技巧`,
+    contentFr: `# Optimisation des images web : Comparatif WebP, PNG et JPEG pour des performances maximales`,
+  },
+  {
+    id: "jwt-authentication-structure-security-best-practices",
+    date: "September 20, 2026",
+    category: "Web Security",
+    titleEn: "Deep Dive into JWT (JSON Web Token): Header, Payload, Signature & Expiration Inspection",
+    titleKo: "JWT(JSON Web Token) 아키텍처와 보안 검증: Header, Payload, Signature 완벽 해석",
+    titleJa: "JWT (JSON Web Token) の構造とセキュリティ検証：Header・Payload・Signature の徹底解剖",
+    titleEs: "Análisis profundo de JWT: Estructura, firma, verificación de expiración y mejores prácticas",
+    titleZh: "JWT (JSON Web Token) 架构原理与安全实战：Header、Payload 与 Signature 深度剖析",
+    titleFr: "Au cœur de JWT (JSON Web Token) : Structure, signature et bonnes pratiques de sécurité",
+    snippetEn: "Understand the cryptographic anatomy of JSON Web Tokens, inspect algorithm vulnerabilities like 'none', and learn safe decoding techniques.",
+    snippetKo: "현대 웹/앱 서비스의 인가(Authorization) 표준인 JWT의 구조를 파헤치고, 만료 시각(exp) 계산 및 안전한 클라이언트 디코딩 방식을 살펴봅니다.",
+    snippetJa: "モダンWebアプリの認可標準であるJWTの構造（Header/Payload/Signature）と、有効期限チェックやセキュリティベストプラクティスを解説します。",
+    snippetEs: "Comprende la anatomía de los JSON Web Tokens, inspecciona vulnerabilidades comunes y aprende técnicas seguras de descodificación.",
+    snippetZh: "深入解析 JWT 三段式 Base64URL 结构，详解 alg=none 常见安全漏洞以及前端安全解析 JWT Token 的正确姿势。",
+    snippetFr: "Comprenez l'anatomie cryptographique des JSON Web Tokens et découvrez comment les décoder en toute sécurité.",
+
+    contentKo: `# JWT(JSON Web Token) 아키텍처와 보안 검증: Header, Payload, Signature 완벽 해석
+
+클라이언트-서버 구조의 웹 애플리케이션 및 REST API 개발에서 가장 보편적으로 사용되는 인증/인가 메커니즘이 바로 **JWT(JSON Web Token)**입니다.
+
+JWT는 마이크로서비스 아키텍처(MSA) 및 무상태(Stateless) 서버 환경에서 별도의 세션 DB 조회 없이 사용자의 신원을 입증할 수 있는 강력한 토큰 표준입니다.
+
+---
+
+## 🧩 1. JWT의 3단계 구문 구조 (Dot으로 구분된 3가지 부분)
+
+JWT 토큰을 살펴보면 마침표(.)로 연결된 3개의 Base64URL 인코딩 문자열로 이루어져 있습니다:
+
+\`\`\`text
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+\`\`\`
+
+### ① Header (헤더)
+- 토큰의 타입('"typ": "JWT"')과 서명 암호화 알고리즘('"alg": "HS256"' 또는 '"RS256"') 정보를 담고 있습니다.
+
+### ② Payload (페이로드 - 클레임 모음)
+- 사용자의 ID, 이름, 권한(Role), 토큰 발급 시각(iat), 만료 시각(exp) 등의 클레임(Claim) 데이터를 포함합니다.
+- **주의**: Payload는 단순히 Base64URL로 인코딩된 것일 뿐 **암호화(Encryption)된 것이 아닙니다.** 따라서 비밀번호나 개인 금융 정보 같은 민감한 데이터는 절대 Payload에 넣으면 안 됩니다.
+
+### ③ Signature (서명)
+- 서버가 가지고 있는 비밀키(Secret Key)를 이용해 Base64(Header) + "." + Base64(Payload)를 위변조할 수 없도록 암호화한 해시값입니다.
+- 클라이언트가 토큰 내용을 조작하면 서명이 일치하지 않아 서버에서 즉시 거부됩니다.
+
+---
+
+## ⚠️ 2. 개발자가 자주 범하는 JWT 보안 취약점
+
+1. **alg: none 공격**: 일부 부실한 JWT 라이브러리에서 헤더의 알고리즘을 none으로 설정 시 서명 검증을 건너뛰는 취약점입니다.
+2. **짧지 않은 만료 시간(exp) 설정**: Refresh Token 없이 Access Token의 유효기간을 며칠씩 길게 가져갈 경우, 토큰 탈취 시 큰 피해가 발생할 수 있습니다.
+3. **로컬스토리지(LocalStorage) 보관 시 XSS 위험**: JWT를 브라우저 LocalStorage에 저장하면 XSS(스크립트 삽입) 공격에 쉽게 탈취되므로 HttpOnly Cookie 보관을 권장합니다.
+
+---
+
+## 🛠️ 안전한 브라우저 JWT 디코더 활용법
+
+개발 및 디버깅 중 발급된 JWT 토큰의 만료 시간이나 사용자 클레임(Claim)을 손쉽게 확인하고 싶다면 desktools.run의 **[JWT Decoder](file:///tools/jwt-decoder)**를 활용하세요.
+
+- **100% 로컬 처리**: 입력한 JWT 토큰이 서버로 절대 전송되지 않아 보안상 매우 안전합니다.
+- **실시간 만료 검증**: exp 타임스탬프를 읽어 토큰의 남아있는 유효시간을 한눈에 시각화해 줍니다.`,
+
+    contentEn: `# Deep Dive into JWT (JSON Web Token): Header, Payload, Signature & Expiration Inspection
+
+JSON Web Tokens (JWT) are an open, industry standard RFC 7519 method for representing claims securely between two parties.
+
+---
+
+## 🧩 1. The Tripartite Anatomy of a JWT
+
+A JWT string comprises three distinct Base64URL-encoded components separated by dots:
+1. **Header**: Defines signing algorithm (HS256, RS256) and token type.
+2. **Payload**: Houses JSON claims (sub, iat, exp). Note: Base64URL is NOT encryption! Never store plaintext passwords in payload.
+3. **Signature**: Cryptographic signature validating payload integrity using server secrets.
+
+Safely decode and inspect JWT payload claims locally without sending tokens to remote servers using desktools.run **JWT Decoder**!`,
+    contentJa: `# JWT (JSON Web Token) の構造とセキュリティ検証：Header・Payload・Signature の徹底解剖`,
+    contentEs: `# Análisis profundo de JWT: Estructura, firma, verificación de expiración y mejores prácticas`,
+    contentZh: `# JWT (JSON Web Token) 架构原理与安全实战：Header、Payload 与 Signature 深度剖析`,
+    contentFr: `# Au cœur de JWT (JSON Web Token) : Structure, signature et bonnes pratiques de sécurité`,
+  },
+  {
+    id: "cron-expressions-master-class-syntax-examples",
+    date: "September 21, 2026",
+    category: "Developer Tools",
+    titleEn: "Cron Expression Masterclass: Syntax, Wildcards, and Practical Scheduling Examples",
+    titleKo: "Cron 표현식 마스터 클래스: 5자리 와일드카드 구문 해석과 실행 주기 실전 가이드",
+    titleJa: "Cron 式マスタークラス：5桁のワイルドカード構文解釈と実行スケジュール実践ガイド",
+    titleEs: "Clase magistral sobre expresiones Cron: Sintaxis, caracteres comodín y ejemplos prácticos",
+    titleZh: "Cron 定时任务表达式全解：5 位通配符语法详解与实战调度示例",
+    titleFr: "Masterclass sur les expressions Cron : Syntaxe, caractères génériques et exemples pratiques",
+    snippetEn: "Learn how to parse 5-field cron strings, calculate upcoming trigger schedules, and avoid common scheduling pitfalls.",
+    snippetKo: "리눅스 crontab 및 서버리스 스케줄러에서 사용하는 5자리 Cron 구문(* * * * *)의 의미와 실무 자주 쓰이는 패턴들을 정리합니다.",
+    snippetJa: "Linuxのcrontabやサーバーレス環境で使われる5桁のCron構文（* * * * *）の正しい読み方と実用的な設定例を解説します。",
+    snippetEs: "Aprende a interpretar cadenas cron de 5 campos, calcula las próximas ejecuciones y evita errores comunes.",
+    snippetZh: "系统化讲解 Linux Crontab 五位 Cron 表达式语法规则，结合具体规则例举与逻辑分析流程。",
+    snippetFr: "Apprenez à analyser les chaînes cron à 5 champs et calculez les prochaines dates d'exécution.",
+
+    contentKo: `# Cron 표현식 마스터 클래스: 5자리 와일드카드 구문 해석과 실행 주기 실전 가이드
+
+리눅스(Linux) 시스템 관리자나 백엔드 개발자라면 자동 배치(Batch) 작업, DB 백업, 로그 정리를 위해 **Cron(크론) 표현식**을 자주 사용합니다.
+
+하지만 */15 2,4 * * 1-5 와 같은 복잡한 특수문자 구문을 접하면 실행 주기가 정확히 언제인지 혼동하기 쉽습니다.
+
+---
+
+## ⏱️ 1. standard 5자리 Cron 구문 순서
+
+기본적인 Cron 표현식은 공백으로 구분된 **5개의 필드**로 구성됩니다:
+
+\`\`\`text
+*     *     *     *     *
+│     │     │     │     │
+│     │     │     │     └───── 요일 (0 - 6) (0: 일요일 ~ 6: 토요일)
+│     │     │     └────────── 월 (1 - 12)
+│     │     └─────────────── 일 (1 - 31)
+│     └──────────────────── 시 (0 - 23)
+└───────────────────────── 분 (0 - 59)
+\`\`\`
+
+---
+
+## 🔣 2. 특수문자(와일드카드)의 의미
+
+- \`*\` (Asterisk): 모든 값을 의미 (예: 분 위치에 \`*\`가 있으면 매 분마다)
+- \`,\` (Comma): 값의 목록 구분 (예: \`1,15,30\` -> 1분, 15분, 30분에 실행)
+- \`-\` (Hyphen): 범위 지정 (예: \`1-5\` -> 월요일부터 금요일까지)
+- \`/\` (Slash): 증분 값 지정 (예: \`*/10\` -> 10분 간격마다)
+
+---
+
+## 💡 3. 실무에서 자주 쓰이는 Cron 표현식 5선
+
+1. \`*/5 * * * *\`: **5분마다 1회 실행**
+2. \`0 * * * *\`: **매시간 0분에 실행 (1시간 간격)**
+3. \`0 0 * * *\`: **매일 자정(00:00)에 1회 실행** (일일 데일리 백업)
+4. \`0 9 * * 1-5\`: **주중(월~금) 아침 9:00에 실행** (출근 시간 리포트)
+5. \`0 0 1 * *\`: **매월 1일 자정에 실행** (월간 정산 작업)
+
+---
+
+## 🛠️ 실시간 Cron Parser 도구로 검증하기
+
+작성한 Cron 표현식이 의도한 대로 동작하는지 확신하기 어렵다면, desktools.run의 **[Cron Parser](file:///tools/cron-parser)** 도구를 이용해 보세요!
+
+- 입력한 5자리 Cron 구문을 **사람이 읽기 쉬운 언어(한국어, 영어 등)**로 번역해 줍니다.
+- 앞으로 실행될 **다음 5회 실행 예정 시각**을 실시간으로 계산해 보여줍니다.`,
+
+    contentEn: `# Cron Expression Masterclass: Syntax, Wildcards, and Practical Scheduling Examples
+
+Cron expressions schedule recurring system commands in Linux environments and serverless cloud functions.
+
+---
+
+## ⏱️ 1. The Standard 5-Field Format
+
+\`\`\`text
+┌───────────── minute (0 - 59)
+│ ┌─────────── hour (0 - 23)
+│ │ ┌───────── day of month (1 - 31)
+│ │ │ ┌─────── month (1 - 12)
+│ │ │ │ ┌───── day of week (0 - 6) (0 is Sunday)
+* * * * *
+\`\`\`
+
+Parse cron expressions into human-readable text and project upcoming execution timestamps locally using desktools.run **Cron Parser**!`,
+    contentJa: `# Cron 式マスタークラス：5桁のワイルドカード構文解釈と実行スケジュール実践ガイド`,
+    contentEs: `# Clase magistral sobre expresiones Cron: Sintaxis, caracteres comodín y ejemplos prácticos`,
+    contentZh: `# Cron 定时任务表达式全解：5 位通配符语法详解与实战调度示例`,
+    contentFr: `# Masterclass sur les expressions Cron : Syntaxe, caractères génériques et exemples pratiques`,
+  },
+  {
+    id: "qr-code-generator-vector-svg-vs-png-usage",
+    date: "September 22, 2026",
+    category: "Design & Marketing",
+    titleEn: "High-Resolution QR Code Generation: SVG Vector vs. PNG Raster Printing",
+    titleKo: "고해상도 QR 코드 생성과 벡터 SVG 포맷 활용법: 마케팅 및 오프라인 인쇄 최적화",
+    titleJa: "高解像度QRコード作成とベクトルSVGフォーマット活用法：オフライン印刷の最適化",
+    titleEs: "Generación de códigos QR de alta resolución: Vector SVG vs. PNG para impresión",
+    titleZh: "高分辨率二维码生成与矢量 SVG 格式应用：线下印刷与营销优化指南",
+    titleFr: "Génération de codes QR haute résolution : SVG vectoriel vs PNG matriciel pour l'impression",
+    snippetEn: "Discover error correction levels (L, M, Q, H) and compare vector SVG vs PNG formats for offline marketing print materials.",
+    snippetKo: "오프라인 현수막, 명함, 팜플렛 인쇄 시 깨짐 없는 QR 코드를 제작하기 위한 SVG/PNG 포맷 비교 및 복구 수준(Error Correction Level)을 설명합니다.",
+    snippetJa: "名刺やポスター印刷で劣化しないQRコードを作成するためのSVGベクトル対PNGラスタの比較と誤り訂正レベル（L/M/Q/H）を解説します。",
+    snippetEs: "Descubre los niveles de corrección de errores y compara los formatos vectoriales SVG y PNG para materiales impresos.",
+    snippetZh: "解析二维码容错率机制（L/M/Q/H），对比矢量 SVG 与 位图 PNG 格式在名刺、海报等线下印刷场景中的优势。",
+    snippetFr: "Découvrez les niveaux de correction d'erreurs et comparez les formats SVG et PNG pour vos supports d'impression.",
+
+    contentKo: `# 고해상도 QR 코드 생성과 벡터 SVG 포맷 활용법: 마케팅 및 인쇄 최적화
+
+카페 메뉴판, 비즈니스 명함, 행사 현수막, 이벤트 팜플렛에 이르기까지 **QR 코드**는 오프라인 고객을 디지털 웹사이트로 연결하는 가장 직관적인 통로입니다.
+
+하지만 QR 코드를 인쇄했을 때 스마트폰 카메라가 제대로 인식하지 못하거나 이미지 입자가 깨지는 문제를 경험하신 적이 있으신가요?
+
+---
+
+## 📐 1. SVG (벡터) vs PNG (비트맵) 인쇄용 포맷 비교
+
+### ① PNG (비트맵 포맷)
+- **특징**: 픽셀(Pixel) 단위로 이미지 정보를 저장합니다.
+- **장점**: 모바일 웹화면, 이메일 서명, SNS 이미지 첨부 시 손쉽게 사용할 수 있습니다.
+- **단점**: 인쇄물을 대형 현수막이나 포스터 크기로 확대하면 픽셀이 깨지는 **계단 현상(Blurry edges)**이 발생하여 QR 카메라 인식이 실패할 수 있습니다.
+
+### ② SVG (Scalable Vector Graphics)
+- **특징**: 점과 선의 수학적 좌표(Vector)로 이미지를 구성합니다.
+- **장점**: **10m 크기 대형 빌딩 현수막으로 확대 인쇄해도 단 1픽셀도 깨지지 않고 완벽한 선명도를 유지합니다.**
+- **추천 용도**: 명함, 카탈로그, 포스터, 굿즈 인쇄물 제작 시 일러스트레이터(AI) 작업용.
+
+---
+
+## 🛡️ 2. QR 코드 복구 수준 (Error Correction Level)의 이해
+
+QR 코드는 일부분이 손상되거나 더러워져도 데이터를 복원할 수 있는 **Reed-Solomon 에러 교정 기능**을 내장하고 있습니다:
+
+1. **Level L (7% 복구)**: 데이터 밀도가 낮아 사각형이 단순하지만 손상에 약함 (웹용 URL)
+2. **Level M (15% 복구)**: 기본 표준 권장값
+3. **Level Q (25% 복구)**: 인쇄물 부착용
+4. **Level H (30% 복구)**: **QR 코드 중앙에 브랜드 로고나 아이콘을 넣을 때 필수 선택**
+
+---
+
+## 🛠️ 브라우저에서 안전하게 QR 코드 생성하기
+
+desktools.run의 **[QR Code Generator](file:///tools/qr-generator)**를 활용하면:
+- **Zero Server Upload**: 입력한 URL이나 Wi-Fi 비밀번호가 서버로 수집되지 않아 개인정보가 안전합니다.
+- **SVG & PNG 동시 지원**: 클릭 한 번으로 고해상도 PNG 또는 벡터 SVG 포맷을 무료로 다운로드할 수 있습니다.`,
+
+    contentEn: `# High-Resolution QR Code Generation: SVG Vector vs. PNG Raster Printing
+
+QR codes bridge offline users with web destinations across marketing collateral, business cards, and product packaging.
+
+---
+
+## 📐 1. Format Battle: SVG Vector vs. PNG Raster
+
+- **PNG**: Best for web viewports, digital emails, and social media. Resizing degrades crispness.
+- **SVG**: Infinite resolution scaling mathematically guaranteeing zero pixelation when printed on massive billboards.
+
+Generate high-resolution PNG & vector SVG QR codes safely in browser using desktools.run **QR Generator**!`,
+    contentJa: `# 高解像度QRコード作成とベクトルSVGフォーマット活用法：オフライン印刷の最適化`,
+    contentEs: `# Generación de códigos QR de alta resolución: Vector SVG vs. PNG para impresión`,
+    contentZh: `# 高分辨率二维码生成与矢量 SVG 格式应用：线下印刷与营销优化指南`,
+    contentFr: `# Génération de codes QR haute résolution : SVG vectoriel vs PNG matriciel pour l'impression`,
+  },
 ];
 
 export function getLocalizedPost(post: BlogPost, locale: string) {

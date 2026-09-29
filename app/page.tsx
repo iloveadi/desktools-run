@@ -26,28 +26,31 @@ export default function Home() {
       <main style={{ flex: 1 }}>
         <HeroSection onSearch={handleSearch} />
 
-        <section className="main-tools-section" style={{ maxWidth: "1280px", margin: "0 auto" }} aria-label={t("grid.allTools")}>
-          {/* Active search header */}
-          {isSearching && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
-              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                {t("grid.searchLabel")} &quot;{searchQuery}&quot;
-              </h2>
-              <button
-                onClick={() => handleSearch("")}
-                style={{ padding: "6px 14px", borderRadius: "8px", background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)", color: "var(--text-secondary)", fontSize: "12.5px", cursor: "pointer", fontFamily: "Inter, sans-serif", fontWeight: 500, transition: "all 0.15s" }}
-                aria-label="Clear search"
-              >
-                {t("grid.showAll")}
-              </button>
-            </div>
-          )}
+        <section className="product-tile-light" aria-label={t("grid.allTools")}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+            {/* Active search header */}
+            {isSearching && (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px" }}>
+                <h2 className="apple-body-strong" style={{ color: "var(--colors-ink)" }}>
+                  {t("grid.searchLabel")} &quot;{searchQuery}&quot;
+                </h2>
+                <button
+                  onClick={() => handleSearch("")}
+                  className="button-secondary-pill"
+                  style={{ padding: "6px 16px", fontSize: "14px" }}
+                  aria-label="Clear search"
+                >
+                  {t("grid.showAll")}
+                </button>
+              </div>
+            )}
 
-          <ToolGrid
-            tools={filteredTools}
-            isSearching={isSearching}
-            onCategorySearch={handleSearch}
-          />
+            <ToolGrid
+              tools={filteredTools}
+              isSearching={isSearching}
+              onCategorySearch={handleSearch}
+            />
+          </div>
         </section>
       </main>
 
