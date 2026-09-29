@@ -52,9 +52,19 @@ html.dark {
   --header-bg: rgba(9, 10, 15, 0.8);
   --footer-bg: #07080c;
 
-  /* Glass Elevation */
+  /* Glass Elevation & Surfaces */
   --glass-blur: blur(16px);
   --card-glow: 0 12px 32px -8px rgba(0, 217, 146, 0.16), inset 0 1px 0 rgba(0, 217, 146, 0.25);
+  --glass-bg:       linear-gradient(180deg, rgba(20, 24, 36, 0.72) 0%, rgba(13, 16, 25, 0.88) 100%);
+  --glass-bg-hover: linear-gradient(180deg, rgba(26, 32, 48, 0.8) 0%, rgba(17, 21, 33, 0.92) 100%);
+  --btn-secondary-bg:     rgba(255, 255, 255, 0.04);
+  --btn-secondary-border: rgba(255, 255, 255, 0.08);
+  --btn-secondary-hover:  rgba(255, 255, 255, 0.08);
+  --input-bg:           rgba(18, 22, 33, 0.75);
+  --input-border:       rgba(255, 255, 255, 0.1);
+  --input-border-focus: rgba(0, 217, 146, 0.6);
+  --tag-bg:       rgba(255, 255, 255, 0.04);
+  --tag-border:   rgba(255, 255, 255, 0.08);
 }
 
 /* ===========================================================
@@ -103,9 +113,19 @@ html.light {
   --header-bg: rgba(255, 255, 255, 0.88);
   --footer-bg: #f1f5f9;
 
-  /* Glass Elevation */
+  /* Glass Elevation & Surfaces */
   --glass-blur: blur(16px);
   --card-glow: 0 12px 32px -8px rgba(5, 150, 105, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --glass-bg:       #ffffff;
+  --glass-bg-hover: #f8fafc;
+  --btn-secondary-bg:     #f8fafc;
+  --btn-secondary-border: rgba(0, 0, 0, 0.08);
+  --btn-secondary-hover:  #f1f5f9;
+  --input-bg:           #ffffff;
+  --input-border:       rgba(0, 0, 0, 0.12);
+  --input-border-focus: #059669;
+  --tag-bg:       #f1f5f9;
+  --tag-border:   rgba(0, 0, 0, 0.08);
 }
 
 /* Base Body Setup with Ambient Radial Mesh & Fine Technical Grid */
@@ -447,6 +467,58 @@ kbd {
   font-family: "SFMono-Regular", Menlo, Monaco, monospace;
 }
 
+/* ===========================================================
+   GLASS CARD SYSTEM (Clean Containers for Tools, Guides, FAQs)
+   =========================================================== */
+.glass-card {
+  background: linear-gradient(180deg, rgba(20, 24, 36, 0.72) 0%, rgba(13, 16, 25, 0.88) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px -6px rgba(0, 0, 0, 0.45);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.glass-card.card-hover:hover,
+a.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 217, 146, 0.45);
+  box-shadow: 0 12px 28px -6px rgba(0, 217, 146, 0.16), inset 0 1px 0 rgba(0, 217, 146, 0.25);
+}
+
+/* Guide Header Badge Pill */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(0, 217, 146, 0.08);
+  border: 1px solid rgba(0, 217, 146, 0.28);
+  color: #00d992;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(0, 217, 146, 0.1);
+}
+
+/* Tool Responsive Grids */
+@media (max-width: 960px) {
+  .workspace-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .preview-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Dashed Section Divider Line */
 .dashed-divider {
   border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
@@ -618,6 +690,31 @@ html.light .tool-icon-box {
 html.light .card-feature:hover .tool-icon-box {
   background: rgba(5, 150, 105, 0.16) !important;
   border-color: rgba(5, 150, 105, 0.45) !important;
+}
+
+html.light .glass-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03), 0 8px 20px -4px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html.light .glass-card:hover {
+  border-color: rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light .glass-card.card-hover:hover,
+html.light a.glass-card:hover {
+  border-color: rgba(5, 150, 105, 0.45) !important;
+  box-shadow: 0 10px 24px -4px rgba(5, 150, 105, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-2px);
+}
+
+html.light .badge-pill {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.25) !important;
+  color: #059669 !important;
+  box-shadow: 0 0 10px rgba(5, 150, 105, 0.08) !important;
 }
 
 html.light .metric-card-neo {

@@ -119,7 +119,7 @@ export default function ToolGuide({
         <div style={{ marginBottom: "32px", textAlign: "center" }}>
           <div className="badge-pill" style={{ marginBottom: "14px" }}>
             <BookOpen size={13} />
-            {t("wordCount.guide.title") || "도구 소개 및 사용 가이드"}
+            {locale === "ko" ? "도구 소개 및 사용 가이드" : "Tool Introduction & Guide"}
           </div>
           <h2
             style={{
@@ -197,7 +197,7 @@ export default function ToolGuide({
                   margin: 0,
                 }}
               >
-                {t("wordCount.guide.overviewTitle") || "도구 개요 & 개인정보 보호"}
+                {locale === "ko" ? "도구 개요 & 개인정보 보호" : "Overview & Privacy Protection"}
               </h3>
             </div>
             <p
@@ -500,7 +500,7 @@ export default function ToolGuide({
                   color: "var(--text-primary)",
                 }}
               >
-                {faqTitle || t("wordCount.guide.faqTitle") || "자주 묻는 질문 (FAQ)"}
+                {faqTitle || (locale === "ko" ? "자주 묻는 질문 (FAQ)" : "Frequently Asked Questions (FAQ)")}
               </h3>
             </div>
 
