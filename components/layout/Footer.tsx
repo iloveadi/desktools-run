@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Zap, Code2, X, Mail, ExternalLink } from "lucide-react";
+import { Zap, Code2, X, Mail, ArrowUpRight } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 export default function Footer() {
@@ -32,16 +32,16 @@ export default function Footer() {
       style={{
         borderTop: "1px solid var(--colors-hairline)",
         marginTop: "auto",
-        backgroundColor: "var(--footer-bg)",
-        color: "var(--colors-ink-muted-80)",
-        paddingTop: "64px",
+        backgroundColor: "var(--colors-canvas)",
+        color: "var(--colors-body)",
+        paddingTop: "48px",
       }}
     >
       <div
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "0 24px 48px",
+          padding: "0 24px 40px",
           display: "grid",
           gridTemplateColumns: "1fr repeat(3, auto)",
           gap: "48px",
@@ -49,7 +49,7 @@ export default function Footer() {
         className="footer-grid"
       >
         {/* Brand column */}
-        <div style={{ maxWidth: "280px" }}>
+        <div style={{ maxWidth: "300px" }}>
           <Link
             href="/"
             style={{
@@ -61,39 +61,59 @@ export default function Footer() {
             }}
             aria-label="desktools.run home"
           >
-            <Zap size={18} color="#0066cc" fill="#0066cc" />
-            <span style={{ fontSize: "17px", fontWeight: 600, color: "var(--colors-ink)" }}>
-              desktools.run
+            <div
+              style={{
+                width: "26px",
+                height: "26px",
+                borderRadius: "6px",
+                backgroundColor: "var(--colors-canvas-soft)",
+                border: "1px solid var(--colors-hairline)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Zap size={14} color="var(--colors-primary)" fill="var(--colors-primary)" />
+            </div>
+            <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--colors-ink-strong)" }}>
+              desktools<span style={{ color: "var(--colors-primary)" }}>.run</span>
             </span>
           </Link>
 
-          <p className="apple-caption" style={{ color: "var(--colors-ink-muted-80)", marginBottom: "20px" }}>
+          <p className="body-sm" style={{ color: "var(--colors-mute)", marginBottom: "20px" }}>
             {t("footer.tagline")}
           </p>
 
           {/* Social / Contact icon links */}
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ display: "flex", gap: "8px" }}>
             {[
-              { icon: Code2, href: "https://github.com", label: "GitHub", external: true },
-              { icon: X,     href: "https://x.com",      label: "X",      external: true },
-              { icon: Mail,  href: "/contact",           label: "Contact", external: false },
+              { icon: Code2, href: "https://github.com/iloveadi/desktools-run", label: "GitHub", external: true },
+              { icon: Mail,  href: "/contact", label: "Contact", external: false },
             ].map(({ icon: Icon, href, label, external }) => {
               const content = (
                 <div
                   style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "9999px",
-                    backgroundColor: "var(--colors-surface-pearl)",
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "6px",
+                    backgroundColor: "var(--colors-canvas-soft)",
                     border: "1px solid var(--colors-hairline)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "var(--colors-ink-muted-80)",
-                    transition: "transform 0.15s ease",
+                    color: "var(--colors-body)",
+                    transition: "border-color 0.15s ease, color 0.15s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--colors-primary)";
+                    e.currentTarget.style.color = "var(--colors-primary)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--colors-hairline)";
+                    e.currentTarget.style.color = "var(--colors-body)";
                   }}
                 >
-                  <Icon size={15} />
+                  <Icon size={14} />
                 </div>
               );
 
@@ -117,39 +137,35 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Link columns — relaxed 2.41 leading per design.md */}
-        {Object.entries(FOOTER_LINKS).map(([title, links]) => (
-          <div key={title}>
-            <h3
+        {/* Link columns */}
+        {Object.entries(FOOTER_LINKS).map(([sectionTitle, links]) => (
+          <div key={sectionTitle}>
+            <p
+              className="eyebrow-mono font-mono"
               style={{
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--colors-ink)",
-                marginBottom: "12px",
-                letterSpacing: "-0.224px",
+                fontSize: "12px",
+                letterSpacing: "1.5px",
+                marginBottom: "16px",
+                color: "var(--colors-ink-strong)",
               }}
             >
-              {title}
-            </h3>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column" }}>
+              {sectionTitle}
+            </p>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {links.map(({ label, href }) => (
                 <li key={label}>
                   <Link
                     href={href}
-                    className="apple-dense-link"
                     style={{
-                      color: "var(--colors-ink-muted-80)",
+                      fontSize: "13.5px",
+                      color: "var(--colors-body)",
                       textDecoration: "none",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "4px",
                       transition: "color 0.15s ease",
                     }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--colors-primary)"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--colors-ink-muted-80)"; }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-primary)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
                   >
                     {label}
-                    {href.startsWith("http") && <ExternalLink size={10} style={{ opacity: 0.5 }} />}
                   </Link>
                 </li>
               ))}
@@ -158,38 +174,46 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Legal fine-print bar */}
+      {/* Dashed divider */}
+      <div className="dashed-divider" />
+
+      {/* Bottom Legal / Copyright Row */}
       <div
         style={{
-          borderTop: "1px solid var(--colors-hairline)",
           maxWidth: "1280px",
           margin: "0 auto",
           padding: "20px 24px",
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-between",
-          gap: "12px",
+          alignItems: "center",
           flexWrap: "wrap",
+          gap: "12px",
         }}
       >
-        <p style={{ fontSize: "12px", color: "var(--colors-ink-muted-48)" }}>
-          © {year} desktools.run — {t("footer.copyright")}
-        </p>
-        <p style={{ fontSize: "12px", color: "var(--colors-ink-muted-48)" }}>
-          {t("footer.privacy")}
-        </p>
+        <span className="caption font-mono" style={{ color: "var(--colors-mute)" }}>
+          &copy; {year} desktools.run &middot; Zero server upload, 100% in-browser processing.
+        </span>
+
+        <span className="caption font-mono" style={{ color: "var(--colors-mute)", display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--colors-primary)" }} />
+          ALL SYSTEMS OPERATIONAL
+        </span>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
-          .footer-grid > div:first-child { grid-column: 1 / -1; max-width: 100% !important; }
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 32px !important;
+          }
         }
         @media (max-width: 480px) {
-          .footer-grid { grid-template-columns: 1fr !important; }
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
         }
       `}</style>
     </footer>
   );
 }
-

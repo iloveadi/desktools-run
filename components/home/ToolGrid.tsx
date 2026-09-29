@@ -277,31 +277,24 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    className={`button-pill-tag ${isActive ? "active" : ""}`}
                     style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      padding: "8px 14px",
-                      borderRadius: "100px",
+                      padding: "6px 14px",
                       fontSize: "13px",
-                      fontWeight: isActive ? 700 : 500,
                       cursor: "pointer",
-                      border: isActive ? "1px solid #6366f1" : "1px solid var(--border-subtle)",
-                      background: isActive ? "linear-gradient(135deg, rgba(99,102,241,0.22), rgba(168,85,247,0.18))" : "var(--btn-secondary-bg)",
-                      color: isActive ? "#818cf8" : "var(--text-secondary)",
-                      transition: "all 0.15s ease",
-                      boxShadow: isActive ? "0 2px 10px rgba(99,102,241,0.2)" : "none",
+                      fontFamily: "var(--font-inter), sans-serif",
                     }}
                   >
                     <span>{tab.label}</span>
                     <span
+                      className="font-mono"
                       style={{
                         fontSize: "11px",
-                        fontWeight: 700,
-                        padding: "1px 6px",
-                        borderRadius: "100px",
-                        background: isActive ? "rgba(99,102,241,0.3)" : "rgba(255,255,255,0.06)",
-                        color: isActive ? "#ffffff" : "var(--text-muted)",
+                        fontWeight: 600,
+                        padding: "1px 5px",
+                        borderRadius: "4px",
+                        backgroundColor: isActive ? "rgba(0, 217, 146, 0.15)" : "var(--colors-canvas-soft)",
+                        color: isActive ? "var(--colors-primary)" : "var(--colors-mute)",
                       }}
                     >
                       {tab.count}
@@ -485,31 +478,40 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
 
             return (
               <div key={category} id={sectionId} style={{ scrollMarginTop: "130px" }}>
+                {/* Dashed Section Divider Line */}
+                <div className="dashed-divider" style={{ marginBottom: "28px" }} />
+
                 {/* Category Header */}
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-                  <div
-                    style={{
-                      width: "4px",
-                      height: "20px",
-                      borderRadius: "2px",
-                      background: meta.accent,
-                    }}
-                  />
-                  <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px" }}>
-                    {getCatName(category)}
-                  </h2>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "2px",
+                        backgroundColor: "var(--colors-primary)",
+                      }}
+                    />
+                    <h2
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: 700,
+                        color: "var(--colors-ink-strong)",
+                        letterSpacing: "-0.4px",
+                      }}
+                    >
+                      {getCatName(category)}
+                    </h2>
+                  </div>
+
                   <span
+                    className="code-text"
                     style={{
                       fontSize: "12px",
-                      color: "var(--text-muted)",
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid var(--border-subtle)",
-                      padding: "2px 8px",
-                      borderRadius: "100px",
-                      fontWeight: 600,
+                      color: "var(--colors-mute)",
                     }}
                   >
-                    {categoryTools.length}{locale === "ko" ? "개 도구" : " tools"}
+                    {categoryTools.length} {locale === "ko" ? "개 유틸리티" : "utilities"}
                   </span>
                 </div>
 
@@ -526,7 +528,7 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                         key={tool.id}
                         href={tool.href}
                         onClick={() => handleToolClick(tool.id)}
-                        className="store-utility-card group"
+                        className={`card-feature group ${isFav ? "card-feature-emphasized" : ""}`}
                         style={{
                           textDecoration: "none",
                           display: "flex",
@@ -534,43 +536,30 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                           justifyContent: "space-between",
                           gap: "16px",
                           position: "relative",
-                          border: isFav ? "1px solid var(--colors-primary)" : "1px solid var(--colors-hairline)",
                         }}
                       >
                         <div>
                           {/* Top row: Icon, Tags, Star Toggle */}
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                             <div
-                              className="apple-product-render"
                               style={{
-                                width: "48px",
-                                height: "48px",
-                                backgroundColor: "var(--colors-canvas-parchment)",
-                                borderRadius: "12px",
+                                width: "42px",
+                                height: "42px",
+                                backgroundColor: "var(--colors-canvas-soft)",
+                                border: "1px solid var(--colors-hairline)",
+                                borderRadius: "8px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 color: "var(--colors-primary)",
                               }}
                             >
-                              <IconComponent size={22} strokeWidth={2} />
+                              <IconComponent size={20} strokeWidth={2} />
                             </div>
 
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                               {tool.badge && (
-                                <span
-                                  style={{
-                                    fontSize: "11px",
-                                    fontWeight: 600,
-                                    padding: "3px 9px",
-                                    borderRadius: "9999px",
-                                    backgroundColor: "rgba(0, 102, 204, 0.1)",
-                                    color: "var(--colors-primary)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "3px",
-                                  }}
-                                >
+                                <span className="code-inline-chip font-mono">
                                   {tool.badge === "Popular" && <TrendingUp size={11} />}
                                   {tool.badge === "New" && <Sparkles size={11} />}
                                   {getBadgeText(tool.badge)}
@@ -583,12 +572,11 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                                   background: "transparent",
                                   border: "none",
                                   cursor: "pointer",
-                                  padding: "8px",
-                                  margin: "-4px",
-                                  minWidth: "36px",
-                                  minHeight: "36px",
+                                  padding: "6px",
+                                  minWidth: "32px",
+                                  minHeight: "32px",
                                   borderRadius: "6px",
-                                  color: isFav ? "#ffcc00" : "var(--colors-ink-muted-48)",
+                                  color: isFav ? "var(--colors-primary)" : "var(--colors-mute)",
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
@@ -597,72 +585,75 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                                 title={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                                 aria-label={isFav ? "즐겨찾기 해제" : "즐겨찾기 추가"}
                               >
-                                <Star size={17} fill={isFav ? "#ffcc00" : "none"} />
+                                <Star size={16} fill={isFav ? "var(--colors-primary)" : "none"} />
                               </button>
                             </div>
                           </div>
 
-                          <h3 className="apple-body-strong" style={{ color: "var(--colors-ink)", marginBottom: "6px" }}>
+                          <h3
+                            style={{
+                              color: "var(--colors-ink-strong)",
+                              fontSize: "17px",
+                              fontWeight: 600,
+                              marginBottom: "6px",
+                              letterSpacing: "-0.2px",
+                            }}
+                          >
                             {getTitle(tool)}
                           </h3>
 
-                          <p className="apple-caption" style={{ color: "var(--colors-ink-muted-80)", marginBottom: "12px" }}>
+                          <p
+                            style={{
+                              color: "var(--colors-body)",
+                              fontSize: "13.5px",
+                              lineHeight: "20px",
+                              marginBottom: "12px",
+                            }}
+                          >
                             {getDesc(tool)}
                           </p>
 
                           {/* Micro Spec / Capability Tag */}
                           {featureTag && (
-                            <div
-                              style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "5px",
-                                padding: "3px 9px",
-                                borderRadius: "9999px",
-                                backgroundColor: "var(--colors-surface-pearl)",
-                                border: "1px solid var(--colors-hairline)",
-                                fontSize: "12px",
-                                color: "var(--colors-ink-muted-48)",
-                                fontWeight: 400,
-                              }}
-                            >
-                              <span>{featureTag}</span>
-                            </div>
+                            <span className="code-inline-chip font-mono" style={{ fontSize: "11.5px" }}>
+                              {featureTag}
+                            </span>
                           )}
                         </div>
 
                         {/* Bottom Action Footer */}
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid var(--colors-divider-soft)" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            paddingTop: "12px",
+                            borderTop: "1px solid var(--colors-hairline)",
+                          }}
+                        >
                           <span
-                            style={{
-                              fontSize: "14px",
-                              fontWeight: 600,
-                              color: "var(--colors-primary)",
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "4px",
-                            }}
+                            className="button-ghost-green"
+                            style={{ padding: 0, fontSize: "13px" }}
                           >
                             {locale === "ko" ? "실행하기" : "Run Tool"}
-                            <ArrowUpRight size={14} className="arrow-action-icon" />
+                            <ArrowUpRight size={14} />
                           </span>
 
                           <span
+                            className="caption font-mono"
                             style={{
-                              fontSize: "12px",
-                              color: "var(--colors-ink-muted-48)",
                               display: "flex",
                               alignItems: "center",
                               gap: "4px",
+                              color: "var(--colors-mute)",
                             }}
-                            title="이용 횟수"
+                            title="실행 횟수"
                           >
-                            <Flame size={12} color="#ff9500" />
+                            <Flame size={12} color="var(--colors-primary)" />
                             {formatCount(count)}
                           </span>
                         </div>
                       </Link>
-
                     );
                   })}
                 </div>

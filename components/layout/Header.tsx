@@ -2,9 +2,8 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
-import { Search, Sun, Moon, ChevronDown, Zap, X, Activity, Command } from "lucide-react";
+import { Search, ChevronDown, Zap, Terminal, Activity } from "lucide-react";
 import { useLocale } from "@/lib/context/LocaleContext";
-import { useTheme } from "@/lib/context/ThemeContext";
 import type { Locale } from "@/lib/i18n";
 import { getTotalSiteUsageCount, formatCount } from "@/lib/stats";
 import CommandPaletteModal from "@/components/common/CommandPaletteModal";
@@ -13,9 +12,9 @@ interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
-// ── SVG Country Flag Components (Standard National Flag Specifications) ──
+// Country flags
 const FlagUS = () => (
-  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0 }}>
     <path fill="#bd3d44" d="M0 0h640v480H0z"/>
     <path stroke="#fff" strokeWidth="37" d="M0 55.5h640M0 129.5h640M0 203.5h640M0 277.5h640M0 351.5h640M0 425.5h640"/>
     <path fill="#192f5d" d="M0 0h285v259H0z"/>
@@ -33,61 +32,46 @@ const FlagUS = () => (
   </svg>
 );
 
-// 대한민국 국기법 규격 표준 정밀 태극기 (대한민국 태극기 표준 비율 & 건곤감리 괘)
 const FlagKR = () => (
-  <svg width="18" height="13" viewBox="0 0 36 24" style={{ borderRadius: "2px", flexShrink: 0, border: "1px solid rgba(0,0,0,0.15)", background: "#ffffff" }}>
+  <svg width="18" height="13" viewBox="0 0 36 24" style={{ borderRadius: "2px", flexShrink: 0, background: "#ffffff" }}>
     <rect width="36" height="24" fill="#ffffff"/>
     <g transform="translate(18 12)">
-      {/* 태극문양: 상단 빨강(#cd2e3a), 하단 파랑(#0047a0) 대각선 -33.69도 기울임 */}
       <g transform="rotate(-33.69)">
         <path fill="#cd2e3a" d="M 0,-6 A 6,6 0 0,1 0,6 A 3,3 0 0,1 0,0 A 3,3 0 0,0 0,-6 Z"/>
         <path fill="#0047a0" d="M 0,6 A 6,6 0 0,1 0,-6 A 3,3 0 0,1 0,0 A 3,3 0 0,0 0,6 Z"/>
       </g>
-      
-      {/* 4괘: 건(☰ 11시), 곤(☷ 5시), 감(☵ 1시), 리(☲ 7시) */}
       <g transform="rotate(-33.69) translate(-9.5 0)" fill="#000000">
-        <rect x="-0.4" y="-3" width="0.5" height="6"/>
-        <rect x="-1.2" y="-3" width="0.5" height="6"/>
-        <rect x="-2.0" y="-3" width="0.5" height="6"/>
+        <rect x="-0.4" y="-3" width="0.5" height="6"/><rect x="-1.2" y="-3" width="0.5" height="6"/><rect x="-2.0" y="-3" width="0.5" height="6"/>
       </g>
-      
       <g transform="rotate(-33.69) translate(9.5 0)" fill="#000000">
-        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
-        <path d="M1.2-3h0.5v2.7H1.2zm0 3.3h0.5v2.7H1.2z"/>
-        <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
+        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/><path d="M1.2-3h0.5v2.7H1.2zm0 3.3h0.5v2.7H1.2z"/><path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
       </g>
-
       <g transform="rotate(33.69) translate(9.5 0)" fill="#000000">
-        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/>
-        <rect x="1.2" y="-3" width="0.5" height="6"/>
-        <path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
+        <path d="M0.4-3h0.5v2.7H0.4zm0 3.3h0.5v2.7H0.4z"/><rect x="1.2" y="-3" width="0.5" height="6"/><path d="M2.0-3h0.5v2.7H2.0zm0 3.3h0.5v2.7H2.0z"/>
       </g>
-
       <g transform="rotate(33.69) translate(-9.5 0)" fill="#000000">
-        <rect x="-0.4" y="-3" width="0.5" height="6"/>
-        <path d="M-1.2-3h0.5v2.7h-0.5zm0 3.3h0.5v2.7h-0.5z"/>
-        <rect x="-2.0" y="-3" width="0.5" height="6"/>
+        <rect x="-0.4" y="-3" width="0.5" height="6"/><path d="M-1.2-3h0.5v2.7h-0.5zm0 3.3h0.5v2.7h-0.5z"/><rect x="-2.0" y="-3" width="0.5" height="6"/>
       </g>
     </g>
   </svg>
 );
 
 const FlagJP = () => (
-  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0 }}>
     <path fill="#fff" d="M0 0h640v480H0z"/>
     <circle cx="320" cy="240" r="144" fill="#bc002d"/>
   </svg>
 );
 
 const FlagES = () => (
-  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0 }}>
     <path fill="#c60b1e" d="M0 0h640v480H0z"/>
     <path fill="#ffc400" d="M0 120h640v240H0z"/>
   </svg>
 );
 
 const FlagCN = () => (
-  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0 }}>
     <path fill="#ee1c25" d="M0 0h640v480H0z"/>
     <g fill="#ffde00">
       <polygon points="100,60 112,96 150,96 119,118 131,154 100,132 69,154 81,118 50,96 88,96"/>
@@ -100,92 +84,52 @@ const FlagCN = () => (
 );
 
 const FlagFR = () => (
-  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0, boxShadow: "0 0 1px rgba(0,0,0,0.3)" }}>
-    <path fill="#002395" d="M0 0h213.3v480H0z"/>
+  <svg width="18" height="13" viewBox="0 0 640 480" style={{ borderRadius: "2px", flexShrink: 0 }}>
+    <path fill="#002654" d="M0 0h213.3v480H0z"/>
     <path fill="#fff" d="M213.3 0h213.4v480H213.3z"/>
-    <path fill="#ed2939" d="M426.7 0H640v480H426.7z"/>
+    <path fill="#ce1126" d="M426.7 0H640v480H426.7z"/>
   </svg>
 );
 
-const LANGUAGES: { code: Locale; label: string; Flag: React.FC }[] = [
-  { code: "ko", label: "한국어",   Flag: FlagKR },
-  { code: "en", label: "English",  Flag: FlagUS },
-  { code: "ja", label: "日本語",   Flag: FlagJP },
-  { code: "es", label: "Español",  Flag: FlagES },
-  { code: "zh", label: "中文",     Flag: FlagCN },
+const LANGUAGES: { code: Locale; label: string; Flag: () => React.JSX.Element }[] = [
+  { code: "ko", label: "한국어", Flag: FlagKR },
+  { code: "en", label: "English", Flag: FlagUS },
+  { code: "ja", label: "日本語", Flag: FlagJP },
+  { code: "es", label: "Español", Flag: FlagES },
+  { code: "zh", label: "中文", Flag: FlagCN },
   { code: "fr", label: "Français", Flag: FlagFR },
 ];
 
 export default function Header({ onSearch }: HeaderProps) {
   const { locale, setLocale, t } = useLocale();
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
   const [langOpen, setLangOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [totalUsage, setTotalUsage] = useState<number>(5417);
-  const [liveUsers, setLiveUsers] = useState<number>(35);
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [liveUsers, setLiveUsers] = useState(38);
+  const [totalUsage, setTotalUsage] = useState(5417);
 
   useEffect(() => {
     setTotalUsage(getTotalSiteUsageCount());
-
     const interval = setInterval(() => {
-      setLiveUsers(32 + Math.floor(Math.random() * 8));
-      setTotalUsage(getTotalSiteUsageCount());
-    }, 4000);
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        setCmdOpen((prev) => !prev);
-      }
-    };
-    const handleOpenSearch = () => {
-      setCmdOpen(true);
-    };
-    window.addEventListener("desktools-open-search", handleOpenSearch);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("desktools-open-search", handleOpenSearch);
-    };
+      setLiveUsers((prev) => Math.min(65, Math.max(25, prev + Math.floor(Math.random() * 5) - 2)));
+    }, 12000);
+    return () => clearInterval(interval);
   }, []);
 
-  const activeLang = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
-  const ActiveFlag = activeLang.Flag;
-
-  const handleSearch = useCallback(
-    (val: string) => {
-      setSearchQuery(val);
-      onSearch?.(val);
-    },
-    [onSearch]
-  );
-
-  const clearSearch = useCallback(() => {
-    setSearchQuery("");
-    onSearch?.("");
-  }, [onSearch]);
+  const currentLang = LANGUAGES.find((l) => l.code === locale) || LANGUAGES[0];
+  const ActiveFlag = currentLang.Flag;
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-      }}
-    >
-      {/* ── Tier 1: Apple global-nav (44px Pure Black Bar) ────────────────────────── */}
-      <div
+    <>
+      <header
         style={{
-          height: "44px",
-          backgroundColor: "#000000",
-          color: "#ffffff",
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          backgroundColor: "var(--colors-canvas)",
+          borderBottom: "1px solid var(--colors-hairline)",
+          height: "56px",
           display: "flex",
           alignItems: "center",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
         }}
       >
         <div
@@ -197,79 +141,117 @@ export default function Header({ onSearch }: HeaderProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontSize: "12px",
-            letterSpacing: "-0.12px",
+            gap: "16px",
           }}
         >
-          {/* Logo / Brand */}
+          {/* Brand Logo with Electric Green Lightning */}
           <Link
             href="/"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "6px",
-              color: "#ffffff",
+              gap: "8px",
               textDecoration: "none",
+              color: "var(--colors-ink-strong)",
               fontWeight: 600,
+              fontSize: "17px",
+              letterSpacing: "-0.3px",
             }}
-            aria-label="desktools.run home"
           >
-            <Zap size={14} color="#0066cc" fill="#0066cc" />
-            <span>desktools.run</span>
+            <div
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "6px",
+                backgroundColor: "var(--colors-canvas-soft)",
+                border: "1px solid var(--colors-hairline)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Zap size={15} color="var(--colors-primary)" fill="var(--colors-primary)" />
+            </div>
+            <span>desktools<span style={{ color: "var(--colors-primary)" }}>.run</span></span>
           </Link>
 
-          {/* Center Links (Desktop) */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Global navigation">
-            <Link href="/tools" style={{ color: "#cccccc", textDecoration: "none", transition: "color 0.15s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")} onMouseLeave={(e) => (e.currentTarget.style.color = "#cccccc")}>All Utilities</Link>
-            <Link href="/about" style={{ color: "#cccccc", textDecoration: "none", transition: "color 0.15s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")} onMouseLeave={(e) => (e.currentTarget.style.color = "#cccccc")}>About</Link>
-            <Link href="/blog" style={{ color: "#cccccc", textDecoration: "none", transition: "color 0.15s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")} onMouseLeave={(e) => (e.currentTarget.style.color = "#cccccc")}>Blog</Link>
-            <Link href="/request" style={{ color: "#cccccc", textDecoration: "none", transition: "color 0.15s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")} onMouseLeave={(e) => (e.currentTarget.style.color = "#cccccc")}>Request Tool</Link>
+          {/* Navigation links (Desktop) */}
+          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+            <Link
+              href="/tools"
+              style={{ color: "var(--colors-body)", textDecoration: "none", fontSize: "14px", transition: "color 0.15s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
+            >
+              All Utilities
+            </Link>
+            <Link
+              href="/blog"
+              style={{ color: "var(--colors-body)", textDecoration: "none", fontSize: "14px", transition: "color 0.15s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
+            >
+              Blog
+            </Link>
+            <Link
+              href="/about"
+              style={{ color: "var(--colors-body)", textDecoration: "none", fontSize: "14px", transition: "color 0.15s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
+            >
+              About
+            </Link>
           </nav>
 
           {/* Right Utility Cluster */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {/* Live Counter Pill */}
+            {/* Live Indicator Status Pill */}
             <div
-              className="header-stats-pill"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "2px 8px",
-                borderRadius: "9999px",
-                backgroundColor: "rgba(255, 255, 255, 0.12)",
-                color: "#cccccc",
-                fontSize: "11px",
-              }}
-              title={locale === "ko" ? `전체 ${totalUsage.toLocaleString()}회 이용됨` : `Total ${totalUsage.toLocaleString()} uses`}
+              className="button-pill-tag hidden sm:inline-flex"
+              style={{ cursor: "default", padding: "4px 10px", fontSize: "12px" }}
+              title={`Total ${totalUsage.toLocaleString()} executions`}
             >
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#34c759", display: "inline-block" }} />
-              <span>{liveUsers} live</span>
+              <span
+                style={{
+                  width: "6px",
+                  height: "6px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--colors-primary)",
+                  display: "inline-block",
+                  boxShadow: "0 0 8px var(--colors-primary)",
+                }}
+              />
+              <span style={{ color: "var(--colors-body)" }}>{liveUsers} live</span>
             </div>
 
-            {/* Quick Search Button */}
+            {/* Quick Command / Search Button */}
             <button
               onClick={() => setCmdOpen(true)}
-              className="button-dark-utility"
-              style={{ padding: "4px 10px", fontSize: "12px" }}
+              className="button-outline-on-dark"
+              style={{ padding: "6px 12px", fontSize: "13px" }}
               aria-label="Search tools"
             >
-              <Search size={12} color="#2997ff" />
+              <Search size={13} color="var(--colors-primary)" />
               <span className="hidden sm:inline">Search</span>
+              <span className="code-text" style={{ fontSize: "11px", color: "var(--colors-mute)", marginLeft: "4px" }}>⌘K</span>
             </button>
 
-            {/* Language Selector */}
+            {/* Language Selector Dropdown */}
             <div style={{ position: "relative" }}>
               <button
                 id="lang-toggle"
                 onClick={() => setLangOpen((o) => !o)}
-                className="button-dark-utility"
-                style={{ padding: "4px 8px", fontSize: "12px" }}
+                className="button-outline-on-dark"
+                style={{ padding: "6px 10px" }}
                 aria-label="Select language"
                 aria-expanded={langOpen}
               >
                 <ActiveFlag />
-                <ChevronDown size={10} style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.15s" }} />
+                <ChevronDown
+                  size={11}
+                  color="var(--colors-mute)"
+                  style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.15s" }}
+                />
               </button>
 
               {langOpen && (
@@ -278,12 +260,12 @@ export default function Header({ onSearch }: HeaderProps) {
                     position: "absolute",
                     right: 0,
                     top: "calc(100% + 6px)",
-                    backgroundColor: "#1d1d1f",
-                    border: "1px solid rgba(255, 255, 255, 0.15)",
-                    borderRadius: "11px",
-                    padding: "6px",
+                    backgroundColor: "var(--colors-canvas-soft)",
+                    border: "1px solid var(--colors-hairline)",
+                    borderRadius: "6px",
+                    padding: "4px",
                     minWidth: "140px",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
                     zIndex: 100,
                   }}
                   role="listbox"
@@ -303,13 +285,13 @@ export default function Header({ onSearch }: HeaderProps) {
                           display: "flex",
                           alignItems: "center",
                           gap: "8px",
-                          padding: "8px 10px",
-                          borderRadius: "6px",
-                          background: isSelected ? "rgba(0, 102, 204, 0.3)" : "transparent",
+                          padding: "6px 10px",
+                          borderRadius: "4px",
+                          background: isSelected ? "rgba(0, 217, 146, 0.15)" : "transparent",
                           border: "none",
                           cursor: "pointer",
-                          color: isSelected ? "#2997ff" : "#ffffff",
-                          fontSize: "12px",
+                          color: isSelected ? "var(--colors-primary)" : "var(--colors-ink)",
+                          fontSize: "13px",
                           textAlign: "left",
                         }}
                         role="option"
@@ -324,80 +306,20 @@ export default function Header({ onSearch }: HeaderProps) {
               )}
             </div>
 
-            {/* Dark/Light Theme Toggle */}
-            <button
-              id="theme-toggle"
-              onClick={toggleTheme}
-              className="button-dark-utility"
-              style={{ padding: "4px 8px" }}
-              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {isDark ? <Sun size={12} color="#ffcc00" /> : <Moon size={12} color="#ffffff" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Tier 2: Apple sub-nav-frosted (52px Sticky Frosted Bar) ──────────────── */}
-      <div
-        style={{
-          height: "52px",
-          backgroundColor: "var(--header-sub-bg)",
-          backdropFilter: "saturate(180%) blur(20px)",
-          WebkitBackdropFilter: "saturate(180%) blur(20px)",
-          borderBottom: "1px solid var(--colors-hairline)",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1280px",
-            width: "100%",
-            margin: "0 auto",
-            padding: "0 24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          {/* Left Category Name / Title */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <span className="apple-tagline" style={{ color: "var(--colors-ink)" }}>
-              desktools.run
-            </span>
-            <span style={{ fontSize: "14px", color: "var(--colors-ink-muted-48)" }} className="hidden sm:inline">
-              Fast & Free Web Utilities
-            </span>
-          </div>
-
-          {/* Right Links & Persistent Blue Pill CTA */}
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <nav className="hidden lg:flex items-center gap-5" aria-label="Category shortcuts">
-              <a href="#pdf-tools" style={{ fontSize: "14px", color: "var(--colors-ink)", textDecoration: "none" }}>PDF</a>
-              <a href="#image-tools" style={{ fontSize: "14px", color: "var(--colors-ink)", textDecoration: "none" }}>Image</a>
-              <a href="#dev-tools" style={{ fontSize: "14px", color: "var(--colors-ink)", textDecoration: "none" }}>Dev</a>
-              <a href="#security" style={{ fontSize: "14px", color: "var(--colors-ink)", textDecoration: "none" }}>Security</a>
-            </nav>
-
-            <button
-              onClick={() => setCmdOpen(true)}
+            {/* Primary Action Button */}
+            <Link
+              href="/request"
               className="button-primary"
-              style={{ padding: "7px 18px", fontSize: "14px" }}
+              style={{ padding: "6px 14px", fontSize: "13px" }}
             >
-              Quick Run
-            </button>
+              Request Tool
+            </Link>
           </div>
         </div>
-      </div>
+      </header>
 
-      {langOpen && (
-        <div onClick={() => setLangOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99 }} aria-hidden="true" />
-      )}
-
-      {/* Global Command Palette Modal */}
+      {/* Command Palette Modal */}
       <CommandPaletteModal isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
-    </header>
+    </>
   );
 }
-

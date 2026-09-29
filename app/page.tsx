@@ -26,18 +26,24 @@ export default function Home() {
       <main style={{ flex: 1 }}>
         <HeroSection onSearch={handleSearch} />
 
-        <section className="product-tile-light" aria-label={t("grid.allTools")}>
+        <section
+          style={{
+            backgroundColor: "var(--colors-canvas)",
+            padding: "48px 24px 80px",
+          }}
+          aria-label={t("grid.allTools")}
+        >
           <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
             {/* Active search header */}
             {isSearching && (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px" }}>
-                <h2 className="apple-body-strong" style={{ color: "var(--colors-ink)" }}>
+                <h2 className="display-sm" style={{ color: "var(--colors-ink-strong)" }}>
                   {t("grid.searchLabel")} &quot;{searchQuery}&quot;
                 </h2>
                 <button
                   onClick={() => handleSearch("")}
-                  className="button-secondary-pill"
-                  style={{ padding: "6px 16px", fontSize: "14px" }}
+                  className="button-outline-on-dark"
+                  style={{ padding: "6px 14px", fontSize: "13px" }}
                   aria-label="Clear search"
                 >
                   {t("grid.showAll")}
