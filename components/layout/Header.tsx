@@ -125,9 +125,11 @@ export default function Header({ onSearch }: HeaderProps) {
           position: "sticky",
           top: 0,
           zIndex: 50,
-          backgroundColor: "var(--colors-canvas)",
-          borderBottom: "1px solid var(--colors-hairline)",
-          height: "56px",
+          backgroundColor: "rgba(9, 10, 15, 0.8)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          height: "60px",
           display: "flex",
           alignItems: "center",
         }}
@@ -144,39 +146,40 @@ export default function Header({ onSearch }: HeaderProps) {
             gap: "16px",
           }}
         >
-          {/* Brand Logo with Electric Green Lightning */}
+          {/* Brand Logo with Electric Green Glow Lightning */}
           <Link
             href="/"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "10px",
               textDecoration: "none",
-              color: "var(--colors-ink-strong)",
-              fontWeight: 600,
-              fontSize: "17px",
-              letterSpacing: "-0.3px",
+              color: "#ffffff",
+              fontWeight: 700,
+              fontSize: "17.5px",
+              letterSpacing: "-0.4px",
             }}
           >
             <div
               style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "6px",
-                backgroundColor: "var(--colors-canvas-soft)",
-                border: "1px solid var(--colors-hairline)",
+                width: "30px",
+                height: "30px",
+                borderRadius: "8px",
+                background: "linear-gradient(135deg, rgba(0, 217, 146, 0.25) 0%, rgba(0, 217, 146, 0.05) 100%)",
+                border: "1px solid rgba(0, 217, 146, 0.4)",
+                boxShadow: "0 0 12px rgba(0, 217, 146, 0.25)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <Zap size={15} color="var(--colors-primary)" fill="var(--colors-primary)" />
+              <Zap size={15} color="#00d992" fill="#00d992" />
             </div>
-            <span>desktools<span style={{ color: "var(--colors-primary)" }}>.run</span></span>
+            <span>desktools<span style={{ color: "#00d992" }}>.run</span></span>
           </Link>
 
           {/* Navigation links (Desktop) */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center gap-7" aria-label="Main navigation">
             <Link
               href="/tools"
               style={{ color: "var(--colors-body)", textDecoration: "none", fontSize: "14px", transition: "color 0.15s" }}

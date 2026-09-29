@@ -482,21 +482,22 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                 <div className="dashed-divider" style={{ marginBottom: "28px" }} />
 
                 {/* Category Header */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "22px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <div
                       style={{
                         width: "8px",
                         height: "8px",
                         borderRadius: "2px",
-                        backgroundColor: "var(--colors-primary)",
+                        backgroundColor: "#00d992",
+                        boxShadow: "0 0 10px #00d992",
                       }}
                     />
                     <h2
                       style={{
-                        fontSize: "20px",
+                        fontSize: "21px",
                         fontWeight: 700,
-                        color: "var(--colors-ink-strong)",
+                        color: "#ffffff",
                         letterSpacing: "-0.4px",
                       }}
                     >
@@ -509,6 +510,10 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                     style={{
                       fontSize: "12px",
                       color: "var(--colors-mute)",
+                      padding: "3px 10px",
+                      background: "rgba(255, 255, 255, 0.04)",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.07)",
                     }}
                   >
                     {categoryTools.length} {locale === "ko" ? "개 유틸리티" : "utilities"}
@@ -541,19 +546,7 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                         <div>
                           {/* Top row: Icon, Tags, Star Toggle */}
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                            <div
-                              style={{
-                                width: "42px",
-                                height: "42px",
-                                backgroundColor: "var(--colors-canvas-soft)",
-                                border: "1px solid var(--colors-hairline)",
-                                borderRadius: "8px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "var(--colors-primary)",
-                              }}
-                            >
+                            <div className="tool-icon-box">
                               <IconComponent size={20} strokeWidth={2} />
                             </div>
 

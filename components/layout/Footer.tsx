@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        borderTop: "1px solid var(--colors-hairline)",
+        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
         marginTop: "auto",
         backgroundColor: "var(--colors-canvas)",
         color: "var(--colors-body)",

@@ -53,29 +53,39 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
   return (
     <section
       style={{
-        backgroundColor: "var(--colors-canvas)",
-        padding: "64px 24px 48px",
+        position: "relative",
+        padding: "72px 24px 52px",
         textAlign: "center",
-        borderBottom: "1px solid var(--colors-hairline)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
       }}
     >
-      <div style={{ maxWidth: "980px", margin: "0 auto" }}>
-        {/* Uppercase Eyebrow Tag (Tracking 2.52px, Electric Green) */}
-        <div style={{ marginBottom: "18px" }}>
-          <span className="eyebrow-mono font-mono">
+      <div style={{ maxWidth: "980px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Uppercase Eyebrow Glow Pill */}
+        <div style={{ marginBottom: "22px" }}>
+          <span className="eyebrow-pill font-mono">
+            <span
+              style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                backgroundColor: "#00d992",
+                boxShadow: "0 0 8px #00d992",
+                display: "inline-block",
+              }}
+            />
             {t("hero.badge")}
           </span>
         </div>
 
-        {/* Hero Headline: 60px / 400 regular / -0.65px tracking */}
+        {/* Hero Headline: Gradient White + Electric Neon Glow */}
         <h1
           className="display-xl"
           style={{
             marginBottom: "20px",
           }}
         >
-          <span>{t("hero.title1")}</span>{" "}
-          <span style={{ color: "var(--colors-primary)" }}>{t("hero.title2")}</span>
+          <span className="hero-gradient-title">{t("hero.title1")}</span>{" "}
+          <span className="hero-neon-accent">{t("hero.title2")}</span>
         </h1>
 
         {/* Lead Body Copy */}
@@ -83,62 +93,52 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
           className="body-lg"
           style={{
             maxWidth: "680px",
-            margin: "0 auto 36px",
+            margin: "0 auto 38px",
           }}
         >
           {t("hero.subtitle")}
         </p>
 
-        {/* Command Search Box (6px radius, Electric Green CTA) */}
-        <div style={{ maxWidth: "640px", margin: "0 auto 28px", position: "relative" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "var(--colors-canvas-soft)",
-              border: "1px solid var(--colors-hairline)",
-              borderRadius: "6px",
-              padding: "4px",
-              transition: "border-color 0.15s ease",
-            }}
-          >
-            <div style={{ padding: "0 10px", display: "flex", alignItems: "center", color: "var(--colors-primary)", flexShrink: 0 }}>
-              <Search size={16} />
+        {/* Raycast-Style Command Search Box */}
+        <div style={{ maxWidth: "660px", margin: "0 auto 28px", position: "relative" }}>
+          <div className="raycast-search-bar">
+            <div style={{ display: "flex", alignItems: "center", color: "#00d992", marginRight: "12px", flexShrink: 0 }}>
+              <Search size={18} strokeWidth={2.2} />
             </div>
             <input
               id="hero-search"
               type="search"
               value={query}
               onChange={(e) => handleChange(e.target.value)}
-              placeholder={locale === "ko" ? "도구 검색 — PDF, 리사이즈, JSON..." : "Search tools — PDF, Resize, JSON..."}
+              placeholder={locale === "ko" ? "도구 검색 — PDF 합치기, 리사이즈, JSON 포매터..." : "Search tools — PDF merge, Resize, JSON..."}
               className="text-input"
               style={{
-                border: "none",
-                background: "transparent",
-                padding: "8px 6px",
-                fontSize: "14px",
-                color: "var(--colors-ink-strong)",
+                fontSize: "15px",
                 minWidth: 0,
               }}
               aria-label={t("hero.search.placeholder")}
             />
-            <button
-              onClick={() => onSearch(query)}
-              className="button-primary"
-              style={{
-                padding: "8px 14px",
-                fontSize: "13.5px",
-                flexShrink: 0,
-              }}
-              aria-label={t("hero.search.button")}
-            >
-              <span>{t("hero.search.button")}</span>
-              <ArrowRight size={13} />
-            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+              <span className="code-text hidden sm:inline-block" style={{ fontSize: "11px", color: "var(--colors-mute)", padding: "2px 6px", background: "rgba(255,255,255,0.06)", borderRadius: "4px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                /
+              </span>
+              <button
+                onClick={() => onSearch(query)}
+                className="button-primary"
+                style={{
+                  padding: "9px 18px",
+                  fontSize: "13.5px",
+                }}
+                aria-label={t("hero.search.button")}
+              >
+                <span>{t("hero.search.button")}</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Popular Tags Cluster (Pill Tags with 9999px radius) */}
+        {/* Popular Tags Cluster (Pill Tags) */}
         <div
           style={{
             display: "flex",
@@ -146,10 +146,10 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
             gap: "8px",
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: "40px",
+            marginBottom: "44px",
           }}
         >
-          <span className="caption font-mono" style={{ color: "var(--colors-mute)", marginRight: "4px" }}>
+          <span className="caption font-mono" style={{ color: "var(--colors-mute)", marginRight: "4px", fontSize: "11.5px" }}>
             POPULAR:
           </span>
           {POPULAR_TAGS.map((tag) => {
@@ -160,7 +160,7 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
                 key={tag.query}
                 onClick={() => handleTagClick(tag.query)}
                 className={`button-pill-tag ${isSelected ? "active" : ""}`}
-                style={{ fontSize: "12px", padding: "3px 10px" }}
+                style={{ fontSize: "12px", padding: "4px 12px" }}
               >
                 {label}
               </button>
@@ -168,12 +168,12 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
           })}
         </div>
 
-        {/* 4-Item Engineering Metric Counters (2x2 on mobile, 4-col on desktop) */}
+        {/* 4-Item Glassmorphic Metric Counters */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: "10px",
+            gap: "12px",
             maxWidth: "880px",
             margin: "0 auto",
           }}
@@ -184,30 +184,23 @@ export default function HeroSection({ onSearch }: HeroSectionProps) {
             return (
               <div
                 key={idx}
-                className="card-feature"
-                style={{
-                  padding: "12px 14px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  minHeight: "auto",
-                }}
+                className="metric-card-neo"
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                  <Icon size={14} color="var(--colors-primary)" />
+                  <Icon size={14} color="#00d992" />
                   <span
                     className="font-mono"
                     style={{
                       fontSize: "20px",
                       fontWeight: 700,
-                      color: "var(--colors-ink-strong)",
+                      color: "#ffffff",
                       letterSpacing: "-0.5px",
                     }}
                   >
                     {item.value}
                   </span>
                 </div>
-                <span className="caption font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>
+                <span className="caption font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px", color: "var(--colors-mute)" }}>
                   {item.label}
                 </span>
               </div>
