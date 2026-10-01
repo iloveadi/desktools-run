@@ -5,6 +5,10 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import ToolGrid from "@/components/home/ToolGrid";
+import HomeFeatureHighlights from "@/components/home/HomeFeatureHighlights";
+import HomeCategoryOverview from "@/components/home/HomeCategoryOverview";
+import HomeBlogSection from "@/components/home/HomeBlogSection";
+import HomeFaqSection from "@/components/home/HomeFaqSection";
 import { TOOLS, searchTools } from "@/lib/tools";
 import { useLocale } from "@/lib/context/LocaleContext";
 
@@ -36,7 +40,14 @@ export default function Home() {
           <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
             {/* Active search header */}
             {isSearching && (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "32px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "32px",
+                }}
+              >
                 <h2 className="display-sm" style={{ color: "var(--colors-ink-strong)" }}>
                   {t("grid.searchLabel")} &quot;{searchQuery}&quot;
                 </h2>
@@ -58,6 +69,12 @@ export default function Home() {
             />
           </div>
         </section>
+
+        {/* Rich Editorial & SEO Content Sections for AdSense & Organic Authority */}
+        <HomeFeatureHighlights />
+        <HomeCategoryOverview />
+        <HomeBlogSection />
+        <HomeFaqSection />
       </main>
 
       <Footer />

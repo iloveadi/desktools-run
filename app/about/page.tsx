@@ -61,24 +61,36 @@ export default function AboutPage() {
                 <Cpu size={20} />
               </div>
               <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
-                Core Technology & Architecture
+                {t("pages.about.tech.title")}
               </h2>
             </div>
             <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
-              desktools.run leverages modern browser-native capabilities including <strong>WebAssembly (Wasm)</strong>, <strong>HTML5 Canvas API</strong>, <strong>Web Workers</strong>, and <strong>Web Crypto API</strong>. By offloading heavy computing tasks directly to the user's CPU and GPU, we eliminate server latencies while guaranteeing that sensitive files, tokens, and documents never leave your device.
+              {t("pages.about.tech.desc")}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "14px", marginTop: "8px" }}>
-              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>⚡ Zero-Server Latency</strong>
-                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Files process instantly in client memory with zero upload/download waits.</span>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>
+                  {t("pages.about.tech.item1.title")}
+                </strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+                  {t("pages.about.tech.item1.desc")}
+                </span>
               </div>
-              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>🛡️ Absolute Data Isolation</strong>
-                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Your files and inputs are never sent to or logged on remote databases.</span>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>
+                  {t("pages.about.tech.item2.title")}
+                </strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+                  {t("pages.about.tech.item2.desc")}
+                </span>
               </div>
-              <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-subtle)" }}>
-                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>🌐 Multi-Language Ready</strong>
-                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>Full native localization across English, Korean, Japanese, Spanish, Chinese, and French.</span>
+              <div style={{ padding: "16px", borderRadius: "10px", background: "var(--btn-secondary-bg)", border: "1px solid var(--btn-secondary-border)" }}>
+                <strong style={{ display: "block", color: "var(--text-primary)", fontSize: "14px", marginBottom: "4px" }}>
+                  {t("pages.about.tech.item3.title")}
+                </strong>
+                <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+                  {t("pages.about.tech.item3.desc")}
+                </span>
               </div>
             </div>
           </div>
@@ -90,14 +102,14 @@ export default function AboutPage() {
                 <Globe2 size={20} />
               </div>
               <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)" }}>
-                Editorial Integrity & Contact
+                {t("pages.about.contact.title")}
               </h2>
             </div>
             <p style={{ fontSize: "14.5px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
-              desktools.run is actively maintained and updated to provide safe, reliable, and cutting-edge web utility software. We welcome bug reports, tool suggestions, and security inquiries.
+              {t("pages.about.contact.desc")}
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "6px", fontSize: "14px", color: "var(--text-secondary)" }}>
-              <span>Official Inquiries:</span>
+              <span>{t("pages.about.contact.official")}</span>
               <a href="mailto:iloveadi@gmail.com" style={{ color: "#818cf8", fontWeight: 700, textDecoration: "underline" }}>
                 iloveadi@gmail.com
               </a>
