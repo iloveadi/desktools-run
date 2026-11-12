@@ -837,7 +837,7 @@ export default function PasswordGeneratorPage() {
             },
           };
 
-          const g = content[locale as keyof typeof content] || content.ko;
+          const g = content[locale as keyof typeof content] || content.en;
 
           return (
             <ToolGuide

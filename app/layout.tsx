@@ -87,7 +87,7 @@ const initScript = `
         document.documentElement.lang = savedLocale;
       } else {
         var langs = navigator.languages || [navigator.language || navigator.userLanguage];
-        var detected = 'ko';
+        var detected = 'en';
         for (var i = 0; i < langs.length; i++) {
           if (!langs[i]) continue;
           var l = langs[i].toLowerCase();
@@ -108,7 +108,7 @@ const initScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta name="naver-site-verification" content="78cc45882494368515599712d3cbe77cb0321e65" />
         <meta name="google-site-verification" content="h6rIrI3xMIgonXn1PDKk5T5FHzgHbXtiOpgut4AtuZM" />
@@ -134,8 +134,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   "@id": "https://desktools.run/#website",
                   "url": "https://desktools.run/",
                   "name": "desktools.run",
-                  "description": "PDF, 이미지, 텍스트, 개발자 도구를 회원가입 없이 브라우저에서 100% 무료로 실행하는 웹 유틸리티 모음.",
-                  "inLanguage": "ko"
+                  "description": "Fast, free, and 100% private browser utilities for PDF, image, text, and developer workflows. Zero server uploads, run directly in your browser.",
+                  "inLanguage": "en"
                 },
                 {
                   "@type": "Organization",

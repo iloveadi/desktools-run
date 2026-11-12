@@ -947,7 +947,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
             },
           };
 
-          const g = content[locale as keyof typeof content] || content.ko;
+          const g = content[locale as keyof typeof content] || content.en;
 
           return (
             <ToolGuide

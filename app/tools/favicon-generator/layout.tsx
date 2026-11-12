@@ -2,31 +2,22 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Favicon & 앱 아이콘 생성기 — 1클릭 일괄 압축 생성 | desktools.run",
-  description:
-    "하나의 로고 이미지로 16x16, 32x32, 48x48, apple-touch-icon, favicon.ico, site.webmanifest 파비콘 세트를 1클릭으로 생성하고 ZIP 패키지로 일괄 다운로드하세요.",
+  title: "Favicon & App Icon Generator — Multi-Size PNG & ICO Suite | desktools.run",
+  description: "Generate complete favicon packages including 16x16, 32x32, 48x48, Apple Touch Icon, Android manifest icons, and ICO files in one click.",
   keywords: [
-    "파비콘 생성기", "Favicon generator", "favicon.ico 생성", "앱 아이콘 생성", "apple-touch-icon",
-    "웹사이트 아이콘", "PWA 아이콘 생성", "무료 파비콘", "파비콘 만드는 법"
+    "favicon generator",
+    "generate ico",
+    "app icon maker",
+    "apple touch icon",
+    "webmanifest icon generator",
+    "free favicon tool",
   ],
   openGraph: {
     url: "https://desktools.run/tools/favicon-generator/",
-    title: "Favicon & 앱 아이콘 생성기 — 1클릭 일괄 압축 생성 | desktools.run",
-    description: "하나의 로고 이미지로 16x16, 32x32, apple-touch-icon, favicon.ico, site.webmanifest 세트를 1클릭 생성하세요.",
+    title: "Favicon & App Icon Generator | desktools.run",
+    description: "Generate complete favicon packages including 16x16, 32x32, 48x48, Apple Touch Icon, Android manifest icons, and ICO files in one click.",
     type: "website",
     siteName: "desktools.run",
-    images: [
-      {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/favicon-generator/",

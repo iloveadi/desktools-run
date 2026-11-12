@@ -3,10 +3,15 @@ Disallow: /cdn-cgi/
 Allow: /
 Sitemap: https://desktools.run/sitemap.xml
 
-# Google AdSense Crawler
+# Google Crawlers & AdSense Quality Review Bots
+User-agent: GoogleOther
+Allow: /
+
 User-agent: Mediapartners-Google
 Allow: /
 
+User-agent: Googlebot
+Allow: /
 
 User-agent: Yeti
 Allow: /

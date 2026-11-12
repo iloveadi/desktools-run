@@ -2,42 +2,22 @@ import ToolJsonLd from "@/components/common/ToolJsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "이미지 포맷 변환기 — PNG·JPG·WEBP·BMP·ICO 무료 일괄 변환 | desktools.run",
-  description:
-    "PNG, JPG, WEBP, BMP, ICO 이미지 포맷을 브라우저에서 즉시 상호 일괄 변환하세요. 차세대 WebP 압축, Favicon.ico 생성, 무손실 투명도 보존. 서버 업로드 없이 100% 로컬 프라이버시 보장.",
+  title: "Image Format Converter — Convert PNG, JPG, WebP, BMP, ICO | desktools.run",
+  description: "Batch convert images between PNG, JPG, WebP, BMP, GIF, and ICO formats instantly in your browser. 100% free, private, and unlimited.",
   keywords: [
-    "이미지 변환기",
     "image converter",
-    "PNG JPG 변환",
-    "WEBP 변환",
-    "ICO 변환",
-    "파비콘 만들기",
-    "이미지 포맷 변경",
-    "무료 이미지 변환",
-    "이미지 일괄 변환",
-    "batch image converter",
-    "convert png to webp",
-    "convert jpg to png",
-    "favicon generator"
+    "png to jpg",
+    "webp to png",
+    "jpg to webp",
+    "image format converter",
+    "online photo converter free",
   ],
   openGraph: {
     url: "https://desktools.run/tools/image-converter/",
-    title: "이미지 포맷 변환기 — PNG·JPG·WEBP·BMP·ICO 무료 일괄 변환 | desktools.run",
-    description: "PNG, JPG, WEBP, BMP, ICO 이미지 포맷을 브라우저에서 즉시 상호 변환하세요. 100% 브라우저 로컬 처리.",
+    title: "Image Format Converter | desktools.run",
+    description: "Batch convert images between PNG, JPG, WebP, BMP, GIF, and ICO formats instantly in your browser. 100% free, private, and unlimited.",
     type: "website",
     siteName: "desktools.run",
-    images: [
-      {
-        url: "/og-global.jpg",
-        width: 1376,
-        height: 768,
-        alt: "desktools.run — Fast & Free Web Utilities",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-converter/",

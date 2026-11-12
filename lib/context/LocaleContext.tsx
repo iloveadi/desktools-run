@@ -29,13 +29,13 @@ interface LocaleContextValue {
 
 // ── Create context ─────────────────────────────────────────────
 const LocaleContext = createContext<LocaleContextValue>({
-  locale: "ko",
+  locale: "en",
   setLocale: () => {},
   t: (key) => key,
 });
 
 function detectSystemLocale(): Locale {
-  if (typeof window === "undefined" || !navigator) return "ko";
+  if (typeof window === "undefined" || !navigator) return "en";
 
   const languages = navigator.languages || [
     navigator.language || (navigator as any).userLanguage,
@@ -50,11 +50,11 @@ function detectSystemLocale(): Locale {
     if (lower.startsWith("fr")) return "fr";
     if (lower.startsWith("en")) return "en";
   }
-  return "ko";
+  return "en";
 }
 
 function getInitialLocale(): Locale {
-  if (typeof window === "undefined") return "ko";
+  if (typeof window === "undefined") return "en";
   try {
     const saved = localStorage.getItem("desktools-locale") as Locale | null;
     if (saved && saved in translations) {
@@ -62,13 +62,13 @@ function getInitialLocale(): Locale {
     }
     return detectSystemLocale();
   } catch {
-    return "ko";
+    return "en";
   }
 }
 
 // ── Provider ───────────────────────────────────────────────────
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
+  const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {
     // Sync html lang attribute and state on mount if needed
