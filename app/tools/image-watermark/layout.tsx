@@ -24,6 +24,18 @@ export const metadata: Metadata = {
     url: "https://desktools.run/tools/image-watermark/",
     title: "Image Watermark Adder | desktools.run",
     description: "Add custom text or logo watermarks to images with full opacity, rotation, and pattern controls.",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

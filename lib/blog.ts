@@ -1,3 +1,5 @@
+import blogExpandedData from "@/data/blogExpanded.json";
+
 export interface BlogPost {
   id: string;
   date: string;
@@ -2068,6 +2070,15 @@ Generate high-resolution PNG & vector SVG QR codes safely in browser using deskt
     contentFr: `# Génération de codes QR haute résolution : SVG vectoriel vs PNG matriciel pour l'impression`,
   },
 ];
+
+// Merge expanded content (800+ words, comparison tables, FAQ) for thin articles
+for (const post of BLOG_POSTS) {
+  const expanded = (blogExpandedData as Record<string, { contentEn?: string; contentKo?: string }>)[post.id];
+  if (expanded) {
+    if (expanded.contentEn) post.contentEn = expanded.contentEn;
+    if (expanded.contentKo) post.contentKo = expanded.contentKo;
+  }
+}
 
 export function getLocalizedPost(post: BlogPost, locale: string) {
   switch (locale) {

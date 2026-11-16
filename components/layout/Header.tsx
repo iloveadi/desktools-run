@@ -7,6 +7,7 @@ import { useLocale } from "@/lib/context/LocaleContext";
 import { useTheme } from "@/lib/context/ThemeContext";
 import type { Locale } from "@/lib/i18n";
 import { getTotalSiteUsageCount, formatCount } from "@/lib/stats";
+import { TOOLS } from "@/lib/tools";
 import CommandPaletteModal from "@/components/common/CommandPaletteModal";
 
 interface HeaderProps {
@@ -107,15 +108,10 @@ export default function Header({ onSearch }: HeaderProps) {
   const isDark = theme === "dark";
   const [langOpen, setLangOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
-  const [liveUsers, setLiveUsers] = useState(38);
   const [totalUsage, setTotalUsage] = useState(5417);
 
   useEffect(() => {
     setTotalUsage(getTotalSiteUsageCount());
-    const interval = setInterval(() => {
-      setLiveUsers((prev) => Math.min(65, Math.max(25, prev + Math.floor(Math.random() * 5) - 2)));
-    }, 12000);
-    return () => clearInterval(interval);
   }, []);
 
   const currentLang = LANGUAGES.find((l) => l.code === locale) || LANGUAGES[0];
@@ -227,7 +223,7 @@ export default function Header({ onSearch }: HeaderProps) {
                   boxShadow: "0 0 8px var(--colors-primary)",
                 }}
               />
-              <span style={{ color: "var(--colors-body)" }}>{liveUsers} live</span>
+              <span style={{ color: "var(--colors-body)" }}>{TOOLS.length} live</span>
             </div>
 
             {/* Quick Command / Search Button */}

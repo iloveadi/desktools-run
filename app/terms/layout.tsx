@@ -11,6 +11,18 @@ export const metadata: Metadata = {
     title: "Terms of Service | desktools.run",
     description: "Terms and guidelines for using desktools.run free web utility tools.",
     url: "https://desktools.run/terms/",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

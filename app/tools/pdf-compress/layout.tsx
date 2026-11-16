@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Compress and shrink heavy PDF documents directly in your browser. Save storage and bandwidth without compromising document visual readability.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-compress/",

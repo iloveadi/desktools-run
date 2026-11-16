@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Resize images by custom width, height, or percentage while locking aspect ratios. High-resolution canvas resampling without server uploads.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-resizer/",

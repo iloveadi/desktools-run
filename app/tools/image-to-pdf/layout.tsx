@@ -20,6 +20,18 @@ export const metadata: Metadata = {
     description: "Combine and convert multiple JPG, PNG, and WebP pictures into a clean, unified PDF document in seconds. 100% client-side privacy.",
     url: "https://desktools.run/tools/image-to-pdf/",
     type: "website",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

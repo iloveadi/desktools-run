@@ -12,6 +12,18 @@ export const metadata: Metadata = {
     url: "https://desktools.run/tools/text-diff/",
     title: "Text Diff Checker | desktools.run",
     description: "Compare two text snippets side by side and highlight differences.",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

@@ -21,8 +21,8 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${post.titleKo || post.titleEn} — desktools.run 기술 블로그`;
-  const description = post.snippetKo || post.snippetEn;
+  const title = `${post.titleEn || post.titleKo} — desktools.run Engineering Blog`;
+  const description = post.snippetEn || post.snippetKo;
   const url = `https://desktools.run/blog/${post.id}/`;
 
   return {
@@ -39,7 +39,7 @@ export async function generateMetadata({
       siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
+        url: "https://desktools.run/og-global.jpg",
         width: 1376,
         height: 768,
         alt: "desktools.run — Fast & Free Web Utilities",
@@ -48,7 +48,7 @@ export async function generateMetadata({
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-global.jpg"],
+    images: ["https://desktools.run/og-global.jpg"],
   },
   };
 }
@@ -65,8 +65,8 @@ export default async function BlogDetailPage({
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: post.titleKo || post.titleEn,
-    description: post.snippetKo || post.snippetEn,
+    headline: post.titleEn || post.titleKo,
+    description: post.snippetEn || post.snippetKo,
     url,
     mainEntityOfPage: {
       "@type": "WebPage",

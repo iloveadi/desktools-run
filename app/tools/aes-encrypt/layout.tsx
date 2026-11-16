@@ -22,6 +22,18 @@ export const metadata: Metadata = {
     description: "Securely encrypt and decrypt sensitive text with military-grade AES-256 encryption in your browser.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/aes-encrypt/",

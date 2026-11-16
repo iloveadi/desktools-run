@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Batch convert images between PNG, JPG, WebP, BMP, GIF, and ICO formats instantly in your browser. 100% free, private, and unlimited.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-converter/",

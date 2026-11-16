@@ -11,6 +11,18 @@ export const metadata: Metadata = {
     title: "Cookie Policy | desktools.run",
     description: "Transparent, privacy-first cookie and local storage guidelines.",
     url: "https://desktools.run/cookies/",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

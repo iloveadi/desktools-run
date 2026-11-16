@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Inspect and wipe GPS location, camera settings, and sensitive metadata from JPG, PNG, and WebP images before sharing online. 100% client-side.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/exif-remover/",

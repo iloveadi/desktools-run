@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Remove passwords and encryption from authorized PDF documents to enable free viewing, printing, and sharing. 100% local processing in browser memory.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-unlock/",

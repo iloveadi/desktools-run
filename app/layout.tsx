@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     siteName: "desktools.run",
     images: [
       {
-        url: "/og-global.jpg",
+        url: "https://desktools.run/og-global.jpg",
         width: 1376,
         height: 768,
         alt: "desktools.run — Fast & Free Web Utilities",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "desktools.run — Fast & Free Web Utilities",
     description: "Fast, free, and 100% private browser utilities for PDF, image, text, and developer workflows. Zero server uploads.",
-    images: ["/og-global.jpg"],
+    images: ["https://desktools.run/og-global.jpg"],
   },
   robots: { index: true, follow: true },
   alternates: {

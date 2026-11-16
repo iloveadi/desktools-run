@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,15 +8,32 @@ import { useLocale } from "@/lib/context/LocaleContext";
 import { BlogPost, getLocalizedPost } from "@/lib/blog";
 import { ArrowLeft, Calendar, Share2, Check, Sparkles } from "lucide-react";
 
-// Helper to parse inline **bold** text
+// Helper to parse inline **bold** text and `code`
 function parseInlineMarkdown(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={i} style={{ color: "var(--text-primary)", fontWeight: 700 }}>
           {part.slice(2, -2)}
         </strong>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code
+          key={i}
+          style={{
+            background: "rgba(255, 255, 255, 0.08)",
+            padding: "2px 6px",
+            borderRadius: "4px",
+            fontFamily: "monospace",
+            fontSize: "0.9em",
+            color: "#38bdf8",
+          }}
+        >
+          {part.slice(1, -1)}
+        </code>
       );
     }
     return part;
@@ -26,8 +43,15 @@ function parseInlineMarkdown(text: string) {
 export default function BlogDetailClient({ post }: { post: BlogPost }) {
   const { locale } = useLocale();
   const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const localized = getLocalizedPost(post, locale);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use English for initial static HTML generation; switch to client locale upon mount
+  const effectiveLocale = mounted ? locale : "en";
+  const localized = getLocalizedPost(post, effectiveLocale);
 
   const copyLink = () => {
     if (typeof window !== "undefined") {
@@ -58,15 +82,15 @@ export default function BlogDetailClient({ post }: { post: BlogPost }) {
             }}
           >
             <ArrowLeft size={15} />
-            {locale === "ko"
+            {effectiveLocale === "ko"
               ? "블로그 목록으로 돌아가기"
-              : locale === "ja"
+              : effectiveLocale === "ja"
               ? "ブログ一覧に戻る"
-              : locale === "es"
+              : effectiveLocale === "es"
               ? "Volver al blog"
-              : locale === "zh"
+              : effectiveLocale === "zh"
               ? "返回博客列表"
-              : locale === "fr"
+              : effectiveLocale === "fr"
               ? "Retour au blog"
               : "Back to Blog Overview"}
           </Link>
@@ -218,6 +242,109 @@ export default function BlogDetailClient({ post }: { post: BlogPost }) {
                     {parseInlineMarkdown(trimmed.replace("## ", ""))}
                   </h2>
                 );
+              }
+
+              if (trimmed.startsWith("### ")) {
+                return (
+                  <h3
+                    key={index}
+                    style={{
+                      fontSize: "17.5px",
+                      fontWeight: 700,
+                      color: "var(--text-primary)",
+                      marginTop: "12px",
+                      marginBottom: "2px",
+                    }}
+                  >
+                    {parseInlineMarkdown(trimmed.replace("### ", ""))}
+                  </h3>
+                );
+              }
+
+              // Markdown table rendering
+              if (trimmed.startsWith("|") && trimmed.includes("\n|")) {
+                const rows = trimmed
+                  .split("\n")
+                  .map((r) => r.trim())
+                  .filter((r) => r.startsWith("|") && r.endsWith("|"));
+                if (rows.length >= 2) {
+                  const headerCells = rows[0]
+                    .slice(1, -1)
+                    .split("|")
+                    .map((c) => c.trim());
+                  // Skip separator row (index 1)
+                  const bodyRows = rows.slice(2).map((r) =>
+                    r
+                      .slice(1, -1)
+                      .split("|")
+                      .map((c) => c.trim())
+                  );
+
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        overflowX: "auto",
+                        margin: "12px 0",
+                        borderRadius: "8px",
+                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                      }}
+                    >
+                      <table
+                        style={{
+                          width: "100%",
+                          borderCollapse: "collapse",
+                          fontSize: "14px",
+                          textAlign: "left",
+                        }}
+                      >
+                        <thead>
+                          <tr style={{ background: "rgba(255, 255, 255, 0.05)" }}>
+                            {headerCells.map((h, hIdx) => (
+                              <th
+                                key={hIdx}
+                                style={{
+                                  padding: "10px 14px",
+                                  fontWeight: 700,
+                                  color: "var(--text-primary)",
+                                  borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+                                }}
+                              >
+                                {parseInlineMarkdown(h)}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bodyRows.map((row, rIdx) => (
+                            <tr
+                              key={rIdx}
+                              style={{
+                                borderBottom:
+                                  rIdx === bodyRows.length - 1
+                                    ? "none"
+                                    : "1px solid rgba(255, 255, 255, 0.06)",
+                                background: rIdx % 2 === 1 ? "rgba(255, 255, 255, 0.02)" : "transparent",
+                              }}
+                            >
+                              {row.map((cell, cIdx) => (
+                                <td
+                                  key={cIdx}
+                                  style={{
+                                    padding: "9px 14px",
+                                    color: "var(--text-secondary)",
+                                  }}
+                                >
+                                  {parseInlineMarkdown(cell)}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                }
               }
 
               if (/^\d+\.\s/.test(trimmed) || trimmed.startsWith("- ")) {

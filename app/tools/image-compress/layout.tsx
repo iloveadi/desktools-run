@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Reduce image file sizes up to 80% without losing visual quality. Batch compress JPG, PNG, and WebP images directly in your browser with zero limits.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/image-compress/",

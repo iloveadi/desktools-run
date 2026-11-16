@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Combine multiple PDF documents into a single organized file in seconds. Drag-and-drop page ordering, 100% private local processing with zero uploads.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-merger/",

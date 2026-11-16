@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Generate cryptographic checksums including MD5, SHA-1, SHA-256, SHA-384, and SHA-512 from text or files. 100% private local hashing in browser memory.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/hash-generator/",

@@ -17,6 +17,18 @@ export const metadata: Metadata = {
     description: "Generate strong, uncrackable random passwords with custom symbols, numbers, uppercase letters, and entropy strength meters. 100% client-side secure.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/password-generator/",

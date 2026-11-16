@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Encrypt and lock confidential PDF documents with 128-bit / 256-bit passwords. Prevent unauthorized opening and copying with 100% browser-based security.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/pdf-protect/",

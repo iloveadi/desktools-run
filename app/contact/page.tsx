@@ -363,7 +363,7 @@ export default function ContactPage() {
           >
             <MessageSquare size={20} style={{ color: "#818cf8" }} />
             <span style={{ fontSize: "13.5px", color: "var(--text-secondary)" }}>
-              수신자 공식 이메일: <strong style={{ color: "var(--text-primary)" }}>{ADMIN_GMAIL}</strong>
+              Official Support Email: <strong style={{ color: "var(--text-primary)" }}>{ADMIN_GMAIL}</strong>
             </span>
           </div>
         </section>

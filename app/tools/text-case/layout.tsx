@@ -12,6 +12,18 @@ export const metadata: Metadata = {
     url: "https://desktools.run/tools/text-case/",
     title: "Text Case Converter | desktools.run",
     description: "Convert UPPERCASE, lowercase, Title Case, camelCase, and snake_case.",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
 };
 

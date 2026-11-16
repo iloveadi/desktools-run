@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     description: "Generate complete favicon packages including 16x16, 32x32, 48x48, Apple Touch Icon, Android manifest icons, and ICO files in one click.",
     type: "website",
     siteName: "desktools.run",
+      images: [
+      {
+        url: "https://desktools.run/og-global.jpg",
+        width: 1376,
+        height: 768,
+        alt: "desktools.run — Fast & Free Web Utilities",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://desktools.run/og-global.jpg"],
   },
   alternates: {
     canonical: "https://desktools.run/tools/favicon-generator/",
