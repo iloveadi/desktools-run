@@ -169,11 +169,21 @@ export default function PdfCompressPage() {
         const pdfjsLib = await import("pdfjs-dist");
         pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
 
-        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const loadingTask = pdfjsLib.getDocument({
+          data: new Uint8Array(buffer),
+          cMapUrl: `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/cmaps/`,
+          cMapPacked: true,
+          standardFontDataUrl: `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/standard_fonts/`,
+        });
         const pdfJsDoc = await loadingTask.promise;
         const totalPages = pdfJsDoc.numPages;
 
+        const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
         const destDoc = await PDFDocument.create();
+
+        // Single shared canvas across all pages to prevent browser canvas memory exhaustion (OOM)
+        const sharedCanvas = document.createElement("canvas");
+        const ctx = sharedCanvas.getContext("2d", { alpha: false, willReadFrequently: true });
 
         for (let p = 1; p <= totalPages; p++) {
           setProgressState({
@@ -182,35 +192,58 @@ export default function PdfCompressPage() {
             percent: Math.round(((p - 1) / totalPages) * 90),
           });
 
-          const page = await pdfJsDoc.getPage(p);
-          const viewport = page.getViewport({ scale });
-          const canvas = document.createElement("canvas");
-          canvas.width = Math.max(1, Math.floor(viewport.width));
-          canvas.height = Math.max(1, Math.floor(viewport.height));
-
-          const ctx = canvas.getContext("2d", { alpha: false });
-          if (ctx) {
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            await page.render({ canvasContext: ctx, canvas, viewport }).promise;
-
-            const imgDataUrl = canvas.toDataURL("image/jpeg", quality);
-            const embeddedImg = await destDoc.embedJpg(imgDataUrl);
-
-            // Use original unscaled dimensions in points (72 DPI standard) to keep page size identical
+          let page: any = null;
+          try {
+            page = await pdfJsDoc.getPage(p);
+            const viewport = page.getViewport({ scale });
             const origViewport = page.getViewport({ scale: 1.0 });
-            const newPage = destDoc.addPage([origViewport.width, origViewport.height]);
-            newPage.drawImage(embeddedImg, {
-              x: 0,
-              y: 0,
-              width: origViewport.width,
-              height: origViewport.height,
-            });
+
+            if (ctx) {
+              sharedCanvas.width = Math.max(1, Math.floor(viewport.width));
+              sharedCanvas.height = Math.max(1, Math.floor(viewport.height));
+
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, sharedCanvas.width, sharedCanvas.height);
+              await page.render({ canvasContext: ctx, canvas: sharedCanvas, viewport }).promise;
+
+              const imgDataUrl = sharedCanvas.toDataURL("image/jpeg", quality);
+              const embeddedImg = await destDoc.embedJpg(imgDataUrl);
+
+              const newPage = destDoc.addPage([origViewport.width, origViewport.height]);
+              newPage.drawImage(embeddedImg, {
+                x: 0,
+                y: 0,
+                width: origViewport.width,
+                height: origViewport.height,
+              });
+            } else {
+              throw new Error("Canvas 2D context unavailable");
+            }
+          } catch (pageErr) {
+            console.warn(`[pdf-compress] Page ${p} rasterization fallback to vector copy:`, pageErr);
+            // Graceful fallback: copy the original vector page so the whole PDF doesn't fail!
+            try {
+              const [copiedPage] = await destDoc.copyPages(srcDoc, [p - 1]);
+              destDoc.addPage(copiedPage);
+            } catch (copyErr) {
+              console.error(`[pdf-compress] Failed to copy fallback page ${p}:`, copyErr);
+            }
+          } finally {
+            if (page && typeof page.cleanup === "function") {
+              page.cleanup();
+            }
           }
 
-          // Non-blocking yield for UI responsiveness
-          await new Promise((r) => setTimeout(r, 10));
+          // Non-blocking yield for UI responsiveness and memory release
+          await new Promise((r) => setTimeout(r, 15));
         }
+
+        // Clean up shared canvas memory and pdfjs document worker
+        sharedCanvas.width = 0;
+        sharedCanvas.height = 0;
+        try {
+          await loadingTask.destroy();
+        } catch {}
 
         destDoc.setTitle("");
         destDoc.setAuthor("");
@@ -262,9 +295,18 @@ export default function PdfCompressPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err) {
-      console.error("PDF Compression Error:", err);
-      alert(locale === "ko" ? "PDF 압축 중 오류가 발생했습니다." : "An error occurred while compressing the PDF.");
+    } catch (err: any) {
+      console.error("PDF Compression Critical Error:", {
+        message: err?.message,
+        name: err?.name,
+        stack: err?.stack,
+        raw: err,
+      });
+      alert(
+        locale === "ko"
+          ? `PDF 압축 중 오류가 발생했습니다: ${err?.message || "알 수 없는 오류"}`
+          : `An error occurred while compressing the PDF: ${err?.message || "Unknown error"}`
+      );
     } finally {
       setIsCompressing(false);
       setProgressState(null);
