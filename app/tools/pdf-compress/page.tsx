@@ -4,6 +4,7 @@
  * app/tools/pdf-compress/page.tsx
  * ─────────────────────────────────────────────────────────────
  * PDF Compression Tool for desktools.run
+ * 100% Client-Side with High/Recommended Image Re-encoding & Lossless Structural Optimization
  */
 
 import { useState, useRef, useCallback } from "react";
@@ -23,10 +24,12 @@ import {
   ShieldCheck,
   Sliders,
   Zap,
+  Loader2,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
+import ToolUsageTracker from "@/components/common/ToolUsageTracker";
 import { useLocale } from "@/lib/context/LocaleContext";
 
 type CompressionLevel = "recommended" | "high" | "low";
@@ -38,13 +41,20 @@ interface LoadedPdf {
   pageCount: number;
 }
 
+interface ProgressState {
+  current: number;
+  total: number;
+  percent: number;
+}
+
 export default function PdfCompressPage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   const [pdfFile, setPdfFile] = useState<LoadedPdf | null>(null);
   const [level, setLevel] = useState<CompressionLevel>("recommended");
   const [outputFilename, setOutputFilename] = useState<string>("compressed_document.pdf");
   const [isCompressing, setIsCompressing] = useState<boolean>(false);
+  const [progressState, setProgressState] = useState<ProgressState | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [compressedResult, setCompressedResult] = useState<{
     size: number;
@@ -103,53 +113,134 @@ export default function PdfCompressPage() {
   const handleReset = () => {
     setPdfFile(null);
     setCompressedResult(null);
+    setProgressState(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Execute Compression (non-blocking yield)
+  // Execute Compression (High / Recommended image re-encoding or Low lossless optimization)
   const handleCompress = async () => {
     if (!pdfFile) return;
 
     setIsCompressing(true);
+    setProgressState({ current: 0, total: pdfFile.pageCount, percent: 5 });
     // Yield to event loop to allow loading UI state to render instantly
     await new Promise((resolve) => setTimeout(resolve, 60));
 
     try {
       const buffer = await pdfFile.file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      let finalPdfBytes: Uint8Array;
 
-      // Create new optimized document
-      const destDoc = await PDFDocument.create();
+      if (level === "low") {
+        // Mode: Pure Lossless Structural Optimization (Zero visual change, preserves vector/text)
+        const destDoc = await PDFDocument.create();
+        const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
 
-      const pageIndices = srcDoc.getPageIndices();
-      // Copy pages in chunks to keep main thread responsive
-      for (let i = 0; i < pageIndices.length; i += 10) {
-        const chunkIndices = pageIndices.slice(i, i + 10);
-        const pages = await destDoc.copyPages(srcDoc, chunkIndices);
-        pages.forEach((p) => destDoc.addPage(p));
-        if (pageIndices.length > 20) {
+        const pageIndices = srcDoc.getPageIndices();
+        for (let i = 0; i < pageIndices.length; i += 10) {
+          const chunkIndices = pageIndices.slice(i, i + 10);
+          const pages = await destDoc.copyPages(srcDoc, chunkIndices);
+          pages.forEach((p) => destDoc.addPage(p));
+          const currentProgress = Math.min(i + 10, pageIndices.length);
+          setProgressState({
+            current: currentProgress,
+            total: pageIndices.length,
+            percent: Math.round((currentProgress / pageIndices.length) * 90),
+          });
           await new Promise((r) => setTimeout(r, 10));
         }
-      }
 
-      // Strip metadata for High & Recommended levels
-      if (level === "high" || level === "recommended") {
+        // Clean redundant metadata
         destDoc.setTitle("");
         destDoc.setAuthor("");
         destDoc.setSubject("");
         destDoc.setKeywords([]);
         destDoc.setProducer("desktools.run local PDF engine");
         destDoc.setCreator("desktools.run");
+
+        finalPdfBytes = await destDoc.save({
+          useObjectStreams: false,
+          addDefaultPage: false,
+        });
+      } else {
+        // Mode: High or Recommended (Actual image re-encoding & resolution optimization via pdfjs)
+        const scale = level === "high" ? 1.0 : 1.35;
+        const quality = level === "high" ? 0.55 : 0.72;
+
+        const pdfjsLib = await import("pdfjs-dist");
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+        const pdfJsDoc = await loadingTask.promise;
+        const totalPages = pdfJsDoc.numPages;
+
+        const destDoc = await PDFDocument.create();
+
+        for (let p = 1; p <= totalPages; p++) {
+          setProgressState({
+            current: p,
+            total: totalPages,
+            percent: Math.round(((p - 1) / totalPages) * 90),
+          });
+
+          const page = await pdfJsDoc.getPage(p);
+          const viewport = page.getViewport({ scale });
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.floor(viewport.width));
+          canvas.height = Math.max(1, Math.floor(viewport.height));
+
+          const ctx = canvas.getContext("2d", { alpha: false });
+          if (ctx) {
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            await page.render({ canvasContext: ctx, canvas, viewport }).promise;
+
+            const imgDataUrl = canvas.toDataURL("image/jpeg", quality);
+            const embeddedImg = await destDoc.embedJpg(imgDataUrl);
+
+            // Use original unscaled dimensions in points (72 DPI standard) to keep page size identical
+            const origViewport = page.getViewport({ scale: 1.0 });
+            const newPage = destDoc.addPage([origViewport.width, origViewport.height]);
+            newPage.drawImage(embeddedImg, {
+              x: 0,
+              y: 0,
+              width: origViewport.width,
+              height: origViewport.height,
+            });
+          }
+
+          // Non-blocking yield for UI responsiveness
+          await new Promise((r) => setTimeout(r, 10));
+        }
+
+        destDoc.setTitle("");
+        destDoc.setAuthor("");
+        destDoc.setSubject("");
+        destDoc.setKeywords([]);
+        destDoc.setProducer("desktools.run local PDF engine");
+        destDoc.setCreator("desktools.run");
+
+        const rasterBytes = await destDoc.save({
+          useObjectStreams: true,
+          addDefaultPage: false,
+        });
+
+        // Smart Fail-Safe: if input was tiny text-only PDF and raster is larger than original, fall back to structural copy
+        if (rasterBytes.byteLength >= pdfFile.originalSize) {
+          const fallbackDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+          const safeDoc = await PDFDocument.create();
+          const pages = await safeDoc.copyPages(fallbackDoc, fallbackDoc.getPageIndices());
+          pages.forEach((page) => safeDoc.addPage(page));
+          safeDoc.setTitle("");
+          safeDoc.setAuthor("");
+          finalPdfBytes = await safeDoc.save({ useObjectStreams: false, addDefaultPage: false });
+        } else {
+          finalPdfBytes = rasterBytes;
+        }
       }
 
-      // Save optimized PDF
-      const useObjectStreams = level !== "low";
-      const compressedBytes = await destDoc.save({
-        useObjectStreams,
-        addDefaultPage: false,
-      });
+      setProgressState({ current: pdfFile.pageCount, total: pdfFile.pageCount, percent: 100 });
 
-      const blob = new Blob([compressedBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+      const blob = new Blob([finalPdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const newSize = blob.size;
 
@@ -173,9 +264,10 @@ export default function PdfCompressPage() {
       document.body.removeChild(link);
     } catch (err) {
       console.error("PDF Compression Error:", err);
-      alert("PDF 압축 중 오류가 발생했습니다.");
+      alert(locale === "ko" ? "PDF 압축 중 오류가 발생했습니다." : "An error occurred while compressing the PDF.");
     } finally {
       setIsCompressing(false);
+      setProgressState(null);
     }
   };
 
@@ -190,6 +282,7 @@ export default function PdfCompressPage() {
 
   return (
     <>
+      <ToolUsageTracker toolId="pdf-compress" />
       <Header />
 
       <main style={{ flex: 1, paddingBottom: "80px" }}>
@@ -439,7 +532,7 @@ export default function PdfCompressPage() {
                               border: "1px solid rgba(52,211,153,0.3)",
                             }}
                           >
-                            Best Balance
+                            Best Balance (~50% OFF)
                           </span>
                         </div>
                         <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "4px" }}>
@@ -474,9 +567,24 @@ export default function PdfCompressPage() {
                         }}
                       />
                       <div>
-                        <strong style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                          {t("pdfCompress.levelHigh")}
-                        </strong>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <strong style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+                            {t("pdfCompress.levelHigh")}
+                          </strong>
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              fontWeight: 700,
+                              padding: "2px 8px",
+                              borderRadius: "100px",
+                              background: "rgba(239,68,68,0.15)",
+                              color: "#f87171",
+                              border: "1px solid rgba(239,68,68,0.3)",
+                            }}
+                          >
+                            Max Size Reduction
+                          </span>
+                        </div>
                         <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "4px" }}>
                           {t("pdfCompress.levelHighDesc")}
                         </p>
@@ -509,9 +617,24 @@ export default function PdfCompressPage() {
                         }}
                       />
                       <div>
-                        <strong style={{ fontSize: "14px", color: "var(--text-primary)" }}>
-                          {t("pdfCompress.levelLow")}
-                        </strong>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <strong style={{ fontSize: "14px", color: "var(--text-primary)" }}>
+                            {t("pdfCompress.levelLow")}
+                          </strong>
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              fontWeight: 700,
+                              padding: "2px 8px",
+                              borderRadius: "100px",
+                              background: "rgba(99,102,241,0.15)",
+                              color: "#818cf8",
+                              border: "1px solid rgba(99,102,241,0.3)",
+                            }}
+                          >
+                            100% Lossless Vector
+                          </span>
+                        </div>
                         <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "4px" }}>
                           {t("pdfCompress.levelLowDesc")}
                         </p>
@@ -526,6 +649,42 @@ export default function PdfCompressPage() {
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
                   Compression Summary
                 </h3>
+
+                {/* Progress Bar when compressing */}
+                {isCompressing && progressState && (
+                  <div
+                    style={{
+                      padding: "16px",
+                      borderRadius: "10px",
+                      background: "rgba(239,68,68,0.08)",
+                      border: "1px solid rgba(239,68,68,0.25)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12.5px" }}>
+                      <span style={{ color: "var(--text-primary)", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+                        <Loader2 size={14} className="animate-spin" color="#f87171" />
+                        {progressState.current > 0
+                          ? `Processing page ${progressState.current} / ${progressState.total}...`
+                          : "Preparing compression engine..."}
+                      </span>
+                      <strong style={{ color: "#f87171" }}>{progressState.percent}%</strong>
+                    </div>
+
+                    <div style={{ width: "100%", height: "6px", background: "rgba(255,255,255,0.08)", borderRadius: "10px", overflow: "hidden" }}>
+                      <div
+                        style={{
+                          width: `${progressState.percent}%`,
+                          height: "100%",
+                          background: "linear-gradient(90deg, #ef4444, #f43f5e)",
+                          transition: "width 0.2s ease",
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {/* Output Stats / Results */}
                 {compressedResult ? (
@@ -561,7 +720,7 @@ export default function PdfCompressPage() {
                       </div>
                     )}
                   </div>
-                ) : (
+                ) : !isCompressing && (
                   <div style={{ padding: "16px", borderRadius: "10px", background: "rgba(0,0,0,0.15)", border: "1px solid var(--border-subtle)", textAlign: "center" }}>
                     <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>Ready to compress</span>
                     <strong style={{ fontSize: "16px", color: "var(--text-primary)", display: "block", marginTop: "4px" }}>
@@ -613,15 +772,16 @@ export default function PdfCompressPage() {
                       justifyContent: "center",
                       gap: "8px",
                       boxShadow: "0 4px 14px rgba(239,68,68,0.3)",
-                      opacity: isCompressing ? 0.6 : 1,
+                      opacity: isCompressing ? 0.7 : 1,
                     }}
                   >
-                    <Download size={17} />
+                    {isCompressing ? <Loader2 size={17} className="animate-spin" /> : <Download size={17} />}
                     {isCompressing ? t("pdfCompress.compressing") : t("pdfCompress.compressBtn")}
                   </button>
 
                   <button
                     onClick={handleReset}
+                    disabled={isCompressing}
                     style={{
                       height: "40px",
                       borderRadius: "8px",
@@ -630,7 +790,7 @@ export default function PdfCompressPage() {
                       color: "var(--text-muted)",
                       fontWeight: 600,
                       fontSize: "13px",
-                      cursor: "pointer",
+                      cursor: isCompressing ? "not-allowed" : "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
