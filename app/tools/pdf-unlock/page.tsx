@@ -296,7 +296,7 @@ export default function PdfUnlockPage() {
       pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
 
       const loadingTask = pdfjsLib.getDocument({
-        data: buffer,
+        data: buffer.slice(0),
         password: password,
       });
 

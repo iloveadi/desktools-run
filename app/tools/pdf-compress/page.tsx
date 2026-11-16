@@ -133,7 +133,7 @@ export default function PdfCompressPage() {
       if (level === "low") {
         // Mode: Pure Lossless Structural Optimization (Zero visual change, preserves vector/text)
         const destDoc = await PDFDocument.create();
-        const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+        const srcDoc = await PDFDocument.load(buffer.slice(0), { ignoreEncryption: true });
 
         const pageIndices = srcDoc.getPageIndices();
         for (let i = 0; i < pageIndices.length; i += 10) {
@@ -169,8 +169,9 @@ export default function PdfCompressPage() {
         const pdfjsLib = await import("pdfjs-dist");
         pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
 
+        // Always pass a fresh slice copy to prevent pdf.js worker from detaching the main ArrayBuffer
         const loadingTask = pdfjsLib.getDocument({
-          data: new Uint8Array(buffer),
+          data: new Uint8Array(buffer.slice(0)),
           cMapUrl: `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/cmaps/`,
           cMapPacked: true,
           standardFontDataUrl: `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/standard_fonts/`,
@@ -178,7 +179,8 @@ export default function PdfCompressPage() {
         const pdfJsDoc = await loadingTask.promise;
         const totalPages = pdfJsDoc.numPages;
 
-        const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+        // Load srcDoc with a separate slice copy for fallback page copying
+        const srcDoc = await PDFDocument.load(buffer.slice(0), { ignoreEncryption: true });
         const destDoc = await PDFDocument.create();
 
         // Single shared canvas across all pages to prevent browser canvas memory exhaustion (OOM)
@@ -259,7 +261,7 @@ export default function PdfCompressPage() {
 
         // Smart Fail-Safe: if input was tiny text-only PDF and raster is larger than original, fall back to structural copy
         if (rasterBytes.byteLength >= pdfFile.originalSize) {
-          const fallbackDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+          const fallbackDoc = await PDFDocument.load(buffer.slice(0), { ignoreEncryption: true });
           const safeDoc = await PDFDocument.create();
           const pages = await safeDoc.copyPages(fallbackDoc, fallbackDoc.getPageIndices());
           pages.forEach((page) => safeDoc.addPage(page));
@@ -273,7 +275,7 @@ export default function PdfCompressPage() {
 
       setProgressState({ current: pdfFile.pageCount, total: pdfFile.pageCount, percent: 100 });
 
-      const blob = new Blob([finalPdfBytes.buffer as ArrayBuffer], { type: "application/pdf" });
+      const blob = new Blob([finalPdfBytes as BlobPart], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const newSize = blob.size;
 
