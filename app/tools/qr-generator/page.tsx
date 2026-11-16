@@ -674,7 +674,7 @@ export default function QrGeneratorPage() {
                 "웹 주소나 텍스트, 또는 Wi-Fi 이름(SSID)과 비밀번호를 입력합니다.",
                 "하단 디자인 패널에서 브랜드 색상(전경색/배경색), 크기 해상도, 여백을 자유롭게 커스텀합니다.",
                 "우측 실시간 미리보기에서 스마트폰 카메라로 QR 코드를 테스트 스캔합니다.",
-                "'Download PNG' 또는 인쇄용 'SVG Vector' 버튼을 눌러 고화질 파일로 다운로드하거나 'Copy Image'로 즉시 붙여넣습니다."
+                "'PNG 다운로드' 또는 인쇄용 'SVG 벡터' 버튼을 눌러 고화질 파일로 다운로드하거나 '이미지 복사'로 즉시 붙여넣습니다."
               ],
               featuresTitle: "핵심 기능 및 특징",
               features: [
@@ -772,7 +772,7 @@ export default function QrGeneratorPage() {
                 "Web アドレス、テキスト、または Wi-Fi のネットワーク名（SSID）とパスワードを入力します。",
                 "カラーピッカーで前景色・背景色、サイズ、余白（マージン）を自由にカスタマイズします。",
                 "右側のリアルタイムプレビューをスマートフォンのカメラで読み取ってテストします。",
-                "「Download PNG」または印刷用の「SVG Vector」をクリックして保存します。"
+                "「PNG保存」または印刷用の「SVGベクター」をクリックして保存するか、「画像をコピー」で直接貼り付けます。"
               ],
               featuresTitle: "主な機能と特徴",
               features: [
@@ -821,7 +821,7 @@ export default function QrGeneratorPage() {
                 "Introduce la dirección web, el texto o los datos de tu red Wi-Fi (SSID y contraseña).",
                 "Personaliza los colores de primer plano y fondo, la resolución y la zona de silencio.",
                 "Escanea la vista previa con la cámara de tu smartphone para comprobar su legibilidad.",
-                "Pulsa 'Download PNG' para uso digital o 'SVG Vector' para impresión profesional."
+                "Pulsa 'Descargar PNG' o 'SVG Vectorial' para impresión profesional, o 'Copiar imagen' para pegarla al instante."
               ],
               featuresTitle: "Características Principales",
               features: [
@@ -870,7 +870,7 @@ export default function QrGeneratorPage() {
                 "输入目标网址、文字备忘或 Wi-Fi 名称（SSID）与连接密码。",
                 "在下方设计面板中根据品牌视觉自定义前景色、背景色、尺寸分辨率及留白边距。",
                 "在右侧实时预览区使用手机相机扫码测试识别效果。",
-                "点击“Download PNG”下载位图或“SVG Vector”下载印刷级矢量源文件，亦可点击“Copy Image”直接复制。"
+                "点击“下载 PNG”下载位图或“SVG 矢量图”下载印刷级矢量源文件，亦可点击“复制图片”直接复制。"
               ],
               featuresTitle: "核心功能与特点",
               features: [
@@ -919,7 +919,7 @@ export default function QrGeneratorPage() {
                 "Saisissez votre lien web, votre texte ou les identifiants de votre réseau Wi-Fi (SSID et mot de passe).",
                 "Personnalisez les couleurs, les dimensions et la zone de silence dans le volet de design.",
                 "Scannez l'aperçu en direct avec l'appareil photo de votre smartphone pour tester.",
-                "Cliquez sur 'Download PNG' pour le web ou 'SVG Vector' pour l'impression professionnelle."
+                "Cliquez sur 'Télécharger PNG' pour le web, 'SVG Vectoriel' pour l'impression professionnelle, ou 'Copier l'image' pour la coller directement."
               ],
               featuresTitle: "Fonctionnalités Clés",
               features: [

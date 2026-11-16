@@ -1212,10 +1212,10 @@ export const translations: Record<Locale, Translations> = {
     "qrGenerator.sizeLabel": "해상도 및 크기",
     "qrGenerator.marginLabel": "테두리 여백 (Quiet Zone)",
     "qrGenerator.previewTitle": "실시간 QR 코드 미리보기",
-    "qrGenerator.downloadPng": "PNG 이미지 다운로드",
-    "qrGenerator.downloadSvg": "인쇄용 SVG 벡터 다운로드",
+    "qrGenerator.downloadPng": "PNG 다운로드",
+    "qrGenerator.downloadSvg": "SVG 벡터",
     "qrGenerator.copied": "복사 완료!",
-    "qrGenerator.copyImage": "클립보드에 이미지 복사",
+    "qrGenerator.copyImage": "이미지 복사",
 
     "header.search.placeholder": "도구 검색... (예: PDF, 리사이즈, JSON)",
 
