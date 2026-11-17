@@ -22,7 +22,9 @@ import {
   ExternalLink,
   Sparkles,
   Layers,
-  Info
+  Info,
+  Eye,
+  EyeOff
 } from "lucide-react";
 
 interface ExifData {
@@ -51,6 +53,7 @@ export default function ExifRemoverPage() {
   const [exifInfo, setExifInfo] = useState<ExifData | null>(null);
   const [isInspecting, setIsInspecting] = useState<boolean>(false);
   const [cleanSuccess, setCleanSuccess] = useState<boolean>(false);
+  const [showOriginalExif, setShowOriginalExif] = useState<boolean>(false);
   const [exportFormat, setExportFormat] = useState<"jpeg" | "png" | "webp">("jpeg");
   const [quality, setQuality] = useState<number>(0.92);
 
@@ -236,6 +239,7 @@ export default function ExifRemoverPage() {
     setImageFile(file);
     setIsInspecting(true);
     setCleanSuccess(false);
+    setShowOriginalExif(false);
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -468,25 +472,47 @@ export default function ExifRemoverPage() {
                     style={{
                       padding: "12px",
                       borderRadius: "10px",
-                      background: hasExifData ? "rgba(239, 68, 68, 0.1)" : "rgba(16, 185, 129, 0.1)",
-                      border: hasExifData ? "1px solid rgba(239, 68, 68, 0.3)" : "1px solid rgba(16, 185, 129, 0.3)",
+                      background: cleanSuccess
+                        ? "rgba(16, 185, 129, 0.12)"
+                        : hasExifData
+                        ? "rgba(239, 68, 68, 0.1)"
+                        : "rgba(16, 185, 129, 0.1)",
+                      border: cleanSuccess
+                        ? "1px solid rgba(16, 185, 129, 0.35)"
+                        : hasExifData
+                        ? "1px solid rgba(239, 68, 68, 0.3)"
+                        : "1px solid rgba(16, 185, 129, 0.3)",
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
                       marginBottom: "16px",
                     }}
                   >
-                    {hasExifData ? (
+                    {cleanSuccess ? (
+                      <ShieldCheck size={20} color="#10b981" style={{ flexShrink: 0 }} />
+                    ) : hasExifData ? (
                       <ShieldAlert size={20} color="#f87171" style={{ flexShrink: 0 }} />
                     ) : (
                       <ShieldCheck size={20} color="#34d399" style={{ flexShrink: 0 }} />
                     )}
                     <div>
-                      <div style={{ fontSize: "13px", fontWeight: 700, color: hasExifData ? "#f87171" : "#34d399" }}>
-                        {hasExifData ? t("exifRemover.hasExif") : t("exifRemover.noExif")}
+                      <div
+                        style={{
+                          fontSize: "13px",
+                          fontWeight: 700,
+                          color: cleanSuccess ? "#10b981" : hasExifData ? "#f87171" : "#34d399",
+                        }}
+                      >
+                        {cleanSuccess
+                          ? t("exifRemover.cleanedTitle")
+                          : hasExifData
+                          ? t("exifRemover.hasExif")
+                          : t("exifRemover.noExif")}
                       </div>
                       <div style={{ fontSize: "11.5px", color: "var(--text-secondary)", marginTop: "1px" }}>
-                        {hasExifData
+                        {cleanSuccess
+                          ? t("exifRemover.cleanedDesc")
+                          : hasExifData
                           ? t("exifRemover.hasExifDesc")
                           : t("exifRemover.noExifDesc")}
                       </div>
@@ -535,16 +561,22 @@ export default function ExifRemoverPage() {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "8px",
-                      background: "linear-gradient(135deg, #ef4444, #dc2626)",
-                      boxShadow: "0 4px 14px rgba(239,68,68,0.35)",
+                      background: cleanSuccess
+                        ? "linear-gradient(135deg, #10b981, #059669)"
+                        : "linear-gradient(135deg, #ef4444, #dc2626)",
+                      boxShadow: cleanSuccess
+                        ? "0 4px 14px rgba(16, 185, 129, 0.35)"
+                        : "0 4px 14px rgba(239, 68, 68, 0.35)",
                     }}
                   >
-                    <Trash2 size={16} />
-                    {t("exifRemover.stripAll")}
+                    {cleanSuccess ? <Download size={16} /> : <Trash2 size={16} />}
+                    {cleanSuccess
+                      ? t("exifRemover.reDownload")
+                      : t("exifRemover.stripAll")}
                   </button>
 
                   {cleanSuccess && (
-                    <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#34d399", fontSize: "12.5px", fontWeight: 600, marginTop: "10px", justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#10b981", fontSize: "12.5px", fontWeight: 600, marginTop: "10px", justifyContent: "center" }}>
                       <CheckCircle2 size={15} />
                       {t("exifRemover.cleanSuccess")}
                     </div>
@@ -554,142 +586,341 @@ export default function ExifRemoverPage() {
 
               {/* Right: Detailed EXIF Inspection Panel */}
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                {/* GPS Location Box */}
-                {exifInfo?.gpsLat && exifInfo?.gpsLng && (
-                  <div className="glass-card" style={{ padding: "20px", border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.04)" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#f87171" }}>
-                        <MapPin size={18} />
-                        <span style={{ fontSize: "15px", fontWeight: 700 }}>
-                          {t("exifRemover.gpsLocation")}
-                        </span>
-                      </div>
-                      <a
-                        href={`https://www.google.com/maps?q=${exifInfo.gpsLat},${exifInfo.gpsLng}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                {cleanSuccess && !showOriginalExif ? (
+                  <div
+                    className="glass-card"
+                    style={{
+                      padding: "32px 24px",
+                      borderRadius: "16px",
+                      background: "rgba(16, 185, 129, 0.05)",
+                      border: "1px solid rgba(16, 185, 129, 0.25)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                        borderRadius: "50%",
+                        background: "rgba(16, 185, 129, 0.15)",
+                        border: "2px solid rgba(16, 185, 129, 0.3)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "0 auto 16px",
+                        color: "#10b981",
+                      }}
+                    >
+                      <ShieldCheck size={36} />
+                    </div>
+
+                    <div
+                      style={{
+                        display: "inline-block",
+                        padding: "4px 12px",
+                        borderRadius: "20px",
+                        background: "rgba(16, 185, 129, 0.15)",
+                        color: "#10b981",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {t("exifRemover.cleanedBadge")}
+                    </div>
+
+                    <h3 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
+                      {t("exifRemover.cleanedTitle")}
+                    </h3>
+                    <p style={{ fontSize: "14px", color: "var(--text-secondary)", maxWidth: "480px", margin: "0 auto 24px", lineHeight: "1.5" }}>
+                      {t("exifRemover.cleanedDesc")}
+                    </p>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                        gap: "12px",
+                        textAlign: "left",
+                        marginBottom: "24px",
+                      }}
+                    >
+                      {[
+                        t("exifRemover.cleanedItemGps"),
+                        t("exifRemover.cleanedItemCamera"),
+                        t("exifRemover.cleanedItemDate"),
+                        t("exifRemover.cleanedItemSoftware"),
+                      ].map((item, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            background: "var(--bg-secondary)",
+                            border: "1px solid var(--border-subtle)",
+                            borderRadius: "10px",
+                            padding: "12px 14px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                          }}
+                        >
+                          <CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                          <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)" }}>
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => setShowOriginalExif(true)}
+                      className="btn-secondary"
+                      style={{
+                        padding: "9px 18px",
+                        borderRadius: "8px",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <Eye size={14} />
+                      {t("exifRemover.viewOriginalMetadata")}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {cleanSuccess && showOriginalExif && (
+                      <div
                         style={{
-                          fontSize: "12.5px",
-                          fontWeight: 600,
-                          color: "#f87171",
-                          textDecoration: "none",
-                          display: "inline-flex",
+                          display: "flex",
                           alignItems: "center",
-                          gap: "4px",
-                          background: "rgba(239,68,68,0.15)",
-                          padding: "4px 10px",
-                          borderRadius: "6px",
+                          justifyContent: "space-between",
+                          padding: "12px 16px",
+                          borderRadius: "10px",
+                          background: "var(--bg-secondary)",
+                          border: "1px solid var(--border-subtle)",
                         }}
                       >
-                        {t("exifRemover.viewMap")}
-                        <ExternalLink size={12} />
-                      </a>
-                    </div>
+                        <span style={{ fontSize: "13px", color: "var(--text-secondary)", fontWeight: 600 }}>
+                          {t("exifRemover.viewOriginalMetadata")}
+                        </span>
+                        <button
+                          onClick={() => setShowOriginalExif(false)}
+                          className="btn-secondary"
+                          style={{
+                            padding: "6px 12px",
+                            borderRadius: "6px",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          <EyeOff size={13} />
+                          {t("exifRemover.hideOriginalMetadata")}
+                        </button>
+                      </div>
+                    )}
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", background: "rgba(0,0,0,0.2)", padding: "12px", borderRadius: "8px" }}>
-                      <div>
-                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.latitude")}</div>
-                        <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
-                          {exifInfo.gpsLat}°
+                    {/* GPS Location Box */}
+                    {exifInfo?.gpsLat && exifInfo?.gpsLng && (
+                      <div className="glass-card" style={{ padding: "20px", border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.04)" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#f87171" }}>
+                            <MapPin size={18} />
+                            <span style={{ fontSize: "15px", fontWeight: 700 }}>
+                              {t("exifRemover.gpsLocation")}
+                            </span>
+                          </div>
+                          <a
+                            href={`https://www.google.com/maps?q=${exifInfo.gpsLat},${exifInfo.gpsLng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              fontSize: "12.5px",
+                              fontWeight: 600,
+                              color: "#f87171",
+                              textDecoration: "none",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              background: "rgba(239,68,68,0.15)",
+                              padding: "4px 10px",
+                              borderRadius: "6px",
+                            }}
+                          >
+                            {t("exifRemover.viewMap")}
+                            <ExternalLink size={12} />
+                          </a>
+                        </div>
+
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: exifInfo.gpsAlt !== undefined ? "repeat(3, 1fr)" : "repeat(2, 1fr)",
+                            gap: "12px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              background: "var(--bg-secondary)",
+                              border: "1px solid var(--border-subtle)",
+                              borderRadius: "10px",
+                              padding: "14px 16px",
+                            }}
+                          >
+                            <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px" }}>
+                              {t("exifRemover.latitude")}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: 800,
+                                color: "var(--text-primary)",
+                                fontFamily: "var(--font-mono), monospace",
+                                letterSpacing: "0.2px",
+                              }}
+                            >
+                              {exifInfo.gpsLat}°
+                            </div>
+                          </div>
+
+                          <div
+                            style={{
+                              background: "var(--bg-secondary)",
+                              border: "1px solid var(--border-subtle)",
+                              borderRadius: "10px",
+                              padding: "14px 16px",
+                            }}
+                          >
+                            <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px" }}>
+                              {t("exifRemover.longitude")}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: 800,
+                                color: "var(--text-primary)",
+                                fontFamily: "var(--font-mono), monospace",
+                                letterSpacing: "0.2px",
+                              }}
+                            >
+                              {exifInfo.gpsLng}°
+                            </div>
+                          </div>
+
+                          {exifInfo.gpsAlt !== undefined && (
+                            <div
+                              style={{
+                                background: "var(--bg-secondary)",
+                                border: "1px solid var(--border-subtle)",
+                                borderRadius: "10px",
+                                padding: "14px 16px",
+                              }}
+                            >
+                              <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px" }}>
+                                {t("exifRemover.altitude")}
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "16px",
+                                  fontWeight: 800,
+                                  color: "var(--text-primary)",
+                                  fontFamily: "var(--font-mono), monospace",
+                                  letterSpacing: "0.2px",
+                                }}
+                              >
+                                {exifInfo.gpsAlt}m
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div>
-                        <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.longitude")}</div>
-                        <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
-                          {exifInfo.gpsLng}°
-                        </div>
+                    )}
+
+                    {/* Camera & Settings Box */}
+                    <div className="glass-card" style={{ padding: "20px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#818cf8", marginBottom: "14px" }}>
+                        <Camera size={18} />
+                        <span style={{ fontSize: "15px", fontWeight: 700 }}>
+                          {t("exifRemover.cameraInfo")}
+                        </span>
                       </div>
-                      {exifInfo.gpsAlt !== undefined && (
-                        <div>
-                          <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.altitude")}</div>
-                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", fontFamily: "monospace" }}>
-                            {exifInfo.gpsAlt}m
+
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px" }}>
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.make")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.make || t("exifRemover.notIncluded")}
                           </div>
                         </div>
-                      )}
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.model")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.model || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.shutterSpeed")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.exposureTime || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.aperture")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.fNumber || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.iso")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.iso || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.focalLength")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.focalLength || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+
+                    {/* Date & Additional Details Box */}
+                    <div className="glass-card" style={{ padding: "20px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#34d399", marginBottom: "14px" }}>
+                        <Calendar size={18} />
+                        <span style={{ fontSize: "15px", fontWeight: 700 }}>
+                          {t("exifRemover.captureDate")}
+                        </span>
+                      </div>
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.captureDate")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.dateTimeOriginal || exifInfo?.dateTime || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+
+                        <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-subtle)", padding: "12px 14px", borderRadius: "10px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>{t("exifRemover.software")}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)" }}>
+                            {exifInfo?.software || t("exifRemover.notIncluded")}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
                 )}
-
-                {/* Camera & Settings Box */}
-                <div className="glass-card" style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#818cf8", marginBottom: "14px" }}>
-                    <Camera size={18} />
-                    <span style={{ fontSize: "15px", fontWeight: 700 }}>
-                      {t("exifRemover.cameraInfo")}
-                    </span>
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "12px" }}>
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.make")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.make || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.model")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.model || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.shutterSpeed")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.exposureTime || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.aperture")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.fNumber || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.iso")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.iso || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.focalLength")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.focalLength || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Date & Additional Details Box */}
-                <div className="glass-card" style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#34d399", marginBottom: "14px" }}>
-                    <Calendar size={18} />
-                    <span style={{ fontSize: "15px", fontWeight: 700 }}>
-                      {t("exifRemover.captureDate")}
-                    </span>
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.captureDate")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.dateTimeOriginal || exifInfo?.dateTime || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-
-                    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-subtle)", padding: "10px 12px", borderRadius: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: "var(--text-muted)" }}>{t("exifRemover.software")}</div>
-                      <div style={{ fontSize: "13.5px", fontWeight: 600, color: "var(--text-primary)" }}>
-                        {exifInfo?.software || t("exifRemover.notIncluded")}
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           )}

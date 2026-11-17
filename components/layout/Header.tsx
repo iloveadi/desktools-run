@@ -185,7 +185,7 @@ export default function Header({ onSearch }: HeaderProps) {
               onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
             >
-              All Utilities
+              {t("header.nav.tools") || "All Utilities"}
             </Link>
             <Link
               href="/blog"
@@ -193,7 +193,7 @@ export default function Header({ onSearch }: HeaderProps) {
               onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
             >
-              Blog
+              {t("header.nav.blog") || "Blog"}
             </Link>
             <Link
               href="/about"
@@ -201,7 +201,7 @@ export default function Header({ onSearch }: HeaderProps) {
               onMouseEnter={(e) => (e.currentTarget.style.color = "var(--colors-ink-strong)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "var(--colors-body)")}
             >
-              About
+              {t("header.nav.about") || "About"}
             </Link>
           </nav>
 
@@ -234,7 +234,7 @@ export default function Header({ onSearch }: HeaderProps) {
               aria-label="Search tools"
             >
               <Search size={14} color="var(--colors-primary)" />
-              <span className="hidden sm:inline">Search</span>
+              <span className="hidden sm:inline">{t("header.nav.search") || "Search"}</span>
               <span className="code-text hidden sm:inline" style={{ fontSize: "11px", color: "var(--colors-mute)", marginLeft: "4px" }}>⌘K</span>
             </button>
 
@@ -325,8 +325,8 @@ export default function Header({ onSearch }: HeaderProps) {
               className="button-primary"
               style={{ padding: "6px 12px", fontSize: "12.5px" }}
             >
-              <span className="hidden sm:inline">Request Tool</span>
-              <span className="sm:hidden">Request</span>
+              <span className="hidden sm:inline">{t("header.nav.request") || "Request Tool"}</span>
+              <span className="sm:hidden">{t("header.nav.requestShort") || "Request"}</span>
             </Link>
           </div>
         </div>
