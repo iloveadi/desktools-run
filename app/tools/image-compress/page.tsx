@@ -48,8 +48,17 @@ export default function ImageCompressPage() {
   const [preset, setPreset] = useState<CompressPreset>("recommended");
   const [customQuality, setCustomQuality] = useState<number>(75);
   const [autoConvertWebp, setAutoConvertWebp] = useState<boolean>(false);
+  const [recompressTrigger, setRecompressTrigger] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handlePresetClick = (pKey: CompressPreset) => {
+    if (preset === pKey) {
+      setRecompressTrigger((prev) => prev + 1);
+    } else {
+      setPreset(pKey);
+    }
+  };
 
   const getEffectiveQuality = useCallback((): number => {
     switch (preset) {
@@ -65,36 +74,6 @@ export default function ImageCompressPage() {
         return 80;
     }
   }, [preset, customQuality]);
-
-  const handleFiles = useCallback((files: FileList | File[]) => {
-    const validFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
-    if (validFiles.length === 0) return;
-
-    validFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const src = e.target?.result as string;
-        const img = new Image();
-        img.onload = () => {
-          const newItem: CompressItem = {
-            id: Math.random().toString(36).substring(2, 9),
-            file,
-            src,
-            width: img.naturalWidth,
-            height: img.naturalHeight,
-            origSize: file.size,
-            compressedBlob: null,
-            compressedUrl: "",
-            compressedSize: 0,
-            isProcessing: false,
-          };
-          setItems((prev) => [...prev, newItem]);
-        };
-        img.src = src;
-      };
-      reader.readAsDataURL(file);
-    });
-  }, []);
 
   const compressSingleItem = useCallback(
     (item: CompressItem, q: number, convertWebp: boolean): Promise<Partial<CompressItem>> => {
@@ -136,6 +115,11 @@ export default function ImageCompressPage() {
             canvas.toBlob(
               (blob) => {
                 if (blob) {
+                  if (item.compressedUrl) {
+                    try {
+                      URL.revokeObjectURL(item.compressedUrl);
+                    } catch {}
+                  }
                   const url = URL.createObjectURL(blob);
                   resolve({
                     compressedBlob: blob,
@@ -154,21 +138,70 @@ export default function ImageCompressPage() {
             resolve({ isProcessing: false });
           }
         };
+        img.onerror = () => {
+          resolve({ isProcessing: false });
+        };
         img.src = item.src;
       });
     },
     [preset]
   );
 
+  const handleFiles = useCallback(
+    (files: FileList | File[]) => {
+      const validFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
+      if (validFiles.length === 0) return;
+
+      const currentQuality = getEffectiveQuality();
+
+      validFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const src = e.target?.result as string;
+          const img = new Image();
+          img.onload = () => {
+            const newItemId = Math.random().toString(36).substring(2, 9);
+            const newItem: CompressItem = {
+              id: newItemId,
+              file,
+              src,
+              width: img.naturalWidth,
+              height: img.naturalHeight,
+              origSize: file.size,
+              compressedBlob: null,
+              compressedUrl: "",
+              compressedSize: 0,
+              isProcessing: true,
+            };
+
+            // 1. Add item with isProcessing: true
+            setItems((prev) => [...prev, newItem]);
+
+            // 2. Immediately execute compression
+            compressSingleItem(newItem, currentQuality, autoConvertWebp).then((result) => {
+              setItems((prev) =>
+                prev.map((i) => (i.id === newItemId ? { ...i, ...result } : i))
+              );
+            });
+          };
+          img.onerror = () => {
+            console.warn("[image-compress] Failed to load image:", file.name);
+          };
+          img.src = src;
+        };
+        reader.readAsDataURL(file);
+      });
+    },
+    [getEffectiveQuality, autoConvertWebp, compressSingleItem]
+  );
+
   useEffect(() => {
     if (items.length === 0) return;
 
     const currentQuality = getEffectiveQuality();
-    items.forEach((item) => {
-      setItems((prev) =>
-        prev.map((i) => (i.id === item.id ? { ...i, isProcessing: true } : i))
-      );
+    setItems((prev) => prev.map((i) => ({ ...i, isProcessing: true })));
 
+    items.forEach((item) => {
       compressSingleItem(item, currentQuality, autoConvertWebp).then((result) => {
         setItems((prev) =>
           prev.map((i) => (i.id === item.id ? { ...i, ...result } : i))
@@ -176,7 +209,7 @@ export default function ImageCompressPage() {
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preset, customQuality, autoConvertWebp]);
+  }, [preset, customQuality, autoConvertWebp, recompressTrigger]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -192,10 +225,25 @@ export default function ImageCompressPage() {
   };
 
   const handleRemoveItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    setItems((prev) => {
+      const target = prev.find((item) => item.id === id);
+      if (target?.compressedUrl) {
+        try {
+          URL.revokeObjectURL(target.compressedUrl);
+        } catch {}
+      }
+      return prev.filter((item) => item.id !== id);
+    });
   };
 
   const handleReset = () => {
+    items.forEach((item) => {
+      if (item.compressedUrl) {
+        try {
+          URL.revokeObjectURL(item.compressedUrl);
+        } catch {}
+      }
+    });
     setItems([]);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -348,7 +396,7 @@ export default function ImageCompressPage() {
                   ].map((p) => (
                     <button
                       key={p.key}
-                      onClick={() => setPreset(p.key as CompressPreset)}
+                      onClick={() => handlePresetClick(p.key as CompressPreset)}
                       style={{
                         padding: "6px 14px",
                         borderRadius: "8px",
@@ -412,28 +460,31 @@ export default function ImageCompressPage() {
             {items.length > 0 && (
               <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>Total Saved</div>
+                  <div style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>
+                    {t("imageCompress.totalSaved") || "Total Saved"}
+                  </div>
                   <div style={{ fontSize: "15px", fontWeight: 800, color: "#34d399" }}>
-                    {formatBytes(stats.savedBytes)} ({stats.savedPercent}% saved)
+                    {formatBytes(stats.savedBytes)} ({stats.savedPercent}% {t("imageCompress.savedRatio") || "saved"})
                   </div>
                 </div>
 
                 <button
                   onClick={downloadAll}
+                  disabled={items.some((i) => i.isProcessing) || !items.some((i) => i.compressedUrl)}
                   style={{
                     height: "40px",
                     padding: "0 18px",
                     borderRadius: "8px",
-                    background: "linear-gradient(135deg, #10b981, #059669)",
-                    color: "white",
+                    background: items.some((i) => i.isProcessing) ? "rgba(255,255,255,0.08)" : "linear-gradient(135deg, #10b981, #059669)",
+                    color: items.some((i) => i.isProcessing) ? "var(--text-muted)" : "white",
                     border: "none",
                     fontWeight: 700,
                     fontSize: "13.5px",
-                    cursor: "pointer",
+                    cursor: items.some((i) => i.isProcessing) ? "not-allowed" : "pointer",
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
-                    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+                    boxShadow: items.some((i) => i.isProcessing) ? "none" : "0 4px 12px rgba(16,185,129,0.3)",
                   }}
                 >
                   <Download size={15} />
@@ -582,7 +633,7 @@ export default function ImageCompressPage() {
                             alignItems: "center",
                             justifyContent: "center",
                           }}
-                          title="Remove file"
+                          title={t("imageCompress.removeFile") || "Remove file"}
                         >
                           <Trash2 size={13} />
                         </button>
@@ -626,7 +677,7 @@ export default function ImageCompressPage() {
                           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11.5px", color: "var(--text-muted)", marginTop: "4px" }}>
                             <span>{item.width} × {item.height} px</span>
                             <span>•</span>
-                            <span>Orig: {formatBytes(item.origSize)}</span>
+                            <span>{t("imageCompress.origPrefix") || "Orig:"} {formatBytes(item.origSize)}</span>
                           </div>
                         </div>
 
@@ -646,7 +697,9 @@ export default function ImageCompressPage() {
                           <span style={{ fontWeight: 600, color: "var(--text-secondary)" }}>
                             {formatBytes(item.compressedSize || item.origSize)}
                           </span>
-                          {item.compressedSize > 0 ? (
+                          {item.isProcessing ? (
+                            <span style={{ color: "var(--text-muted)" }}>{t("imageCompress.compressing")}</span>
+                          ) : item.compressedSize > 0 ? (
                             <span
                               style={{
                                 fontWeight: 800,
@@ -666,17 +719,17 @@ export default function ImageCompressPage() {
                         {/* Download Single */}
                         <button
                           onClick={() => downloadSingle(item)}
-                          disabled={!item.compressedUrl}
+                          disabled={item.isProcessing || !item.compressedUrl}
                           style={{
                             width: "100%",
                             height: "36px",
                             borderRadius: "8px",
-                            background: item.compressedUrl ? "rgba(16,185,129,0.2)" : "rgba(255,255,255,0.05)",
-                            border: item.compressedUrl ? "1px solid #34d399" : "1px solid var(--border-subtle)",
-                            color: item.compressedUrl ? "#6ee7b7" : "var(--text-muted)",
+                            background: item.compressedUrl && !item.isProcessing ? "rgba(16,185,129,0.2)" : "rgba(255,255,255,0.05)",
+                            border: item.compressedUrl && !item.isProcessing ? "1px solid #34d399" : "1px solid var(--border-subtle)",
+                            color: item.compressedUrl && !item.isProcessing ? "#6ee7b7" : "var(--text-muted)",
                             fontWeight: 700,
                             fontSize: "12.5px",
-                            cursor: item.compressedUrl ? "pointer" : "not-allowed",
+                            cursor: item.compressedUrl && !item.isProcessing ? "pointer" : "not-allowed",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
