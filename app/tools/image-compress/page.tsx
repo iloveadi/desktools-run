@@ -397,17 +397,7 @@ export default function ImageCompressPage() {
                     <button
                       key={p.key}
                       onClick={() => handlePresetClick(p.key as CompressPreset)}
-                      style={{
-                        padding: "6px 14px",
-                        borderRadius: "8px",
-                        background: preset === p.key ? "rgba(52,211,153,0.25)" : "rgba(255,255,255,0.05)",
-                        border: preset === p.key ? "1px solid #34d399" : "1px solid var(--border-subtle)",
-                        color: preset === p.key ? "#6ee7b7" : "var(--text-secondary)",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        transition: "all 0.15s",
-                      }}
+                      className={`image-compress-preset-btn ${preset === p.key ? "active" : ""}`}
                     >
                       {p.label}
                     </button>
@@ -463,7 +453,7 @@ export default function ImageCompressPage() {
                   <div style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>
                     {t("imageCompress.totalSaved") || "Total Saved"}
                   </div>
-                  <div style={{ fontSize: "15px", fontWeight: 800, color: "#34d399" }}>
+                  <div className="image-compress-total-saved-num">
                     {formatBytes(stats.savedBytes)} ({stats.savedPercent}% {t("imageCompress.savedRatio") || "saved"})
                   </div>
                 </div>
@@ -605,52 +595,18 @@ export default function ImageCompressPage() {
                     return (
                       <div
                         key={item.id}
-                        style={{
-                          background: "rgba(0,0,0,0.2)",
-                          borderRadius: "12px",
-                          border: "1px solid var(--border-subtle)",
-                          padding: "16px",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "12px",
-                          position: "relative",
-                        }}
+                        className="image-compress-card"
                       >
                         <button
                           onClick={() => handleRemoveItem(item.id)}
-                          style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "10px",
-                            background: "rgba(239,68,68,0.15)",
-                            border: "none",
-                            color: "#f87171",
-                            width: "26px",
-                            height: "26px",
-                            borderRadius: "50%",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
+                          className="image-compress-remove-btn"
                           title={t("imageCompress.removeFile") || "Remove file"}
                         >
                           <Trash2 size={13} />
                         </button>
 
                         {/* Thumbnail */}
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "160px",
-                            borderRadius: "8px",
-                            overflow: "hidden",
-                            background: "rgba(0,0,0,0.3)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                        <div className="image-compress-thumb-wrap">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={item.compressedUrl || item.src}
@@ -663,7 +619,7 @@ export default function ImageCompressPage() {
                         <div>
                           <p
                             style={{
-                              fontSize: "13px",
+                              fontSize: "13.5px",
                               fontWeight: 700,
                               color: "var(--text-primary)",
                               overflow: "hidden",
@@ -682,37 +638,20 @@ export default function ImageCompressPage() {
                         </div>
 
                         {/* Compression Savings */}
-                        <div
-                          style={{
-                            padding: "8px 12px",
-                            borderRadius: "8px",
-                            background: "rgba(255,255,255,0.03)",
-                            border: "1px solid var(--border-subtle)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            fontSize: "12px",
-                          }}
-                        >
-                          <span style={{ fontWeight: 600, color: "var(--text-secondary)" }}>
+                        <div className="image-compress-info-bar">
+                          <span className="image-compress-size-val">
                             {formatBytes(item.compressedSize || item.origSize)}
                           </span>
                           {item.isProcessing ? (
-                            <span style={{ color: "var(--text-muted)" }}>{t("imageCompress.compressing")}</span>
+                            <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>{t("imageCompress.compressing")}</span>
                           ) : item.compressedSize > 0 ? (
                             <span
-                              style={{
-                                fontWeight: 800,
-                                padding: "2px 6px",
-                                borderRadius: "4px",
-                                background: savedPercent > 0 ? "rgba(52,211,153,0.15)" : "rgba(251,191,36,0.15)",
-                                color: savedPercent > 0 ? "#34d399" : "#fbbf24",
-                              }}
+                              className={`image-compress-savings-badge ${savedPercent > 0 ? "" : "no-savings"}`}
                             >
                               {savedPercent > 0 ? `-${savedPercent}%` : "0%"}
                             </span>
                           ) : (
-                            <span style={{ color: "var(--text-muted)" }}>{t("imageCompress.compressing")}</span>
+                            <span style={{ color: "var(--text-muted)", fontWeight: 500 }}>{t("imageCompress.compressing")}</span>
                           )}
                         </div>
 
@@ -720,21 +659,7 @@ export default function ImageCompressPage() {
                         <button
                           onClick={() => downloadSingle(item)}
                           disabled={item.isProcessing || !item.compressedUrl}
-                          style={{
-                            width: "100%",
-                            height: "36px",
-                            borderRadius: "8px",
-                            background: item.compressedUrl && !item.isProcessing ? "rgba(16,185,129,0.2)" : "rgba(255,255,255,0.05)",
-                            border: item.compressedUrl && !item.isProcessing ? "1px solid #34d399" : "1px solid var(--border-subtle)",
-                            color: item.compressedUrl && !item.isProcessing ? "#6ee7b7" : "var(--text-muted)",
-                            fontWeight: 700,
-                            fontSize: "12.5px",
-                            cursor: item.compressedUrl && !item.isProcessing ? "pointer" : "not-allowed",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "6px",
-                          }}
+                          className="image-compress-btn-download"
                         >
                           <Download size={14} />
                           {t("imageCompress.download")}
