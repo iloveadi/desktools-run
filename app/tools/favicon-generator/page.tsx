@@ -43,6 +43,11 @@ export default function FaviconGeneratorPage() {
   const [shape, setShape] = useState<"square" | "rounded" | "circle">("rounded");
   const [padding, setPadding] = useState<number>(10); // percentage
 
+  // Web App & Manifest options
+  const [appName, setAppName] = useState<string>("");
+  const [appShortName, setAppShortName] = useState<string>("");
+  const [themeColor, setThemeColor] = useState<string>("#ffffff");
+
   // Generated Assets
   const [generatedIcons, setGeneratedIcons] = useState<GeneratedIcon[]>([]);
   const [icoBlob, setIcoBlob] = useState<Blob | null>(null);
@@ -222,31 +227,37 @@ export default function FaviconGeneratorPage() {
       const padPx = (s * padding) / 100;
       const drawSize = s - padPx * 2;
 
+      const isAppleTouchIcon = target.name === "apple-touch-icon.png";
+      // Apple HIG requires apple-touch-icon to be square and opaque (no rounded/transparent corners,
+      // as iOS automatically applies its own squircle mask and renders transparent corners as black).
+      const effectiveShape = isAppleTouchIcon ? "square" : shape;
+
       // Draw background shape
       ctx.save();
       const fillStyle = bgColor === "transparent" ? null : bgColor === "custom" ? customHex : bgColor;
 
       if (fillStyle) {
         ctx.fillStyle = fillStyle;
-        if (shape === "circle") {
+        if (effectiveShape === "circle") {
           ctx.beginPath();
           ctx.arc(s / 2, s / 2, s / 2, 0, Math.PI * 2);
           ctx.fill();
-        } else if (shape === "rounded") {
+        } else if (effectiveShape === "rounded") {
           const rx = s * 0.22;
           ctx.beginPath();
           ctx.roundRect(0, 0, s, s, rx);
           ctx.fill();
         } else {
+          // "square" (including apple-touch-icon with opaque background)
           ctx.fillRect(0, 0, s, s);
         }
       }
 
-      if (shape === "circle" && !fillStyle) {
+      if (effectiveShape === "circle" && !fillStyle) {
         ctx.beginPath();
         ctx.arc(s / 2, s / 2, s / 2, 0, Math.PI * 2);
         ctx.clip();
-      } else if (shape === "rounded" && !fillStyle) {
+      } else if (effectiveShape === "rounded" && !fillStyle) {
         const rx = s * 0.22;
         ctx.beginPath();
         ctx.roundRect(0, 0, s, s, rx);
@@ -288,22 +299,28 @@ export default function FaviconGeneratorPage() {
       setIcoUint8(icoUint);
     }
 
-    // Build site.webmanifest
+    setIsRendering(false);
+  }, [sourceImage, bgColor, customHex, shape, padding]);
+
+  // Update site.webmanifest on settings change
+  useEffect(() => {
+    const effectiveName = appName.trim() || "My Web App";
+    const effectiveShortName = appShortName.trim() || (appName.trim() ? appName.trim().slice(0, 12) : "App");
+    const effectiveTheme = themeColor.trim() || "#ffffff";
+
     const manifest = {
-      name: "My Web App",
-      short_name: "App",
+      name: effectiveName,
+      short_name: effectiveShortName,
       icons: [
         { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
         { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" }
       ],
-      theme_color: "#ffffff",
-      background_color: "#ffffff",
+      theme_color: effectiveTheme,
+      background_color: effectiveTheme,
       display: "standalone"
     };
     setManifestText(JSON.stringify(manifest, null, 2));
-
-    setIsRendering(false);
-  }, [sourceImage, bgColor, customHex, shape, padding]);
+  }, [appName, appShortName, themeColor]);
 
   useEffect(() => {
     renderIcons();
@@ -345,11 +362,15 @@ export default function FaviconGeneratorPage() {
     a.click();
   };
 
+  const effectiveName = appName.trim() || "My Web App";
+  const effectiveTheme = themeColor.trim() || "#ffffff";
+
   const htmlHeadSnippet = `<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="shortcut icon" href="/favicon.ico">`;
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="theme-color" content="${effectiveTheme}">`;
 
   const copyHtmlSnippet = () => {
     navigator.clipboard.writeText(htmlHeadSnippet);
@@ -600,6 +621,101 @@ export default function FaviconGeneratorPage() {
                   </div>
                 </div>
 
+                {/* Web App & Manifest Settings */}
+                <div className="glass-card" style={{ padding: "18px", display: "flex", flexDirection: "column", gap: "14px" }}>
+                  <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <Smartphone size={16} color="#818cf8" />
+                    {t("faviconGen.appSettings")}
+                  </div>
+
+                  {/* App / Site Name */}
+                  <div>
+                    <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px", display: "block" }}>
+                      {t("faviconGen.appName")}
+                    </label>
+                    <input
+                      type="text"
+                      value={appName}
+                      onChange={(e) => setAppName(e.target.value)}
+                      placeholder={t("faviconGen.appNamePlaceholder") || "My Web App"}
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        background: "var(--bg-secondary)",
+                        border: "1px solid var(--border-subtle)",
+                        color: "var(--text-primary)",
+                        fontSize: "13px",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+
+                  {/* Short Name */}
+                  <div>
+                    <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px", display: "block" }}>
+                      {t("faviconGen.shortName")}
+                    </label>
+                    <input
+                      type="text"
+                      value={appShortName}
+                      onChange={(e) => setAppShortName(e.target.value)}
+                      placeholder={t("faviconGen.shortNamePlaceholder") || "App"}
+                      style={{
+                        width: "100%",
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        background: "var(--bg-secondary)",
+                        border: "1px solid var(--border-subtle)",
+                        color: "var(--text-primary)",
+                        fontSize: "13px",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+
+                  {/* Theme Color */}
+                  <div>
+                    <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px", display: "block" }}>
+                      {t("faviconGen.themeColor")}
+                    </label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <input
+                        type="color"
+                        value={themeColor.startsWith("#") && themeColor.length === 7 ? themeColor : "#ffffff"}
+                        onChange={(e) => setThemeColor(e.target.value)}
+                        style={{
+                          width: "36px",
+                          height: "36px",
+                          borderRadius: "8px",
+                          border: "1px solid var(--border-subtle)",
+                          padding: "2px",
+                          background: "var(--bg-secondary)",
+                          cursor: "pointer",
+                          flexShrink: 0,
+                        }}
+                      />
+                      <input
+                        type="text"
+                        value={themeColor}
+                        onChange={(e) => setThemeColor(e.target.value)}
+                        placeholder="#ffffff"
+                        style={{
+                          flex: 1,
+                          padding: "8px 12px",
+                          borderRadius: "8px",
+                          background: "var(--bg-secondary)",
+                          border: "1px solid var(--border-subtle)",
+                          color: "var(--text-primary)",
+                          fontSize: "13px",
+                          fontFamily: "var(--font-mono), monospace",
+                          outline: "none",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 {/* ZIP Download Action Box */}
                 <div className="glass-card" style={{ padding: "18px" }}>
                   <button
@@ -643,7 +759,7 @@ export default function FaviconGeneratorPage() {
                       <div style={{ background: "#0f172a", borderRadius: "6px 6px 0 0", padding: "6px 12px", display: "inline-flex", alignItems: "center", gap: "8px", maxWidth: "180px" }}>
                         {icon16 && <img src={icon16} alt="tab icon" style={{ width: "16px", height: "16px" }} />}
                         <span style={{ fontSize: "12px", color: "#f8fafc", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 500 }}>
-                          My Web App
+                          {effectiveName}
                         </span>
                       </div>
                     </div>
@@ -770,15 +886,16 @@ export default function FaviconGeneratorPage() {
 
                   <pre
                     style={{
-                      background: "rgba(0,0,0,0.3)",
-                      padding: "12px",
-                      borderRadius: "8px",
-                      fontSize: "12px",
-                      fontFamily: "monospace",
+                      background: "#0f172a",
+                      padding: "14px 16px",
+                      borderRadius: "10px",
+                      fontSize: "12.5px",
+                      fontFamily: "var(--font-mono), monospace",
                       color: "#34d399",
                       overflowX: "auto",
-                      border: "1px solid var(--border-subtle)",
+                      border: "1px solid #1e293b",
                       margin: 0,
+                      lineHeight: "1.6",
                     }}
                   >
                     {htmlHeadSnippet}
