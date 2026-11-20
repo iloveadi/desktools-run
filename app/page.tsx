@@ -15,9 +15,22 @@ import { useLocale } from "@/lib/context/LocaleContext";
 export default function Home() {
   const { t } = useLocale();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
+    if (query.trim()) {
+      setSelectedCategory("all");
+    }
+  }, []);
+
+  const handleSelectCategory = useCallback((category: string) => {
+    setSearchQuery("");
+    setSelectedCategory(category);
+    const el = document.getElementById("tools");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   }, []);
 
   const filteredTools = searchQuery.trim() ? searchTools(searchQuery) : TOOLS;
@@ -28,7 +41,7 @@ export default function Home() {
       <Header onSearch={handleSearch} />
 
       <main style={{ flex: 1 }}>
-        <HeroSection onSearch={handleSearch} />
+        <HeroSection onSearch={handleSearch} onSelectCategory={handleSelectCategory} />
 
         <section
           style={{
@@ -66,6 +79,8 @@ export default function Home() {
               tools={filteredTools}
               isSearching={isSearching}
               onCategorySearch={handleSearch}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
             />
           </div>
         </section>

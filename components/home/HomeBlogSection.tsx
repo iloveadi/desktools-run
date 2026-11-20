@@ -152,8 +152,8 @@ export default function HomeBlogSection() {
               textDecoration: "none",
               padding: "8px 16px",
               borderRadius: "8px",
-              background: "rgba(0, 217, 146, 0.08)",
-              border: "1px solid rgba(0, 217, 146, 0.25)",
+              background: "rgba(217, 119, 6, 0.08)",
+              border: "1px solid rgba(217, 119, 6, 0.25)",
               transition: "all 0.15s ease",
             }}
           >

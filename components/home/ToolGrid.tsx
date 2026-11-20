@@ -156,17 +156,31 @@ interface ToolGridProps {
   tools?: Tool[];
   isSearching?: boolean;
   onCategorySearch?: (query: string) => void;
+  selectedCategory?: string;
+  onSelectCategory?: (category: string) => void;
 }
 
-export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategorySearch }: ToolGridProps) {
+export default function ToolGrid({
+  tools = TOOLS,
+  isSearching = false,
+  onCategorySearch,
+  selectedCategory,
+  onSelectCategory,
+}: ToolGridProps) {
   const grouped = groupToolsByCategory(tools);
   const { locale } = useLocale();
 
   const [usageCounts, setUsageCounts] = useState<Record<string, number>>({});
   const [favorites, setFavorites] = useState<string[]>([]);
   const [recentTools, setRecentTools] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("all");
+  const [internalActiveTab, setInternalActiveTab] = useState<string>("all");
+  const activeTab = selectedCategory !== undefined ? selectedCategory : internalActiveTab;
   const [trayView, setTrayView] = useState<"favorites" | "recents">("favorites");
+
+  const setActiveTab = (tabId: string) => {
+    setInternalActiveTab(tabId);
+    onSelectCategory?.(tabId);
+  };
 
   const syncStorage = () => {
     setFavorites(getFavorites());
@@ -293,7 +307,7 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                         fontWeight: 600,
                         padding: "1px 5px",
                         borderRadius: "4px",
-                        backgroundColor: isActive ? "rgba(0, 217, 146, 0.15)" : "var(--colors-canvas-soft)",
+                        backgroundColor: isActive ? "rgba(217, 119, 6, 0.15)" : "var(--colors-canvas-soft)",
                         color: isActive ? "var(--colors-primary)" : "var(--colors-mute)",
                       }}
                     >
@@ -489,8 +503,8 @@ export default function ToolGrid({ tools = TOOLS, isSearching = false, onCategor
                         width: "8px",
                         height: "8px",
                         borderRadius: "2px",
-                        backgroundColor: "#00d992",
-                        boxShadow: "0 0 10px #00d992",
+                        backgroundColor: "var(--colors-primary)",
+                        boxShadow: "0 0 8px var(--colors-primary)",
                       }}
                     />
                     <h2

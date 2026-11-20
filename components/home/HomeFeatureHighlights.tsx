@@ -362,8 +362,8 @@ export default function HomeFeatureHighlights() {
               gap: "8px",
               padding: "6px 14px",
               borderRadius: "100px",
-              background: "rgba(0, 217, 146, 0.1)",
-              border: "1px solid rgba(0, 217, 146, 0.25)",
+              background: "rgba(217, 119, 6, 0.1)",
+              border: "1px solid rgba(217, 119, 6, 0.25)",
               color: "var(--colors-primary)",
               fontSize: "12.5px",
               fontWeight: 700,
@@ -455,9 +455,9 @@ export default function HomeFeatureHighlights() {
             className="glass-card"
             style={{
               padding: "32px 28px",
-              border: "1px solid rgba(0, 217, 146, 0.4)",
-              background: "linear-gradient(180deg, rgba(0, 217, 146, 0.06) 0%, rgba(18, 21, 31, 0.7) 100%)",
-              boxShadow: "0 8px 32px -8px rgba(0, 217, 146, 0.15)",
+              border: "1px solid rgba(217, 119, 6, 0.35)",
+              background: "linear-gradient(180deg, rgba(217, 119, 6, 0.06) 0%, var(--colors-card-surface) 100%)",
+              boxShadow: "0 8px 32px -8px rgba(217, 119, 6, 0.12)",
               position: "relative",
             }}
           >
@@ -468,7 +468,7 @@ export default function HomeFeatureHighlights() {
                 gap: "6px",
                 padding: "4px 10px",
                 borderRadius: "6px",
-                background: "rgba(0, 217, 146, 0.15)",
+                background: "rgba(217, 119, 6, 0.15)",
                 color: "var(--colors-primary)",
                 fontSize: "12px",
                 fontWeight: 700,
@@ -509,7 +509,7 @@ export default function HomeFeatureHighlights() {
                 width: "40px",
                 height: "40px",
                 borderRadius: "10px",
-                background: "rgba(0, 217, 146, 0.12)",
+                background: "rgba(217, 119, 6, 0.12)",
                 color: "var(--colors-primary)",
                 display: "flex",
                 alignItems: "center",
