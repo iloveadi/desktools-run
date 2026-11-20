@@ -24,6 +24,11 @@ import {
   Zap,
   Infinity as InfinityIcon,
   MonitorSmartphone,
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle2,
+  X,
+  ExternalLink,
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -38,6 +43,16 @@ interface PdfItem {
   pageCount: number;
 }
 
+interface Toast {
+  id: string;
+  type: "error" | "warning" | "success" | "info";
+  message: string;
+  action?: {
+    label: string;
+    href: string;
+  };
+}
+
 export default function PdfMergerPage() {
   const { t } = useLocale();
 
@@ -46,12 +61,44 @@ export default function PdfMergerPage() {
   const [isMerging, setIsMerging] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [mergedBlobUrl, setMergedBlobUrl] = useState<string | null>(null);
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Toast handlers
+  const showToast = useCallback((toast: Omit<Toast, "id">) => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { ...toast, id }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((item) => item.id !== id));
+    }, 6000);
+  }, []);
+
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((item) => item.id !== id));
+  }, []);
+
   // Parse & append PDF files to queue
   const handleFiles = useCallback(async (files: FileList | File[]) => {
-    const validPdfs = Array.from(files).filter((f) => f.type === "application/pdf" || f.name.endsWith(".pdf"));
+    const fileArray = Array.from(files);
+    if (fileArray.length === 0) return;
+
+    // Check for non-PDF files and show warning
+    const nonPdfs = fileArray.filter(
+      (f) => !f.type.includes("pdf") && !f.name.toLowerCase().endsWith(".pdf")
+    );
+    if (nonPdfs.length > 0) {
+      const names = nonPdfs.map((f) => `'${f.name}'`).slice(0, 2).join(", ");
+      const extra = nonPdfs.length > 2 ? ` 외 ${nonPdfs.length - 2}개` : "";
+      showToast({
+        type: "warning",
+        message: `${names}${extra} 파일은 PDF 형식이 아닙니다. (.pdf 파일만 지원)`,
+      });
+    }
+
+    const validPdfs = fileArray.filter(
+      (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
+    );
     if (validPdfs.length === 0) return;
 
     const newItems: PdfItem[] = [];
@@ -59,7 +106,21 @@ export default function PdfMergerPage() {
     for (const file of validPdfs) {
       try {
         const buffer = await file.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+        // Load without ignoreEncryption to properly detect encrypted files
+        const pdfDoc = await PDFDocument.load(buffer);
+
+        if (pdfDoc.isEncrypted) {
+          showToast({
+            type: "warning",
+            message: `'${file.name}'는 암호가 걸려 있어 병합할 수 없습니다. 'PDF 잠금 해제' 도구에서 암호를 먼저 풀어 주세요.`,
+            action: {
+              label: t("pdfMerger.goToUnlock") || "PDF 잠금 해제 바로가기",
+              href: "/tools/pdf-unlock/",
+            },
+          });
+          continue;
+        }
+
         newItems.push({
           id: Math.random().toString(36).substring(2, 9),
           file,
@@ -67,21 +128,37 @@ export default function PdfMergerPage() {
           size: file.size,
           pageCount: pdfDoc.getPageCount(),
         });
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error loading PDF:", file.name, err);
-        newItems.push({
-          id: Math.random().toString(36).substring(2, 9),
-          file,
-          name: file.name,
-          size: file.size,
-          pageCount: 1,
-        });
+        const errMsg = (err?.message || "").toLowerCase();
+        const isEncrypted =
+          errMsg.includes("encrypt") ||
+          errMsg.includes("password") ||
+          err?.name === "EncryptedPDFError";
+
+        if (isEncrypted) {
+          showToast({
+            type: "warning",
+            message: `'${file.name}'는 암호가 걸려 있어 병합할 수 없습니다. 'PDF 잠금 해제' 도구에서 암호를 먼저 풀어 주세요.`,
+            action: {
+              label: t("pdfMerger.goToUnlock") || "PDF 잠금 해제 바로가기",
+              href: "/tools/pdf-unlock/",
+            },
+          });
+        } else {
+          showToast({
+            type: "error",
+            message: `'${file.name}'는 PDF 파일이 아니거나 손상되어 열 수 없습니다.`,
+          });
+        }
       }
     }
 
-    setPdfQueue((prev) => [...prev, ...newItems]);
-    setMergedBlobUrl(null);
-  }, []);
+    if (newItems.length > 0) {
+      setPdfQueue((prev) => [...prev, ...newItems]);
+      setMergedBlobUrl(null);
+    }
+  }, [showToast, t]);
 
   // Drag & Drop Handlers
   const handleDragOver = (e: React.DragEvent) => {
@@ -127,6 +204,25 @@ export default function PdfMergerPage() {
   const totalFiles = pdfQueue.length;
   const totalPages = pdfQueue.reduce((sum, item) => sum + item.pageCount, 0);
 
+  // Helper for filename
+  const getCleanFilename = useCallback((): string => {
+    const trimmed = outputFilename.trim();
+    return trimmed.toLowerCase().endsWith(".pdf") ? trimmed : `${trimmed || "merged_document"}.pdf`;
+  }, [outputFilename]);
+
+  // Re-download Action
+  const handleReDownload = () => {
+    if (!mergedBlobUrl) return;
+    const name = getCleanFilename();
+    const link = document.createElement("a");
+    link.href = mergedBlobUrl;
+    link.setAttribute("download", name);
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Merge Action
   const handleMerge = async () => {
     if (pdfQueue.length === 0) return;
@@ -139,10 +235,72 @@ export default function PdfMergerPage() {
       const mergedPdf = await PDFDocument.create();
 
       for (const item of pdfQueue) {
-        const buffer = await item.file.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
+        let buffer: ArrayBuffer;
+        try {
+          buffer = await item.file.arrayBuffer();
+        } catch {
+          showToast({
+            type: "error",
+            message: `'${item.name}' 파일을 읽는 중 오류가 발생했습니다.`,
+          });
+          setIsMerging(false);
+          return;
+        }
+
+        let pdfDoc: PDFDocument;
+        try {
+          pdfDoc = await PDFDocument.load(buffer);
+        } catch (err: any) {
+          const errMsg = (err?.message || "").toLowerCase();
+          const isEncrypted =
+            errMsg.includes("encrypt") ||
+            errMsg.includes("password") ||
+            err?.name === "EncryptedPDFError";
+
+          if (isEncrypted) {
+            showToast({
+              type: "warning",
+              message: `'${item.name}'는 암호가 걸려 있어 병합할 수 없습니다. 'PDF 잠금 해제' 도구에서 암호를 먼저 풀어 주세요.`,
+              action: {
+                label: t("pdfMerger.goToUnlock") || "PDF 잠금 해제 바로가기",
+                href: "/tools/pdf-unlock/",
+              },
+            });
+          } else {
+            showToast({
+              type: "error",
+              message: `'${item.name}' 처리 중 오류가 발생하여 병합에 실패했습니다.`,
+            });
+          }
+          setIsMerging(false);
+          return;
+        }
+
+        if (pdfDoc.isEncrypted) {
+          showToast({
+            type: "warning",
+            message: `'${item.name}'는 암호가 걸려 있어 병합할 수 없습니다. 'PDF 잠금 해제' 도구에서 암호를 먼저 풀어 주세요.`,
+            action: {
+              label: t("pdfMerger.goToUnlock") || "PDF 잠금 해제 바로가기",
+              href: "/tools/pdf-unlock/",
+            },
+          });
+          setIsMerging(false);
+          return;
+        }
+
+        try {
+          const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        } catch (err) {
+          console.error("Error copying pages:", item.name, err);
+          showToast({
+            type: "error",
+            message: `'${item.name}' 페이지 복사 중 오류가 발생하여 병합에 실패했습니다.`,
+          });
+          setIsMerging(false);
+          return;
+        }
       }
 
       const mergedBytes = await mergedPdf.save();
@@ -151,7 +309,7 @@ export default function PdfMergerPage() {
       setMergedBlobUrl(url);
 
       // Trigger automatic browser download
-      const name = outputFilename.endsWith(".pdf") ? outputFilename : `${outputFilename}.pdf`;
+      const name = getCleanFilename();
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", name);
@@ -159,9 +317,17 @@ export default function PdfMergerPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      showToast({
+        type: "success",
+        message: `${totalFiles}개의 PDF 문서(${totalPages}페이지)가 성공적으로 병합되었습니다!`,
+      });
     } catch (err) {
       console.error("PDF Merge Error:", err);
-      alert("PDF 병합 중 오류가 발생했습니다.");
+      showToast({
+        type: "error",
+        message: "PDF 병합 중 예기치 않은 오류가 발생했습니다.",
+      });
     } finally {
       setIsMerging(false);
     }
@@ -197,7 +363,7 @@ export default function PdfMergerPage() {
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {t("pdfSplit.back") || "Back to All Tools"}
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
@@ -275,7 +441,12 @@ export default function PdfMergerPage() {
                 type="file"
                 multiple
                 accept="application/pdf, .pdf"
-                onChange={(e) => e.target.files && handleFiles(e.target.files)}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    handleFiles(e.target.files);
+                    e.target.value = "";
+                  }
+                }}
                 style={{ display: "none" }}
               />
 
@@ -298,8 +469,8 @@ export default function PdfMergerPage() {
                 <p style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px" }}>
                   {t("pdfMerger.dropPrompt")}
                 </p>
-                <p style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                  Select multiple PDF files. Combine unlimited pages 100% locally.
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+                  {t("pdfMerger.dropHint") || "Select multiple PDF files. Combine unlimited pages 100% locally."}
                 </p>
               </div>
             </div>
@@ -352,7 +523,7 @@ export default function PdfMergerPage() {
                         >
                           {item.name}
                         </p>
-                        <p style={{ fontSize: "12px", color: "var(--text-muted)", display: "flex", gap: "12px", marginTop: "2px" }}>
+                        <p style={{ fontSize: "12px", color: "var(--text-secondary)", display: "flex", gap: "12px", marginTop: "2px" }}>
                           <span>{item.pageCount} {t("pdfMerger.pages")}</span>
                           <span>•</span>
                           <span>{formatBytes(item.size)}</span>
@@ -426,36 +597,48 @@ export default function PdfMergerPage() {
                   </div>
                 ))}
 
-                {/* Add More Files Button */}
-                <button
+                {/* Additional PDF Dropzone & Add Button */}
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
                   style={{
-                    height: "44px",
-                    borderRadius: "10px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px dashed var(--border-subtle)",
-                    color: "var(--text-secondary)",
-                    fontSize: "13.5px",
-                    fontWeight: 600,
+                    padding: "24px 20px",
+                    borderRadius: "12px",
+                    border: isDragging ? "2px dashed #f87171" : "1.5px dashed var(--border-subtle)",
+                    background: isDragging ? "rgba(239,68,68,0.08)" : "rgba(255,255,255,0.02)",
+                    textAlign: "center",
                     cursor: "pointer",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "6px",
                     transition: "all 0.15s",
                   }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "#f87171"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-subtle)"; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "#f87171"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = isDragging ? "#f87171" : "var(--border-subtle)"; }}
                 >
-                  <Plus size={16} />
-                  {t("pdfMerger.addMore")}
-                </button>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-primary)", fontWeight: 700, fontSize: "14px" }}>
+                    <Plus size={16} color="#f87171" />
+                    {t("pdfMerger.addMore")}
+                  </div>
+                  <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0 }}>
+                    {t("pdfMerger.dropMoreHint") || "여기에 PDF 파일을 추가로 드래그하거나 클릭하여 선택하세요"}
+                  </p>
+                </div>
                 <input
                   ref={fileInputRef}
                   type="file"
                   multiple
                   accept="application/pdf, .pdf"
-                  onChange={(e) => e.target.files && handleFiles(e.target.files)}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      handleFiles(e.target.files);
+                      e.target.value = "";
+                    }
+                  }}
                   style={{ display: "none" }}
                 />
               </div>
@@ -463,7 +646,7 @@ export default function PdfMergerPage() {
               {/* Right Column: Options & Action Panel */}
               <div className="glass-card" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px", height: "fit-content" }}>
                 <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                  Merge Options
+                  {t("pdfMerger.optionsTitle")}
                 </h3>
 
                 {/* Total Stats Summary Badges */}
@@ -504,55 +687,215 @@ export default function PdfMergerPage() {
 
                 {/* Actions Bar */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <button
-                    onClick={handleMerge}
-                    disabled={isMerging || totalFiles === 0}
-                    style={{
-                      height: "46px",
-                      borderRadius: "10px",
-                      background: "linear-gradient(135deg, #ef4444, #f43f5e)",
-                      color: "white",
-                      border: "none",
-                      fontWeight: 700,
-                      fontSize: "14.5px",
-                      cursor: isMerging || totalFiles === 0 ? "not-allowed" : "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      boxShadow: "0 4px 14px rgba(239,68,68,0.3)",
-                      opacity: isMerging || totalFiles === 0 ? 0.6 : 1,
-                    }}
-                  >
-                    <Download size={17} />
-                    {isMerging ? t("pdfMerger.merging") : t("pdfMerger.mergeBtn")}
-                  </button>
+                  {mergedBlobUrl ? (
+                    <>
+                      <button
+                        onClick={handleReDownload}
+                        style={{
+                          height: "46px",
+                          borderRadius: "10px",
+                          background: "linear-gradient(135deg, #10b981, #059669)",
+                          color: "white",
+                          border: "none",
+                          fontWeight: 700,
+                          fontSize: "14.5px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          boxShadow: "0 4px 14px rgba(16,185,129,0.35)",
+                        }}
+                      >
+                        <Download size={17} />
+                        {t("pdfMerger.reDownload") || "다시 다운로드"}
+                      </button>
 
-                  <button
-                    onClick={handleReset}
-                    style={{
-                      height: "40px",
-                      borderRadius: "8px",
-                      background: "rgba(255,255,255,0.06)",
-                      border: "1px solid var(--border-subtle)",
-                      color: "var(--text-muted)",
-                      fontWeight: 600,
-                      fontSize: "13px",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "6px",
-                    }}
-                  >
-                    <RotateCcw size={14} />
-                    {t("pdfMerger.reset")}
-                  </button>
+                      <button
+                        onClick={handleMerge}
+                        disabled={isMerging}
+                        style={{
+                          height: "40px",
+                          borderRadius: "8px",
+                          background: "rgba(255,255,255,0.06)",
+                          border: "1px solid var(--border-subtle)",
+                          color: "var(--text-primary)",
+                          fontWeight: 600,
+                          fontSize: "13px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <RotateCcw size={14} />
+                        {isMerging ? t("pdfMerger.merging") : (t("pdfMerger.mergeAgain") || "새로 병합하기")}
+                      </button>
+
+                      <button
+                        onClick={handleReset}
+                        style={{
+                          height: "36px",
+                          borderRadius: "8px",
+                          background: "none",
+                          border: "1px solid transparent",
+                          color: "var(--text-muted)",
+                          fontWeight: 500,
+                          fontSize: "12.5px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <Trash2 size={13} />
+                        {t("pdfMerger.reset")}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleMerge}
+                        disabled={isMerging || totalFiles === 0}
+                        style={{
+                          height: "46px",
+                          borderRadius: "10px",
+                          background: "linear-gradient(135deg, #ef4444, #f43f5e)",
+                          color: "white",
+                          border: "none",
+                          fontWeight: 700,
+                          fontSize: "14.5px",
+                          cursor: isMerging || totalFiles === 0 ? "not-allowed" : "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          boxShadow: "0 4px 14px rgba(239,68,68,0.3)",
+                          opacity: isMerging || totalFiles === 0 ? 0.6 : 1,
+                        }}
+                      >
+                        <Download size={17} />
+                        {isMerging ? t("pdfMerger.merging") : t("pdfMerger.mergeBtn")}
+                      </button>
+
+                      <button
+                        onClick={handleReset}
+                        style={{
+                          height: "40px",
+                          borderRadius: "8px",
+                          background: "rgba(255,255,255,0.06)",
+                          border: "1px solid var(--border-subtle)",
+                          color: "var(--text-muted)",
+                          fontWeight: 600,
+                          fontSize: "13px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <RotateCcw size={14} />
+                        {t("pdfMerger.reset")}
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           )}
         </section>
+
+        {/* ── Toast Notification Container ───────────────── */}
+        {toasts.length > 0 && (
+          <div
+            style={{
+              position: "fixed",
+              bottom: "24px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 9999,
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              maxWidth: "92vw",
+              width: "520px",
+              pointerEvents: "none",
+            }}
+          >
+            {toasts.map((toast) => (
+              <div
+                key={toast.id}
+                style={{
+                  pointerEvents: "auto",
+                  padding: "14px 18px",
+                  borderRadius: "12px",
+                  background: "var(--bg-secondary, #1e293b)",
+                  border:
+                    toast.type === "error"
+                      ? "1px solid #ef4444"
+                      : toast.type === "warning"
+                      ? "1px solid #f59e0b"
+                      : "1px solid #10b981",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.4)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "12px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1, minWidth: 0 }}>
+                  {toast.type === "error" && <AlertCircle size={20} color="#ef4444" style={{ flexShrink: 0 }} />}
+                  {toast.type === "warning" && <AlertTriangle size={20} color="#f59e0b" style={{ flexShrink: 0 }} />}
+                  {toast.type === "success" && <CheckCircle2 size={20} color="#10b981" style={{ flexShrink: 0 }} />}
+
+                  <div style={{ fontSize: "13.5px", color: "var(--text-primary)", fontWeight: 500, lineHeight: 1.4, wordBreak: "break-word" }}>
+                    <span>{toast.message}</span>
+                    {toast.action && (
+                      <div style={{ marginTop: "6px" }}>
+                        <Link
+                          href={toast.action.href}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            fontSize: "12.5px",
+                            fontWeight: 700,
+                            color: "#3b82f6",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          {toast.action.label}
+                          <ExternalLink size={12} />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => removeToast(toast.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--text-muted)",
+                    cursor: "pointer",
+                    padding: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                  aria-label="Close"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* ── Unified Tool Guide & FAQ Section ───────────── */}
         <ToolGuide
