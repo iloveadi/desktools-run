@@ -60,8 +60,8 @@ export default function FloatingScrollButtons() {
           background: "rgba(18, 22, 33, 0.88)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          border: "1px solid rgba(0, 217, 146, 0.3)",
-          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.55), 0 0 18px rgba(0, 217, 146, 0.2)",
+          border: "1px solid rgba(251, 191, 36, 0.35)",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.55), 0 0 18px rgba(251, 191, 36, 0.15)",
           padding: "4px",
           gap: "2px",
           transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -92,9 +92,9 @@ export default function FloatingScrollButtons() {
           }}
           onMouseEnter={(e) => {
             if (showTop) {
-              e.currentTarget.style.background = "linear-gradient(135deg, #00f5a0, #00d992)";
-              e.currentTarget.style.color = "#04120b";
-              e.currentTarget.style.boxShadow = "0 0 14px rgba(0, 217, 146, 0.6)";
+              e.currentTarget.style.background = "linear-gradient(135deg, #fbbf24, #d97706)";
+              e.currentTarget.style.color = "#111110";
+              e.currentTarget.style.boxShadow = "0 0 14px rgba(251, 191, 36, 0.5)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }
           }}
@@ -143,9 +143,9 @@ export default function FloatingScrollButtons() {
           }}
           onMouseEnter={(e) => {
             if (showBottom) {
-              e.currentTarget.style.background = "linear-gradient(135deg, #00f5a0, #00d992)";
-              e.currentTarget.style.color = "#04120b";
-              e.currentTarget.style.boxShadow = "0 0 14px rgba(0, 217, 146, 0.6)";
+              e.currentTarget.style.background = "linear-gradient(135deg, #fbbf24, #d97706)";
+              e.currentTarget.style.color = "#111110";
+              e.currentTarget.style.boxShadow = "0 0 14px rgba(251, 191, 36, 0.5)";
               e.currentTarget.style.transform = "translateY(1px)";
             }
           }}

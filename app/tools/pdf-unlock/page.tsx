@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { PDFDocument } from "pdf-lib";
 import {
   Unlock,
-  Lock,
   Upload,
   ArrowLeft,
   Trash2,
@@ -17,7 +16,8 @@ import {
   Eye,
   EyeOff,
   FileText,
-  ShieldCheck
+  ShieldCheck,
+  Info
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -43,7 +43,13 @@ const I18N = {
     passwordPlaceholder: "문서 비밀번호 입력",
     btnUnlock: "비밀번호 해제 및 PDF 저장",
     unlocking: "PDF 잠금 해제 중...",
-    wrongPassword: "비밀번호가 올바르지 않습니다. 다시 확인해주세요.",
+    wrongPassword: "비밀번호가 올바르지 않습니다. 다시 확인해 주세요.",
+    corruptError: "PDF를 읽지 못했습니다. 파일이 손상되었는지 확인해 주세요.",
+    notEncrypted: "이 PDF에는 암호가 걸려 있지 않습니다. 바로 열 수 있어요.",
+    notEncryptedDesc: "이 문서는 이미 암호 없이 열람 및 인쇄가 가능하므로 추가 해제 작업이 필요하지 않습니다.",
+    onlyPdf: "PDF 파일만 업로드할 수 있습니다.",
+    rasterNotice: "※ 안내: 보안 암호 해제를 위해 고해상도 이미지 방식으로 재구성되어 저장되었습니다. 글자 복사·검색은 불가하며 원본 대비 파일 용량이 늘어날 수 있습니다.",
+    autoDownloadNotice: "완료 후 잠금 해제된 PDF가 자동으로 다운로드됩니다. (다운로드가 시작되지 않았다면 아래 버튼을 클릭하세요)",
     successTitle: "PDF 잠금 해제가 완료되었습니다!",
     successDesc: "비밀번호가 완전히 제거되어 이제 암호 입력 없이 어디서나 바로 열 수 있습니다.",
     downloadBtn: "잠금 해제된 PDF 다운로드",
@@ -60,7 +66,7 @@ const I18N = {
     faq2Q: "제 비밀번호나 문서 내용이 서버로 전송되나요?",
     faq2A: "전혀 전송되지 않습니다! desktools.run의 모든 복호화 작업은 사용자의 브라우저 내에서 100% 로컬 처리됩니다.",
     faq3Q: "잠금 해제 후 원본 내용이나 화질이 변경되나요?",
-    faq3A: "아닙니다. 원본 페이지의 레이아웃과 고화질 해상도가 100% 원본 그대로 유지되며 비밀번호 보안 레이어만 깔끔하게 제거됩니다."
+    faq3A: "보안 암호를 영구 제거하기 위해 고해상도 이미지 방식으로 재구성되어 저장되므로 시각적 레이아웃은 유지되지만, 글자 복사·검색은 불가하며 파일 용량이 늘어날 수 있습니다."
   },
   en: {
     back: "All Tools",
@@ -75,6 +81,12 @@ const I18N = {
     btnUnlock: "Unlock & Save PDF",
     unlocking: "Unlocking PDF...",
     wrongPassword: "Incorrect password. Please try again.",
+    corruptError: "Could not read PDF. Please check if the file is corrupted.",
+    notEncrypted: "This PDF is not password-protected. You can open it directly.",
+    notEncryptedDesc: "This document is already accessible without any password. No unlocking is required.",
+    onlyPdf: "Only PDF files can be uploaded.",
+    rasterNotice: "※ Notice: Reconstructed using high-resolution images to remove password protection. Text copying/searching is disabled and file size may increase.",
+    autoDownloadNotice: "Saved automatically upon completion. (Click the button below if download did not start)",
     successTitle: "PDF Unlocked Successfully!",
     successDesc: "The password protection has been permanently removed.",
     downloadBtn: "Download Unlocked PDF",
@@ -91,7 +103,7 @@ const I18N = {
     faq2Q: "Is my document uploaded to a server?",
     faq2A: "Never! All decryption operations run 100% locally on your machine inside your browser.",
     faq3Q: "Does unlocking affect document quality?",
-    faq3A: "Not at all. The document contents, layout, and visual fidelity are preserved."
+    faq3A: "Pages are reconstructed as high-resolution images to permanently remove password encryption. Visual layout is preserved, but text copying/searching may be unavailable and file size may increase."
   },
   ja: {
     back: "全ツール一覧",
@@ -106,6 +118,12 @@ const I18N = {
     btnUnlock: "パスワードを解除して保存",
     unlocking: "ロック解除中...",
     wrongPassword: "パスワードが正しくありません。再度ご確認ください。",
+    corruptError: "PDFを読み取れませんでした。ファイルが破損していないかご確認ください。",
+    notEncrypted: "このPDFにはパスワードが設定されていません。そのまま開くことができます。",
+    notEncryptedDesc: "この文書には保護がかかっておらず、そのまま閲覧や印刷が可能です。",
+    onlyPdf: "PDFファイルのみアップロードできます。",
+    rasterNotice: "※ ご案内：パスワード除去のため高解像度画像として再構築されています。文字のコピーや検索はできず、ファイルサイズが増加する場合があります。",
+    autoDownloadNotice: "完了後に自動ダウンロードされます。（開始されない場合は下のボタンを押してください）",
     successTitle: "PDFのロック解除が完了しました！",
     successDesc: "パスワード保護が完全に解除され、今後はパスワードなしで開けます。",
     downloadBtn: "解除済みPDFをダウンロード",
@@ -122,7 +140,7 @@ const I18N = {
     faq2Q: "サーバーにファイルやパスワードが送信されますか？",
     faq2A: "一切送信されません。すべてお使いの端末（ブラウザ）内で安全に処理されます。",
     faq3Q: "画質やレイアウトは劣化しますか？",
-    faq3A: "劣化しません。元のレイアウトと高画質を保持したままパスワードのみを安全に除去します。"
+    faq3A: "パスワードを永久解除するため高解像度画像として再構築されます。見た目のレイアウトは保たれますが、テキストの選択・検索ができなくなり、ファイルサイズが大きくなる場合があります。"
   },
   es: {
     back: "Todas las herramientas",
@@ -137,6 +155,12 @@ const I18N = {
     btnUnlock: "Desbloquear y Guardar PDF",
     unlocking: "Desbloqueando PDF...",
     wrongPassword: "Contraseña incorrecta. Inténtalo de nuevo.",
+    corruptError: "No se pudo leer el PDF. Comprueba si el archivo está dañado.",
+    notEncrypted: "Este PDF no tiene contraseña. Puedes abrirlo directamente.",
+    notEncryptedDesc: "Este documento ya es accesible sin contraseña. No requiere desbloqueo.",
+    onlyPdf: "Solo se pueden subir archivos PDF.",
+    rasterNotice: "※ Nota: Reconstruido mediante imágenes de alta resolución para eliminar la contraseña. No se puede seleccionar texto y el tamaño del archivo puede aumentar.",
+    autoDownloadNotice: "Se guardará automáticamente al finalizar. (Haz clic abajo si no comienza)",
     successTitle: "¡PDF Desbloqueado con Éxito!",
     successDesc: "La contraseña ha sido eliminada permanentemente.",
     downloadBtn: "Descargar PDF Desbloqueado",
@@ -153,7 +177,7 @@ const I18N = {
     faq2Q: "¿Se envían mis datos a algún servidor?",
     faq2A: "¡No! Todo el procesamiento es 100% local en tu navegador.",
     faq3Q: "¿Afecta a la calidad del documento?",
-    faq3A: "En absoluto. Se mantiene la calidad y el diseño original."
+    faq3A: "Las páginas se redibujan como imágenes de alta resolución para eliminar la contraseña de forma permanente. Se mantiene el diseño visual, pero no se podrá copiar ni buscar texto y el tamaño del archivo puede aumentar."
   },
   zh: {
     back: "返回所有工具",
@@ -168,6 +192,12 @@ const I18N = {
     btnUnlock: "解除密码并保存 PDF",
     unlocking: "正在解除锁定...",
     wrongPassword: "密码错误，请重新确认输入。",
+    corruptError: "无法读取 PDF，请检查文件是否损坏。",
+    notEncrypted: "此 PDF 未设置密码保护，可以直接打开阅读。",
+    notEncryptedDesc: "该文档未加密，可直接正常打开与打印，无需额外解锁。",
+    onlyPdf: "仅支持上传 PDF 格式文件。",
+    rasterNotice: "※ 说明：为彻底永久解除密码，本工具通过高清图像渲染重构页面并导出。版面视觉完整保留，但不支持文字复制与搜索，且文件体积可能会比原件偏大。",
+    autoDownloadNotice: "处理完成后已自动开始下载。（若未自动下载，请点击下方按钮）",
     successTitle: "PDF 密码解除成功！",
     successDesc: "密码保护已被永久移除，今后无需密码即可随时打开浏览。",
     downloadBtn: "下载已解锁的 PDF",
@@ -184,7 +214,7 @@ const I18N = {
     faq2Q: "我的文件或密码会泄露到服务器吗？",
     faq2A: "绝无可能！所有解密均在您的电脑或手机浏览器本地执行。",
     faq3Q: "解锁后会损失画质或格式吗？",
-    faq3A: "完全不会。原始排版与高清画质 100% 完整保留。"
+    faq3A: "为彻底永久解除密码，本工具通过高清图像渲染重构页面并导出。版面视觉完整保留，但不支持文字复制与搜索，且文件体积可能会比原件偏大。"
   },
   fr: {
     back: "Tous les outils",
@@ -199,6 +229,12 @@ const I18N = {
     btnUnlock: "Déverrouiller et Enregistrer",
     unlocking: "Déverrouillage en cours...",
     wrongPassword: "Mot de passe incorrect. Veuillez réessayer.",
+    corruptError: "Impossible de lire le PDF. Veuillez vérifier si le fichier est corrompu.",
+    notEncrypted: "Ce PDF n'est pas protégé par un mot de passe. Vous pouvez l'ouvrir directement.",
+    notEncryptedDesc: "Ce document est déjà accessible sans mot de passe. Aucun déverrouillage n'est nécessaire.",
+    onlyPdf: "Seuls les fichiers PDF peuvent être téléversés.",
+    rasterNotice: "※ Remarque : Reconstruit sous forme d'images haute résolution pour supprimer définitivement le mot de passe. La sélection de texte est indisponible et la taille peut augmenter.",
+    autoDownloadNotice: "Téléchargé automatiquement dès la fin du traitement. (Cliquez ci-dessous si le téléchargement ne démarre pas)",
     successTitle: "PDF Déverrouillé avec Succès !",
     successDesc: "Le mot de passe a été retiré définitivement.",
     downloadBtn: "Télécharger le PDF Déverrouillé",
@@ -215,7 +251,7 @@ const I18N = {
     faq2Q: "Mon fichier est-il envoyé sur un serveur ?",
     faq2A: "Jamais ! Toutes les opérations s'exécutent directement dans votre navigateur.",
     faq3Q: "La qualité est-elle modifiée ?",
-    faq3A: "Non, la mise en page et la haute résolution sont préservées intactes."
+    faq3A: "Les pages sont reconstruites sous forme d'images haute résolution pour supprimer définitivement le mot de passe. La mise en page est préservée, mais la sélection de texte est indisponible et la taille peut augmenter."
   }
 };
 
@@ -227,6 +263,9 @@ export default function PdfUnlockPage() {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isUnlocking, setIsUnlocking] = useState<boolean>(false);
+  const [isChecking, setIsChecking] = useState<boolean>(false);
+  const [isEncrypted, setIsEncrypted] = useState<boolean | null>(null);
+  const [notEncryptedMessage, setNotEncryptedMessage] = useState<string>("");
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [unlockedResult, setUnlockedResult] = useState<{
@@ -237,19 +276,70 @@ export default function PdfUnlockPage() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFiles = useCallback((files: FileList | File[]) => {
-    const file = Array.from(files).find((f) => f.type === "application/pdf" || f.name.endsWith(".pdf"));
-    if (!file) return;
+  // Synchronize document title with the active locale
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.title = `${t("pdfUnlock.title") || txt.title} | desktools.run`;
+    }
+  }, [locale, t, txt.title]);
 
-    setPdfFile({
-      file,
-      name: file.name,
-      originalSize: file.size,
-    });
-    setPassword("");
+  const handleFiles = useCallback(async (files: FileList | File[]) => {
+    const fileList = Array.from(files);
+    if (fileList.length === 0) return;
+
+    const file = fileList.find(
+      (f) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
+    );
+
+    if (!file) {
+      setErrorMessage(txt.onlyPdf);
+      return;
+    }
+
     setErrorMessage("");
-    setUnlockedResult(null);
-  }, []);
+    setIsChecking(true);
+
+    try {
+      const buffer = await file.arrayBuffer();
+
+      // Verify whether the PDF is actually password-protected
+      try {
+        await PDFDocument.load(buffer);
+        // If it loaded without error, it is NOT encrypted!
+        setIsEncrypted(false);
+        setNotEncryptedMessage(txt.notEncrypted);
+      } catch (loadErr: unknown) {
+        const errStr = String(loadErr);
+        if (
+          errStr.includes("encrypted") ||
+          errStr.includes("Encrypted") ||
+          (loadErr as { name?: string })?.name === "EncryptedPDFError"
+        ) {
+          // Document is truly encrypted
+          setIsEncrypted(true);
+          setNotEncryptedMessage("");
+        } else {
+          console.warn("PDF parse error:", loadErr);
+          setErrorMessage(txt.corruptError);
+          setIsChecking(false);
+          return;
+        }
+      }
+
+      setPdfFile({
+        file,
+        name: file.name,
+        originalSize: file.size,
+      });
+      setPassword("");
+      setUnlockedResult(null);
+    } catch (readErr: unknown) {
+      console.warn("File read error:", readErr);
+      setErrorMessage(txt.corruptError);
+    } finally {
+      setIsChecking(false);
+    }
+  }, [txt.onlyPdf, txt.notEncrypted, txt.corruptError]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -268,6 +358,8 @@ export default function PdfUnlockPage() {
     setPdfFile(null);
     setPassword("");
     setErrorMessage("");
+    setIsEncrypted(null);
+    setNotEncryptedMessage("");
     setUnlockedResult(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -282,7 +374,7 @@ export default function PdfUnlockPage() {
 
   // Unlock execution
   const handleUnlock = async () => {
-    if (!pdfFile) return;
+    if (!pdfFile || isEncrypted === false) return;
 
     setIsUnlocking(true);
     setErrorMessage("");
@@ -291,9 +383,9 @@ export default function PdfUnlockPage() {
     try {
       const buffer = await pdfFile.file.arrayBuffer();
 
-      // Dynamically load pdfjs-dist
+      // Dynamically load pdfjs-dist and use same-origin local worker
       const pdfjsLib = await import("pdfjs-dist");
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
       const loadingTask = pdfjsLib.getDocument({
         data: buffer.slice(0),
@@ -347,13 +439,32 @@ export default function PdfUnlockPage() {
         filename: outName,
         size: blob.size,
       });
+
+      // Automatic download upon completion
+      try {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = outName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch {
+        // Fallback gracefully to manual button
+      }
     } catch (err: unknown) {
-      console.error("Unlock error:", err);
       const errStr = String(err);
-      if (errStr.includes("Password") || errStr.includes("Incorrect") || errStr.includes("bad password")) {
+      if (
+        errStr.includes("Password") ||
+        errStr.includes("password") ||
+        errStr.includes("Incorrect") ||
+        errStr.includes("bad password") ||
+        (err as { name?: string })?.name === "PasswordException"
+      ) {
+        console.warn("PDF unlock: incorrect password entered");
         setErrorMessage(txt.wrongPassword);
       } else {
-        setErrorMessage(txt.wrongPassword);
+        console.error("PDF unlock read/render error:", err);
+        setErrorMessage(txt.corruptError);
       }
     } finally {
       setIsUnlocking(false);
@@ -392,12 +503,12 @@ export default function PdfUnlockPage() {
                     width: "36px",
                     height: "36px",
                     borderRadius: "10px",
-                    background: "rgba(239, 68, 68, 0.15)",
-                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                    background: "rgba(245, 158, 11, 0.15)",
+                    border: "1px solid rgba(245, 158, 11, 0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#f87171",
+                    color: "var(--colors-primary)",
                   }}
                 >
                   <Unlock size={20} />
@@ -418,9 +529,9 @@ export default function PdfUnlockPage() {
                 gap: "6px",
                 padding: "6px 12px",
                 borderRadius: "100px",
-                background: "rgba(239, 68, 68, 0.1)",
-                border: "1px solid rgba(239, 68, 68, 0.2)",
-                color: "#f87171",
+                background: "rgba(245, 158, 11, 0.1)",
+                border: "1px solid rgba(245, 158, 11, 0.2)",
+                color: "var(--colors-primary)",
                 fontSize: "12px",
                 fontWeight: 600,
               }}
@@ -445,8 +556,8 @@ export default function PdfUnlockPage() {
                 padding: "64px 32px",
                 textAlign: "center",
                 cursor: "pointer",
-                border: isDragging ? "2px dashed #f87171" : "2px dashed var(--border-subtle)",
-                background: isDragging ? "rgba(239, 68, 68, 0.08)" : "var(--glass-bg)",
+                border: isDragging ? "2px dashed var(--colors-primary)" : "2px dashed var(--border-subtle)",
+                background: isDragging ? "rgba(245, 158, 11, 0.08)" : "var(--glass-bg)",
                 transition: "all 0.2s",
                 display: "flex",
                 flexDirection: "column",
@@ -470,11 +581,11 @@ export default function PdfUnlockPage() {
                   width: "64px",
                   height: "64px",
                   borderRadius: "16px",
-                  background: "rgba(239, 68, 68, 0.15)",
+                  background: "rgba(245, 158, 11, 0.12)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#f87171",
+                  color: "var(--colors-primary)",
                 }}
               >
                 <Upload size={32} />
@@ -487,11 +598,28 @@ export default function PdfUnlockPage() {
                   {t("pdfUnlock.dropHint") || txt.dropzoneHint}
                 </p>
               </div>
+
+              {errorMessage && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    marginTop: "8px",
+                    fontSize: "13px",
+                    color: "#ef4444",
+                    fontWeight: 600,
+                  }}
+                >
+                  <AlertCircle size={15} />
+                  {errorMessage}
+                </div>
+              )}
             </div>
           ) : (
             <div className="glass-card" style={{ padding: "32px", borderRadius: "16px", marginBottom: "48px" }}>
               {!unlockedResult ? (
-                /* Password Input & Unlock Action */
+                /* Password Input & Unlock Action OR Not-Encrypted Banner */
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                   {/* File Selected Badge */}
                   <div
@@ -501,241 +629,301 @@ export default function PdfUnlockPage() {
                       justifyContent: "space-between",
                       padding: "16px 20px",
                       borderRadius: "12px",
-                    background: "rgba(239, 68, 68, 0.08)",
-                    border: "1px solid rgba(239, 68, 68, 0.22)",
-                    flexWrap: "wrap",
-                    gap: "12px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "10px",
-                        background: "rgba(239, 68, 68, 0.15)",
-                        color: "#ef4444",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <FileText size={20} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", wordBreak: "break-all" }}>
-                        {pdfFile.name}
-                      </div>
-                      <div style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "2px" }}>
-                        {formatBytes(pdfFile.originalSize)}
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={handleReset}
-                    style={{
-                      background: "transparent",
-                      border: "1px solid var(--border-subtle)",
-                      color: "var(--text-muted)",
-                      padding: "6px 12px",
-                      borderRadius: "8px",
-                      fontSize: "12.5px",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      transition: "all 0.15s",
+                      background: "rgba(245, 158, 11, 0.08)",
+                      border: "1px solid rgba(245, 158, 11, 0.22)",
+                      flexWrap: "wrap",
+                      gap: "12px",
                     }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#ef4444"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
                   >
-                    <Trash2 size={14} />
-                    {locale === "ko" ? "파일 교체" : "Change"}
-                  </button>
-                </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "10px",
+                          background: "rgba(245, 158, 11, 0.15)",
+                          color: "var(--colors-primary)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <FileText size={20} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", wordBreak: "break-all" }}>
+                          {pdfFile.name}
+                        </div>
+                        <div style={{ fontSize: "12.5px", color: "var(--text-secondary)", marginTop: "2px" }}>
+                          {formatBytes(pdfFile.originalSize)}
+                        </div>
+                      </div>
+                    </div>
 
-                {/* Password Input Section */}
-                <div>
-                  <label style={{ display: "block", fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
-                    <KeyRound size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "#f87171" }} />
-                    {txt.passwordPrompt}
-                  </label>
-                  <div style={{ position: "relative" }}>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setErrorMessage("");
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && password) handleUnlock();
-                      }}
-                      placeholder={txt.passwordPlaceholder}
-                      style={{
-                        width: "100%",
-                        padding: "12px 42px 12px 14px",
-                        borderRadius: "10px",
-                        background: "var(--input-bg)",
-                        border: `1px solid ${errorMessage ? "#ef4444" : "var(--input-border)"}`,
-                        color: "var(--text-primary)",
-                        fontSize: "14.5px",
-                        outline: "none",
-                        transition: "border 0.2s",
-                      }}
-                    />
                     <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={handleReset}
                       style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
                         background: "transparent",
-                        border: "none",
+                        border: "1px solid var(--border-subtle)",
                         color: "var(--text-muted)",
+                        padding: "6px 12px",
+                        borderRadius: "8px",
+                        fontSize: "12.5px",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
-                        padding: "4px",
+                        gap: "6px",
+                        transition: "all 0.15s",
                       }}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#ef4444"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
                     >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      <Trash2 size={14} />
+                      {locale === "ko" ? "파일 교체" : "Change"}
                     </button>
                   </div>
 
-                  {errorMessage && (
+                  {/* Case 1: PDF is NOT password protected */}
+                  {isEncrypted === false ? (
                     <div
                       style={{
+                        padding: "20px",
+                        borderRadius: "12px",
+                        background: "rgba(16, 185, 129, 0.08)",
+                        border: "1px solid rgba(16, 185, 129, 0.3)",
                         display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        marginTop: "8px",
-                        fontSize: "12.5px",
-                        color: "#ef4444",
-                        fontWeight: 600,
+                        flexDirection: "column",
+                        gap: "14px",
                       }}
                     >
-                      <AlertCircle size={14} />
-                      {errorMessage}
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                        <CheckCircle2 size={22} color="#10b981" style={{ flexShrink: 0, marginTop: "2px" }} />
+                        <div>
+                          <div style={{ fontSize: "15px", fontWeight: 700, color: "#10b981" }}>
+                            {txt.notEncrypted}
+                          </div>
+                          <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "4px", lineHeight: 1.5 }}>
+                            {txt.notEncryptedDesc}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", flexWrap: "wrap" }}>
+                        <button
+                          onClick={handleReset}
+                          className="button-primary"
+                          style={{
+                            padding: "8px 18px",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <RotateCcw size={14} />
+                          <span>{txt.resetBtn}</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Case 2: PDF IS password protected -> Show Password Input */
+                    <div>
+                      <label style={{ display: "block", fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+                        <KeyRound size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "var(--colors-primary)" }} />
+                        {txt.passwordPrompt}
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setErrorMessage("");
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && password) handleUnlock();
+                          }}
+                          placeholder={txt.passwordPlaceholder}
+                          style={{
+                            width: "100%",
+                            padding: "12px 42px 12px 14px",
+                            borderRadius: "10px",
+                            background: "var(--input-bg)",
+                            border: `1px solid ${errorMessage ? "#ef4444" : "var(--input-border)"}`,
+                            color: "var(--text-primary)",
+                            fontSize: "14.5px",
+                            outline: "none",
+                            transition: "border 0.2s",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          style={{
+                            position: "absolute",
+                            right: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "transparent",
+                            border: "none",
+                            color: "var(--text-muted)",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "4px",
+                          }}
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+
+                      {errorMessage && (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            marginTop: "8px",
+                            fontSize: "12.5px",
+                            color: "#ef4444",
+                            fontWeight: 600,
+                          }}
+                        >
+                          <AlertCircle size={14} />
+                          {errorMessage}
+                        </div>
+                      )}
+
+                      {/* Unlock Submit Button */}
+                      <button
+                        onClick={handleUnlock}
+                        disabled={!password || isUnlocking || isChecking}
+                        className="button-primary"
+                        style={{
+                          padding: "14px 24px",
+                          fontSize: "15px",
+                          fontWeight: 700,
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          opacity: !password || isUnlocking || isChecking ? 0.5 : 1,
+                          cursor: !password || isUnlocking || isChecking ? "not-allowed" : "pointer",
+                          marginTop: "16px",
+                        }}
+                      >
+                        {isUnlocking ? (
+                          <>
+                            <div className="spinner" style={{ width: "16px", height: "16px" }} />
+                            <span>{txt.unlocking}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Unlock size={16} />
+                            <span>{txt.btnUnlock}</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   )}
                 </div>
-
-                {/* Unlock Submit Button */}
-                <button
-                  onClick={handleUnlock}
-                  disabled={!password || isUnlocking}
-                  className="btn-glow"
-                  style={{
-                    padding: "14px 24px",
-                    fontSize: "15px",
-                    fontWeight: 700,
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    opacity: !password || isUnlocking ? 0.5 : 1,
-                    cursor: !password || isUnlocking ? "not-allowed" : "pointer",
-                    marginTop: "8px",
-                    background: "linear-gradient(135deg, #ef4444, #dc2626)",
-                    boxShadow: "0 4px 20px rgba(239, 68, 68, 0.3)",
-                  }}
-                >
-                  {isUnlocking ? (
-                    <>
-                      <div className="spinner" style={{ width: "16px", height: "16px" }} />
-                      {txt.unlocking}
-                    </>
-                  ) : (
-                    <>
-                      <Unlock size={16} />
-                      {txt.btnUnlock}
-                    </>
-                  )}
-                </button>
-              </div>
-            ) : (
-              /* Success Result Card */
-              <div style={{ textAlign: "center", padding: "16px 0" }}>
-                <div
-                  style={{
-                    width: "64px",
-                    height: "64px",
-                    borderRadius: "50%",
-                    background: "rgba(16, 185, 129, 0.15)",
-                    color: "#10b981",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 16px",
-                  }}
-                >
-                  <CheckCircle2 size={32} />
-                </div>
-                <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
-                  {txt.successTitle}
-                </h2>
-                <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "24px", maxWidth: "480px", margin: "0 auto 24px" }}>
-                  {txt.successDesc}
-                </p>
-
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "12px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <a
-                    href={unlockedResult.url}
-                    download={unlockedResult.filename}
-                    className="btn-glow"
+              ) : (
+                /* Success Result Card */
+                <div style={{ textAlign: "center", padding: "16px 0" }}>
+                  <div
                     style={{
-                      padding: "12px 24px",
-                      fontSize: "14px",
-                      textDecoration: "none",
-                      display: "inline-flex",
+                      width: "64px",
+                      height: "64px",
+                      borderRadius: "50%",
+                      background: "rgba(16, 185, 129, 0.15)",
+                      color: "#10b981",
+                      display: "flex",
                       alignItems: "center",
-                      gap: "8px",
-                      background: "linear-gradient(135deg, #10b981, #059669)",
+                      justifyContent: "center",
+                      margin: "0 auto 16px",
                     }}
                   >
-                    <Download size={16} />
-                    {txt.downloadBtn}
-                  </a>
+                    <CheckCircle2 size={32} />
+                  </div>
+                  <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-primary)", marginBottom: "8px" }}>
+                    {txt.successTitle}
+                  </h2>
+                  <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "16px", maxWidth: "520px", margin: "0 auto 16px" }}>
+                    {txt.successDesc}
+                  </p>
 
-                  <button
-                    onClick={handleReset}
+                  {/* Informative notice on rasterization format & auto download */}
+                  <div
                     style={{
-                      background: "var(--btn-secondary-bg)",
-                      border: "1px solid var(--btn-secondary-border)",
-                      color: "var(--text-primary)",
-                      padding: "12px 20px",
-                      borderRadius: "10px",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      transition: "all 0.15s",
+                      maxWidth: "600px",
+                      margin: "0 auto 24px",
+                      padding: "12px 16px",
+                      borderRadius: "8px",
+                      background: "rgba(245, 158, 11, 0.08)",
+                      border: "1px solid rgba(245, 158, 11, 0.25)",
+                      fontSize: "12.5px",
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.6,
+                      textAlign: "left",
                     }}
                   >
-                    <RotateCcw size={15} />
-                    {txt.resetBtn}
-                  </button>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "6px" }}>
+                      <Info size={15} color="var(--colors-primary)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>
+                        {txt.autoDownloadNotice}
+                      </span>
+                    </div>
+                    <p style={{ margin: 0, paddingLeft: "23px", fontSize: "12px", color: "var(--colors-mute)" }}>
+                      {txt.rasterNotice}
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "12px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <a
+                      href={unlockedResult.url}
+                      download={unlockedResult.filename}
+                      className="button-primary"
+                      style={{
+                        padding: "12px 24px",
+                        fontSize: "14px",
+                        textDecoration: "none",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Download size={16} />
+                      <span>{txt.downloadBtn}</span>
+                    </a>
+
+                    <button
+                      onClick={handleReset}
+                      className="button-outline-on-dark"
+                      style={{
+                        padding: "12px 20px",
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <RotateCcw size={15} />
+                      <span>{txt.resetBtn}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           )}
         </section>
 
