@@ -1230,6 +1230,38 @@ html.light .markdown-preview-body pre code {
   color: var(--text-primary);
 }
 
+/* ===========================================================
+   TOOL OUTPUT BOXES - DARK & LIGHT CONTRAST
+   =========================================================== */
+.tool-output-box {
+  background: rgba(0, 0, 0, 0.3);
+  color: #4ade80;
+}
+.tool-output-box.is-error {
+  color: #f87171;
+}
+.tool-output-box.is-encrypt {
+  color: #818cf8;
+}
+.tool-output-box.is-decrypt {
+  color: #34d399;
+}
+
+html.light .tool-output-box {
+  background: #f5f5f4 !important;
+  color: #166534 !important;
+}
+html.light .tool-output-box.is-error {
+  color: #b91c1c !important;
+}
+html.light .tool-output-box.is-encrypt {
+  color: #4338ca !important;
+}
+html.light .tool-output-box.is-decrypt {
+  color: #166534 !important;
+}
+
+
 
 
 

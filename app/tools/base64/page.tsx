@@ -321,13 +321,12 @@ export default function Base64Page() {
                 rows={12}
                 value={outputStr}
                 placeholder="Result will appear here..."
+                className={`tool-output-box ${outputStr.startsWith("⚠️") ? "is-error" : ""}`}
                 style={{
                   width: "100%",
                   height: "360px",
                   borderRadius: "8px",
-                  background: "rgba(0,0,0,0.3)",
                   border: "1px solid var(--border-subtle)",
-                  color: outputStr.startsWith("⚠️") ? "#f87171" : "#4ade80",
                   padding: "14px",
                   fontSize: "13.5px",
                   fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",

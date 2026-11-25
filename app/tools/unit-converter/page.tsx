@@ -110,7 +110,7 @@ const CATEGORIES: {
     baseUnit: "m2",
     units: [
       { key: "m2", label: "Square Meter (m²)", ratio: 1 },
-      { key: "pyeong", label: "Pyeong (평 - 3.3m²)", ratio: 400 / 121 },
+      { key: "pyeong", label: "Pyeong (평 - 3.305785m²)", ratio: 400 / 121 },
       { key: "km2", label: "Square Km (km²)", ratio: 1000000 },
       { key: "ft2", label: "Square Foot (ft²)", ratio: 0.09290304 },
       { key: "ac", label: "Acre (ac)", ratio: 4046.8564224 },
@@ -441,7 +441,7 @@ export default function UnitConverterPage() {
                     type="number"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Enter number..."
+                    placeholder={locale === "ko" ? "숫자를 입력하세요" : "Enter number..."}
                     style={{
                       flex: 1,
                       height: "48px",
@@ -483,7 +483,7 @@ export default function UnitConverterPage() {
               {/* Swap Button */}
               <button
                 onClick={handleSwap}
-                title="Swap Units"
+                title={locale === "ko" ? "단위 바꾸기" : "Swap Units"}
                 style={{
                   width: "42px",
                   height: "42px",
@@ -528,13 +528,12 @@ export default function UnitConverterPage() {
                 </div>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <div
+                    className="tool-output-box"
                     style={{
                       flex: 1,
                       height: "48px",
                       borderRadius: "10px",
-                      background: "rgba(0,0,0,0.25)",
                       border: "1px solid var(--border-subtle)",
-                      color: "#4ade80",
                       padding: "0 16px",
                       fontSize: "20px",
                       fontWeight: 800,

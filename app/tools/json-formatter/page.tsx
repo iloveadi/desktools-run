@@ -416,13 +416,12 @@ export default function JsonFormatterPage() {
                 rows={18}
                 value={outputJson}
                 placeholder="Formatted JSON will appear here..."
+                className={`tool-output-box ${errorMsg ? "is-error" : ""}`}
                 style={{
                   width: "100%",
                   height: "460px",
                   borderRadius: "8px",
-                  background: "rgba(0,0,0,0.3)",
                   border: "1px solid var(--border-subtle)",
-                  color: errorMsg ? "#f87171" : "#4ade80",
                   padding: "14px",
                   fontSize: "13.5px",
                   fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",

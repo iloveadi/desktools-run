@@ -21,6 +21,11 @@ export const translations: Record<Locale, Translations> = {
   // ── English ────────────────────────────────────────────────
   en: {
     // ── Missing Tool Keys Patch (EN) ──────
+    "unitConverter.back": "Back to All Tools",
+    "unitConverter.popularPresets": "Popular Presets",
+    "unitConverter.fromLabel": "From",
+    "unitConverter.toLabel": "To",
+    "unitConverter.allUnitsTable": "All Units",
     "base64.back": "Back to All Tools",
     "textDiff.back": "Back to All Tools",
     "textDiff.originalText": "Original Text",
@@ -1277,6 +1282,11 @@ export const translations: Record<Locale, Translations> = {
   // ── Korean ─────────────────────────────────────────────────
   ko: {
     // ── Missing Tool Keys Patch (KO) ──────
+    "unitConverter.back": "모든 도구로 돌아가기",
+    "unitConverter.popularPresets": "인기 프리셋",
+    "unitConverter.fromLabel": "변환할 값",
+    "unitConverter.toLabel": "변환 결과",
+    "unitConverter.allUnitsTable": "전체 단위 비교표",
     "base64.back": "모든 도구로 돌아가기",
     "textDiff.back": "모든 도구로 돌아가기",
     "textDiff.originalText": "원본 텍스트",
@@ -2532,6 +2542,11 @@ export const translations: Record<Locale, Translations> = {
   // ── Japanese ───────────────────────────────────────────────
   ja: {
     // ── Missing Tool Keys Patch (JA) ──────
+    "unitConverter.back": "全ツール一覧に戻る",
+    "unitConverter.popularPresets": "人気のプリセット",
+    "unitConverter.fromLabel": "変換元の値",
+    "unitConverter.toLabel": "変換結果",
+    "unitConverter.allUnitsTable": "全単位比較表",
     "base64.back": "全ツール一覧に戻る",
     "textDiff.back": "全ツール一覧に戻る",
     "textDiff.originalText": "元のテキスト",
@@ -3693,6 +3708,11 @@ export const translations: Record<Locale, Translations> = {
   // ── Spanish ────────────────────────────────────────────────
   es: {
     // ── Missing Tool Keys Patch (ES) ──────
+    "unitConverter.back": "Volver a todas las herramientas",
+    "unitConverter.popularPresets": "Ajustes populares",
+    "unitConverter.fromLabel": "Desde",
+    "unitConverter.toLabel": "Hacia",
+    "unitConverter.allUnitsTable": "Todas las unidades",
     "base64.back": "Volver a todas las herramientas",
     "textDiff.back": "Volver a todas las herramientas",
     "textDiff.originalText": "Texto original",
@@ -4875,6 +4895,11 @@ export const translations: Record<Locale, Translations> = {
   // ── Chinese ────────────────────────────────────────────────
   zh: {
     // ── Missing Tool Keys Patch (ZH) ──────
+    "unitConverter.back": "返回全部工具",
+    "unitConverter.popularPresets": "常用预设",
+    "unitConverter.fromLabel": "转换数值",
+    "unitConverter.toLabel": "转换结果",
+    "unitConverter.allUnitsTable": "所有单位对照表",
     "base64.back": "返回全部工具",
     "textDiff.back": "返回全部工具",
     "textDiff.originalText": "原始文本",
@@ -6035,6 +6060,11 @@ export const translations: Record<Locale, Translations> = {
   // ── French ─────────────────────────────────────────────────
   fr: {
     // ── Missing Tool Keys Patch (FR) ──────
+    "unitConverter.back": "Retour à tous les outils",
+    "unitConverter.popularPresets": "Préréglages populaires",
+    "unitConverter.fromLabel": "De",
+    "unitConverter.toLabel": "Vers",
+    "unitConverter.allUnitsTable": "Toutes les unités",
     "base64.back": "Retour à tous les outils",
     "textDiff.back": "Retour à tous les outils",
     "textDiff.originalText": "Texte original",

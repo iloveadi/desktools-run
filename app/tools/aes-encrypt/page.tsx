@@ -1016,12 +1016,11 @@ export default function AesEncryptPage() {
                 </div>
 
                 <div
+                  className={`tool-output-box ${mode === "encrypt" ? "is-encrypt" : "is-decrypt"}`}
                   style={{
                     padding: "16px",
                     borderRadius: "12px",
-                    background: "rgba(0, 0, 0, 0.3)",
                     border: "1px solid rgba(99, 102, 241, 0.2)",
-                    color: mode === "encrypt" ? "#818cf8" : "#34d399",
                     fontSize: "13.5px",
                     fontFamily: mode === "encrypt" ? "monospace" : "inherit",
                     wordBreak: "break-all",
