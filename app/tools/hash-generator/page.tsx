@@ -24,136 +24,7 @@ import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
 import ToolUsageTracker from "@/components/common/ToolUsageTracker";
 import { useLocale } from "@/lib/context/LocaleContext";
-
-// ── Pure JS Compact MD5 Implementation ─────────────────────────
-function md5(bytes: Uint8Array): string {
-  function safeAdd(x: number, y: number) {
-    const lsw = (x & 0xffff) + (y & 0xffff);
-    const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-    return (msw << 16) | (lsw & 0xffff);
-  }
-  function bitRol(num: number, cnt: number) {
-    return (num << cnt) | (num >>> (32 - cnt));
-  }
-  function md5cmn(q: number, a: number, b: number, x: number, s: number, t: number) {
-    return safeAdd(bitRol(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
-  }
-  function md5ff(a: number, b: number, c: number, d: number, x: number, s: number, t: number) {
-    return md5cmn((b & c) | (~b & d), a, b, x, s, t);
-  }
-  function md5gg(a: number, b: number, c: number, d: number, x: number, s: number, t: number) {
-    return md5cmn((b & d) | (c & ~d), a, b, x, s, t);
-  }
-  function md5hh(a: number, b: number, c: number, d: number, x: number, s: number, t: number) {
-    return md5cmn(b ^ c ^ d, a, b, x, s, t);
-  }
-  function md5ii(a: number, b: number, c: number, d: number, x: number, s: number, t: number) {
-    return md5cmn(c ^ (b | ~d), a, b, x, s, t);
-  }
-
-  const nblocks = ((bytes.length + 8) >> 6) + 1;
-  const blocks = new Int32Array(nblocks * 16);
-  for (let i = 0; i < bytes.length; i++) {
-    blocks[i >> 2] |= bytes[i] << ((i % 4) * 8);
-  }
-  blocks[bytes.length >> 2] |= 0x80 << ((bytes.length % 4) * 8);
-  blocks[nblocks * 16 - 2] = bytes.length * 8;
-
-  let a = 1732584193;
-  let b = -271733879;
-  let c = -1732584194;
-  let d = 271733878;
-
-  for (let i = 0; i < blocks.length; i += 16) {
-    const olda = a;
-    const oldb = b;
-    const oldc = c;
-    const oldd = d;
-
-    a = md5ff(a, b, c, d, blocks[i + 0], 7, -680876936);
-    d = md5ff(d, a, b, c, blocks[i + 1], 12, -389564586);
-    c = md5ff(c, d, a, b, blocks[i + 2], 17, 606105819);
-    b = md5ff(b, c, d, a, blocks[i + 3], 22, -1044525330);
-    a = md5ff(a, b, c, d, blocks[i + 4], 7, -176418897);
-    d = md5ff(d, a, b, c, blocks[i + 5], 12, 1200080426);
-    c = md5ff(c, d, a, b, blocks[i + 6], 17, -1473231341);
-    b = md5ff(b, c, d, a, blocks[i + 7], 22, -45705983);
-    a = md5ff(a, b, c, d, blocks[i + 8], 7, 1770035416);
-    d = md5ff(d, a, b, c, blocks[i + 9], 12, -1958414417);
-    c = md5ff(c, d, a, b, blocks[i + 10], 17, -42063);
-    b = md5ff(b, c, d, a, blocks[i + 11], 22, -1990404162);
-    a = md5ff(a, b, c, d, blocks[i + 12], 7, 1804603682);
-    d = md5ff(d, a, b, c, blocks[i + 13], 12, -40341101);
-    c = md5ff(c, d, a, b, blocks[i + 14], 17, -1502002290);
-    b = md5ff(b, c, d, a, blocks[i + 15], 22, 1236535329);
-
-    a = md5gg(a, b, c, d, blocks[i + 1], 5, -165796510);
-    d = md5gg(d, a, b, c, blocks[i + 6], 9, -1069501632);
-    c = md5gg(c, d, a, b, blocks[i + 11], 14, 643717713);
-    b = md5gg(b, c, d, a, blocks[i + 0], 20, -373897302);
-    a = md5gg(a, b, c, d, blocks[i + 5], 5, -701558691);
-    d = md5gg(d, a, b, c, blocks[i + 10], 9, 38016083);
-    c = md5gg(c, d, a, b, blocks[i + 15], 14, -660478335);
-    b = md5gg(b, c, d, a, blocks[i + 4], 20, -405537848);
-    a = md5gg(a, b, c, d, blocks[i + 9], 5, 568446438);
-    d = md5gg(d, a, b, c, blocks[i + 14], 9, -1019803690);
-    c = md5gg(c, d, a, b, blocks[i + 3], 14, -187363961);
-    b = md5gg(b, c, d, a, blocks[i + 8], 20, 1163531501);
-    a = md5gg(a, b, c, d, blocks[i + 13], 5, -1444681467);
-    d = md5gg(d, a, b, c, blocks[i + 2], 9, -51403784);
-    c = md5gg(c, d, a, b, blocks[i + 7], 14, 1735328473);
-    b = md5gg(b, c, d, a, blocks[i + 12], 20, -1926607734);
-
-    a = md5hh(a, b, c, d, blocks[i + 5], 4, -378558);
-    d = md5hh(d, a, b, c, blocks[i + 8], 11, -2022574463);
-    c = md5hh(c, d, a, b, blocks[i + 11], 16, 1839030562);
-    b = md5hh(b, c, d, a, blocks[i + 14], 23, -35309556);
-    a = md5hh(a, b, c, d, blocks[i + 1], 4, -1530992060);
-    d = md5hh(d, a, b, c, blocks[i + 4], 11, 1272893353);
-    c = md5hh(c, d, a, b, blocks[i + 7], 16, -1554976322);
-    b = md5hh(b, c, d, a, blocks[i + 10], 23, -1094730640);
-    a = md5hh(a, b, c, d, blocks[i + 13], 4, 681279174);
-    d = md5hh(d, a, b, c, blocks[i + 0], 11, -358537222);
-    c = md5hh(c, d, a, b, blocks[i + 3], 16, -722521979);
-    b = md5hh(b, c, d, a, blocks[i + 6], 23, 76029189);
-    a = md5hh(a, b, c, d, blocks[i + 9], 4, -640364409);
-    d = md5hh(d, a, b, c, blocks[i + 12], 11, -421815835);
-    c = md5hh(c, d, a, b, blocks[i + 15], 16, 530742520);
-    b = md5hh(b, c, d, a, blocks[i + 2], 23, -995338651);
-
-    a = md5ii(a, b, c, d, blocks[i + 0], 6, -198630844);
-    d = md5ii(d, a, b, c, blocks[i + 7], 10, 1126891415);
-    c = md5ii(c, d, a, b, blocks[i + 14], 15, -1416354905);
-    b = md5ii(b, c, d, a, blocks[i + 5], 21, -57434055);
-    a = md5ii(a, b, c, d, blocks[i + 12], 6, 1700485571);
-    d = md5ii(d, a, b, c, blocks[i + 3], 10, -1894980168);
-    c = md5ii(c, d, a, b, blocks[i + 10], 15, -1051523);
-    b = md5ii(b, c, d, a, blocks[i + 1], 21, -2054922799);
-    a = md5ii(a, b, c, d, blocks[i + 8], 6, 1873313359);
-    d = md5ii(d, a, b, c, blocks[i + 15], 10, -30611744);
-    c = md5ii(c, d, a, b, blocks[i + 6], 15, -1560198380);
-    b = md5ii(b, c, d, a, blocks[i + 1], 21, 1309151649);
-    a = md5ii(a, b, c, d, blocks[i + 4], 6, -145523070);
-    d = md5ii(d, a, b, c, blocks[i + 11], 10, -1120210379);
-    c = md5ii(c, d, a, b, blocks[i + 2], 15, 718787259);
-    b = md5ii(b, c, d, a, blocks[i + 9], 21, -343485551);
-
-    a = safeAdd(a, olda);
-    b = safeAdd(b, oldb);
-    c = safeAdd(c, oldc);
-    d = safeAdd(d, oldd);
-  }
-
-  const hexTab = "0123456789abcdef";
-  let out = "";
-  for (let i = 0; i < 4; i++) {
-    const val = [a, b, c, d][i];
-    for (let j = 0; j < 4; j++) {
-      out += hexTab.charAt((val >> (j * 8 + 4)) & 0x0f) + hexTab.charAt((val >> (j * 8)) & 0x0f);
-    }
-  }
-  return out;
-}
+import SparkMD5 from "spark-md5";
 
 function bufferToHex(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
@@ -189,8 +60,7 @@ export default function HashGeneratorPage() {
   });
 
   const computeHashesForBuffer = useCallback(async (buffer: ArrayBuffer) => {
-    const bytes = new Uint8Array(buffer);
-    const md5Hex = md5(bytes);
+    const md5Hex = SparkMD5.ArrayBuffer.hash(buffer);
 
     let sha1Hex = "";
     let sha256Hex = "";
@@ -298,7 +168,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
             }}
           >
             <ArrowLeft size={14} />
-            Back to All Tools
+            {locale === "ko" ? "모든 도구로 돌아가기" : "Back to All Tools"}
           </Link>
 
           <div
@@ -367,7 +237,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
           <div className="glass-card" style={{ padding: "24px", marginBottom: "24px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
               <label style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-primary)" }}>
-                Input Text or File
+                {locale === "ko" ? "텍스트 또는 파일 입력" : "Input Text or File"}
               </label>
 
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -414,7 +284,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
                   }}
                 >
                   <Upload size={13} />
-                  Import File
+                  {locale === "ko" ? "파일 불러오기" : "Import File"}
                 </button>
 
                 <button
@@ -482,7 +352,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
                       cursor: "pointer",
                     }}
                   >
-                    Switch to Text Input
+                    {locale === "ko" ? "텍스트 입력으로 전환" : "Switch to Text Input"}
                   </button>
                 </div>
               ) : (
@@ -538,7 +408,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Layers size={16} style={{ color: "#6366f1" }} />
               <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>
-                Calculated Cryptographic Hashes
+                {locale === "ko" ? "계산된 암호화 해시" : "Calculated Cryptographic Hashes"}
               </h3>
             </div>
 
@@ -568,7 +438,13 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
             {[
               { key: "md5", title: "MD5", bits: "128 bits", value: hashes.md5, color: "#f87171" },
               { key: "sha1", title: "SHA-1", bits: "160 bits", value: hashes.sha1, color: "#fbbf24" },
-              { key: "sha256", title: "SHA-256", bits: "256 bits (Recommended)", value: hashes.sha256, color: "#34d399" },
+              {
+                key: "sha256",
+                title: "SHA-256",
+                bits: locale === "ko" ? "256비트 (권장)" : "256 bits (Recommended)",
+                value: hashes.sha256,
+                color: "#34d399",
+              },
               { key: "sha384", title: "SHA-384", bits: "384 bits", value: hashes.sha384, color: "#60a5fa" },
               { key: "sha512", title: "SHA-512", bits: "512 bits", value: hashes.sha512, color: "#a855f7" },
             ].map(({ key, title, bits, value, color }) => {

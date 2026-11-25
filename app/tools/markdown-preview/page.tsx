@@ -1,13 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
+import MarkdownIt from "markdown-it";
+import DOMPurify from "dompurify";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolGuide from "@/components/common/ToolGuide";
 import { useLocale } from "@/lib/context/LocaleContext";
 import ToolUsageTracker from "@/components/common/ToolUsageTracker";
 import { Code2, ArrowLeft, Copy, Check, Download } from "lucide-react";
+
+const mdParser = new MarkdownIt({
+  html: false,
+  linkify: true,
+  breaks: true,
+});
 
 export default function MarkdownPreviewPage() {
   const { t, locale } = useLocale();
@@ -25,26 +33,16 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
 `);
   const [copied, setCopied] = useState(false);
 
-  // Simple clean markdown-to-html parser
-  const renderHtml = (md: string) => {
-    let html = md
-      .replace(/^### (.*$)/gim, '<h3 style="font-size:18px;font-weight:700;margin:12px 0 6px;">$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2 style="font-size:22px;font-weight:800;margin:16px 0 8px;color:#818cf8;">$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1 style="font-size:26px;font-weight:800;margin:20px 0 10px;color:var(--text-primary);">$1</h1>')
-      .replace(/^\> (.*$)/gim, '<blockquote style="border-left:4px solid #818cf8;padding-left:12px;color:var(--text-secondary);margin:12px 0;font-style:italic;">$1</blockquote>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/~~(.*?)~~/g, '<del>$1</del>')
-      .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;font-family:monospace;">$1</code>')
-      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#818cf8;text-decoration:underline;">$1</a>')
-      .replace(/^\- (.*$)/gim, '<li style="margin-left:20px;list-style-type:disc;">$1</li>')
-      .replace(/\n\n/g, '<br/><br/>');
-
-    return html;
-  };
+  const renderedHtml = useMemo(() => {
+    const rawHtml = mdParser.render(markdown);
+    if (typeof window === "undefined") {
+      return rawHtml;
+    }
+    return DOMPurify.sanitize(rawHtml);
+  }, [markdown]);
 
   const handleCopyHtml = () => {
-    navigator.clipboard.writeText(renderHtml(markdown));
+    navigator.clipboard.writeText(renderedHtml);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -106,8 +104,9 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
                 </button>
               </div>
               <div
-                style={{ width: "100%", height: "480px", borderRadius: "8px", background: "rgba(0,0,0,0.2)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", padding: "20px", overflowY: "auto", lineHeight: "1.7" }}
-                dangerouslySetInnerHTML={{ __html: renderHtml(markdown) }}
+                className="markdown-preview-body"
+                style={{ width: "100%", height: "480px", borderRadius: "8px", background: "var(--input-bg)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", padding: "20px", overflowY: "auto", lineHeight: "1.7" }}
+                dangerouslySetInnerHTML={{ __html: renderedHtml }}
               />
             </div>
           </div>
