@@ -207,7 +207,7 @@ export default function UrlEncoderPage() {
 
               <button
                 onClick={swapData}
-                title="Swap input & output"
+                title={locale === "ko" ? "입력/출력 전환" : "Swap input & output"}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "8px",
@@ -221,7 +221,7 @@ export default function UrlEncoderPage() {
                   gap: "6px",
                 }}
               >
-                <ArrowRightLeft size={14} /> Swap
+                <ArrowRightLeft size={14} /> {locale === "ko" ? "전환" : "Swap"}
               </button>
 
               <button
@@ -239,7 +239,7 @@ export default function UrlEncoderPage() {
                   gap: "6px",
                 }}
               >
-                <Sparkles size={14} /> Sample
+                <Sparkles size={14} /> {locale === "ko" ? "예시" : "Sample"}
               </button>
             </div>
 
@@ -260,7 +260,7 @@ export default function UrlEncoderPage() {
                   gap: "6px",
                 }}
               >
-                <Trash2 size={14} /> Clear
+                <Trash2 size={14} /> {locale === "ko" ? "지우기" : "Clear"}
               </button>
 
               <button
@@ -292,7 +292,7 @@ export default function UrlEncoderPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "6px" }}>
                   <FileText size={16} color="#818cf8" />
-                  {mode === "encode" ? (t("urlEncoder.inputLabel") || "URL / Plain String to Encode") : "Encoded URL / Percent String"}
+                  {mode === "encode" ? (t("urlEncoder.inputLabel") || "URL / Plain String to Encode") : (locale === "ko" ? "인코딩된 URL / 퍼센트 문자열" : "Encoded URL / Percent String")}
                 </span>
                 <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "monospace" }}>
                   {inputStr.length.toLocaleString()} chars
@@ -324,7 +324,7 @@ export default function UrlEncoderPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8", display: "flex", alignItems: "center", gap: "6px" }}>
                   <Sparkles size={16} color="#818cf8" />
-                  {mode === "encode" ? (t("urlEncoder.outputLabel") || "Percent-Encoded Result") : "Decoded Plain URL"}
+                  {mode === "encode" ? (t("urlEncoder.outputLabel") || "Percent-Encoded Result") : (locale === "ko" ? "디코딩된 일반 URL" : "Decoded Plain URL")}
                 </span>
                 <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "monospace" }}>
                   {outputStr.length.toLocaleString()} chars

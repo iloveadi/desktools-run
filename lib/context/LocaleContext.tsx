@@ -90,7 +90,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   // Translate function — falls back to English if key missing
   const t = useCallback(
     (key: keyof Translations): string => {
-      return translations[locale]?.[key] ?? translations.en[key] ?? key;
+      return translations[locale]?.[key] || translations.en[key] || key;
     },
     [locale]
   );

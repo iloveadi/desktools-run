@@ -191,7 +191,7 @@ export default function Base64Page() {
 
               <button
                 onClick={switchMode}
-                title="Swap input & output mode"
+                title={locale === "ko" ? "입력/출력 모드 전환" : "Swap input & output mode"}
                 style={{
                   padding: "8px 12px",
                   borderRadius: "8px",
@@ -205,7 +205,7 @@ export default function Base64Page() {
                   gap: "6px",
                 }}
               >
-                <ArrowRightLeft size={14} /> Swap
+                <ArrowRightLeft size={14} /> {locale === "ko" ? "전환" : "Swap"}
               </button>
 
               <button
@@ -224,7 +224,7 @@ export default function Base64Page() {
                   gap: "6px",
                 }}
               >
-                <Upload size={14} /> Load File
+                <Upload size={14} /> {locale === "ko" ? "파일 불러오기" : "Load File"}
               </button>
               <input ref={fileInputRef} type="file" style={{ display: "none" }} onChange={handleFileUpload} />
             </div>
@@ -246,7 +246,7 @@ export default function Base64Page() {
                   gap: "6px",
                 }}
               >
-                <Trash2 size={14} /> Clear
+                <Trash2 size={14} /> {locale === "ko" ? "지우기" : "Clear"}
               </button>
 
               <button

@@ -757,7 +757,8 @@ export default function AesEncryptPage() {
                     alignItems: "center",
                     padding: "4px",
                   }}
-                  aria-label={showPassphrase ? "Hide passphrase" : "Show passphrase"}
+                  title={locale === "ko" ? (showPassphrase ? "비밀키 숨기기" : "비밀키 표시") : (showPassphrase ? "Hide passphrase" : "Show passphrase")}
+                  aria-label={locale === "ko" ? (showPassphrase ? "비밀키 숨기기" : "비밀키 표시") : (showPassphrase ? "Hide passphrase" : "Show passphrase")}
                 >
                   {showPassphrase ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
