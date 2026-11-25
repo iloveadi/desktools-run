@@ -135,18 +135,15 @@ export default function ToolGuide({
 
           {/* Trust & Local Processing Indicator Chip */}
           <div
+            className="tool-guide-trust-badge"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
               borderRadius: "100px",
-              background: "rgba(16, 185, 129, 0.08)",
-              border: "1px solid rgba(16, 185, 129, 0.28)",
-              color: "#34d399",
               fontSize: "12.5px",
               fontWeight: 700,
-              boxShadow: "0 2px 10px rgba(16, 185, 129, 0.08)",
             }}
           >
             <span

@@ -325,13 +325,12 @@ export default function RegexTesterPage() {
                 </span>
                 <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
                   <span
+                    className={`regex-match-badge ${matches.length > 0 ? "has-matches" : ""}`}
                     style={{
                       fontSize: "12px",
                       fontWeight: 700,
                       padding: "3px 10px",
                       borderRadius: "100px",
-                      background: matches.length > 0 ? "rgba(34,197,94,0.15)" : "rgba(255,255,255,0.05)",
-                      color: matches.length > 0 ? "#4ade80" : "var(--text-muted)",
                     }}
                   >
                     {matches.length} {matches.length === 1 ? "match" : "matches"}
@@ -366,10 +365,10 @@ export default function RegexTesterPage() {
                   matches.map((m, i) => (
                     <div
                       key={i}
+                      className="regex-match-card"
                       style={{
                         padding: "10px 12px",
                         borderRadius: "8px",
-                        background: "rgba(0,0,0,0.25)",
                         border: "1px solid var(--border-subtle)",
                         fontSize: "13px",
                         fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
@@ -377,16 +376,16 @@ export default function RegexTesterPage() {
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                        <span style={{ color: "#818cf8", fontSize: "11px", fontWeight: 700 }}>Match #{i + 1}</span>
+                        <span className="regex-match-title" style={{ fontSize: "11px", fontWeight: 700 }}>Match #{i + 1}</span>
                         <span style={{ color: "var(--text-muted)", fontSize: "11px" }}>pos: {m.index}</span>
                       </div>
-                      <div style={{ color: "#4ade80", fontWeight: 700 }}>{m.match}</div>
+                      <div className="regex-match-text" style={{ fontWeight: 700 }}>{m.match}</div>
                       {m.groups.length > 0 && (
                         <div style={{ marginTop: "6px", paddingTop: "6px", borderTop: "1px dashed var(--border-subtle)", fontSize: "12px", color: "var(--text-secondary)" }}>
                           {m.groups.map((g, gi) => (
                             <div key={gi} style={{ display: "flex", gap: "6px" }}>
                               <span style={{ color: "var(--text-muted)" }}>Group {gi + 1}:</span>
-                              <span style={{ color: "#a5b4fc" }}>{g || "undefined"}</span>
+                              <span className="regex-match-group">{g || "undefined"}</span>
                             </div>
                           ))}
                         </div>

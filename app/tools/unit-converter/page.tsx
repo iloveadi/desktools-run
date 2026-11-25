@@ -656,7 +656,7 @@ export default function UnitConverterPage() {
               ],
               faqTitle: "자주 묻는 질문 (FAQ)",
               faqs: [
-                { q: "한국 고유 단위인 '평'이나 '근'도 변환되나요?", a: "네! 넓이 카테고리에서 1평(3.3058m²), 무게 카테고리에서 1근(600g)을 완벽 지원합니다." },
+                { q: "한국 고유 단위인 '평'이나 '근'도 변환되나요?", a: "네! 넓이 카테고리에서 1평(3.305785m²), 무게 카테고리에서 1근(600g)을 완벽 지원합니다." },
                 { q: "온도 변환 공식은 절대온도(Kelvin)도 지원하나요?", a: "네, 섭씨(°C), 화씨(°F), 켈빈(K) 간의 3방향 정밀 변환이 모두 지원됩니다." },
                 { q: "디지털 용량은 1000과 1024 중 어떤 기준인가요?", a: "컴퓨팅 표준인 1024 바이트(1 KB = 1024 B, 1 MB = 1024 KB)를 기준으로 정확히 환산합니다." },
                 { q: "모바일 스마트폰에서도 사용하기 편한가요?", a: "네! 모바일 터치 키패드와 스왑 버튼이 완벽하게 최적화되어 있습니다." },
@@ -705,7 +705,7 @@ export default function UnitConverterPage() {
               ],
               faqTitle: "Frequently Asked Questions",
               faqs: [
-                { q: "Does this converter support localized units like Pyeong?", a: "Yes. In the Area category, Pyeong (3.3058 m²) is fully supported alongside acres and hectares." },
+                { q: "Does this converter support localized units like Pyeong?", a: "Yes. In the Area category, Pyeong (3.305785 m²) is fully supported alongside acres and hectares." },
                 { q: "Are temperature conversions accurate for Kelvin?", a: "Yes, precision formulas for Celsius, Fahrenheit, and Kelvin are implemented with high accuracy." },
                 { q: "Is digital storage based on 1000 or 1024?", a: "It uses the binary standard of 1024 bytes (1 KB = 1024 Bytes, 1 MB = 1024 KB)." },
                 { q: "Does this tool work offline on mobile?", a: "Yes. Once loaded, all calculations run 100% in your local browser sandbox." },
@@ -754,7 +754,7 @@ export default function UnitConverterPage() {
               ],
               faqTitle: "よくある質問 (FAQ)",
               faqs: [
-                { q: "坪（pyeong）の変換に対応していますか？", a: "はい。面積カテゴリーで 1 坪（約 3.3058 m²）の換算に対応しています。" },
+                { q: "坪（pyeong）の変換に対応していますか？", a: "はい。面積カテゴリーで 1 坪（約 3.305785 m²）の換算に対応しています。" },
                 { q: "ケルビン（K）を含む温度換算は可能ですか？", a: "はい、摂氏（°C）、華氏（°F）、ケルビン（K）の相互変換に対応しています。" },
                 { q: "データ容量は 1000 基準ですか、1024 基準ですか？", a: "コンピュータ規格に準拠し、1024 バイト（1 KB = 1024 B）基準で換算します。" },
                 { q: "スマートフォンでも使えますか？", a: "はい、モバイル端末に完全対応しています。" },
@@ -852,7 +852,7 @@ export default function UnitConverterPage() {
               ],
               faqTitle: "常见问题解答 (FAQ)",
               faqs: [
-                { q: "支持东亚传统面积单位“坪”吗？", a: "支持！在“面积”分类下完整集成了 1 坪（约 3.3058 m²）的精准换算。" },
+                { q: "支持东亚传统面积单位“坪”吗？", a: "支持！在“面积”分类下完整集成了 1 坪（约 3.305785 m²）的精准换算。" },
                 { q: "温度换算支持绝对温度（开尔文 K）吗？", a: "支持，摄氏度（°C）、华氏度（°F）、开尔文（K）三者之间可自由互转。" },
                 { q: "存储单位是按 1000 还是 1024 换算？", a: "严格按照计算机二进制标准（1 KB = 1024 B, 1 MB = 1024 KB）进行计算。" },
                 { q: "手机端可以正常操作吗？", a: "完全可以，已针对移动端触摸屏优化。" },

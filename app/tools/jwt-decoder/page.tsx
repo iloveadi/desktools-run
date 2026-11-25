@@ -363,12 +363,11 @@ export default function JwtDecoderPage() {
                       </button>
                     </div>
                     <pre
+                      className="tool-output-box is-jwt-header"
                       style={{
-                        background: "rgba(0,0,0,0.3)",
                         padding: "12px 14px",
                         borderRadius: "8px",
                         fontSize: "13px",
-                        color: "#fca5a5",
                         fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
                         overflowX: "auto",
                         margin: 0,
@@ -404,12 +403,11 @@ export default function JwtDecoderPage() {
                       </button>
                     </div>
                     <pre
+                      className="tool-output-box is-jwt-payload"
                       style={{
-                        background: "rgba(0,0,0,0.3)",
                         padding: "12px 14px",
                         borderRadius: "8px",
                         fontSize: "13px",
-                        color: "#e9d5ff",
                         fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
                         overflowX: "auto",
                         margin: 0,

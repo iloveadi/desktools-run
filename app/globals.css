@@ -1261,6 +1261,70 @@ html.light .tool-output-box.is-decrypt {
   color: #166534 !important;
 }
 
+.tool-output-box.is-jwt-header {
+  color: #fca5a5;
+}
+.tool-output-box.is-jwt-payload {
+  color: #e9d5ff;
+}
+html.light .tool-output-box.is-jwt-header {
+  background: #f5f5f4 !important;
+  color: #9f1239 !important;
+}
+html.light .tool-output-box.is-jwt-payload {
+  background: #f5f5f4 !important;
+  color: #5b21b6 !important;
+}
+
+.regex-match-card {
+  background: rgba(0, 0, 0, 0.25);
+}
+.regex-match-title {
+  color: #818cf8;
+}
+.regex-match-text {
+  color: #4ade80;
+}
+.regex-match-group {
+  color: #a5b4fc;
+}
+.regex-match-badge {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+.regex-match-badge.has-matches {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+}
+html.light .regex-match-card {
+  background: #f5f5f4 !important;
+}
+html.light .regex-match-title,
+html.light .regex-match-group {
+  color: #4338ca !important;
+}
+html.light .regex-match-text {
+  color: #166534 !important;
+}
+html.light .regex-match-badge.has-matches {
+  background: #ecfdf5 !important;
+  color: #166534 !important;
+}
+
+.tool-guide-trust-badge {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #34d399;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08);
+}
+html.light .tool-guide-trust-badge {
+  background: #ecfdf5 !important;
+  border: 1px solid rgba(22, 101, 52, 0.25) !important;
+  color: #166534 !important;
+  box-shadow: 0 2px 10px rgba(22, 101, 52, 0.08) !important;
+}
+
+
 
 
 
