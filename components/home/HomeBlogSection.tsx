@@ -97,6 +97,7 @@ export default function HomeBlogSection() {
         >
           <div>
             <div
+              className="home-badge-indigo"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -105,7 +106,6 @@ export default function HomeBlogSection() {
                 borderRadius: "100px",
                 background: "rgba(99, 102, 241, 0.1)",
                 border: "1px solid rgba(99, 102, 241, 0.25)",
-                color: "#818cf8",
                 fontSize: "12.5px",
                 fontWeight: 700,
                 marginBottom: "14px",
@@ -142,13 +142,13 @@ export default function HomeBlogSection() {
 
           <Link
             href="/blog/"
+            className="home-accent-amber"
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
               fontSize: "14px",
               fontWeight: 700,
-              color: "var(--colors-primary)",
               textDecoration: "none",
               padding: "8px 16px",
               borderRadius: "8px",
@@ -199,11 +199,11 @@ export default function HomeBlogSection() {
                     }}
                   >
                     <span
+                      className="home-badge-indigo"
                       style={{
                         padding: "3px 10px",
                         borderRadius: "100px",
                         background: "rgba(99, 102, 241, 0.15)",
-                        color: "#818cf8",
                         fontWeight: 700,
                       }}
                     >

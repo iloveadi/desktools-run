@@ -372,6 +372,7 @@ export default function HomeCategoryOverview() {
         {/* Section Header */}
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <div
+            className="home-badge-indigo"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -380,7 +381,6 @@ export default function HomeCategoryOverview() {
               borderRadius: "100px",
               background: "rgba(99, 102, 241, 0.1)",
               border: "1px solid rgba(99, 102, 241, 0.25)",
-              color: "#818cf8",
               fontSize: "12.5px",
               fontWeight: 700,
               marginBottom: "16px",

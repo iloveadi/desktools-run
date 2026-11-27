@@ -336,12 +336,12 @@ export default function RegexTesterPage() {
                     <button
                       onClick={copyMatches}
                       title="Copy all matches"
+                      className={`tool-small-action ${copied ? "is-copied" : ""}`}
                       style={{
                         padding: "4px 8px",
                         borderRadius: "6px",
                         background: copied ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.15)",
                         border: "none",
-                        color: copied ? "#4ade80" : "#818cf8",
                         cursor: "pointer",
                         fontSize: "11px",
                         fontWeight: 700,

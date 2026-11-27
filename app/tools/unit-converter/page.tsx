@@ -510,10 +510,10 @@ export default function UnitConverterPage() {
                   </label>
                   <button
                     onClick={handleCopy}
+                    className={`tool-small-action ${copied ? "is-copied" : ""}`}
                     style={{
                       background: "none",
                       border: "none",
-                      color: copied ? "#4ade80" : "#818cf8",
                       fontSize: "12px",
                       fontWeight: 600,
                       cursor: "pointer",

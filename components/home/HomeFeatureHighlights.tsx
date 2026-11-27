@@ -356,6 +356,7 @@ export default function HomeFeatureHighlights() {
         {/* Section Header */}
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <div
+            className="home-accent-amber"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -364,7 +365,6 @@ export default function HomeFeatureHighlights() {
               borderRadius: "100px",
               background: "rgba(217, 119, 6, 0.1)",
               border: "1px solid rgba(217, 119, 6, 0.25)",
-              color: "var(--colors-primary)",
               fontSize: "12.5px",
               fontWeight: 700,
               marginBottom: "16px",
@@ -418,6 +418,7 @@ export default function HomeFeatureHighlights() {
             }}
           >
             <div
+              className="home-badge-red"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -425,7 +426,6 @@ export default function HomeFeatureHighlights() {
                 padding: "4px 10px",
                 borderRadius: "6px",
                 background: "rgba(239, 68, 68, 0.15)",
-                color: "#f87171",
                 fontSize: "12px",
                 fontWeight: 700,
                 marginBottom: "16px",
@@ -462,6 +462,7 @@ export default function HomeFeatureHighlights() {
             }}
           >
             <div
+              className="home-accent-amber"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -469,7 +470,6 @@ export default function HomeFeatureHighlights() {
                 padding: "4px 10px",
                 borderRadius: "6px",
                 background: "rgba(217, 119, 6, 0.15)",
-                color: "var(--colors-primary)",
                 fontSize: "12px",
                 fontWeight: 700,
                 marginBottom: "16px",

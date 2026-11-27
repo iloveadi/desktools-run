@@ -336,12 +336,10 @@ export default function ImageConverterPage() {
                     <button
                       key={fmt}
                       onClick={() => setTargetFormat(fmt)}
+                      className={`img-conv-chip ${targetFormat === fmt ? "is-active" : ""}`}
                       style={{
                         padding: "6px 14px",
                         borderRadius: "8px",
-                        background: targetFormat === fmt ? "rgba(139,92,246,0.25)" : "rgba(255,255,255,0.05)",
-                        border: targetFormat === fmt ? "1px solid #a78bfa" : "1px solid var(--border-subtle)",
-                        color: targetFormat === fmt ? "#c4b5fd" : "var(--text-secondary)",
                         fontSize: "13px",
                         fontWeight: 700,
                         cursor: "pointer",
@@ -359,7 +357,7 @@ export default function ImageConverterPage() {
                 <div style={{ minWidth: "160px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px" }}>
                     <span style={{ fontWeight: 700, textTransform: "uppercase" }}>{t("imageConverter.quality")}</span>
-                    <span style={{ color: "#a78bfa", fontWeight: 700 }}>{quality}%</span>
+                    <span className="img-conv-accent" style={{ fontWeight: 700 }}>{quality}%</span>
                   </div>
                   <input
                     type="range"
@@ -386,12 +384,10 @@ export default function ImageConverterPage() {
                       <button
                         key={bg.val}
                         onClick={() => setBgColor(bg.val)}
+                        className={`img-conv-chip ${bgColor === bg.val ? "is-active" : ""}`}
                         style={{
                           padding: "5px 10px",
                           borderRadius: "6px",
-                          background: bgColor === bg.val ? "rgba(139,92,246,0.2)" : "rgba(255,255,255,0.05)",
-                          border: bgColor === bg.val ? "1px solid #a78bfa" : "1px solid var(--border-subtle)",
-                          color: bgColor === bg.val ? "#c4b5fd" : "var(--text-muted)",
                           fontSize: "12px",
                           fontWeight: 600,
                           cursor: "pointer",

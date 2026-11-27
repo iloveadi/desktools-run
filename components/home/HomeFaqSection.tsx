@@ -259,6 +259,7 @@ export default function HomeFaqSection() {
         {/* Section Header */}
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <div
+            className="home-badge-amber"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -267,7 +268,6 @@ export default function HomeFaqSection() {
               borderRadius: "100px",
               background: "rgba(251, 191, 36, 0.1)",
               border: "1px solid rgba(251, 191, 36, 0.25)",
-              color: "#fbbf24",
               fontSize: "12.5px",
               fontWeight: 700,
               marginBottom: "16px",

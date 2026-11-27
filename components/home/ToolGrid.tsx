@@ -301,14 +301,14 @@ export default function ToolGrid({
                   >
                     <span>{tab.label}</span>
                     <span
-                      className="font-mono"
+                      className={`font-mono ${isActive ? "home-accent-amber" : ""}`}
                       style={{
                         fontSize: "11px",
                         fontWeight: 600,
                         padding: "1px 5px",
                         borderRadius: "4px",
                         backgroundColor: isActive ? "rgba(217, 119, 6, 0.15)" : "var(--colors-canvas-soft)",
-                        color: isActive ? "var(--colors-primary)" : "var(--colors-mute)",
+                        color: isActive ? undefined : "var(--colors-mute)",
                       }}
                     >
                       {tab.count}
@@ -346,6 +346,7 @@ export default function ToolGrid({
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <button
                   onClick={() => setTrayView("favorites")}
+                  className={trayView === "favorites" ? "home-badge-amber" : ""}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -357,7 +358,7 @@ export default function ToolGrid({
                     cursor: "pointer",
                     border: trayView === "favorites" ? "1px solid rgba(250, 204, 21, 0.4)" : "1px solid transparent",
                     background: trayView === "favorites" ? "rgba(250, 204, 21, 0.15)" : "transparent",
-                    color: trayView === "favorites" ? "#eab308" : "var(--text-muted)",
+                    color: trayView === "favorites" ? undefined : "var(--text-muted)",
                     transition: "all 0.15s",
                   }}
                 >
@@ -367,6 +368,7 @@ export default function ToolGrid({
 
                 <button
                   onClick={() => setTrayView("recents")}
+                  className={trayView === "recents" ? "home-badge-indigo" : ""}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -378,7 +380,7 @@ export default function ToolGrid({
                     cursor: "pointer",
                     border: trayView === "recents" ? "1px solid rgba(99, 102, 241, 0.4)" : "1px solid transparent",
                     background: trayView === "recents" ? "rgba(99, 102, 241, 0.15)" : "transparent",
-                    color: trayView === "recents" ? "#818cf8" : "var(--text-muted)",
+                    color: trayView === "recents" ? undefined : "var(--text-muted)",
                     transition: "all 0.15s",
                   }}
                 >

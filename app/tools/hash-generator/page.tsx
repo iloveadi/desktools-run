@@ -465,17 +465,7 @@ SHA-512: ${isUppercase ? hashes.sha512.toUpperCase() : hashes.sha512}`;
                       <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--text-primary)" }}>
                         {title}
                       </span>
-                      <span
-                        style={{
-                          fontSize: "11px",
-                          fontWeight: 600,
-                          padding: "2px 8px",
-                          borderRadius: "100px",
-                          background: `${color}20`,
-                          color,
-                          border: `1px solid ${color}40`,
-                        }}
-                      >
+                      <span className={`hash-bit-badge hash-bit-${key}`}>
                         {bits}
                       </span>
                     </div>
