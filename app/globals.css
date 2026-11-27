@@ -755,7 +755,7 @@ html.light a.glass-card:hover {
 html.light .badge-pill {
   background: rgba(217, 119, 6, 0.08) !important;
   border-color: rgba(217, 119, 6, 0.25) !important;
-  color: #d97706 !important;
+  color: #92400e !important;
   box-shadow: 0 0 10px rgba(217, 119, 6, 0.08) !important;
 }
 
@@ -773,14 +773,14 @@ html.light .metric-card-neo span.font-mono {
 }
 
 html.light .button-primary {
-  background: #d97706 !important;
+  background: #b45309 !important;
   color: #ffffff !important;
-  border: 1px solid #b45309 !important;
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25) !important;
+  border: 1px solid #92400e !important;
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.25) !important;
 }
 html.light .button-primary:hover {
-  background: #b45309 !important;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35) !important;
+  background: #92400e !important;
+  box-shadow: 0 4px 14px rgba(146, 64, 14, 0.35) !important;
   color: #ffffff !important;
 }
 
@@ -1323,6 +1323,184 @@ html.light .tool-guide-trust-badge {
   color: #166534 !important;
   box-shadow: 0 2px 10px rgba(22, 101, 52, 0.08) !important;
 }
+
+/* ===========================================================
+   LIGHT MODE ACCESSIBILITY CONTRAST OVERRIDES (WCAG AA >= 4.5:1)
+   =========================================================== */
+.tool-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.tool-hero-badge.badge-emerald {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  color: #6ee7b7;
+}
+.tool-hero-badge.badge-indigo {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+.tool-hero-badge.badge-red {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+.tool-hero-badge.badge-pink {
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  color: #f472b6;
+}
+.tool-hero-badge.badge-violet {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+}
+
+html.light .tool-hero-badge.badge-emerald {
+  background: #ecfdf5 !important;
+  border-color: rgba(22, 101, 52, 0.25) !important;
+  color: #166534 !important;
+}
+html.light .tool-hero-badge.badge-indigo {
+  background: #eef2ff !important;
+  border-color: rgba(67, 56, 202, 0.25) !important;
+  color: #4338ca !important;
+}
+html.light .tool-hero-badge.badge-red {
+  background: #fef2f2 !important;
+  border-color: rgba(185, 28, 28, 0.25) !important;
+  color: #b91c1c !important;
+}
+html.light .tool-hero-badge.badge-pink {
+  background: #fdf2f8 !important;
+  border-color: rgba(157, 23, 77, 0.25) !important;
+  color: #9d174d !important;
+}
+html.light .tool-hero-badge.badge-violet {
+  background: #f5f3ff !important;
+  border-color: rgba(91, 33, 182, 0.25) !important;
+  color: #5b21b6 !important;
+}
+
+.md-copy-btn {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+.md-copy-btn.is-copied {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+html.light .md-copy-btn {
+  background: #e8e8fd !important;
+  color: #4338ca !important;
+}
+html.light .md-copy-btn.is-copied {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+}
+
+.tool-accent-title,
+.tool-guide-accent-link {
+  color: #818cf8;
+}
+html.light .tool-accent-title,
+html.light .tool-guide-accent-link {
+  color: #4338ca !important;
+}
+
+.unit-table-val {
+  color: var(--text-primary);
+}
+.unit-table-val.is-selected {
+  color: #a5b4fc;
+}
+html.light .unit-table-val.is-selected {
+  color: #4338ca !important;
+}
+
+.regex-preset-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.regex-preset-btn.is-active {
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.6);
+  color: #a5b4fc;
+}
+html.light .regex-preset-btn.is-active {
+  background: #e8e8fd !important;
+  border-color: #6366f1 !important;
+  color: #4338ca !important;
+}
+
+.regex-flag-bar {
+  background: rgba(0, 0, 0, 0.2);
+}
+html.light .regex-flag-bar {
+  background: #f5f5f4 !important;
+}
+.regex-flag-btn {
+  background: transparent;
+  color: var(--text-muted);
+}
+.regex-flag-btn.is-active {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+}
+html.light .regex-flag-btn.is-active {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+.tool-clear-btn {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+html.light .tool-clear-btn {
+  background: #fef2f2 !important;
+  border-color: rgba(185, 28, 28, 0.25) !important;
+  color: #b91c1c !important;
+}
+
+.jwt-status-title.is-active {
+  color: #4ade80;
+}
+.jwt-status-title.is-expired {
+  color: #f87171;
+}
+html.light .jwt-status-title.is-active {
+  color: #166534 !important;
+}
+html.light .jwt-status-title.is-expired {
+  color: #b91c1c !important;
+}
+.jwt-header-label {
+  color: #f87171;
+}
+.jwt-payload-label {
+  color: #c084fc;
+}
+.jwt-sig-label {
+  color: #38bdf8;
+}
+html.light .jwt-header-label {
+  color: #9f1239 !important;
+}
+html.light .jwt-payload-label {
+  color: #5b21b6 !important;
+}
+html.light .jwt-sig-label {
+  color: #0369a1 !important;
+}
+
 
 
 

@@ -189,12 +189,10 @@ export default function RegexTesterPage() {
               <button
                 key={p.name}
                 onClick={() => applyPreset(p)}
+                className={`regex-preset-btn ${pattern === p.pattern ? "is-active" : ""}`}
                 style={{
                   padding: "6px 12px",
                   borderRadius: "6px",
-                  background: pattern === p.pattern ? "rgba(99,102,241,0.25)" : "rgba(255,255,255,0.04)",
-                  border: pattern === p.pattern ? "1px solid rgba(99,102,241,0.6)" : "1px solid var(--border-subtle)",
-                  color: pattern === p.pattern ? "#a5b4fc" : "var(--text-secondary)",
                   fontSize: "12px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -231,7 +229,7 @@ export default function RegexTesterPage() {
               <span style={{ fontSize: "20px", fontWeight: 800, color: "var(--text-muted)", fontFamily: "monospace" }}>/</span>
 
               {/* Flag Quick Toggles */}
-              <div style={{ display: "flex", gap: "4px", background: "rgba(0,0,0,0.2)", padding: "4px", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+              <div className="regex-flag-bar" style={{ display: "flex", gap: "4px", padding: "4px", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
                 {[
                   { flag: "g", label: "Global (g)" },
                   { flag: "i", label: "Case Insensitive (i)" },
@@ -244,12 +242,11 @@ export default function RegexTesterPage() {
                       key={flag}
                       onClick={() => toggleFlag(flag)}
                       title={label}
+                      className={`regex-flag-btn ${active ? "is-active" : ""}`}
                       style={{
                         padding: "6px 10px",
                         borderRadius: "6px",
-                        background: active ? "linear-gradient(135deg, #6366f1, #4f46e5)" : "transparent",
                         border: "none",
-                        color: active ? "white" : "var(--text-muted)",
                         fontSize: "13px",
                         fontWeight: 700,
                         cursor: "pointer",
@@ -319,8 +316,8 @@ export default function RegexTesterPage() {
             {/* Match Results & Inspector */}
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#818cf8" />
+                <span className="tool-accent-title" style={{ fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Sparkles size={16} />
                   {t("regexTester.matchResults") || "Match Results"}
                 </span>
                 <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>

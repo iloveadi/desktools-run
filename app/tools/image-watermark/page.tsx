@@ -783,7 +783,7 @@ export default function ImageWatermarkPage() {
                       {t("imageWatermark.preview")}
                     </span>
                   </div>
-                  <span style={{ fontSize: "11.5px", color: "#34d399", background: "rgba(52,211,153,0.12)", padding: "2px 8px", borderRadius: "100px", fontWeight: 600 }}>
+                  <span className="tool-hero-badge badge-emerald" style={{ fontSize: "11.5px", padding: "2px 8px" }}>
                     100% Client-Side
                   </span>
                 </div>

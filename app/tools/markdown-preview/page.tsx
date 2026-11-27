@@ -90,6 +90,19 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
                 rows={18}
                 value={markdown}
                 onChange={(e) => setMarkdown(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Tab") {
+                    e.preventDefault();
+                    const target = e.currentTarget;
+                    const start = target.selectionStart;
+                    const end = target.selectionEnd;
+                    const nextVal = markdown.slice(0, start) + "  " + markdown.slice(end);
+                    setMarkdown(nextVal);
+                    requestAnimationFrame(() => {
+                      target.selectionStart = target.selectionEnd = start + 2;
+                    });
+                  }
+                }}
                 style={{ width: "100%", height: "480px", borderRadius: "8px", background: "var(--input-bg)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", padding: "14px", fontSize: "14px", fontFamily: "monospace", lineHeight: "1.6", resize: "none" }}
               />
             </div>
@@ -97,17 +110,48 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
             {/* Preview */}
             <div className="glass-card" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "14px", fontWeight: 700, color: "#818cf8" }}>{t("markdownPreview.previewTitle") || "Rendered HTML Preview"}</span>
-                <button onClick={handleCopyHtml} style={{ padding: "4px 10px", borderRadius: "6px", background: copied ? "rgba(34,197,94,0.2)" : "rgba(99,102,241,0.15)", border: "none", color: copied ? "#4ade80" : "#818cf8", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
+                <span className="tool-accent-title" style={{ fontSize: "14px", fontWeight: 700 }}>{t("markdownPreview.previewTitle") || "Rendered HTML Preview"}</span>
+                <button onClick={handleCopyHtml} className={`md-copy-btn ${copied ? "is-copied" : ""}`} style={{ padding: "4px 10px", borderRadius: "6px", border: "none", fontSize: "12px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}>
                   {copied ? <Check size={13} /> : <Copy size={13} />}
                   {copied ? (t("markdownPreview.copiedHtml") || "HTML Copied") : (t("markdownPreview.copyHtml") || "Copy HTML")}
                 </button>
               </div>
-              <div
-                className="markdown-preview-body"
-                style={{ width: "100%", height: "480px", borderRadius: "8px", background: "var(--input-bg)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", padding: "20px", overflowY: "auto", lineHeight: "1.7" }}
-                dangerouslySetInnerHTML={{ __html: renderedHtml }}
-              />
+              {markdown.trim() ? (
+                <div
+                  className="markdown-preview-body"
+                  style={{ width: "100%", height: "480px", borderRadius: "8px", background: "var(--input-bg)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)", padding: "20px", overflowY: "auto", lineHeight: "1.7" }}
+                  dangerouslySetInnerHTML={{ __html: renderedHtml }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "480px",
+                    borderRadius: "8px",
+                    background: "var(--input-bg)",
+                    border: "1px solid var(--border-subtle)",
+                    color: "var(--text-muted)",
+                    padding: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    fontSize: "14px",
+                  }}
+                >
+                  {locale === "ko"
+                    ? "왼쪽에 마크다운을 입력하면 여기에 실시간으로 표시됩니다."
+                    : locale === "ja"
+                    ? "左側にMarkdownを入力すると、ここにリアルタイムでプレビューが表示されます。"
+                    : locale === "zh"
+                    ? "在左侧输入 Markdown，此处将实时显示渲染预览。"
+                    : locale === "es"
+                    ? "Escribe Markdown a la izquierda para ver la vista previa en tiempo real aquí."
+                    : locale === "fr"
+                    ? "Saisissez du Markdown à gauche pour afficher l'aperçu en direct ici."
+                    : "Start typing Markdown on the left to see a live preview here."}
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -118,7 +162,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
             ko: {
               aboutTitle: "마크다운 실시간 미리보기 & 웹 에디터 소개",
               aboutDesc:
-                "좌측 에디터에서 Markdown 문법으로 글을 작성하면 우측 화면에서 실시간 렌더링된 서식화 HTML 문서를 즉시 확인할 수 있는 분할형 마크다운 프리뷰 도구입니다. 제목(#, ##, ###), 굵게, 기울임, 취소선, 인용구, 인라인 코드, 리스트, 하이퍼링크 등 필수 마크다운 문법을 완벽히 지원하며, 작성된 문서를 .md 파일로 즉시 다운로드하거나 변환된 HTML 코드를 클립보드로 1클릭 복사할 수 있습니다. 100% 브라우저 메모리 안에서 로컬 렌더링되어 소중한 글과 기밀 문서가 외부로 유출되지 않습니다.",
+                "좌측 에디터에서 Markdown 문법으로 글을 작성하면 우측 화면에서 실시간 렌더링된 서식화 HTML 문서를 즉시 확인할 수 있는 분할형 마크다운 프리뷰 도구입니다. 제목(#, ##, ###), 굵게, 기울임, 취소선, 인용구, 인라인 코드·코드 펜스(```js), GFM 표(| --- |), 순서 있는/없는 목록 및 중첩 목록, 수평선(---), 이미지(![alt](url)), 하이퍼링크를 모두 지원하며 원본 HTML/XSS는 안전하게 이스케이프·차단됩니다. 작성된 문서를 .md 파일로 다운로드하거나 변환된 HTML 코드를 1클릭 복사할 수 있으며, 100% 브라우저 메모리 안에서 로컬 처리됩니다.",
               howTitle: "마크다운 작성 및 HTML 추출 방법",
               steps: [
                 "좌측 에디터 패널에 마크다운 텍스트를 직접 입력하거나 기존 .md 파일 내용을 붙여넣습니다.",
@@ -150,7 +194,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "자주 묻는 질문 (FAQ)",
               faqs: [
-                { q: "어떤 마크다운 문법들이 지원되나요?", a: "제목(#, ##, ###), 텍스트 스타일(굵게 **, 기울임 *, 취소선 ~~), 인라인 코드(`), 인용구(>), 순서 없는 목록(-), 하이퍼링크([텍스트](링크)) 등 표준 문법을 지원합니다." },
+                { q: "어떤 마크다운 문법들이 지원되나요?", a: "제목(#, ##, ###), 텍스트 스타일(굵게 **, 기울임 *, 취소선 ~~), 인라인 코드(`) 및 코드 펜스(```js), GFM 표(| --- |), 순서 있는 목록(1.)·중첩 목록, 수평선(---), 이미지(![alt](url)), 인용구(>), 하이퍼링크([텍스트](링크))를 지원하며 원본 HTML과 XSS 스크립트는 자동 이스케이프·차단됩니다." },
                 { q: "작성한 마크다운 내용이 서버에 저장되나요?", a: "아닙니다. 모든 마크다운 파싱과 HTML 렌더링은 100% 사용자의 웹 브라우저 메모리 내부에서 로컬 처리됩니다." },
                 { q: "작성한 글을 마크다운 파일(.md)로 다운로드할 수 있나요?", a: "네! 상단 좌측의 '.md 저장' 버튼을 클릭하면 UTF-8 인코딩의 document.md 파일로 즉시 저장됩니다." },
                 { q: "렌더링된 HTML 코드를 복사해서 어디에 쓸 수 있나요?", a: "블로그 CMS(워드프레스, 티스토리 등)의 HTML 편집 모드나 이메일 뉴스레터 본문, 웹 퍼블리싱 등에 그대로 복사해 사용하실 수 있습니다." },
@@ -167,7 +211,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
             en: {
               aboutTitle: "About Markdown Live Preview & Editor",
               aboutDesc:
-                "Write Markdown text on the left editor and inspect instant live-rendered HTML formatting side-by-side on the right. Supports headings, bold, italics, strikethrough, blockquotes, inline code, lists, and hyperlinks. Easily export your work to a .md file or copy clean converted HTML tags in one click with 100% client-side privacy.",
+                "Write Markdown text on the left editor and inspect instant live-rendered HTML formatting side-by-side on the right. Supports GFM tables (| --- |), fenced code blocks (```js), ordered and nested lists, horizontal rules (---), images (![alt](url)), headings, bold, italics, strikethrough, blockquotes, inline code, and links—with raw HTML and XSS automatically escaped and sanitized. Export to a .md file or copy clean HTML in one click with 100% client-side privacy.",
               howTitle: "How to Write Markdown & Export HTML",
               steps: [
                 "Type or paste your Markdown content into the left editor panel.",
@@ -199,7 +243,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "Frequently Asked Questions (FAQ)",
               faqs: [
-                { q: "What Markdown syntax is supported?", a: "It supports standard headings (# to ###), bold (**text**), italics (*text*), strikethrough (~~text~~), inline code (`code`), blockquotes (>), bullet lists (-), and hyperlinks." },
+                { q: "What Markdown syntax is supported?", a: "It supports GFM tables (| --- |), fenced code blocks (```js), ordered lists (1.) and nested lists, horizontal rules (---), images (![alt](url)), headings (# to ###), bold (**text**), italics (*text*), strikethrough (~~text~~), inline code (`code`), blockquotes (>), and links, with raw HTML and XSS automatically escaped and sanitized." },
                 { q: "Is my Markdown document stored on any server?", a: "No! 100% of parsing and HTML rendering runs locally inside your browser memory." },
                 { q: "Can I download the written document as a .md file?", a: "Yes! Click 'Save .md' in the top editor bar to download a UTF-8 encoded document.md file." },
                 { q: "Where can I paste the copied HTML code?", a: "You can paste the generated HTML directly into web editors, email campaign builders, or WordPress HTML view." },
@@ -248,7 +292,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "よくある質問 (FAQ)",
               faqs: [
-                { q: "どのようなマークダウン記法に対応していますか？", a: "見出し（#〜###）、太字（**）、斜体（*）、打ち消し線（~~）、インラインコード（`）、引用（>）、箇条書き（-）、リンク（[テキスト](URL)）に対応しています。" },
+                { q: "どのようなマークダウン記法に対応していますか？", a: "見出し（#〜###）、太字（**）、斜体（*）、打ち消し線（~~）、インラインコード・コードブロック（```js）、GFMテーブル（| --- |）、番号付きリスト（1.）・ネストリスト、水平線（---）、画像（![alt](url)）、引用（>）、リンクに対応し、生のHTMLやXSSは自動でエスケープ・無害化されます。" },
                 { q: "入力した文章がサーバーに送信されますか？", a: "一切送信されません。すべてのパース処理とHTML描画はお使いのブラウザ内（ローカル）でのみ実行されます。" },
                 { q: ".mdファイルとして保存できますか？", a: "はい！上部の「.md保存」ボタンを押すだけで即座にローカルに保存されます。" },
                 { q: "コピーしたHTMLコードはどこで使えますか？", a: "WordPressや各種ブログのHTMLモード、メールマガジン、Webサイト制作などでそのままご利用いただけます。" },
@@ -297,7 +341,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "Preguntas Frecuentes (FAQ)",
               faqs: [
-                { q: "¿Qué sintaxis de Markdown es compatible?", a: "Soporta encabezados (# a ###), negrita (**texto**), cursiva (*texto*), tachado (~~texto~~), código (`código`), citas (>), listas (-) y enlaces." },
+                { q: "¿Qué sintaxis de Markdown es compatible?", a: "Soporta tablas GFM (| --- |), bloques de código (```js), listas ordenadas (1.) y anidadas, líneas horizontales (---), imágenes (![alt](url)), encabezados (# a ###), negrita (**texto**), cursiva (*texto*), tachado (~~texto~~), código (`código`), citas (>) y enlaces, bloqueando HTML sin procesar y XSS." },
                 { q: "¿Se guardan mis documentos en algún servidor?", a: "No. El análisis y renderizado se ejecutan 100% en la memoria de tu navegador." },
                 { q: "¿Puedo descargar el archivo como .md?", a: "Sí, haz clic en 'Guardar .md' para descargar tu archivo document.md en UTF-8." },
                 { q: "¿Dónde puedo usar el HTML copiado?", a: "Puedes pegarlo directamente en editores web, campañas de correo electrónico o en el editor HTML de WordPress." },
@@ -346,7 +390,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "常见问题解答 (FAQ)",
               faqs: [
-                { q: "支持哪些主流 Markdown 语法？", a: "支持标题（# 到 ###）、加粗（**文字**）、斜体（*文字*）、删除线（~~文字~~）、行内代码（`代码`）、引用块（>）、列表（-）以及超链接（[名称](链接)）。" },
+                { q: "支持哪些主流 Markdown 语法？", a: "支持 GFM 表格（| --- |）、围栏代码块（```js）、有序列表（1.）与嵌套列表、分隔线（---）、图片（![alt](url)）、标题（# 到 ###）、加粗（**文字**）、斜体（*文字*）、删除线（~~文字~~）、行内代码（`代码`）、引用块（>）及超链接，并自动转义过滤原生 HTML 与 XSS。" },
                 { q: "我输入的文章内容会被上传到服务器吗？", a: "绝对不会！所有 Markdown 解析与 HTML 渲染逻辑 100% 在您的本地浏览器中完成。" },
                 { q: "可以直接下载保存为 .md 文件吗？", a: "可以！点击左上方的“保存 .md”按钮即可瞬间将内容下载至电脑本地。" },
                 { q: "复制出来的 HTML 代码可以用在哪里？", a: "可直接粘贴至各类博客 CMS 的 HTML 源码模式、邮件群发模板或静态网页代码中。" },
@@ -395,7 +439,7 @@ Write your **Markdown** on the left, and see the *instant rendered preview* on t
               ],
               faqTitle: "Foire Aux Questions (FAQ)",
               faqs: [
-                { q: "Quelles syntaxes Markdown sont prises en charge ?", a: "Prend en charge les titres (# à ###), le gras (**texte**), l'italique (*texte*), le barré (~~texte~~), le code (`code`), les citations (>), les listes (-) et les liens." },
+                { q: "Quelles syntaxes Markdown sont prises en charge ?", a: "Prend en charge les tableaux GFM (| --- |), blocs de code (```js), listes ordonnées (1.) et imbriquées, lignes horizontales (---), images (![alt](url)), titres (# à ###), gras (**texte**), italique (*texte*), barré (~~texte~~), code (`code`), citations (>) et liens, avec filtrage automatique du HTML brut et des failles XSS." },
                 { q: "Mes écrits sont-ils enregistrés sur un serveur ?", a: "Non ! Toute l'analyse et le rendu HTML s'exécutent 100% localement dans votre navigateur." },
                 { q: "Puis-je télécharger le fichier en .md ?", a: "Oui, cliquez sur 'Enregistrer .md' pour télécharger votre fichier document.md encodé en UTF-8." },
                 { q: "Où puis-je utiliser le HTML copié ?", a: "Vous pouvez le coller dans vos éditeurs de blogs CMS, outils d'emailing ou pages web." },

@@ -200,12 +200,10 @@ export default function JwtDecoderPage() {
               </button>
               <button
                 onClick={clearAll}
+                className="tool-clear-btn"
                 style={{
                   padding: "8px 14px",
                   borderRadius: "8px",
-                  background: "rgba(239,68,68,0.1)",
-                  border: "1px solid rgba(239,68,68,0.2)",
-                  color: "#f87171",
                   fontSize: "13px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -245,7 +243,7 @@ export default function JwtDecoderPage() {
                   <CheckCircle2 size={20} color="#4ade80" />
                 )}
                 <div>
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: expInfo.isExpired ? "#f87171" : "#4ade80" }}>
+                  <div className={`jwt-status-title ${expInfo.isExpired ? "is-expired" : "is-active"}`} style={{ fontSize: "14px", fontWeight: 700 }}>
                     {expInfo.isExpired ? "Token is EXPIRED" : "Token is ACTIVE (Valid)"}
                   </div>
                   <div style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
@@ -340,7 +338,7 @@ export default function JwtDecoderPage() {
                   {/* Header Box */}
                   <div className="glass-card" style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#f87171", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span className="jwt-header-label" style={{ fontSize: "13px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
                         <Lock size={15} /> HEADER: Algorithm & Token Type
                       </span>
                       <button
@@ -380,7 +378,7 @@ export default function JwtDecoderPage() {
                   {/* Payload Box */}
                   <div className="glass-card" style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#c084fc", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span className="jwt-payload-label" style={{ fontSize: "13px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
                         <FileJson size={15} /> PAYLOAD: Data & Claims
                       </span>
                       <button
@@ -421,7 +419,7 @@ export default function JwtDecoderPage() {
                   {/* Signature Box */}
                   <div className="glass-card" style={{ padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden" }}>
-                      <span style={{ fontSize: "12px", fontWeight: 700, color: "#38bdf8", whiteSpace: "nowrap" }}>
+                      <span className="jwt-sig-label" style={{ fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap" }}>
                         SIGNATURE:
                       </span>
                       <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "monospace", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>

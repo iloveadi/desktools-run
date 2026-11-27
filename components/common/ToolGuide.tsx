@@ -582,9 +582,9 @@ export default function ToolGuide({
               </div>
               <Link
                 href="/tools/"
+                className="tool-guide-accent-link"
                 style={{
                   fontSize: "12.5px",
-                  color: "#818cf8",
                   fontWeight: 600,
                   textDecoration: "none",
                   display: "inline-flex",
@@ -629,7 +629,7 @@ export default function ToolGuide({
                       {rt.desc}
                     </p>
                   </div>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: "3px", fontSize: "12px", color: "#818cf8", fontWeight: 700, paddingTop: "4px" }}>
+                  <div className="tool-guide-accent-link" style={{ display: "inline-flex", alignItems: "center", gap: "3px", fontSize: "12px", fontWeight: 700, paddingTop: "4px" }}>
                     <span>{locale === "ko" ? "도구 실행하기" : "Run tool"}</span>
                     <ArrowRight size={12} />
                   </div>

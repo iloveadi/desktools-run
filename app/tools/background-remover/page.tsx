@@ -352,20 +352,7 @@ export default function BackgroundRemoverPage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                background: "rgba(236,72,153,0.1)",
-                border: "1px solid rgba(236,72,153,0.2)",
-                fontSize: "12px",
-                color: "#f472b6",
-                fontWeight: 600,
-              }}
-            >
+            <div className="tool-hero-badge badge-pink">
               <Bot size={14} />
               {t("backgroundRemover.badge")}
             </div>
@@ -489,10 +476,10 @@ export default function BackgroundRemoverPage() {
                           bgStyle === "transparent"
                             ? "linear-gradient(45deg, rgba(255,255,255,0.08) 25%, transparent 25%), linear-gradient(-45deg, rgba(255,255,255,0.08) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.08) 75%), linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.08) 75%)"
                             : bgStyle === "white"
-                            ? "#ffffff"
-                            : bgStyle === "black"
-                            ? "#000000"
-                            : customBgColor,
+                              ? "#ffffff"
+                              : bgStyle === "black"
+                                ? "#000000"
+                                : customBgColor,
                         backgroundColor: bgStyle === "transparent" ? "#1e293b" : "transparent",
                         backgroundSize: "16px 16px",
                         backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0px",

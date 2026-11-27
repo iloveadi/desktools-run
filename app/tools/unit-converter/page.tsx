@@ -603,10 +603,10 @@ export default function UnitConverterPage() {
                     {item.label}
                   </span>
                   <span
+                    className={`unit-table-val ${item.isCurrentToUnit ? "is-selected" : ""}`}
                     style={{
                       fontSize: "14px",
                       fontWeight: 700,
-                      color: item.isCurrentToUnit ? "#a5b4fc" : "var(--text-primary)",
                       fontFamily: "ui-monospace, monospace",
                     }}
                   >

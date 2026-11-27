@@ -245,20 +245,7 @@ export default function ImageResizerPage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                background: "rgba(99,102,241,0.1)",
-                border: "1px solid rgba(99,102,241,0.2)",
-                fontSize: "12px",
-                color: "#a5b4fc",
-                fontWeight: 600,
-              }}
-            >
+            <div className="tool-hero-badge badge-indigo">
               <Sparkles size={12} />
               {t("imageResizer.badge")}
             </div>

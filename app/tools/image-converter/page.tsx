@@ -303,20 +303,7 @@ export default function ImageConverterPage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                background: "rgba(139,92,246,0.1)",
-                border: "1px solid rgba(139,92,246,0.2)",
-                fontSize: "12px",
-                color: "#c4b5fd",
-                fontWeight: 600,
-              }}
-            >
+            <div className="tool-hero-badge badge-violet">
               <Sparkles size={12} />
               {t("imageConverter.badge")}
             </div>

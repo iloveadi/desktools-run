@@ -346,20 +346,7 @@ export default function ImageCompressPage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                background: "rgba(52,211,153,0.1)",
-                border: "1px solid rgba(52,211,153,0.2)",
-                fontSize: "12px",
-                color: "#6ee7b7",
-                fontWeight: 600,
-              }}
-            >
+            <div className="tool-hero-badge badge-emerald">
               <Sparkles size={12} />
               {t("imageCompress.badge")}
             </div>

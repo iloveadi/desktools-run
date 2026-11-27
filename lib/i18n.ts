@@ -1085,7 +1085,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "Is my Markdown text or HTML stored on any server?",
     "markdownPreview.guide.faq1A": "No! 100% of Markdown parsing and HTML rendering runs locally inside your browser memory. Your documents never leave your device.",
     "markdownPreview.guide.faq2Q": "What Markdown syntax is supported?",
-    "markdownPreview.guide.faq2A": "It supports standard Markdown syntax including headings (#, ##, ###), text formatting (bold, italic, strikethrough), blockquotes (>), inline code, lists, and hyperlinks.",
+    "markdownPreview.guide.faq2A": "Supports GFM tables (| --- |), fenced code blocks (```js), ordered lists (1.), nested lists, horizontal rules (---), images (![alt](url)), headings, bold/italic/strikethrough, blockquotes, inline code, and links, with raw HTML/XSS automatically escaped and sanitized.",
     // Text Diff
     "textDiff.title": "Text Diff Checker",
     "textDiff.subtitle": "Compare two blocks of text and highlight line-by-line differences.",
@@ -2345,7 +2345,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "작성한 마크다운 문서나 HTML 내용이 서버에 저장되나요?",
     "markdownPreview.guide.faq1A": "아닙니다! 모든 마크다운 렌더링 및 파싱 작업은 100% 사용자의 웹 브라우저 내부에서 로컬로 처리되며 외부 서버로 절대 전송되지 않습니다.",
     "markdownPreview.guide.faq2Q": "어떤 마크다운 문법을 지원하나요?",
-    "markdownPreview.guide.faq2A": "제목(#, ##, ###), 강조(볼드, 이탈릭, 취소선), 인용구(>), 인라인 코드, 리스트 및 하이퍼링크 등 표준 마크다운 문법을 지원합니다.",
+    "markdownPreview.guide.faq2A": "제목(#, ##, ###), 강조(굵게, 기울임, 취소선), 인용구(>), 인라인 코드 및 코드 펜스(```js), GFM 표(| --- |), 순서 있는 목록(1.)·중첩 목록, 수평선(---), 이미지(![alt](url)), 링크를 지원하며 원본 HTML과 XSS 스크립트는 자동 이스케이프·차단됩니다.",
     // Text Diff
     "textDiff.title": "텍스트 차이점 비교 (Diff Checker)",
     "textDiff.subtitle": "두 개의 텍스트를 비교하여 변경, 추가, 삭제된 문장을 실시간으로 하이라이트 비교하세요.",
@@ -3623,7 +3623,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "入力したマークダウンやHTMLはサーバーに保存されますか？",
     "markdownPreview.guide.faq1A": "いいえ！すべてのマークダウン処理とHTML表示は100%お使いのブラウザ内で行われ、外部サーバーには一切送信されません。",
     "markdownPreview.guide.faq2Q": "どのようなマークダウン文法に対応していますか？",
-    "markdownPreview.guide.faq2A": "見出し（#, ##, ###）、テキスト強調（太字、斜体、打ち消し線）、引用（>）、インラインコード、リスト、ハイパーリンクなどの標準文法に対応しています。",
+    "markdownPreview.guide.faq2A": "見出し、強調、引用、インラインコード・コードブロック（```js）、GFMテーブル（| --- |）、番号付きリスト（1.）・ネストリスト、水平線（---）、画像（![alt](url)）、リンクに対応し、生のHTMLやXSSは自動でエスケープ・無害化されます。",
     // Pages
 // CSV to JSON
     "csvToJson.title": "CSV ➔ JSON 変換ツール",
@@ -4810,7 +4810,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "¿Se almacena mi texto Markdown o HTML en algún servidor?",
     "markdownPreview.guide.faq1A": "¡No! El 100% del procesamiento de Markdown se ejecuta localmente en la memoria de su navegador. Sus documentos nunca salen de su dispositivo.",
     "markdownPreview.guide.faq2Q": "¿Qué sintaxis de Markdown es compatible?",
-    "markdownPreview.guide.faq2A": "Admite la sintaxis estándar de Markdown, incluidos encabezados (#, ##, ###), formato de texto (negrita, cursiva, tachado), citas (>), código en línea, listas y enlaces.",
+    "markdownPreview.guide.faq2A": "Admite tablas GFM (| --- |), bloques de código (```js), listas ordenadas (1.) y anidadas, líneas horizontales (---), imágenes (![alt](url)), encabezados, negrita/cursiva/tachado, citas y enlaces, bloqueando HTML sin procesar y XSS.",
     // Pages
 // CSV to JSON
     "csvToJson.title": "Convertidor de CSV ➔ JSON",
@@ -5975,7 +5975,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "我的 Markdown 文本或 HTML 内容会上传到服务器吗？",
     "markdownPreview.guide.faq1A": "不会！所有 Markdown 解析与 HTML 渲染完全在您的浏览器内存中本地完成，绝不会上传至任何外部服务器。",
     "markdownPreview.guide.faq2Q": "支持哪些 Markdown 语法？",
-    "markdownPreview.guide.faq2A": "支持标准 Markdown 语法，包括标题（#, ##, ###）、文本格式（加粗、斜体、删除线）、引用块（>）、内联代码、列表及超链接等。",
+    "markdownPreview.guide.faq2A": "支持 GFM 表格（| --- |）、围栏代码块（```js）、有序列表（1.）、嵌套列表、分隔线（---）、图片（![alt](url)）、标题、加粗/斜体/删除线、引用及链接，并自动转义过滤原生 HTML 与 XSS。",
     // Pages
 // CSV to JSON
     "csvToJson.title": "CSV ➔ JSON 转换器",
@@ -7140,7 +7140,7 @@ export const translations: Record<Locale, Translations> = {
     "markdownPreview.guide.faq1Q": "Mon texte Markdown ou HTML est-il stocké sur un serveur ?",
     "markdownPreview.guide.faq1A": "Non ! 100% du traitement Markdown s'effectue localement dans votre navigateur. Vos documents ne quittent jamais votre appareil.",
     "markdownPreview.guide.faq2Q": "Quelle syntaxe Markdown est prise en charge ?",
-    "markdownPreview.guide.faq2A": "Il prend en charge la syntaxe Markdown standard, notamment les titres (#, ##, ###), la mise en forme (gras, italique, barré), les citations (>), le code en ligne, les listes et les liens.",
+    "markdownPreview.guide.faq2A": "Prend en charge les tableaux GFM (| --- |), blocs de code (```js), listes ordonnées (1.) et imbriquées, lignes horizontales (---), images (![alt](url)), titres, gras/italique/barré, citations et liens, avec filtrage automatique du HTML brut et des failles XSS.",
     // Pages
 // CSV to JSON
     "csvToJson.title": "Convertisseur CSV ➔ JSON",

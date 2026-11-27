@@ -393,20 +393,7 @@ export default function PdfMergerPage() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 12px",
-                borderRadius: "100px",
-                background: "rgba(239,68,68,0.1)",
-                border: "1px solid rgba(239,68,68,0.2)",
-                fontSize: "12px",
-                color: "#f87171",
-                fontWeight: 600,
-              }}
-            >
+            <div className="tool-hero-badge badge-red">
               <Sparkles size={12} />
               100% Client-Side PDF Engine
             </div>
